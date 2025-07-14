@@ -1,0 +1,34 @@
+name: Node.js CI
+
+on:
+  push:
+    branches:
+      - '**'  # se ejecuta en push a cualquier rama
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Checkout del código
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      # 2. Instalación de Node.js
+      - name: Usar Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      # 3. Instalación de dependencias
+      - name: Instalar dependencias
+        run: npm ci
+
+      # 4. Correr linter
+      - name: Correr linter
+        run: npm run lint
+
+      # 5. Correr tests
+      - name: Correr tests
+        run: npm test

@@ -30,7 +30,7 @@ async function obtenerProtocolo(req, res) {
   try {
     const conn = await connectToDatabase();
     const result = await conn.execute(
-      `SELECT protocolo_id, nombre, enfermedad, linea FROM protocolo WHERE protocolo_id = :id`,
+      'SELECT protocolo_id, nombre, enfermedad, linea FROM protocolo WHERE protocolo_id = :id',
       [id]
     );
     if (result.rows.length === 0) {
