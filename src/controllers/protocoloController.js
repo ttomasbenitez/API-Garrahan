@@ -1,4 +1,4 @@
-const { connectToDatabase } = require('../db/oracle');
+const knex = require('../db/knex');
 
 async function crearProtocolo(req, res) {
   const { nombre, enfermedad, linea } = req.body;
@@ -6,16 +6,11 @@ async function crearProtocolo(req, res) {
     return res.status(400).json({ error: 'Faltan campos requeridos' });
   }
   try {
-    const conn = await connectToDatabase();
-    const result = await conn.execute(
-      `INSERT INTO protocolo (nombre, enfermedad, linea)
-       VALUES (:nombre, :enfermedad, :linea)
-       RETURNING protocolo_id INTO :id`,
-      { nombre, enfermedad, linea, id: { dir: require('oracledb').BIND_OUT, type: require('oracledb').NUMBER } },
-      { autoCommit: true }
-    );
+    const [protocolo_id] = await knex('protocolo')
+      .insert({ nombre, enfermedad, linea })
+      .returning('protocolo_id');
     res.status(201).json({
-      protocolo_id: result.outBinds.id[0],
+      protocolo_id: protocolo_id,
       nombre,
       enfermedad,
       linea
@@ -28,16 +23,14 @@ async function crearProtocolo(req, res) {
 async function obtenerProtocolo(req, res) {
   const { id } = req.params;
   try {
-    const conn = await connectToDatabase();
-    const result = await conn.execute(
-      'SELECT protocolo_id, nombre, enfermedad, linea FROM protocolo WHERE protocolo_id = :id',
-      [id]
-    );
-    if (result.rows.length === 0) {
+    const protocolo = await knex('protocolo')
+      .select('protocolo_id', 'nombre', 'enfermedad', 'linea')
+      .where({ protocolo_id: id })
+      .first();
+    if (!protocolo) {
       return res.status(404).json({ error: 'No encontrado' });
     }
-    const [protocolo_id, nombre, enfermedad, linea] = result.rows[0];
-    res.json({ protocolo_id, nombre, enfermedad, linea });
+    res.json(protocolo);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
