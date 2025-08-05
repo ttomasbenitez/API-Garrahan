@@ -37,3 +37,9 @@ services:
       init-oracle:
         condition: service_healthy
     command: sh -c "npx knex migrate:latest && node src/app.js"
+    volumes:
+      - ./src:/app/src
+      - ./package.json:/app/package.json
+      - ./package-lock.json:/app/package-lock.json
+      - ./knexfile.js:/app/knexfile.js
+      - ./eslint.config.js:/app/eslint.config.js

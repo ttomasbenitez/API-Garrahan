@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Trabajo profesional FIUBA-Garrahan",
   "main": "app.js",
+  "type": "module",
   "scripts": {
     "test": "jest --passWithNoTests",
     "lint": "eslint ."
