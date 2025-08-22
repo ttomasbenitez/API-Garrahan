@@ -1,5 +1,5 @@
 /* global describe, test, expect */
-import Protocolo from '../../src/domain/protocolos/index.js';
+import Protocolo from '../../src/domain/protocolo/index.js';
 
 describe('Protocolo', () => {
   test('deberia crear un protocolo con todos los campos obligatorios', () => {

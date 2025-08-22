@@ -4,19 +4,20 @@ const feature = loadFeature('features/creacion_protocolo.feature', { tagFilter: 
 
 defineFeature(feature, (test) => {
   test('US-01.1 Crear un protocolo con todos los campos', ({ given, when, then }) => {
-    given(/^quiero crear el protocolo con el nombre de "(.*)"$/, (_nombreProtocolo) => {
-      // Implementar la lógica para crear el protocolo
+    const protocolo = {};
+    given(/^quiero crear el protocolo con el nombre de "(.*)"$/, nombreProtocolo => {
+      protocolo.nombre = nombreProtocolo;
     });
 
-    given(/^enfermedad "(.*)"$/, (_enfermedad) => {
-      // Implementar la lógica para crear el protocolo
+    given(/^enfermedad "(.*)"$/, (enfermedad) => {
+      protocolo.enfermedad = enfermedad;
     });
 
-    given(/^de linea de tratamiento "(.*)"$/, (_lineaTratamiento) => {
-      // Implementar la lógica para crear el protocolo
+    given(/^de linea de tratamiento "(.*)"$/, (lineaTratamiento) => {
+      protocolo.linea = lineaTratamiento;
     });
 
-    when('el sistema crea el protocolo', () => {
+    when('publico en la API "/protocolo" con los datos', async () => {
       // Implementar la lógica para crear el protocolo
     });
 

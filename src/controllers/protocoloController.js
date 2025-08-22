@@ -1,4 +1,4 @@
-import Protocolo from '../domain/protocolos/index.js';
+import Protocolo from '../domain/protocolo/index.js';
 
 async function crearProtocolo(body, repositorioProtocolo) {
   const protocolo = new Protocolo(body.nombre, body.enfermedad, body.linea);
