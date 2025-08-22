@@ -1,6 +1,7 @@
-const express = require('express');
+import express from 'express';
+import { crearProtocolo, obtenerProtocolo }  from '../controllers/protocoloController.js';
+
 const router = express.Router();
-const { crearProtocolo, obtenerProtocolo } = require('../controllers/protocoloController');
 
 router.get('/health', (req, res) => {
   res.json({ status: 'ok' });
@@ -9,4 +10,5 @@ router.get('/health', (req, res) => {
 router.post('/protocolo', crearProtocolo);
 router.get('/protocolo/:id', obtenerProtocolo);
 
-module.exports = router;
+export default router;
+

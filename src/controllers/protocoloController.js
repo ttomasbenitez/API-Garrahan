@@ -1,46 +1,30 @@
-const { connectToDatabase } = require('../db/oracle');
+import Protocolo from '../domain/protocolos/index.js';
 
-async function crearProtocolo(req, res) {
-  const { nombre, enfermedad, linea } = req.body;
-  if (!nombre || !enfermedad || !linea) {
-    return res.status(400).json({ error: 'Faltan campos requeridos' });
-  }
+async function crearProtocolo(body, repositorioProtocolo) {
+  const protocolo = new Protocolo(body.nombre, body.enfermedad, body.linea);
   try {
-    const conn = await connectToDatabase();
-    const result = await conn.execute(
-      `INSERT INTO protocolo (nombre, enfermedad, linea)
-       VALUES (:nombre, :enfermedad, :linea)
-       RETURNING protocolo_id INTO :id`,
-      { nombre, enfermedad, linea, id: { dir: require('oracledb').BIND_OUT, type: require('oracledb').NUMBER } },
-      { autoCommit: true }
-    );
-    res.status(201).json({
-      protocolo_id: result.outBinds.id[0],
-      nombre,
-      enfermedad,
-      linea
-    });
+    const id = await repositorioProtocolo.crearProtocolo(protocolo);
+    return {
+      protocolo_id: id,
+      nombre: body.nombre,
+      enfermedad: body.enfermedad,
+      linea: body.linea
+    };
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    throw new Error(err.message);
   }
 }
 
-async function obtenerProtocolo(req, res) {
-  const { id } = req.params;
+async function obtenerProtocolo(id, repositorioProtocolo) {
   try {
-    const conn = await connectToDatabase();
-    const result = await conn.execute(
-      'SELECT protocolo_id, nombre, enfermedad, linea FROM protocolo WHERE protocolo_id = :id',
-      [id]
-    );
-    if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'No encontrado' });
+    const result = await repositorioProtocolo.obtenerProtocolo(id);
+    if (!result) {
+      throw new Error('No encontrado');
     }
-    const [protocolo_id, nombre, enfermedad, linea] = result.rows[0];
-    res.json({ protocolo_id, nombre, enfermedad, linea });
+    return result;
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    throw new Error(err.message);
   }
 }
 
-module.exports = { crearProtocolo, obtenerProtocolo };
+export { crearProtocolo, obtenerProtocolo };

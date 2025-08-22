@@ -1,9 +1,8 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const routes = require('./routes');
-const { connectToDatabase } = require('./db/oracle');
-const logger = require('./utils/logger');
+import express from 'express';
+import cors from 'cors';
+import routes from './routes/index.js';
+import { connectToDatabase } from './db/oracle.js';
+import logger from './utils/logger.js';
 
 const app = express();
 

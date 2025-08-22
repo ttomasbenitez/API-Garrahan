@@ -24,7 +24,7 @@ export default [
       'no-trailing-spaces': 'error',        // Espacios innecesarios al final
       'eol-last': ['error', 'always'],      // Línea vacía al final de archivos
 
-      'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }], // Ignora args como `_req`, `_res`
+      'no-unused-vars': ['warn', { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' }], // Ignora args como `_req`, `_res`
       'no-console': 'off',
       eqeqeq: ['error', 'always'],          // Usar siempre === y !==
       'prefer-const': 'error',              // Preferir const cuando sea posible

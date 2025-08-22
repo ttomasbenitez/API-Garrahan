@@ -1,5 +1,6 @@
-const oracledb = require('oracledb');
-require('dotenv').config();
+import oracledb from 'oracledb';
+import dotenv from 'dotenv';
+dotenv.config();
 
 let connection;
 
@@ -26,4 +27,4 @@ process.on('exit', async () => {
   await closeConnection();
 });
 
-module.exports = { connectToDatabase, closeConnection };
+export { connectToDatabase, closeConnection };
