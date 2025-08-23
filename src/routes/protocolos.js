@@ -5,7 +5,7 @@ import { connectToDatabase } from '../db/oracle.js';
 
 const router = express.Router();
 
-router.post('/protocolo', async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const { nombre, enfermedad, linea } = req.body;
     if (!nombre || !enfermedad || !linea) {
@@ -20,7 +20,7 @@ router.post('/protocolo', async (req, res) => {
   }
 });
 
-router.get('/protocolo/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     if (!id) {

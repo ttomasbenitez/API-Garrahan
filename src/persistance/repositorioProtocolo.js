@@ -1,4 +1,4 @@
-import Protocolo from '../domain/protocolos/index.js';
+import Protocolo from '../domain/protocolo/index.js';
 
 export class RepositorioProtocolo {
   constructor(connection) {

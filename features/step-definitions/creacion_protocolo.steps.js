@@ -17,8 +17,8 @@ defineFeature(feature, (test) => {
       protocolo.linea = lineaTratamiento;
     });
 
-    when('publico en la API "/protocolo" con los datos', async () => {
-      // Implementar la lógica para crear el protocolo
+    when(/^publico en la API "(.*)" con los datos$/, async () => {
+      // Implementar la lógica para crear el protocolo usando la API
     });
 
     then('el protocolo se crea correctamente', () => {

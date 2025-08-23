@@ -26,7 +26,7 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-      
+
   flyway:
     image: flyway/flyway
     env_file:
@@ -55,3 +55,5 @@ services:
     depends_on:
       flyway:
         condition: service_completed_successfully
+    volumes:
+      - ./:/app

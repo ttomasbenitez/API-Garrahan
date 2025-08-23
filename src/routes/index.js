@@ -1,5 +1,5 @@
 import express from 'express';
-import { crearProtocolo, obtenerProtocolo }  from '../controllers/protocoloController.js';
+import protocolosRoutes from './protocolos.js';
 
 const router = express.Router();
 
@@ -7,8 +7,6 @@ router.get('/health', (req, res) => {
   res.json({ status: 'ok' });
 });
 
-router.post('/protocolo', crearProtocolo);
-router.get('/protocolo/:id', obtenerProtocolo);
+router.use('/protocolo', protocolosRoutes);
 
 export default router;
-
