@@ -1,4 +1,5 @@
 import Protocolo from '../domain/protocolo/index.js';
+import { ERROR_PROTOCOLO_CREACION, ERROR_PROTOCOLO_NO_ENCONTRADO } from '../errors/protocolo.js';
 
 export class RepositorioProtocolo {
   constructor(connection) {
@@ -13,6 +14,9 @@ export class RepositorioProtocolo {
       { nombre: protocolo.nombre, enfermedad: protocolo.enfermedad, linea: protocolo.linea, id: { dir: require('oracledb').BIND_OUT, type: require('oracledb').NUMBER } },
       { autoCommit: true }
     );
+    if (result.rowsAffected === 0) {
+      throw new Error(ERROR_PROTOCOLO_CREACION);
+    }
     return result.outBinds.id[0];
   }
 
@@ -22,7 +26,7 @@ export class RepositorioProtocolo {
       [id]
     );
     if (result.rows.length === 0) {
-      return null;
+      throw new Error(ERROR_PROTOCOLO_NO_ENCONTRADO);
     }
     return Protocolo.fromRow(result.rows[0]);
   }
