@@ -7,7 +7,7 @@ Feature: Crear un protocolo
         Given quiero crear el protocolo con el nombre de "Osteosarcoma GBTO 2006 - No metastásico" 
         And enfermedad "Osteosarcoma"
         And de linea de tratamiento "primera linea"
-        When publico en la API '/protocolo' con los datos
+        When publico en la API "/protocolo" con los datos
         Then el protocolo se crea correctamente
         And puedo consultar el protocolo por enfermedad
     
