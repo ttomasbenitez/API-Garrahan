@@ -67,6 +67,8 @@ CREATE TABLE paciente (
   ultima_modificacion TIMESTAMP,
   sexo CHAR(1) CHECK (sexo IN ('M','F')),
   profesional_id NUMBER,
+  obrsocial VARCHAR2(100),
+  estado_del_tratamiento VARCHAR2(100),
   FOREIGN KEY (profesional_id) REFERENCES profesional(id)
 );
 
