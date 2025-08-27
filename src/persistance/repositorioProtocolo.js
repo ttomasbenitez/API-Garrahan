@@ -21,6 +21,9 @@ export class RepositorioProtocolo {
       'SELECT protocolo_id, nombre, enfermedad, linea FROM protocolo WHERE protocolo_id = :id',
       [id]
     );
+    if (result.rows.length === 0) {
+      return null;
+    }
     return Protocolo.fromRow(result.rows[0]);
   }
 }
