@@ -8,12 +8,14 @@
     "test": "jest --passWithNoTests",
     "test:unit": "jest --testPathPattern=spec",
     "test:features": "jest --testPathPattern=features",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "dev": "nodemon --watch src --ext ts,js --exec node src/app.js"
   },
   "dependencies": {
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.18.2",
+    "nodemon": "^3.1.10",
     "oracledb": "^6.3.0",
     "winston": "^3.10.0"
   },
