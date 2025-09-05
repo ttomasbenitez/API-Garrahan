@@ -7,7 +7,7 @@ jest.mock('oracledb', () => ({
   NUMBER: 2010
 }));
 
-describe('RepositorioProtocolo.guardar', () => {
+describe(RepositorioProtocolo, () => {
   let connection;
   let repo;
 
@@ -16,7 +16,7 @@ describe('RepositorioProtocolo.guardar', () => {
     repo = new RepositorioProtocolo(connection);
   });
 
-  test('inserta y devuelve el id cuando todo va bien', async () => {
+  test('guardar protocolo funciona cprrectamente devolviendo el id de la creación', async () => {
     const protocolo = new Protocolo('Osteosarcoma GBTO 2006 - No metastásico', 'Osteosarcoma', 'primera linea');
 
     connection.execute.mockResolvedValue({
