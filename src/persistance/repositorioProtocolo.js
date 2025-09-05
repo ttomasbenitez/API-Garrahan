@@ -6,7 +6,7 @@ export class RepositorioProtocolo {
     this.connection = connection;
   }
 
-  async crearProtocolo(protocolo) {
+  async guardar(protocolo) {
     const result = await this.connection.execute(
       `INSERT INTO protocolo (nombre, enfermedad, linea)
          VALUES (:nombre, :enfermedad, :linea)
@@ -20,7 +20,7 @@ export class RepositorioProtocolo {
     return result.outBinds.id[0];
   }
 
-  async obtenerProtocolo(id) {
+  async obtener(id) {
     const result = await this.connection.execute(
       'SELECT protocolo_id, nombre, enfermedad, linea FROM protocolo WHERE protocolo_id = :id',
       [id]
