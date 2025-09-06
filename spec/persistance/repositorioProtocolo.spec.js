@@ -16,7 +16,7 @@ describe(RepositorioProtocolo, () => {
     repo = new RepositorioProtocolo(connection);
   });
 
-  test('guardar protocolo funciona cprrectamente devolviendo el id de la creación', async () => {
+  test('guardar protocolo funciona correctamente devolviendo el id de la creación', async () => {
     const protocolo = new Protocolo('Osteosarcoma GBTO 2006 - No metastásico', 'Osteosarcoma', 'primera linea');
 
     connection.execute.mockResolvedValue({
@@ -38,5 +38,16 @@ describe(RepositorioProtocolo, () => {
       // el bind OUT 'id' lo provee el mock de oracledb
     });
     expect(opts).toMatchObject({ autoCommit: true });
+  });
+
+  test('guardar protocolo lanza error si no se crea', async () => {
+    const protocolo = new Protocolo('Osteosarcoma GBTO 2006 - No metastásico', 'Osteosarcoma', 'primera linea');
+
+    connection.execute.mockResolvedValue({
+      rowsAffected: 0,
+      outBinds: { id: [] }
+    });
+
+    await expect(repo.guardar(protocolo)).rejects.toThrow('Error al crear el protocolo');
   });
 });
