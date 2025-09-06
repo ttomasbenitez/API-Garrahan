@@ -77,4 +77,12 @@ describe(RepositorioProtocolo, () => {
     expect(sql).toMatch(/SELECT\s+protocolo_id,\s+nombre,\s+enfermedad,\s+linea\s+FROM\s+protocolo/i);
     expect(binds).toEqual([123]);
   });
+
+  test('obtener protocolo lanza error si no se encuentra el id', async () => {
+    connection.execute.mockResolvedValue({
+      rows: []
+    });
+
+    await expect(repo.obtener(999)).rejects.toThrow('Protocolo no encontrado');
+  });
 });
