@@ -5,7 +5,6 @@ export const config = {
   },
   testMatch: [
     '**/spec/**/*.spec.js',
-    '**/features/**/*.steps.js'
   ],
   moduleFileExtensions: ['js', 'json'],
   collectCoverageFrom: [
