@@ -1,3 +1,4 @@
+import oracledb from 'oracledb';
 import Protocolo from '../domain/protocolo/index.js';
 import { ERROR_PROTOCOLO_CREACION, ERROR_PROTOCOLO_NO_ENCONTRADO } from '../errors/protocolo.js';
 
@@ -11,7 +12,7 @@ export class RepositorioProtocolo {
       `INSERT INTO protocolo (nombre, enfermedad, linea)
          VALUES (:nombre, :enfermedad, :linea)
          RETURNING protocolo_id INTO :id`,
-      { nombre: protocolo.nombre, enfermedad: protocolo.enfermedad, linea: protocolo.linea, id: { dir: require('oracledb').BIND_OUT, type: require('oracledb').NUMBER } },
+      { nombre: protocolo.nombre, enfermedad: protocolo.enfermedad, linea: protocolo.linea, id: { dir: oracledb.BIND_OUT, type: oracledb.NUMBER } },
       { autoCommit: true }
     );
     if (result.rowsAffected === 0) {

@@ -7,7 +7,7 @@
   "scripts": {
     "test": "jest --passWithNoTests",
     "test:unit": "jest --testPathPattern=spec",
-    "cucumber": "cucumber-js --import features/step-definitions --import features/support",
+    "cucumber": "cucumber-js --tags \"not @wip\" --import features/step-definitions --import features/support",
     "lint": "eslint .",
     "dev": "nodemon --watch src --ext ts,js --exec node src/app.js"
   },

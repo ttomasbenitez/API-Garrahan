@@ -12,7 +12,6 @@ export const config = {
     'src/**/*.js',
     '!src/**/*.spec.js'
   ],
-  setupFilesAfterEnv: ['<rootDir>/features/support/hooks.int.js'],
   globals: {
     describe: 'readonly',
     test: 'readonly',

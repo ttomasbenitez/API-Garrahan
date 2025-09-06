@@ -1,12 +1,13 @@
 import app from './app.js';
-import { connectToDatabase } from './db/oracle.js';
+import OracleConnection from './db/oracle.js';
 import logger from './utils/logger.js';
 
 const PORT = process.env.PORT || 3000;
 
 async function startServer() {
   try {
-    await connectToDatabase();
+    const oracleConnection = new OracleConnection();
+    await oracleConnection.connect();
     logger.info('Conexión a Oracle establecida, iniciando servidor...');
     app.listen(PORT, () => logger.info(`Servidor escuchando en puerto ${PORT}`));
   } catch (error) {

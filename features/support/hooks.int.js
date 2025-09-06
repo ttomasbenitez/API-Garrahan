@@ -3,9 +3,11 @@ import { GenericContainer, Wait } from 'testcontainers';
 import oracledb from 'oracledb';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { connectToDatabase, closeConnection } from '../../src/db/oracle.js';
+import OracleConnection from '../../src/db/oracle.js';
 
 let container;
+
+const appConn = new OracleConnection();
 
 async function runSql(conn, sqlText) {
   const stmts = sqlText.split(/;\s*$/m).map(s => s.trim()).filter(Boolean);
@@ -50,7 +52,7 @@ BeforeAll({ timeout: 180_000 }, async function () {
   process.env.ORACLE_PASSWORD = 'app_pass';
   process.env.ORACLE_CONNECT_STRING = `${host}:${port}/${service}`;
 
-  const appConn = await connectToDatabase();
+  await appConn.connect();
 
   const ddlPath = path.join(process.cwd(), 'features/support/schema.sql');
   const ddl = await fs.readFile(ddlPath, 'utf8');
@@ -72,6 +74,6 @@ BeforeAll({ timeout: 180_000 }, async function () {
 });
 
 AfterAll(async function () {
-  await closeConnection();
+  await appConn.close();
   if (container) await container.stop();
 });
