@@ -12,7 +12,7 @@ Feature: Crear un protocolo
         And puedo consultar el protocolo por enfermedad
     
     @wip
-    Scenario: US-01.2 Objtener un protocolo creado por su id
+    Scenario: US-01.2 Obtener un protocolo creado por su id
         Given existe en la base de datos un protocolo con el nombre de "Osteosarcoma GBTO 2006 - No metastásico" con id "1"
         When consulto en la API "/protocolo/1"
         Then el sistema me devuelve el protocolo con id "1"

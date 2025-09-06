@@ -1,4 +1,6 @@
-const { loadFeature, defineFeature } = require('jest-cucumber');
+import app from '../../src/app.js';
+import request from 'supertest';
+const { loadFeature, defineFeature, expect  } = require('jest-cucumber');
 
 const feature = loadFeature('features/creacion_protocolo.feature', { tagFilter: 'not @wip' });
 
@@ -18,7 +20,13 @@ defineFeature(feature, (test) => {
     });
 
     when(/^publico en la API "(.*)" con los datos$/, async () => {
-      // Implementar la lógica para crear el protocolo usando la API
+      const response = await request(app)
+        .post('/protocolo')
+        .send(protocolo)
+        .set('Accept', 'application/json');
+      expect(response.status).toBe(201);
+      expect(response.body).toHaveProperty('protocolo_id');
+      protocolo.id = response.body.protocolo_id;
     });
 
     then('el protocolo se crea correctamente', () => {
