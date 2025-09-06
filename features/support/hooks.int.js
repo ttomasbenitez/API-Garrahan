@@ -16,11 +16,11 @@ async function runSql(conn, sqlText) {
 
 BeforeAll({ timeout: 180_000 }, async function () {
   container = await new GenericContainer('gvenzl/oracle-xe')
-  .withEnvironment({ ORACLE_PASSWORD: 'oracle' })
-  .withExposedPorts(1521)
-  .withWaitStrategy(Wait.forLogMessage('DATABASE IS READY TO USE!'))
-  .withStartupTimeout(120_000)
-  .start();
+    .withEnvironment({ ORACLE_PASSWORD: 'oracle' })
+    .withExposedPorts(1521)
+    .withWaitStrategy(Wait.forLogMessage('DATABASE IS READY TO USE!'))
+    .withStartupTimeout(120_000)
+    .start();
 
   const host = 'localhost';
   const port = container.getMappedPort(1521);
