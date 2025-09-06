@@ -50,4 +50,31 @@ describe(RepositorioProtocolo, () => {
 
     await expect(repo.guardar(protocolo)).rejects.toThrow('Error al crear el protocolo');
   });
+
+  test('obtener protocolo funciona correctamente devolviendo el objeto Protocolo', async () => {
+    const row = {
+      protocolo_id: 123,
+      nombre: 'Osteosarcoma GBTO 2006 - No metastásico',
+      enfermedad: 'Osteosarcoma',
+      linea: 'primera linea'
+    };
+
+    connection.execute.mockResolvedValue({
+      rows: [row]
+    });
+
+    const protocolo = await repo.obtener(123);
+
+    expect(protocolo).toBeInstanceOf(Protocolo);
+    expect(protocolo).toMatchObject({
+      nombre: row.nombre,
+      enfermedad: row.enfermedad,
+      linea: row.linea
+    });
+
+    expect(connection.execute).toHaveBeenCalledTimes(1);
+    const [sql, binds] = connection.execute.mock.calls[0];
+    expect(sql).toMatch(/SELECT\s+protocolo_id,\s+nombre,\s+enfermedad,\s+linea\s+FROM\s+protocolo/i);
+    expect(binds).toEqual([123]);
+  });
 });
