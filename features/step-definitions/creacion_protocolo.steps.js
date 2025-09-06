@@ -1,39 +1,37 @@
-import app from '../../src/app.js';
+import { Given, When, Then } from '@cucumber/cucumber';
 import request from 'supertest';
-const { loadFeature, defineFeature, expect  } = require('jest-cucumber');
+import app from '../../src/app.js';
 
-const feature = loadFeature('features/creacion_protocolo.feature', { tagFilter: 'not @wip' });
+const protocolo = {};
 
-defineFeature(feature, (test) => {
-  test('US-01.1 Crear un protocolo con todos los campos', ({ given, when, then }) => {
-    const protocolo = {};
-    given(/^quiero crear el protocolo con el nombre de "(.*)"$/, nombreProtocolo => {
-      protocolo.nombre = nombreProtocolo;
-    });
+Given(/^quiero crear el protocolo con el nombre de "(.*)"$/, function (nombreProtocolo) {
+  protocolo.nombre = nombreProtocolo;
+});
 
-    given(/^enfermedad "(.*)"$/, (enfermedad) => {
-      protocolo.enfermedad = enfermedad;
-    });
+Given(/^enfermedad "(.*)"$/, function (enfermedad) {
+  protocolo.enfermedad = enfermedad;
+});
 
-    given(/^de linea de tratamiento "(.*)"$/, (lineaTratamiento) => {
-      protocolo.linea = lineaTratamiento;
-    });
+Given(/^de linea de tratamiento "(.*)"$/, function (lineaTratamiento) {
+  protocolo.linea = lineaTratamiento;
+});
 
-    when(/^publico en la API "(.*)" con los datos$/, async () => {
-      const response = await request(app)
-        .post('/protocolo')
-        .send(protocolo)
-        .set('Accept', 'application/json');
-      expect(response.status).toBe(201);
-      expect(response.body).toHaveProperty('protocolo_id');
-      protocolo.id = response.body.protocolo_id;
-    });
+When(/^publico en la API "(.*)" con los datos$/, async function (endpoint) {
+  const response = await request(app)
+    .post(endpoint)
+    .send(protocolo)
+    .set('Accept', 'application/json');
+  this.response = response;
+  protocolo.id = response.body.protocolo_id;
+});
 
-    then('el protocolo se crea correctamente', () => {
-      // Implementar la lógica para verificar que el protocolo se creó correctamente
-    });
-    then('puedo consultar el protocolo por enfermedad', () => {
-      // Implementar la lógica para verificar que el protocolo se creó correctamente
-    });
-  });
+Then('el protocolo se crea correctamente', function () {
+  const response = this.response;
+  if (!response) throw new Error('No se recibió respuesta');
+  if (response.status !== 201) throw new Error(`Status esperado 201, recibido ${response.status}`);
+  if (!response.body.protocolo_id) throw new Error('No se recibió protocolo_id');
+});
+
+Then('puedo consultar el protocolo por enfermedad', async function () {
+  // Implementar la lógica para consultar el protocolo por enfermedad
 });
