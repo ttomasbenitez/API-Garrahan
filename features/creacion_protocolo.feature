@@ -9,7 +9,6 @@ Feature: Crear un protocolo
         And de linea de tratamiento "primera linea"
         When publico en la API "/protocolo" con los datos
         Then el protocolo se crea correctamente
-        And puedo consultar el protocolo por enfermedad
     
     @wip
     Scenario: US-01.2 Obtener un protocolo creado por su id

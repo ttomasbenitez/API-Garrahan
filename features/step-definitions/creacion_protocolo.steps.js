@@ -31,7 +31,3 @@ Then('el protocolo se crea correctamente', function () {
   if (response.status !== 201) throw new Error(`Status esperado 201, recibido ${response.status}`);
   if (!response.body.protocolo_id) throw new Error('No se recibió protocolo_id');
 });
-
-Then('puedo consultar el protocolo por enfermedad', async function () {
-  // Implementar la lógica para consultar el protocolo por enfermedad
-});
