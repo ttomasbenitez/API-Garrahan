@@ -9,7 +9,7 @@ Feature: Crear un protocolo
         And de linea de tratamiento "primera linea"
         When publico en la API "/protocolo" con los datos
         Then el protocolo se crea correctamente
-
+    
     Scenario: US-01.2 Obtener un protocolo creado por su id
         Given existe en la base de datos un protocolo con el nombre de "Osteosarcoma GBTO 2006 - No metastásico" con id "1"
         When consulto en la API "/protocolo/1"
@@ -17,5 +17,17 @@ Feature: Crear un protocolo
         And el nombre del protocolo es "Osteosarcoma GBTO 2006 - No metastásico"
         And la enfermedad es "Osteosarcoma"
         And la linea de tratamiento es "primera linea"
+    
+    @wip
+    Scenario: US-01.3 Agregar ciclo de tratamiento a un protocolo
+        Given existe en la base de datos un protocolo con el nombre de "Osteosarcoma GBTO 2006 - No metastásico" con id "1"
+        And quiero agregar al protocolo con id "1" un ciclo de tratamiento con los siguientes datos
+            | protocolo_id     | 1               |
+            | ciclo_id         | 1               |
+            | regimen          | 0               |
+            | duracion_semanas | 5               |
+            | ciclo_final      | false           |
+        When publico en la API "/protocolo/1/ciclo" con los datos
+        Then el ciclo de tratamiento se agrega correctamente al protocolo "1" con id "1"
 
 
