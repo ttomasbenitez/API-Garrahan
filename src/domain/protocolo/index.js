@@ -19,6 +19,14 @@ class Protocolo {
       throw new Error(err.message);
     }
   }
+
+  async agregarCiclo(ciclo, repositorioProtocolo) {
+    if (!this.ciclos) {
+      this.ciclos = [];
+    }
+    this.ciclos.push(ciclo);
+    await repositorioProtocolo.agregarCiclo(this.protocolo_id, ciclo);
+  }
 }
 
 export default Protocolo;

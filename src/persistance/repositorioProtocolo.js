@@ -1,6 +1,6 @@
 import oracledb from 'oracledb';
 import Protocolo from '../domain/protocolo/index.js';
-import { ERROR_PROTOCOLO_CREACION, ERROR_PROTOCOLO_NO_ENCONTRADO } from '../errors/protocolo.js';
+import { ERROR_PROTOCOLO_CREACION, ERROR_PROTOCOLO_NO_ENCONTRADO, ERROR_PROTOCOLO_CICLO } from '../errors/protocolo.js';
 
 export class RepositorioProtocolo {
   constructor(db) {
@@ -32,5 +32,27 @@ export class RepositorioProtocolo {
       throw new Error(ERROR_PROTOCOLO_NO_ENCONTRADO);
     }
     return Protocolo.fromRow(result.rows[0]);
+  }
+
+  async agregarCiclo(protocoloId, ciclo) {
+    return await this.db.withConnection(async (conn) => {
+      const result = await conn.execute(
+        `INSERT INTO ciclo (protocolo_id, ciclo_id, regimen, duracion_semanas, ciclo_final)
+         VALUES (:protocolo_id, :ciclo_id, :regimen, :duracion_semanas, :ciclo_final)`,
+        {
+          protocolo_id: protocoloId,
+          ciclo_id: ciclo.id,
+          regimen: ciclo.regimen,
+          duracion_semanas: ciclo.duracion_semanas,
+          ciclo_final: ciclo.ciclo_final ? 1 : 0
+        },
+        { autoCommit: true }
+      );
+      if (result.rowsAffected === 0) {
+        throw new Error(ERROR_PROTOCOLO_CICLO);
+      }
+
+      return result.outBinds.id[0];
+    });
   }
 }

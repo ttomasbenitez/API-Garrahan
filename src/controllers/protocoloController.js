@@ -4,6 +4,7 @@ import logger from '../utils/logger.js';
 export const makeProtocoloController = (protocoloService) => ({
   crear: (req, res) => crearProtocolo(req, res, protocoloService),
   obtener: (req, res) => obtenerProtocolo(req, res, protocoloService),
+  agregarCiclo: (req, res) => agregarCiclo(req, res, protocoloService),
 });
 
 
@@ -35,4 +36,6 @@ async function obtenerProtocolo(req, res, service) {
   }
 }
 
-export { crearProtocolo, obtenerProtocolo };
+async function agregarCiclo(req, res, service) {
+  return 1;
+}

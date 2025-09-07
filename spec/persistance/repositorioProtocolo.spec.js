@@ -1,5 +1,6 @@
 /* global describe, test, expect, jest, beforeEach  */
 import oracleDB from '../../src/db/connection_pool.js';
+import Ciclo from '../../src/domain/ciclo/index.js';
 import Protocolo from '../../src/domain/protocolo';
 import { RepositorioProtocolo } from '../../src/persistance/repositorioProtocolo';
 // Mock de 'oracledb' porque lo usás adentro del método con require('oracledb')
@@ -14,9 +15,28 @@ jest.mock('../../src/db/connection_pool.js', () => ({
   }
 }));
 
+
 describe(RepositorioProtocolo, () => {
   let db;
   let repo;
+  let protocolo;
+  let connExecuteMock;
+
+  const agregarProtocolo = async () => {
+    protocolo = new Protocolo('Osteosarcoma GBTO 2006 - No metastásico', 'Osteosarcoma', 'primera linea', 1);
+
+    // Creamos el mock de la conexión y su método execute
+    connExecuteMock = jest.fn().mockResolvedValue({
+      rowsAffected: 1,
+      outBinds: { id: [123] }
+    });
+    db.withConnection.mockImplementation(async (fn) => {
+      return await fn({ execute: connExecuteMock });
+    });
+
+
+    return await repo.guardar(protocolo);
+  };
 
   beforeEach(() => {
     db = oracleDB; // <--- agrega esto
@@ -27,17 +47,7 @@ describe(RepositorioProtocolo, () => {
   });
 
   test('guardar protocolo funciona correctamente devolviendo el id de la creación', async () => {
-    const protocolo = new Protocolo('Osteosarcoma GBTO 2006 - No metastásico', 'Osteosarcoma', 'primera linea', 1);
-
-    // Creamos el mock de la conexión y su método execute
-    const connExecuteMock = jest.fn().mockResolvedValue({
-      rowsAffected: 1,
-      outBinds: { id: [123] }
-    });
-    db.withConnection.mockImplementation(async (fn) => {
-      return await fn({ execute: connExecuteMock });
-    });
-    const id = await repo.guardar(protocolo);
+    const id = await agregarProtocolo();
 
     expect(id).toBe(123);
     expect(db.withConnection).toHaveBeenCalledTimes(1);
@@ -101,5 +111,36 @@ describe(RepositorioProtocolo, () => {
     });
 
     await expect(repo.obtener(999)).rejects.toThrow('Protocolo no encontrado');
+  });
+
+  test('agregar ciclo al protocolo funciona correctamente', async () => {
+    const id = await agregarProtocolo();
+    const ciclo = new Ciclo(id, 1, 0, 5, false);
+
+    // Creamos el mock de la conexión y su método execute
+    const connExecuteMock = jest.fn().mockResolvedValue({
+      rowsAffected: 1,
+      outBinds: { id: 1 }
+    });
+
+    db.withConnection.mockImplementation(async (fn) => {
+      return await fn({ execute: connExecuteMock });
+    });
+
+    await repo.agregarCiclo(id, ciclo);
+
+    expect(db.withConnection).toHaveBeenCalledTimes(2); // una vez para guardar el protocolo y otra para agregar el ciclo
+    expect(connExecuteMock).toHaveBeenCalledTimes(1);
+
+    const [sql, binds, opts] = connExecuteMock.mock.calls[0];
+    expect(sql).toMatch(/INSERT\s+INTO\s+ciclo/i);
+    expect(binds).toMatchObject({
+      protocolo_id: 123,
+      ciclo_id: ciclo.id,
+      regimen: ciclo.regimen,
+      duracion_semanas: ciclo.duracion_semanas,
+      ciclo_final: ciclo.ciclo_final ? 1 : 0,
+    });
+    expect(opts).toMatchObject({ autoCommit: true });
   });
 });
