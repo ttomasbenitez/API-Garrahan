@@ -17,7 +17,7 @@ async function crearProtocolo(body, repositorioProtocolo) {
 
 async function obtenerProtocolo(id, repositorioProtocolo) {
   try {
-    const result = await repositorioProtocolo.obtenerProtocolo(id);
+    const result = await repositorioProtocolo.obtener(id);
     return result;
   } catch (err) {
     throw new Error(err.message);
