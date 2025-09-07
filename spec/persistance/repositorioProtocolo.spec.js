@@ -17,7 +17,7 @@ describe(RepositorioProtocolo, () => {
   });
 
   test('guardar protocolo funciona correctamente devolviendo el id de la creación', async () => {
-    const protocolo = new Protocolo('Osteosarcoma GBTO 2006 - No metastásico', 'Osteosarcoma', 'primera linea');
+    const protocolo = new Protocolo('Osteosarcoma GBTO 2006 - No metastásico', 'Osteosarcoma', 'primera linea', 1);
 
     connection.execute.mockResolvedValue({
       rowsAffected: 1,
@@ -41,7 +41,7 @@ describe(RepositorioProtocolo, () => {
   });
 
   test('guardar protocolo lanza error si no se crea', async () => {
-    const protocolo = new Protocolo('Osteosarcoma GBTO 2006 - No metastásico', 'Osteosarcoma', 'primera linea');
+    const protocolo = new Protocolo('Osteosarcoma GBTO 2006 - No metastásico', 'Osteosarcoma', 'primera linea', 3);
 
     connection.execute.mockResolvedValue({
       rowsAffected: 0,
@@ -52,12 +52,12 @@ describe(RepositorioProtocolo, () => {
   });
 
   test('obtener protocolo funciona correctamente devolviendo el objeto Protocolo', async () => {
-    const row = {
-      protocolo_id: 123,
-      nombre: 'Osteosarcoma GBTO 2006 - No metastásico',
-      enfermedad: 'Osteosarcoma',
-      linea: 'primera linea'
-    };
+    const row = [
+      123,
+      'Osteosarcoma GBTO 2006 - No metastásico',
+      'Osteosarcoma',
+      'primera linea'
+    ];
 
     connection.execute.mockResolvedValue({
       rows: [row]
@@ -67,9 +67,10 @@ describe(RepositorioProtocolo, () => {
 
     expect(protocolo).toBeInstanceOf(Protocolo);
     expect(protocolo).toMatchObject({
-      nombre: row.nombre,
-      enfermedad: row.enfermedad,
-      linea: row.linea
+      nombre: row[1],
+      enfermedad: row[2],
+      linea: row[3],
+      protocolo_id: row[0]
     });
 
     expect(connection.execute).toHaveBeenCalledTimes(1);

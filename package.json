@@ -5,7 +5,7 @@
   "main": "app.js",
   "type": "module",
   "scripts": {
-    "test": "jest --passWithNoTests",
+    "test": "jest --passWithNoTests && cucumber-js --tags \"not @wip\" --import features/step-definitions --import features/support",
     "test:unit": "jest --testPathPattern=spec",
     "cucumber": "cucumber-js --tags \"not @wip\" --import features/step-definitions --import features/support",
     "lint": "eslint .",

@@ -36,7 +36,7 @@ router.get('/:id', async (req, res) => {
     const repositorioProtocolo = new RepositorioProtocolo(oracleConnection.connection);
     const protocolo = await obtenerProtocolo(id, repositorioProtocolo);
     logger.info('Protocolo obtenido con ID: %d', protocolo.protocolo_id);
-    res.json(protocolo);
+    res.status(200).json(JSON.stringify(protocolo));
     await oracleConnection.close();
   } catch (error) {
     logger.error('Error al obtener protocolo: %o', error);
