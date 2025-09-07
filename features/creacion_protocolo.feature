@@ -9,7 +9,7 @@ Feature: Crear un protocolo
         And de linea de tratamiento "primera linea"
         When publico en la API "/protocolo" con los datos
         Then el protocolo se crea correctamente
-    
+
     Scenario: US-01.2 Obtener un protocolo creado por su id
         Given existe en la base de datos un protocolo con el nombre de "Osteosarcoma GBTO 2006 - No metastásico" con id "1"
         When consulto en la API "/protocolo/1"

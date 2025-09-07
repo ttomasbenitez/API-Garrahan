@@ -1,35 +1,49 @@
 /* global describe, test, expect, jest, beforeEach  */
+import oracleDB from '../../src/db/connection_pool.js';
 import Protocolo from '../../src/domain/protocolo';
 import { RepositorioProtocolo } from '../../src/persistance/repositorioProtocolo';
 // Mock de 'oracledb' porque lo usás adentro del método con require('oracledb')
-jest.mock('oracledb', () => ({
-  BIND_OUT: 3003,  // valores simbólicos; solo tienen que existir
-  NUMBER: 2010
+jest.mock('../../src/db/connection_pool.js', () => ({
+  __esModule: true,
+  default: {
+    init: jest.fn(),
+    getPool: jest.fn(),
+    withConnection: jest.fn(),
+    execute: jest.fn(),
+    close: jest.fn(),
+  }
 }));
 
 describe(RepositorioProtocolo, () => {
-  let connection;
+  let db;
   let repo;
 
   beforeEach(() => {
-    connection = { execute: jest.fn() };
-    repo = new RepositorioProtocolo(connection);
+    db = oracleDB; // <--- agrega esto
+    repo = new RepositorioProtocolo(db); // <--- agrega esto
+
+    db.execute.mockReset();
+    db.withConnection.mockReset();
   });
 
   test('guardar protocolo funciona correctamente devolviendo el id de la creación', async () => {
     const protocolo = new Protocolo('Osteosarcoma GBTO 2006 - No metastásico', 'Osteosarcoma', 'primera linea', 1);
 
-    connection.execute.mockResolvedValue({
+    // Creamos el mock de la conexión y su método execute
+    const connExecuteMock = jest.fn().mockResolvedValue({
       rowsAffected: 1,
       outBinds: { id: [123] }
     });
-
+    db.withConnection.mockImplementation(async (fn) => {
+      return await fn({ execute: connExecuteMock });
+    });
     const id = await repo.guardar(protocolo);
 
     expect(id).toBe(123);
-    expect(connection.execute).toHaveBeenCalledTimes(1);
+    expect(db.withConnection).toHaveBeenCalledTimes(1);
 
-    const [sql, binds, opts] = connection.execute.mock.calls[0];
+
+    const [sql, binds, opts] = connExecuteMock.mock.calls[0];
     expect(sql).toMatch(/INSERT\s+INTO\s+protocolo/i);
     expect(binds).toMatchObject({
       nombre: protocolo.nombre,
@@ -43,9 +57,11 @@ describe(RepositorioProtocolo, () => {
   test('guardar protocolo lanza error si no se crea', async () => {
     const protocolo = new Protocolo('Osteosarcoma GBTO 2006 - No metastásico', 'Osteosarcoma', 'primera linea', 3);
 
-    connection.execute.mockResolvedValue({
-      rowsAffected: 0,
-      outBinds: { id: [] }
+    db.withConnection.mockImplementation(async (fn) => {
+      return await fn({ execute: jest.fn().mockResolvedValue({
+        rowsAffected: 0,
+        outBinds: { id: [] }
+      }) });
     });
 
     await expect(repo.guardar(protocolo)).rejects.toThrow('Error al crear el protocolo');
@@ -59,7 +75,7 @@ describe(RepositorioProtocolo, () => {
       'primera linea'
     ];
 
-    connection.execute.mockResolvedValue({
+    db.execute.mockResolvedValue({
       rows: [row]
     });
 
@@ -73,14 +89,14 @@ describe(RepositorioProtocolo, () => {
       protocolo_id: row[0]
     });
 
-    expect(connection.execute).toHaveBeenCalledTimes(1);
-    const [sql, binds] = connection.execute.mock.calls[0];
+    expect(db.execute).toHaveBeenCalledTimes(1);
+    const [sql, binds] = db.execute.mock.calls[0];
     expect(sql).toMatch(/SELECT\s+protocolo_id,\s+nombre,\s+enfermedad,\s+linea\s+FROM\s+protocolo/i);
     expect(binds).toEqual([123]);
   });
 
   test('obtener protocolo lanza error si no se encuentra el id', async () => {
-    connection.execute.mockResolvedValue({
+    db.execute.mockResolvedValue({
       rows: []
     });
 

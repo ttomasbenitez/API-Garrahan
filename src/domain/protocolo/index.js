@@ -10,6 +10,15 @@ class Protocolo {
   static fromRow(row) {
     return new Protocolo(row[1], row[2], row[3], row[0]);
   }
+
+  async guardar(repositorioProtocolo) {
+    try {
+      this.protocolo_id = await repositorioProtocolo.guardar(this);
+      return this.protocolo_id;
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
 }
 
 export default Protocolo;

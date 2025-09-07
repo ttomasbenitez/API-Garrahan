@@ -23,13 +23,15 @@ When(/^publico en la API "(.*)" con los datos$/, async function (endpoint) {
     .post(endpoint)
     .send(protocolo)
     .set('Accept', 'application/json');
-  protocolo.id = response.body.protocolo_id;
 });
 
 Then('el protocolo se crea correctamente', function () {
   if (!response) throw new Error('No se recibió respuesta');
   if (response.status !== 201) throw new Error(`Status esperado 201, recibido ${response.status}`);
-  if (!response.body.protocolo_id) throw new Error('No se recibió protocolo_id');
+  assert.ok(response.body.protocolo_id);
+  assert.strictEqual(response.body.nombre, protocolo.nombre);
+  assert.strictEqual(response.body.enfermedad, protocolo.enfermedad);
+  assert.strictEqual(response.body.linea, protocolo.linea);
 });
 
 Given(/^existe en la base de datos un protocolo con el nombre de "(.*)" con id "(.*)"$/, async function (nombreProtocolo, _idProtocolo) {

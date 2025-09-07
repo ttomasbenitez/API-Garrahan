@@ -3,7 +3,7 @@ import { GenericContainer, Wait } from 'testcontainers';
 import oracledb from 'oracledb';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-import { initPool, getPool } from '../../src/db/connection_pool.js';
+import oracleDBInstance from '../../src/db/connection_pool.js';
 
 let container;
 
@@ -54,8 +54,8 @@ BeforeAll({ timeout: 180_000 }, async function () {
   process.env.ORACLE_CONNECT_STRING = `${host}:${port}/${service}`;
 
   // Inicializar pool y obtener una conexión para cargar el schema
-  await initPool();
-  const pool = await getPool();
+  await oracleDBInstance.init();
+  const pool = oracleDBInstance.getPool();
   const connection = await pool.getConnection();
 
   const ddlPath = path.join(process.cwd(), 'features/support/schema.sql');
@@ -82,7 +82,6 @@ BeforeAll({ timeout: 180_000 }, async function () {
 
 AfterAll(async function () {
   // Cerrar pool y contenedor
-  const pool = await getPool();
-  await pool.close();
+  await oracleDBInstance.close();
   if (container) await container.stop();
 });
