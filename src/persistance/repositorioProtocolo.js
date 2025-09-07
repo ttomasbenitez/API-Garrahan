@@ -26,7 +26,7 @@ export class RepositorioProtocolo {
 
   async obtenerCiclos(protocoloId) {
     const result = await this.db.execute(
-      'SELECT ciclo_id, protocolo_id, regimen, duracion_semanas, ciclo_final FROM ciclo WHERE protocolo_id = :protocoloId',
+      'SELECT ciclo_id, protocolo_id, regimen, duracion_semanas, ciclo_final, repeticiones FROM ciclo WHERE protocolo_id = :protocoloId',
       [protocoloId]
     );
 
@@ -50,8 +50,8 @@ export class RepositorioProtocolo {
   async agregarCiclo(protocoloId, ciclo) {
     return await this.db.withConnection(async (conn) => {
       const result = await conn.execute(
-        `INSERT INTO ciclo (protocolo_id, ciclo_id, regimen, duracion_semanas, ciclo_final)
-        VALUES (:protocolo_id, :ciclo_id, :regimen, :duracion_semanas, :ciclo_final)
+        `INSERT INTO ciclo (protocolo_id, ciclo_id, regimen, duracion_semanas, ciclo_final, repeticiones)
+        VALUES (:protocolo_id, :ciclo_id, :regimen, :duracion_semanas, :ciclo_final, :repeticiones)
         RETURNING ciclo_id INTO :id`,
         {
           protocolo_id: protocoloId,
@@ -59,6 +59,7 @@ export class RepositorioProtocolo {
           regimen: ciclo.regimen,
           duracion_semanas: ciclo.duracion_semanas,
           ciclo_final: ciclo.ciclo_final ? 1 : 0,
+          repeticiones: ciclo.repeticiones,
           id: { dir: oracledb.BIND_OUT, type: oracledb.NUMBER }
         },
         { autoCommit: true }

@@ -1,3 +1,4 @@
+import Ciclo from '../domain/ciclo/index.js';
 import Protocolo from '../domain/protocolo/index.js';
 import logger from '../utils/logger.js';
 
@@ -38,13 +39,25 @@ async function obtenerProtocolo(req, res, service) {
 
 async function agregarCiclo(req, res, service) {
   try {
-    const { id } = req.params;
-    const { ciclo_id, regimen, duracion_semanas, ciclo_final } = req.body;
-    if (!ciclo_id || !regimen || !duracion_semanas || ciclo_final === undefined) {
-      return res.status(400).json({ error: 'Faltan campos requeridos para el ciclo' });
-    }
-    const protocolo = await service.agregarCiclo(id, { id: ciclo_id, regimen, duracion_semanas, ciclo_final });
-    logger.info('Ciclo agregado al protocolo ID: %d', id);
+    const protocoloId = Number(req.params.id);
+    const payload = Array.isArray(req.body) ? req.body : [req.body];
+    const ciclos = payload.map((c) => {
+      if (!c.ciclo_id || !c.regimen || !c.duracion_semanas || c.ciclo_final === undefined || !c.repeticiones) {
+        return res.status(400).json({ error: 'validation_error' });
+      }
+      const ciclo = new Ciclo(
+        Number(c.ciclo_id),
+        protocoloId,
+        Number(c.regimen),
+        Number(c.duracion_semanas),
+        Boolean(c.ciclo_final === true || c.ciclo_final === 'true' || c.ciclo_final === 1 || c.ciclo_final === '1'),
+        Number(c.repeticiones)
+      );
+      return ciclo;
+    });
+
+    const protocolo = await service.agregarCiclos(protocoloId, ciclos);
+    logger.info('Ciclo agregado al protocolo ID: %d', protocoloId);
     res.status(200).json(protocolo);
   } catch (error) {
     logger.error(error);

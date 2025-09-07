@@ -13,18 +13,9 @@ CREATE TABLE ciclo (
   regimen NUMBER NOT NULL,
   duracion_semanas NUMBER,
   ciclo_final CHAR(1) CHECK (ciclo_final IN ('0','1')),
-  PRIMARY KEY (protocolo_id, ciclo_id, regimen),
-  FOREIGN KEY (protocolo_id) REFERENCES protocolo(protocolo_id)
-);
-
--- Tabla ciclos_finales
-CREATE TABLE ciclos_finales (
-  protocolo_id NUMBER NOT NULL,
-  ciclo_id NUMBER NOT NULL,
-  regimen NUMBER NOT NULL,
   repeticiones NUMBER,
   PRIMARY KEY (protocolo_id, ciclo_id, regimen),
-  FOREIGN KEY (protocolo_id, ciclo_id, regimen) REFERENCES ciclo(protocolo_id, ciclo_id, regimen)
+  FOREIGN KEY (protocolo_id) REFERENCES protocolo(protocolo_id)
 );
 
 -- Tabla drogas

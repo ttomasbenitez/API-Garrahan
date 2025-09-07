@@ -26,7 +26,27 @@ Feature: Crear un protocolo
             | regimen          | 0               |
             | duracion_semanas | 5               |
             | ciclo_final      | false           |
+            | repeticiones     | 1               |
         When publico en la API "/protocolo/1/ciclo" con los datos
         Then el ciclo de tratamiento se agrega correctamente al protocolo "1" con id "1"
+
+    Scenario: US-01.4 Puedo agregar varios ciclos de tratamiento a un protocolo
+        Given existe en la base de datos un protocolo con el nombre de "Osteosarcoma GBTO 2006 - No metastásico" con id "1"
+        And quiero agregar al protocolo con id "1" un ciclo de tratamiento con los siguientes datos
+            | protocolo_id     | 1               |
+            | ciclo_id         | 2               |
+            | regimen          | 0               |
+            | duracion_semanas | 5               |
+            | ciclo_final      | false           |
+            | repeticiones     | 1               |
+        Given quiero agregar al protocolo con id "1" un ciclo de tratamiento con los siguientes datos
+            | protocolo_id     | 1               |
+            | ciclo_id         | 3               |
+            | regimen          | 1               |
+            | duracion_semanas | 3               |
+            | ciclo_final      | true            |
+            | repeticiones     | 3               |
+        When publico en la API "/protocolo/1/ciclo" con los datos
+        Then el ciclo de tratamiento se agrega correctamente al protocolo "1" con los ids "2","3"
 
 
