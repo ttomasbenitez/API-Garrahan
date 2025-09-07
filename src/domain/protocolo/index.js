@@ -5,10 +5,13 @@ class Protocolo {
     this.enfermedad = enfermedad;
     this.linea = linea;
     this.protocolo_id = id;
+    this.ciclos = [];
   }
 
-  static fromRow(row) {
-    return new Protocolo(row[1], row[2], row[3], row[0]);
+  static fromRow(row, ciclos = []) {
+    const protocolo = new Protocolo(row[1], row[2], row[3], row[0]);
+    protocolo.ciclos = ciclos;
+    return protocolo;
   }
 
   async guardar(repositorioProtocolo) {
@@ -24,8 +27,8 @@ class Protocolo {
     if (!this.ciclos) {
       this.ciclos = [];
     }
-    this.ciclos.push(ciclo);
     await repositorioProtocolo.agregarCiclo(this.protocolo_id, ciclo);
+    this.ciclos.push(ciclo);
   }
 }
 

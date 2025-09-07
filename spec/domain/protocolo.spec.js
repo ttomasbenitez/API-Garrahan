@@ -61,10 +61,12 @@ describe('Protocolo', () => {
       'Osteosarcoma',
       'primera linea'
     ];
-    const protocolo = Protocolo.fromRow(row);
+    const protocolo = Protocolo.fromRow(row, []);
     expect(protocolo.nombre).toBe('Osteosarcoma GBTO 2006 - No metastásico');
     expect(protocolo.enfermedad).toBe('Osteosarcoma');
     expect(protocolo.linea).toBe('primera linea');
+    expect(protocolo.protocolo_id).toBe(1);
+    expect(protocolo.ciclos.length).toBe(0);
   });
 
   test('deberia poder agregar ciclos asociados al protocolo', async () => {

@@ -37,5 +37,17 @@ async function obtenerProtocolo(req, res, service) {
 }
 
 async function agregarCiclo(req, res, service) {
-  return 1;
+  try {
+    const { id } = req.params;
+    const { ciclo_id, regimen, duracion_semanas, ciclo_final } = req.body;
+    if (!ciclo_id || !regimen || !duracion_semanas || ciclo_final === undefined) {
+      return res.status(400).json({ error: 'Faltan campos requeridos para el ciclo' });
+    }
+    const protocolo = await service.agregarCiclo(id, { id: ciclo_id, regimen, duracion_semanas, ciclo_final });
+    logger.info('Ciclo agregado al protocolo ID: %d', id);
+    res.status(200).json(protocolo);
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({ error: error.message });
+  }
 }

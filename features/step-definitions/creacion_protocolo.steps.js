@@ -84,9 +84,10 @@ Then(/^el ciclo de tratamiento se agrega correctamente al protocolo "(.*)" con i
   response = JSON.parse(response.body);
   assert.strictEqual(response.protocolo_id, parseInt(idProtocolo, 10));
   assert.ok(response.ciclos);
-  const ciclo = response.ciclos.find(c => c.ciclo_id === parseInt(idCiclo, 10));
+  const ciclo = response.ciclos.find(c => c.id === parseInt(idCiclo, 10));
   if (!ciclo) throw new Error(`No se encontró el ciclo con id ${idCiclo} en el protocolo ${idProtocolo}`);
-  assert.strictEqual(ciclo.duracion, data.duracion);
-  assert.strictEqual(ciclo.descripcion, data.descripcion);
+  assert.strictEqual(Number(ciclo.regimen), Number(data.regimen));
+  assert.strictEqual(Number(ciclo.duracion_semanas), Number(data.duracion_semanas));
+  assert.strictEqual(String(ciclo.ciclo_final), data.ciclo_final);
 });
 

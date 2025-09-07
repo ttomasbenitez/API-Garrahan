@@ -12,4 +12,20 @@ describe('Ciclo', () => {
     expect(ciclo.duracion_semanas).toBe(5);
     expect(ciclo.ciclo_final).toBe(false);
   });
+
+  test('deberia obtener un ciclo con todos los campos a partir de un row', () => {
+    const row = [
+      1,
+      1,
+      0,
+      5,
+      0,
+    ];
+    const ciclo = Ciclo.fromRow(row);
+    expect(ciclo.id).toBe(1);
+    expect(ciclo.protocolo_id).toBe(1);
+    expect(ciclo.regimen).toBe(0);
+    expect(ciclo.duracion_semanas).toBe(5);
+    expect(ciclo.ciclo_final).toBe(false);
+  });
 });
