@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 3000;
 async function startServer() {
   try {
     await initPool();
-    const pool = await getPool(); 
+    const pool = await getPool();
     const connection = await pool.getConnection();
     await connection.close();
 

@@ -54,7 +54,7 @@ BeforeAll({ timeout: 180_000 }, async function () {
   process.env.ORACLE_CONNECT_STRING = `${host}:${port}/${service}`;
 
   // Inicializar pool y obtener una conexión para cargar el schema
-  await initPool(); 
+  await initPool();
   const pool = await getPool();
   const connection = await pool.getConnection();
 
