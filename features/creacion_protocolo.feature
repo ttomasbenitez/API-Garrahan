@@ -18,7 +18,6 @@ Feature: Crear un protocolo
         And la enfermedad es "Osteosarcoma"
         And la linea de tratamiento es "primera linea"
     
-    @wip
     Scenario: US-01.3 Agregar ciclo de tratamiento a un protocolo
         Given existe en la base de datos un protocolo con el nombre de "Osteosarcoma GBTO 2006 - No metastásico" con id "1"
         And quiero agregar al protocolo con id "1" un ciclo de tratamiento con los siguientes datos
