@@ -16,10 +16,9 @@ async function crearPaciente(req, res, service) {
 
     const fecha_nacimiento_date = fecha_nacimiento ? new Date(fecha_nacimiento) : null;
 
-    const paciente = new Paciente(nombre, apellido, id_hospitalario,
-      fecha_nacimiento_date, peso, sexo, profesional_id, obra_social);
+    const paciente = new Paciente(nombre, apellido, id_hospitalario, fecha_nacimiento_date, peso, sexo, profesional_id, obra_social);
     await service.crear(paciente);
-    logger.info('Paciente creado con ID: %d', paciente.paciente_id);
+    logger.info('Paciente creado con ID: %d', paciente.id);
     res.status(201).json(paciente);
   } catch (error) {
     logger.error('Error al crear paciente: %o', error);
@@ -31,7 +30,7 @@ async function obtenerPaciente(req, res, service) {
   try {
     const { id } = req.params;
     const paciente = await service.obtener(id);
-    logger.info('Paciente obtenido con ID: %d', paciente.paciente_id);
+    logger.info('Paciente obtenido con ID: %d', paciente.id);
     res.status(200).json(JSON.stringify(paciente));
   } catch (error) {
     logger.error('Error al obtener paciente: %o', error);

@@ -5,7 +5,7 @@ export class PacienteService {
 
   async crear(paciente) {
     const id = await this.pacienteRepo.guardar(paciente);
-    paciente.paciente_id = id;
+    paciente.id = id;
     return id;
   }
 

@@ -42,7 +42,8 @@ export class RepositorioPaciente {
       `SELECT id, nombre, apellido, id_hospitalario, fecha_nacimiento, peso, sexo, profesional_id, ultima_modificacion, obra_social
            FROM paciente
            WHERE id = :id`,
-      [id]
+      [id],
+      { outFormat: oracledb.OUT_FORMAT_OBJECT }
     );
 
     if (result.rows.length === 0) {
@@ -54,7 +55,7 @@ export class RepositorioPaciente {
       row.NOMBRE,
       row.APELLIDO,
       row.ID_HOSPITALARIO,
-      row.FECHA_NACIMIENTO,
+      row.FECHA_NACIMIENTO ? new Date(row.FECHA_NACIMIENTO).toISOString().split('T')[0] : null,
       row.PESO,
       row.SEXO,
       row.PROFESIONAL_ID,

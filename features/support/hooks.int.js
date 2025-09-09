@@ -80,7 +80,7 @@ BeforeAll({ timeout: 180_000 }, async function () {
   await connection.close(); // devuelve al pool
 });
 
-AfterAll(async function () {
+AfterAll({ timeout: 180_000 }, async function () {
   // Cerrar pool y contenedor
   await oracleDBInstance.close();
   if (container) await container.stop();
