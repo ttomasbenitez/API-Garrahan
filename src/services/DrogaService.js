@@ -4,9 +4,13 @@ export class DrogaService {
     this.drogaRepo = drogaRepo;
   }
 
-  async crear(droga) {
-    const id = await this.drogaRepo.guardar(droga);
-    droga.id_droga = id;
-    return id;
+  async crear(drogas) {
+
+    const ids = await this.drogaRepo.guardar(drogas);
+    drogas.forEach((droga, index) => {
+      droga.id_droga = ids[index];
+    });
+
+    return ids;
   }
 }

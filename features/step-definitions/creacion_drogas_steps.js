@@ -3,11 +3,12 @@ import request from 'supertest';
 import app from '../../src/app.js';
 import assert from 'node:assert/strict';
 
-let droga = {};
+let droga = [];
 let response;
 
 Given(/^que tengo los siguientes datos de la droga:$/, function (dataTable) {
-  droga = dataTable.rowsHash();
+  const data = dataTable.rowsHash();
+  droga.push(data);
 });
 
 When(/^publico en la API "(.*)" con los datos de la droga$/, async function (endpoint) {
@@ -18,17 +19,42 @@ When(/^publico en la API "(.*)" con los datos de la droga$/, async function (end
 });
 
 Then(/^obtengo los datos de la droga con el id "(.*)"$/, function (id) {
-  assert.ok(response);
-  assert.strictEqual(response.status, 201);
-  assert.ok(response.body.id_droga);
-  assert.strictEqual(response.body.id_droga, parseInt(id, 10));
+  assert.ok(response.body[0].id_droga);
+  assert.strictEqual(response.body[0].id_droga, parseInt(id, 10));
 
 });
 
 Then(/^el medicamento es "(.*)"$/, function (nombreMedicamento) {
-  assert.strictEqual(response.body.medicamento, nombreMedicamento);
+  assert.strictEqual(response.body[0].medicamento, nombreMedicamento);
 });
 
 Then(/^la "(.*)" es "(.*)"$/, function (campo, valor) {
-  assert.strictEqual(response.body[campo], valor);
+  assert.strictEqual(String(response.body[0][campo]), String(valor));
+});
+
+const compararDroga = (droga1, droga2) => {
+  assert.strictEqual(droga1.medicamento, droga2.medicamento);
+  assert.strictEqual(droga1.presentacion, droga2.presentacion);
+  assert.strictEqual(String(droga1.dosis), String(droga2.dosis));
+  assert.strictEqual(String(droga1.dosis_unidad), String(droga2.dosis_unidad));
+  assert.strictEqual(String(droga1.dosis_maxima), String(droga2.dosis_maxima));
+  assert.strictEqual(String(droga1.dosis_maxima_unidad), String(droga2.dosis_maxima_unidad));
+};
+
+Then(/^obtengo los datos de las Drogas con el id "(.*)" y "(.*)"$/, function (id1, id2) {
+  assert.ok(Array.isArray(response.body));
+  assert.strictEqual(response.body.length, 2);
+  assert.ok(response.body[0].id_droga);
+  assert.ok(response.body[1].id_droga);
+  assert.strictEqual(response.body[0].id_droga, parseInt(id1, 10));
+  assert.strictEqual(response.body[1].id_droga, parseInt(id2, 10));
+  compararDroga(response.body[0], droga[0]);
+  compararDroga(response.body[1], droga[1]);
+});
+
+Then('responde correctamente', function () {
+  droga = [];
+  assert.ok(response);
+  assert.strictEqual(response.status, 201);
+  response = {};
 });

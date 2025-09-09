@@ -6,31 +6,45 @@ export class RepositorioDroga {
     this.db = db;
   }
 
-  async guardar(droga) {
+  async guardar(drogas) {
     try {
       const result = await this.db.withConnection(async (conn) => {
         const sql = `
-          INSERT INTO droga (medicamento, presentacion, dosis, dosis_unidad, dosis_maxima, dosis_maxima_unidad)
-          VALUES (:medicamento, :presentacion, :dosis, :dosis_unidad, :dosis_maxima, :dosis_maxima_unidad)
-          RETURNING id_droga INTO :id
-        `;
-        const binds = {
-          medicamento: droga.medicamento,
-          presentacion: droga.presentacion,
-          dosis: droga.dosis,
-          dosis_unidad: droga.dosis_unidad,
-          dosis_maxima: droga.dosis_maxima,
-          dosis_maxima_unidad: droga.dosis_maxima_unidad,
-          id: { dir: oracledb.BIND_OUT, type: oracledb.NUMBER }
+        INSERT INTO droga (medicamento, presentacion, dosis, dosis_unidad, dosis_maxima, dosis_maxima_unidad)
+        VALUES (:medicamento, :presentacion, :dosis, :dosis_unidad, :dosis_maxima, :dosis_maxima_unidad)
+        RETURNING id_droga INTO :id
+      `;
+        const toNum = (v) => (v === undefined || v === null || v === '' ? null : Number(v));
+        const toStr = (v) => (v === undefined || v === null ? null : String(v));
+
+        const binds = drogas.map(d => ({
+          medicamento: toStr(d.medicamento),
+          presentacion: toStr(d.presentacion),
+          dosis: toNum(d.dosis),
+          dosis_unidad: toStr(d.dosis_unidad),
+          dosis_maxima: toNum(d.dosis_maxima),
+          dosis_maxima_unidad: toStr(d.dosis_maxima_unidad),
+        }));
+
+        const opts = {
+          autoCommit: true,
+          bindDefs: {
+            medicamento: { type: oracledb.STRING, maxSize: 100 },
+            presentacion: { type: oracledb.STRING, maxSize: 100 },
+            dosis: { type: oracledb.NUMBER },
+            dosis_unidad: { type: oracledb.STRING, maxSize: 20 },
+            dosis_maxima: { type: oracledb.NUMBER },
+            dosis_maxima_unidad: { type: oracledb.STRING, maxSize: 20 },
+            id: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
+          }
         };
-        const opts = { autoCommit: true };
-        return await conn.execute(sql, binds, opts);
+        return await conn.executeMany(sql, binds, opts);
       });
 
       if (result.rowsAffected === 0) {
         throw new Error(ERROR_DROGRA_CREACION);
       }
-      return result.outBinds.id[0];
+      return result.outBinds.map(bind => bind.id[0]);
     } catch (error) {
       console.error('Error en RepositorioDroga.guardar:', error);
       throw error;
