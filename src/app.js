@@ -28,6 +28,7 @@ const protocoloController = makeProtocoloController(protocoloService);
 const repositorioPaciente = new RepositorioPaciente(oracleDBInstance);
 const pacienteService = new PacienteService(repositorioPaciente);
 const pacienteController = makePacienteController(pacienteService);
+// profesional
 const repositorioProfesional = new RepositorioProfesional(oracleDBInstance);
 const profesionalService = new ProfesionalService(repositorioProfesional);
 const profesionalController = makeProfesionalController(profesionalService);
