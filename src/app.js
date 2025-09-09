@@ -10,19 +10,30 @@ import pacientesRoutes from './routes/pacientes.js';
 import { RepositorioPaciente } from './persistance/repositorioPaciente.js';
 import { PacienteService } from './services/PacienteService.js';
 import { makePacienteController } from './controllers/pacienteController.js';
+import { DrogaService } from './services/DrogaService.js';
+import { makeDrogaController } from './controllers/drogaController.js';
+import drogasRoutes from './routes/drogas.js';
+import { RepositorioDroga } from './persistance/repositorioDroga.js';
 
 const app = express();
+// protocolo
 const repositorioProtocolo = new RepositorioProtocolo(oracleDBInstance);
 const protocoloService = new ProtocoloService(repositorioProtocolo);
 const protocoloController = makeProtocoloController(protocoloService);
+// paciente
 const repositorioPaciente = new RepositorioPaciente(oracleDBInstance);
 const pacienteService = new PacienteService(repositorioPaciente);
 const pacienteController = makePacienteController(pacienteService);
+// droga
+const repositorioDroga = new RepositorioDroga(oracleDBInstance);
+const drogasService = new DrogaService(repositorioDroga);
+const drogaController = makeDrogaController(drogasService);
 
 app.use(cors());
 app.use(express.json());
 app.use('/', routes);
 app.use('/protocolo', protocolosRoutes(protocoloController));
 app.use('/paciente', pacientesRoutes(pacienteController));
+app.use('/droga', drogasRoutes(drogaController));
 
 export default app;
