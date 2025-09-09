@@ -93,4 +93,40 @@ describe(RepositorioDroga, () => {
     });
     expect(opts).toMatchObject({ autoCommit: true });
   });
+
+  test('puedo obtener una droga por su id', async () => {
+    await agregarDroga();
+    const drogaId = 0;
+    const expectedDroga = [
+      droga.medicamento,
+      droga.presentacion,
+      droga.dosis,
+      droga.dosis_unidad,
+      droga.dosis_maxima,
+      droga.dosis_maxima_unidad,
+      drogaId
+    ];
+    // Creamos el mock de la conexión y su método execute
+    db.execute.mockResolvedValue({
+      rows: [expectedDroga]
+    });
+
+    const drogaObtenida = await repo.obtener(0);
+
+    expect(db.execute).toHaveBeenCalledTimes(1);
+    const [sql] = db.execute.mock.calls[0];
+    expect(sql).toMatch(/SELECT\s+/i);
+    expect(sql).toMatch(/FROM\s+droga/i);
+
+    expect(drogaObtenida).toBeInstanceOf(Droga);
+    expect(drogaObtenida).toMatchObject({
+      medicamento: expectedDroga[0],
+      presentacion: expectedDroga[1],
+      dosis: expectedDroga[2],
+      dosis_unidad: expectedDroga[3],
+      dosis_maxima: expectedDroga[4],
+      dosis_maxima_unidad: expectedDroga[5],
+      id_droga: expectedDroga[6]
+    });
+  });
 });

@@ -1,5 +1,6 @@
 import oracledb from 'oracledb';
-import { ERROR_DROGRA_CREACION } from '../errors/droga.js';
+import { ERROR_DROGA_NO_ENCONTRADA, ERROR_DROGRA_CREACION } from '../errors/droga.js';
+import Droga from '../domain/droga/index.js';
 
 export class RepositorioDroga {
   constructor(db) {
@@ -49,5 +50,18 @@ export class RepositorioDroga {
       console.error('Error en RepositorioDroga.guardar:', error);
       throw error;
     }
+  }
+
+  async obtener(id) {
+    const result = await this.db.execute(
+      'SELECT medicamento, presentacion, dosis, dosis_unidad, dosis_maxima, dosis_maxima_unidad, id_droga FROM droga WHERE id_droga = :id',
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+      throw new Error(ERROR_DROGA_NO_ENCONTRADA);
+    }
+
+    return new Droga(...result.rows[0]);
   }
 }

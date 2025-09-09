@@ -43,7 +43,7 @@ CREATE TABLE administracion_medicacion (
   frecuencia_diaria NUMBER,
   PRIMARY KEY (protocolo_id, ciclo_id, regimen, id_droga),
   FOREIGN KEY (protocolo_id, ciclo_id, regimen) REFERENCES ciclo(protocolo_id, ciclo_id, regimen),
-  FOREIGN KEY (id_droga) REFERENCES drogas(id_droga)
+  FOREIGN KEY (id_droga) REFERENCES droga(id_droga)
 );
 
 -- Tabla profesional

@@ -13,4 +13,8 @@ export class DrogaService {
 
     return ids;
   }
+
+  async obtener(idDroga) {
+    return await this.drogaRepo.obtener(idDroga);
+  }
 }

@@ -25,11 +25,13 @@ Then(/^obtengo los datos de la droga con el id "(.*)"$/, function (id) {
 });
 
 Then(/^el medicamento es "(.*)"$/, function (nombreMedicamento) {
-  assert.strictEqual(response.body[0].medicamento, nombreMedicamento);
+  const body = Array.isArray(response.body) ? response.body[0] : response.body;
+  assert.strictEqual(body.medicamento, nombreMedicamento);
 });
 
 Then(/^la "(.*)" es "(.*)"$/, function (campo, valor) {
-  assert.strictEqual(String(response.body[0][campo]), String(valor));
+  const body = Array.isArray(response.body) ? response.body[0] : response.body;
+  assert.strictEqual(String(body[campo]), String(valor));
 });
 
 const compararDroga = (droga1, droga2) => {
@@ -55,6 +57,33 @@ Then(/^obtengo los datos de las Drogas con el id "(.*)" y "(.*)"$/, function (id
 Then('responde correctamente', function () {
   droga = [];
   assert.ok(response);
+  assert.strictEqual(response.status, 200);
+  response = {};
+});
+
+Then('se crea correctamente', function () {
+  droga = [];
+  assert.ok(response);
   assert.strictEqual(response.status, 201);
   response = {};
+});
+
+Given(/^su id es "(.*)"$/, async function (_id) {
+  response = await request(app)
+    .post('/droga')
+    .send(droga)
+    .set('Accept', 'application/json');
+});
+
+When(/^consulto en la API "(.*)" por su id$/, async function (endpoint) {
+  response = await request(app)
+    .get(endpoint)
+    .set('Accept', 'application/json');
+});
+
+Then(/^el sistema me devuelve la droga con id "(.*)"$/, function (id) {
+  assert.ok(response);
+  assert.strictEqual(response.status, 200);
+  assert.ok(response.body.id_droga);
+  assert.strictEqual(response.body.id_droga, parseInt(id, 10));
 });
