@@ -1,4 +1,4 @@
-import Ciclo from '../domain/ciclo/index.js';
+import Ciclo from '../domain/protocolo/ciclo.js';
 import Protocolo from '../domain/protocolo/index.js';
 import logger from '../utils/logger.js';
 

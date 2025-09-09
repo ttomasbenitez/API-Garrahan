@@ -1,6 +1,6 @@
 /* global describe, test, expect, jest, beforeEach  */
 import oracleDB from '../../src/db/connection_pool.js';
-import Ciclo from '../../src/domain/ciclo/index.js';
+import Ciclo from '../../src/domain/protocolo/ciclo.js';
 import Protocolo from '../../src/domain/protocolo/index.js';
 import { RepositorioProtocolo } from '../../src/persistance/repositorioProtocolo.js';
 

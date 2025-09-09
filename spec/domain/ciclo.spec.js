@@ -1,4 +1,4 @@
-import Ciclo from '../../src/domain/ciclo';
+import Ciclo from '../../src/domain/protocolo/ciclo';
 
 /* global describe, test, expect */
 describe('Ciclo', () => {
