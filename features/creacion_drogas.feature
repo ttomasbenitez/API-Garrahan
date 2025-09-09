@@ -3,7 +3,7 @@ Feature: Creación de Drogas
     Quiero mantener un catálogo de drogas
     Para poder asignarlas a protocolos y consultarlas por nombre y presentación
 
-  Scenario: US-03.1 Crear una nueva droga
+  Scenario: US-04.1 Crear una nueva droga
     Given que tengo los siguientes datos de la droga:
       | medicamento         | CISPLATINO      |
       | presentacion        | FRASCO AMPOLLA  |
@@ -21,7 +21,7 @@ Feature: Creación de Drogas
     And la "dosis_maxima_unidad" es "mg"
     And se crea correctamente
 
-  Scenario: US-03.2 Crear varias drogas
+  Scenario: US-04.2 Crear varias drogas
     Given que tengo los siguientes datos de la droga:
       | medicamento         | CISPLATINO      |
       | presentacion        | CAPSULA         |
@@ -40,7 +40,7 @@ Feature: Creación de Drogas
     Then obtengo los datos de las Drogas con el id "2" y "3"
     And se crea correctamente
 
-  Scenario: US-03.3 Obtener una droga creada por su id
+  Scenario: US-04.3 Obtener una droga creada por su id
     Given que tengo los siguientes datos de la droga:
       | medicamento        | CISPLATINO         |
       | presentacion       | FRASCO AMPOLLA     |
