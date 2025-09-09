@@ -46,9 +46,9 @@ Feature: Creación de Drogas
       | medicamento        | CISPLATINO         |
       | presentacion       | FRASCO AMPOLLA     |
       | dosis              | 10                 |
-      | dosis_unidad       | "mg"               |
+      | dosis_unidad       | mg                 |
       | dosis_maxima       | 10                 | 
-      | dosis_maxima_unidad| "mg"               |
+      | dosis_maxima_unidad| mg                 |
     When consulto en la API "/droga/1"
     Then el sistema me devuelve la droga con id "1"
     And el medicamento es "CISPLATINO"
