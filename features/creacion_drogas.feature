@@ -12,7 +12,7 @@ Feature: Creación de Drogas
       | dosis_maxima        | 10              |
       | dosis_maxima_unidad | mg              |
     When publico en la API "/droga" con los datos de la droga
-    Then obtengo los datos de la droga con el id "1"
+    Then obtengo los datos de la droga con el id "3"
     And el medicamento es "CISPLATINO"
     And la "presentacion" es "FRASCO AMPOLLA"
     And la "dosis" es "10"
@@ -38,7 +38,7 @@ Feature: Creación de Drogas
       | dosis_maxima_unidad  | mg              |
       | volumen_ml_por_dosis | 100             |
     When publico en la API "/droga" con los datos de la droga
-    Then obtengo los datos de las Drogas con el id "2" y "3"
+    Then obtengo los datos de las Drogas con el id "4" y "5"
     And se crea correctamente
 
   Scenario: US-04.3 Obtener una droga creada por su id
@@ -49,9 +49,9 @@ Feature: Creación de Drogas
       | dosis_unidad       | mg                 |
       | dosis_maxima       | 10                 | 
       | dosis_maxima_unidad| mg                 |
-    And su id es "1"
-    When consulto en la API "/droga/4" por su id
-    Then el sistema me devuelve la droga con id "4"
+    And su id es "6"
+    When consulto en la API "/droga/6" por su id
+    Then el sistema me devuelve la droga con id "6"
     And el medicamento es "CISPLATINO"
     And la "presentacion" es "FRASCO AMPOLLA"
     And la "dosis" es "10"

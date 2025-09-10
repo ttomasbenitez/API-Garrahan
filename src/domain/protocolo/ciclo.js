@@ -9,6 +9,7 @@ class Ciclo {
     this.duracion_semanas = duracion_semanas;
     this.ciclo_final = ciclo_final;
     this.repeticiones = repeticiones;
+    this.administracion_medicacion = [];
   }
 
   static fromRow(row) {
@@ -20,6 +21,13 @@ class Ciclo {
       row[4] === ES_CICLO_FINAL,
       row[5]
     );
+  }
+
+  agregarAdministracion(administracion_medicaciones) {
+    if (!this.administracion_medicacion) {
+      this.administracion_medicacion = [];
+    }
+    this.administracion_medicacion.push(...administracion_medicaciones);
   }
 }
 

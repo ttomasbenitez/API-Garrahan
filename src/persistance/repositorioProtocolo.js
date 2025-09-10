@@ -2,6 +2,7 @@ import oracledb from 'oracledb';
 import Protocolo from '../domain/protocolo/index.js';
 import { ERROR_PROTOCOLO_CREACION, ERROR_PROTOCOLO_NO_ENCONTRADO, ERROR_PROTOCOLO_CICLO } from '../errors/protocolo.js';
 import Ciclo from '../domain/protocolo/ciclo.js';
+import AdministracionMedicacion from '../domain/protocolo/administracionMedicacion.js';
 
 export class RepositorioProtocolo {
   constructor(db) {
@@ -30,8 +31,27 @@ export class RepositorioProtocolo {
       [protocoloId]
     );
 
+    const administracion_medicaciones = await this.db.execute(
+      `SELECT protocolo_id, ciclo_id, regimen, id_droga, dosis, dosis_unidad, frecuencia, administracion_diaria, frecuencia_diaria, id
+       FROM administracion_medicacion
+       WHERE protocolo_id = :id`,
+      [protocoloId],
+    );
+
+    const administracionesPorCiclo = administracion_medicaciones.rows.reduce((acc, row) => {
+      const key = `${row[1]}-${row[2]}`;
+      if (!acc[key]) {
+        acc[key] = [];
+      }
+      acc[key].push(new AdministracionMedicacion(row[3], row[4], row[5], row[6], row[7], row[8], row[9]));
+      return acc;
+    }, {});
+
     return result.rows.map(row => {
-      return Ciclo.fromRow(row);
+      const ciclo = Ciclo.fromRow(row);
+      const key = `${ciclo.id}-${ciclo.regimen}`;
+      ciclo.administracion_medicacion = administracionesPorCiclo[key] || [];
+      return ciclo;
     });
   }
 
@@ -69,5 +89,59 @@ export class RepositorioProtocolo {
       }
       return result.outBinds.id[0];
     });
+  }
+
+  async agregarAdministracion(protocolo, ciclo, administracion_medicaciones) {
+    try {
+      const result = await this.db.withConnection(async (conn) => {
+        const sql = `
+        INSERT INTO administracion_medicacion (protocolo_id, ciclo_id, regimen, id_droga, dosis, dosis_unidad, frecuencia, administracion_diaria, frecuencia_diaria)
+        VALUES (:protocolo_id, :ciclo_id, :regimen, :id_droga, :dosis, :dosis_unidad, :frecuencia, :administracion_diaria, :frecuencia_diaria)
+        RETURNING id INTO :id
+      `;
+
+        const toNum = (v) => (v === undefined || v === null || v === '' ? null : Number(v));
+        const toStr = (v) => (v === undefined || v === null ? null : String(v));
+
+        const binds = administracion_medicaciones.map(a => ({
+          protocolo_id: toNum(protocolo.protocolo_id),
+          ciclo_id: toNum(ciclo.id),
+          regimen: toNum(ciclo.regimen),
+          id_droga: toNum(a.id_droga),
+          dosis: toNum(a.dosis),
+          dosis_unidad: toStr(a.dosis_unidad),
+          frecuencia: toStr(a.frecuencia),
+          administracion_diaria: toNum(a.administracion_diaria),
+          frecuencia_diaria: toNum(a.frecuencia_diaria),
+        }));
+
+        const opts = {
+          autoCommit: true,
+          bindDefs: {
+            protocolo_id: { type: oracledb.NUMBER },
+            ciclo_id: { type: oracledb.NUMBER },
+            regimen: { type: oracledb.NUMBER },
+            id_droga: { type: oracledb.NUMBER },
+            dosis: { type: oracledb.NUMBER },
+            dosis_unidad: { type: oracledb.STRING, maxSize: 20 },
+            frecuencia: { type: oracledb.STRING, maxSize: 100 },
+            administracion_diaria: { type: oracledb.NUMBER },
+            frecuencia_diaria: { type: oracledb.NUMBER },
+            id: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
+          }
+        };
+        return await conn.executeMany(sql, binds, opts);
+      });
+
+      if (result.rowsAffected === 0) {
+        throw new Error('Error al agregar administraciones de medicación');
+      }
+
+      return result.outBinds.map(bind => bind.id[0]);
+
+    } catch (error) {
+      console.error('Error en RepositorioProtocolo.agregarAdministracion:', error);
+      throw error;
+    }
   }
 }

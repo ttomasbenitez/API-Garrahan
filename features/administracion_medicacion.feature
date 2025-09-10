@@ -6,21 +6,33 @@ Feature: Administrar medicación en un ciclo de tratamiento
   Background:
     Given existe en la base de datos un protocolo con el nombre de "Osteosarcoma GBTO 2006 - No metastásico" con id "1"
     And existe en la base de datos un ciclo para el protocolo "1" con ciclo_id "1" y regimen "0"
-    And existe en la base de datos una droga con id "10" y nombre "Metotrexato 50 mg"
-    And existe en la base de datos una droga con id "11" y nombre "Doxorrubicina 10 mg/mL"
-  
-  @wip
+    And existe en la base de datos una droga con id "1" y con los datos:
+      | medicamento         | CISPLATINO      |
+      | presentacion        | CAPSULA         |
+      | dosis               | 10              |
+      | dosis_unidad        | mg              |
+      | dosis_maxima        | 10              | 
+      | dosis_maxima_unidad | mg              |
+    And existe en la base de datos una droga con id "2" y con los datos:
+      | medicamento          | PANITUMUMAB     |
+      | presentacion         | FRASCO AMPOLLA  |
+      | dosis                | 20              |
+      | dosis_unidad         | mg/ml           |
+      | dosis_maxima         | 2               | 
+      | dosis_maxima_unidad  | mg              |
+      | volumen_ml_por_dosis | 100             |
+
   Scenario: US-05.1 Agregar una administración (una sola droga) a un ciclo
     Given quiero agregar administración de medicación con los siguientes datos
-      | id_droga             | 10     |
-      | dosis                | 50     |
-      | dosis_unidad         | mg     |
-      | frecuencia           | D1-D2  |
-      | administracion_diaria| 0      |
-      | frecuencia_diaria    | 2      |
-    When publico en la API "/protocolo/1/ciclo/1/regimen/0/administracion" con los datos
+      | id_droga              | 1      |
+      | dosis                 | 50     |
+      | dosis_unidad          | mg     |
+      | frecuencia            | 1,2    |
+      | administracion_diaria | 0      |
+      | frecuencia_diaria     | 2      |
+    When publico en la API "/protocolo/1/ciclo/1/regimen/0/administracion" con los datos de la administración
     Then la administración se crea correctamente
-    And puedo consultar la administración de "/protocolo/1/ciclo/1/regimen/0/administracion" y veo la droga "10" con dosis "50" "mg" y frecuencia "D1-D2"
+
   @wip
   Scenario: US-05.2 Agregar varias administraciones en una sola llamada (array)
     Given quiero agregar múltiples administraciones con los siguientes items

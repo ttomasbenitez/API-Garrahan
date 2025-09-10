@@ -30,6 +30,25 @@ class Protocolo {
     await repositorioProtocolo.agregarCiclo(this.protocolo_id, ciclo);
     this.ciclos.push(ciclo);
   }
+
+  validarCicloEnRegimen(cicloId, regimen) {
+    if (!this.ciclos || this.ciclos.length === 0) {
+      throw new Error('El protocolo no tiene ciclos definidos');
+    }
+    const ciclo = this.ciclos.find(c => c.id === cicloId && c.regimen === regimen);
+    if (!ciclo) {
+      throw new Error(`No se encontró el ciclo ${cicloId} en el régimen ${regimen} del protocolo ${this.protocolo_id}`);
+    }
+    return ciclo;
+  }
+
+  async agregarAdministracion(ciclo, administracion_medicaciones, repositorioProtocolo) {
+    const ids = await repositorioProtocolo.agregarAdministracion(this, ciclo, administracion_medicaciones);
+    administracion_medicaciones.forEach((adm, index) => {
+      adm.id = ids[index];
+    });
+    ciclo.agregarAdministracion(administracion_medicaciones, repositorioProtocolo);
+  }
 }
 
 export default Protocolo;

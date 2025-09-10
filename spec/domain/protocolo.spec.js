@@ -71,7 +71,23 @@ describe('Protocolo', () => {
 
   test('deberia poder agregar ciclos asociados al protocolo', async () => {
     const id = await agregarProtocolo();
-    await protocolo.agregarCiclo(new Ciclo(id, 1, 0, 5, false), repo);
+    await protocolo.agregarCiclo(new Ciclo(1, id, 0, 5, false), repo);
     expect(protocolo.ciclos.length).toBe(1);
   });
+
+  test('puedo validar si un ciclo de un regimen existe en el protocolo', async () => {
+    const id = await agregarProtocolo();
+    await protocolo.agregarCiclo(new Ciclo(1, id, 0, 2, false), repo);
+    await protocolo.agregarCiclo(new Ciclo(1, id, 1, 5, true), repo);
+
+    const ciclo1Regimen0 = protocolo.validarCicloEnRegimen(1, 0);
+    expect(ciclo1Regimen0).toBeInstanceOf(Ciclo);
+    expect(ciclo1Regimen0.duracion_semanas).toBe(2);
+
+    const ciclo1Regimen1 = protocolo.validarCicloEnRegimen(1, 1);
+    expect(ciclo1Regimen1).toBeInstanceOf(Ciclo);
+    expect(ciclo1Regimen1.duracion_semanas).toBe(5);
+
+  });
+
 });

@@ -32,6 +32,7 @@ CREATE TABLE droga (
 
 -- Tabla administracion_medicacion
 CREATE TABLE administracion_medicacion (
+  id NUMBER GENERATED ALWAYS AS IDENTITY,
   protocolo_id NUMBER NOT NULL,
   ciclo_id NUMBER NOT NULL,
   regimen NUMBER NOT NULL,

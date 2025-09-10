@@ -12,16 +12,29 @@ export class ProtocoloService {
   async obtener(id) { return this.protocoloRepo.obtener(id); }
 
   async agregarCiclo(protocoloId, ciclo) {
-    const protocolo = await this.protocoloRepo.obtener(protocoloId);
+    const protocolo = await this.obtener(protocoloId);
     await protocolo.agregarCiclo(ciclo, this.protocoloRepo);
     return protocolo;
   }
 
   async agregarCiclos(protocoloId, ciclos) {
-    const protocolo = await this.protocoloRepo.obtener(protocoloId);
+    const protocolo = await this.obtener(protocoloId);
     for (const ciclo of ciclos) {
       await protocolo.agregarCiclo(ciclo, this.protocoloRepo);
     }
+    return protocolo;
+  }
+
+  async validarProtocolo(protocoloId) {
+    const protocolo = await this.obtener(protocoloId);
+    if (!protocolo) {
+      throw new Error(`No se encontró el protocolo con id ${protocoloId}`);
+    }
+    return protocolo;
+  }
+
+  async agregarAdministracion(protocolo, ciclo, administracion_medicaciones) {
+    await protocolo.agregarAdministracion(ciclo, administracion_medicaciones, this.protocoloRepo);
     return protocolo;
   }
 }

@@ -20,10 +20,6 @@ import drogasRoutes from './routes/drogas.js';
 import { RepositorioDroga } from './persistance/repositorioDroga.js';
 
 const app = express();
-// protocolo
-const repositorioProtocolo = new RepositorioProtocolo(oracleDBInstance);
-const protocoloService = new ProtocoloService(repositorioProtocolo);
-const protocoloController = makeProtocoloController(protocoloService);
 // paciente
 const repositorioPaciente = new RepositorioPaciente(oracleDBInstance);
 const pacienteService = new PacienteService(repositorioPaciente);
@@ -36,6 +32,10 @@ const profesionalController = makeProfesionalController(profesionalService);
 const repositorioDroga = new RepositorioDroga(oracleDBInstance);
 const drogasService = new DrogaService(repositorioDroga);
 const drogaController = makeDrogaController(drogasService);
+// protocolo
+const repositorioProtocolo = new RepositorioProtocolo(oracleDBInstance);
+const protocoloService = new ProtocoloService(repositorioProtocolo);
+const protocoloController = makeProtocoloController(protocoloService, drogasService);
 
 app.use(cors());
 app.use(express.json());

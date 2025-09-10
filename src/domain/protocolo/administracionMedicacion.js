@@ -7,7 +7,7 @@ class AdministracionMedicacion {
     this.frecuencia = frecuencia ?? null;
     this.administracion_diaria = administracion_diaria ?? 0;
     this.frecuencia_diaria = frecuencia_diaria ?? null;
-    this.id_admin = id_admin ?? null;
+    this.id = id_admin ?? null;
   }
 }
 

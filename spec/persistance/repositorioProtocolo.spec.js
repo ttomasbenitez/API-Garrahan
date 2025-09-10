@@ -2,7 +2,9 @@
 import oracleDB from '../../src/db/connection_pool.js';
 import Ciclo from '../../src/domain/protocolo/ciclo.js';
 import Protocolo from '../../src/domain/protocolo';
+import AdministracionMedicacion from '../../src/domain/protocolo/administracionMedicacion.js';
 import { RepositorioProtocolo } from '../../src/persistance/repositorioProtocolo';
+
 // Mock de 'oracledb' porque lo usás adentro del método con require('oracledb')
 jest.mock('../../src/db/connection_pool.js', () => ({
   __esModule: true,
@@ -21,6 +23,7 @@ describe(RepositorioProtocolo, () => {
   let repo;
   let protocolo;
   let ciclo;
+  const admins = [];
 
   const agregarProtocolo = async () => {
     protocolo = new Protocolo('Osteosarcoma GBTO 2006 - No metastásico', 'Osteosarcoma', 'primera linea', 1);
@@ -28,7 +31,7 @@ describe(RepositorioProtocolo, () => {
     // Creamos el mock de la conexión y su método execute
     const connExecuteMock = jest.fn().mockResolvedValue({
       rowsAffected: 1,
-      outBinds: { id: [123] }
+      outBinds: { id: [123] },
     });
     db.withConnection.mockImplementation(async (fn) => {
       return await fn({ execute: connExecuteMock });
@@ -39,12 +42,12 @@ describe(RepositorioProtocolo, () => {
   };
 
   const agregarCiclo = async (idProtocolo) => {
-    ciclo = new Ciclo(1,idProtocolo, 0, 5, false);
+    ciclo = new Ciclo(1, idProtocolo, 0, 5, false);
 
     // Creamos el mock de la conexión y su método execute
-    const connExecuteMock = jest.fn().mockResolvedValue({
+    const connExecuteMock = jest.fn().mockResolvedValueOnce({
       rowsAffected: 1,
-      outBinds: { id: 1 }
+      outBinds: { id: [1] }
     });
 
     db.withConnection.mockImplementation(async (fn) => {
@@ -53,6 +56,37 @@ describe(RepositorioProtocolo, () => {
 
     await repo.agregarCiclo(idProtocolo, ciclo);
     return connExecuteMock;
+  };
+
+  const agregarAdministraciones = async (cantidad = 1) => {
+    for(let i = 0; i < cantidad; i++) {
+      const adminDiaria = new AdministracionMedicacion(1 + i, 50 * (i + 1), 'mg', '1,2,5', 0 + i, 1 + i);
+      admins.push(adminDiaria);
+    }
+
+    const ids = Array.from({ length: cantidad }, (v, i) => ({ id: [i] }));
+
+    // Creamos el mock de la conexión y su método execute
+    const connExecuteMock = jest.fn().mockResolvedValueOnce({
+      rowsAffected: cantidad,
+      outBinds: ids,
+      rows: [
+        admins
+      ],
+    });
+
+    // Mock para db.withConnection
+    db.withConnection.mockImplementation(async (fn) => {
+      return await fn({
+        execute: jest.fn().mockResolvedValue({
+          rowsAffected: 1,
+          outBinds: { id: [123] },
+        }),
+        executeMany: connExecuteMock,
+      });
+    });
+
+    return {id: await repo.guardar(admins), connExecuteMock};
   };
 
   beforeEach(() => {
@@ -106,6 +140,12 @@ describe(RepositorioProtocolo, () => {
       rows: [row]
     });
 
+    db.withConnection.mockImplementation(async (fn) => {
+      return await fn({ execute: jest.fn().mockResolvedValue({
+        rows: [row]
+      }) });
+    });
+
     const protocolo = await repo.obtener(123);
 
     expect(protocolo).toBeInstanceOf(Protocolo);
@@ -116,7 +156,7 @@ describe(RepositorioProtocolo, () => {
       protocolo_id: row[0]
     });
 
-    expect(db.execute).toHaveBeenCalledTimes(2); // una vez para obtener el protocolo y otra para obtener los ciclos
+    expect(db.execute).toHaveBeenCalledTimes(3); // una vez para obtener el protocolo, otra para obtener los ciclos y otra para obtener las administraciones
     const [sql, binds] = db.execute.mock.calls[0];
     expect(sql).toMatch(/SELECT\s+protocolo_id,\s+nombre,\s+enfermedad,\s+linea\s+FROM\s+protocolo/i);
     expect(binds).toEqual([123]);
@@ -163,5 +203,45 @@ describe(RepositorioProtocolo, () => {
     const cicloObtenido = await repo.obtenerCiclos(id);
     expect(cicloObtenido[0]).toBeInstanceOf(Ciclo);
     expect(cicloObtenido[0]).toMatchObject(ciclo);
+  });
+
+  test('dado un protocolo con ciclos y administraciones, deberia poder obtener todo el objeto completo', async () => {
+
+    const {id} = await agregarProtocolo();
+    await agregarCiclo(id);
+    await agregarAdministraciones(2);
+
+    expect(db.withConnection).toHaveBeenCalledTimes(3);
+
+    db.execute
+      .mockResolvedValueOnce({
+        rows: [
+          [123, 'Protocolo de prueba', 'Enfermedad de prueba', 'Primera línea']
+        ]
+      }) // Para el protocolo
+      .mockResolvedValueOnce({
+        rows: [
+          [1, 123, 0, 4, false, 1]
+        ]
+      }) // Para los ciclos
+      .mockResolvedValueOnce({
+        rows: [
+          [123, 1, 0, 1, 50, 'mg', '1,2,5', 0, 1],
+          [123, 1, 0, 2, 100, 'mg', '1,2,5', 1, 2]
+        ]
+      }); // Para las administraciones
+
+    const protocoloObtenido = await repo.obtener(id);
+
+    const ciclos = protocoloObtenido.ciclos;
+    const administraciones = ciclos[0].administracion_medicacion;
+
+    expect(ciclos.length).toBe(1);
+    expect(administraciones.length).toBe(2);
+    expect(administraciones[0]).toBeInstanceOf(AdministracionMedicacion);
+    expect(administraciones[1]).toBeInstanceOf(AdministracionMedicacion);
+    expect(administraciones[0]).toMatchObject(admins[0]);
+    expect(administraciones[1]).toMatchObject(admins[1]);
+
   });
 });
