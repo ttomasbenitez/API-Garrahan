@@ -30,12 +30,13 @@ Feature: Creación de Drogas
       | dosis_maxima        | 10              | 
       | dosis_maxima_unidad | mg              |
     And que tengo los siguientes datos de la droga:
-      | medicamento         | DOXORRUBICINA   |
-      | presentacion        | FRASCO AMPOLLA  |
-      | dosis               | 20              |
-      | dosis_unidad        | mg              |
-      | dosis_maxima        | 2               | 
-      | dosis_maxima_unidad | mg              |
+      | medicamento          | PANITUMUMAB     |
+      | presentacion         | FRASCO AMPOLLA  |
+      | dosis                | 20              |
+      | dosis_unidad         | mg/ml           |
+      | dosis_maxima         | 2               | 
+      | dosis_maxima_unidad  | mg              |
+      | volumen_ml_por_dosis | 100             |
     When publico en la API "/droga" con los datos de la droga
     Then obtengo los datos de las Drogas con el id "2" y "3"
     And se crea correctamente

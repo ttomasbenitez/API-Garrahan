@@ -11,8 +11,8 @@ export class RepositorioDroga {
     try {
       const result = await this.db.withConnection(async (conn) => {
         const sql = `
-        INSERT INTO droga (medicamento, presentacion, dosis, dosis_unidad, dosis_maxima, dosis_maxima_unidad)
-        VALUES (:medicamento, :presentacion, :dosis, :dosis_unidad, :dosis_maxima, :dosis_maxima_unidad)
+        INSERT INTO droga (medicamento, presentacion, dosis, dosis_unidad, dosis_maxima, dosis_maxima_unidad, volumen_ml_por_dosis)
+        VALUES (:medicamento, :presentacion, :dosis, :dosis_unidad, :dosis_maxima, :dosis_maxima_unidad, :volumen_ml_por_dosis)
         RETURNING id_droga INTO :id
       `;
         const toNum = (v) => (v === undefined || v === null || v === '' ? null : Number(v));
@@ -25,6 +25,7 @@ export class RepositorioDroga {
           dosis_unidad: toStr(d.dosis_unidad),
           dosis_maxima: toNum(d.dosis_maxima),
           dosis_maxima_unidad: toStr(d.dosis_maxima_unidad),
+          volumen_ml_por_dosis: d.volumen_ml_por_dosis ? toNum(d.volumen_ml_por_dosis) : null,
         }));
 
         const opts = {
@@ -36,6 +37,7 @@ export class RepositorioDroga {
             dosis_unidad: { type: oracledb.STRING, maxSize: 20 },
             dosis_maxima: { type: oracledb.NUMBER },
             dosis_maxima_unidad: { type: oracledb.STRING, maxSize: 20 },
+            volumen_ml_por_dosis: { type: oracledb.NUMBER },
             id: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
           }
         };
@@ -54,7 +56,7 @@ export class RepositorioDroga {
 
   async obtener(id) {
     const result = await this.db.execute(
-      'SELECT medicamento, presentacion, dosis, dosis_unidad, dosis_maxima, dosis_maxima_unidad, id_droga FROM droga WHERE id_droga = :id',
+      'SELECT medicamento, presentacion, dosis, dosis_unidad, dosis_maxima, dosis_maxima_unidad, volumen_ml_por_dosis, id_droga FROM droga WHERE id_droga = :id',
       [id]
     );
 
