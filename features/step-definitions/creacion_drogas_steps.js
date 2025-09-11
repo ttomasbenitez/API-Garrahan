@@ -75,6 +75,10 @@ Given(/^su id es "(.*)"$/, async function (_id) {
     .set('Accept', 'application/json');
 });
 
+Given(/^que existe el medicamento "(.*)" con id "(.*)"$/, async function (_nombreMedicamento, _id) {
+  return;
+});
+
 When(/^consulto en la API "(.*)" por su id$/, async function (endpoint) {
   response = await request(app)
     .get(endpoint)

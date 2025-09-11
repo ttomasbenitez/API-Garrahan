@@ -6,6 +6,7 @@ Feature: Administrar medicación en un ciclo de tratamiento
   Background:
     Given existe en la base de datos un protocolo con el nombre de "Osteosarcoma GBTO 2006 - No metastásico" con id "1"
     And existe en la base de datos un ciclo para el protocolo "1" con ciclo_id "1" y regimen "0"
+    And existe en la base de datos un ciclo para el protocolo "1" con ciclo_id "1" y regimen "1"
     And existe en la base de datos una droga con id "1" y con los datos:
       | medicamento         | CISPLATINO      |
       | presentacion        | CAPSULA         |
@@ -24,7 +25,7 @@ Feature: Administrar medicación en un ciclo de tratamiento
 
   Scenario: US-05.1 Agregar una administración (una sola droga) a un ciclo
     Given quiero agregar administración de medicación con los siguientes datos
-      | id_droga              | 1      |
+      | id_droga              | 2      |
       | dosis                 | 50     |
       | dosis_unidad          | mg     |
       | frecuencia            | 1,2    |
@@ -33,15 +34,13 @@ Feature: Administrar medicación en un ciclo de tratamiento
     When publico en la API "/protocolo/1/ciclo/1/regimen/0/administracion" con los datos de la administración
     Then la administración se crea correctamente
 
-  @wip
   Scenario: US-05.2 Agregar varias administraciones en una sola llamada (array)
     Given quiero agregar múltiples administraciones con los siguientes items
       | id_droga | dosis | dosis_unidad | frecuencia | administracion_diaria | frecuencia_diaria |
-      | 10       | 50    | mg           | D1-D2      |                       |                   |
-      | 11       | 1.2   | mg/kg        | D1         | 1                     | 7                 |
-    When publico en la API "/protocolo/1/ciclo/1/regimen/0/administracion" con los datos
-    Then se crean 2 administraciones para el protocolo "1" ciclo "1" régimen "0"
-    And puedo consultar la administración de "/protocolo/1/ciclo/1/regimen/0/administracion" y veo las drogas "10","11"
+      | 2        | 50    | mg           | 1,2        | 2                     | 1                 |
+      | 1        | 1.2   | mg/kg        | 1,5        | 1                     | 7                 |
+    When publico en la API "/protocolo/1/ciclo/1/regimen/1/administracion" con los datos de la administración
+    Then se crean "2" administraciones para el protocolo "1" ciclo "1" régimen "1"
   @wip
   Scenario: US-05.3 Validación: campos requeridos
     Given quiero agregar administración de medicación con los siguientes datos

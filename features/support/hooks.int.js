@@ -1,4 +1,4 @@
-import { BeforeAll, AfterAll } from '@cucumber/cucumber';
+import { BeforeAll, AfterAll, Before, After } from '@cucumber/cucumber';
 import { GenericContainer, Wait } from 'testcontainers';
 import oracledb from 'oracledb';
 import fs from 'node:fs/promises';
@@ -67,7 +67,6 @@ BeforeAll({ timeout: 180_000 }, async function () {
     BEGIN
       EXECUTE IMMEDIATE 'TRUNCATE TABLE tratamiento_paciente';
       EXECUTE IMMEDIATE 'TRUNCATE TABLE administracion_medicacion';
-      EXECUTE IMMEDIATE 'TRUNCATE TABLE ciclos_finales';
       EXECUTE IMMEDIATE 'TRUNCATE TABLE ciclo';
       EXECUTE IMMEDIATE 'TRUNCATE TABLE protocolo';
       EXECUTE IMMEDIATE 'TRUNCATE TABLE droga';
@@ -79,9 +78,68 @@ BeforeAll({ timeout: 180_000 }, async function () {
 
   await connection.close(); // devuelve al pool
 });
+const cleanedFor = new Set();
+
+async function truncateTables(conn) {
+  const tables = [
+    'ADMINISTRACION_MEDICACION',
+    'CICLO',
+    'PROTOCOLO',
+    'DROGA',
+    'PACIENTE',
+    'PROFESIONAL'
+  ];
+  for (const t of tables) {
+    try {
+      await conn.execute(`TRUNCATE TABLE "${t}"`);
+    } catch (e) {
+      if (e.errorNum !== 942) console.warn(`[TRUNCATE ${t}] ${e.message}`);
+    }
+  }
+}
+/**
+ * Resetea TODAS las columnas IDENTITY del esquema a START WITH 1
+ * (sin alterar las secuencias ISEQ$$_…)
+ */
+async function resetIdentityColumns(conn) {
+  const res = await conn.execute(
+    `SELECT table_name, column_name
+       FROM user_tab_identity_cols`,
+    [],
+    { outFormat: oracledb.OUT_FORMAT_OBJECT }
+  );
+
+  for (const row of res.rows ?? []) {
+    const t = row.TABLE_NAME;
+    const c = row.COLUMN_NAME;
+    // Nota: la sintaxis correcta es ALTER TABLE ... MODIFY ... GENERATED AS IDENTITY (START WITH 1)
+    // y sólo funciona si la tabla está vacía (por eso truncamos antes).
+    const sql = `ALTER TABLE "${t}" MODIFY ("${c}" GENERATED AS IDENTITY (START WITH 1))`;
+    try {
+      await conn.execute(sql);
+    } catch (e) {
+      console.warn(`[IDENTITY RESET ${t}.${c}] ${e.message}`);
+    }
+  }
+  await conn.commit();
+}
+
+Before({ timeout: 60_000 }, async function ({ gherkinDocument }) {
+  const uri = gherkinDocument?.uri;
+  if (!uri || cleanedFor.has(uri)) return;
+
+  const pool = oracleDBInstance.getPool();
+  const conn = await pool.getConnection();
+  try {
+    await truncateTables(conn);
+    await resetIdentityColumns(conn);
+  } finally {
+    await conn.close();
+  }
+  cleanedFor.add(uri);
+});
 
 AfterAll({ timeout: 180_000 }, async function () {
-  // Cerrar pool y contenedor
   await oracleDBInstance.close();
   if (container) await container.stop();
 });

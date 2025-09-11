@@ -76,10 +76,12 @@ async function agregarAdministracion(req, res, protocoloService, drogaService) {
 
     const payload = Array.isArray(req.body) ? req.body : [req.body];
 
+    const errors = [];
     const administracion_medicaciones = await Promise.all(
       payload.map(async (a) => {
         if (!a.id_droga || !a.dosis || !a.dosis_unidad || !a.frecuencia || !a.administracion_diaria || !a.frecuencia_diaria) {
-          return res.status(400).json({ error: ERROR_CAMPOS_REQUERIDOS });
+          errors.push('validation_error');
+          return;
         }
 
         try {
@@ -98,6 +100,10 @@ async function agregarAdministracion(req, res, protocoloService, drogaService) {
         );
       })
     );
+
+    if (errors.length > 0) {
+      return res.status(400).json({ error: ERROR_CAMPOS_REQUERIDOS });
+    }
 
     const protocolo = await protocoloService.validarProtocolo(protocoloId);
     const ciclo = protocolo.validarCicloEnRegimen(cicloId, regimen);
