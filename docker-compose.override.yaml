@@ -35,10 +35,11 @@ services:
       FLYWAY_URL: jdbc:oracle:thin:@//oracle:1521/XEPDB1
       FLYWAY_USER: ${ORACLE_USER}
       FLYWAY_PASSWORD: ${ORACLE_PASSWORD}
+      FLYWAY_SCHEMAS: ${ORACLE_USER}
       FLYWAY_DEFAULT_SCHEMA: ${ORACLE_USER}
+      FLYWAY_LOCATIONS: filesystem:/flyway/sql
       FLYWAY_BASELINE_ON_MIGRATE: true
       FLYWAY_CREATE_SCHEMAS: false
-      FLYWAY_SCHEMAS: ${ORACLE_USER}
     volumes:
       - ./src/db/migrations:/flyway/sql
     depends_on:
@@ -57,7 +58,9 @@ services:
     command: npm run dev       
     volumes:
       - .:/app                 
-      - /app/node_modules    
+      - /app/node_modules
     environment:
-      - NODE_ENV=development
-      - ORACLE_CONNECT_STRING=oracle:1521/XEPDB1
+      ORACLE_USER: ${ORACLE_USER}
+      ORACLE_PASSWORD: ${ORACLE_PASSWORD}
+      ORACLE_CONNECT_STRING: oracle:1521/XEPDB1
+

@@ -95,4 +95,4 @@ CREATE INDEX idx_tratamiento_paciente_fecha ON tratamiento_paciente(fecha_receta
 CREATE INDEX idx_protocolo_nombre ON protocolo(nombre);
 
 -- Índice para buscar drogas por nombre
-CREATE INDEX idx_drogas_nombre ON drogas(nombre);
+CREATE INDEX idx_drogas_nombre ON droga(medicamento);
