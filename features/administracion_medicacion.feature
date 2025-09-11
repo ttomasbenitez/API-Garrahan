@@ -41,42 +41,45 @@ Feature: Administrar medicación en un ciclo de tratamiento
       | 1        | 1.2   | mg/kg        | 1,5        | 1                     | 7                 |
     When publico en la API "/protocolo/1/ciclo/1/regimen/1/administracion" con los datos de la administración
     Then se crean "2" administraciones para el protocolo "1" ciclo "1" régimen "1"
-  @wip
+
   Scenario: US-05.3 Validación: campos requeridos
     Given quiero agregar administración de medicación con los siguientes datos
       | dosis        | 50 |
       | dosis_unidad | mg |
       | frecuencia   | D1 |
-    When publico en la API "/protocolo/1/ciclo/1/regimen/0/administracion" con los datos
-    Then el sistema responde 400
+    When publico en la API "/protocolo/1/ciclo/1/regimen/0/administracion" con los datos de la administración
+    Then el sistema responde "400"
     And el error contiene "id_droga es requerido"
-  @wip
+
   Scenario: US-05.4 Validación: dosis debe ser positiva cuando se informa
     Given quiero agregar administración de medicación con los siguientes datos
       | id_droga     | 10  |
       | dosis        | -10 |
       | dosis_unidad | mg  |
-    When publico en la API "/protocolo/1/ciclo/1/regimen/0/administracion" con los datos
-    Then el sistema responde 400
+    When publico en la API "/protocolo/1/ciclo/1/regimen/0/administracion" con los datos de la administración
+    Then el sistema responde "400"
     And el error contiene "dosis debe ser > 0"
+  
   @wip
   Scenario: US-05.5 Conflicto por duplicado (misma droga ya cargada en ese ciclo/régimen)
-    Given ya existe en la base de datos una administración para el protocolo "1" ciclo "1" régimen "0" con id_droga "10"
-    And quiero agregar administración de medicación con los siguientes datos
+    Given quiero agregar administración de medicación con los siguientes datos
       | id_droga     | 10 |
       | dosis        | 50 |
       | dosis_unidad | mg |
-    When publico en la API "/protocolo/1/ciclo/1/regimen/0/administracion" con los datos
-    Then el sistema responde 409
+    When publico en la API "/protocolo/1/ciclo/1/regimen/0/administracion" con los datos de la administración
+    Then el sistema responde "409"
     And el error contiene "administración ya existente"
-  @wip
+
   Scenario: US-05.6 Error por FK: droga inexistente
     Given quiero agregar administración de medicación con los siguientes datos
-      | id_droga     | 9999 |
-      | dosis        | 50   |
-      | dosis_unidad | mg   |
-    When publico en la API "/protocolo/1/ciclo/1/regimen/0/administracion" con los datos
-    Then el sistema responde 404
+      | id_droga              | 2232   |
+      | dosis                 | 50     |
+      | dosis_unidad          | mg     |
+      | frecuencia            | 1,2    |
+      | administracion_diaria | 0      |
+      | frecuencia_diaria     | 2      |
+    When publico en la API "/protocolo/1/ciclo/1/regimen/0/administracion" con los datos de la administración
+    Then el sistema responde "404"
     And el error contiene "droga no encontrada"
   @wip
   Scenario: US-05.7 Error por FK: ciclo/régimen inexistente
@@ -84,6 +87,6 @@ Feature: Administrar medicación en un ciclo de tratamiento
       | id_droga     | 10 |
       | dosis        | 50 |
       | dosis_unidad | mg |
-    When publico en la API "/protocolo/1/ciclo/99/regimen/7/administracion" con los datos
-    Then el sistema responde 404
+    When publico en la API "/protocolo/1/ciclo/99/regimen/7/administracion" con los datos de la administración
+    Then el sistema responde "404"
     And el error contiene "ciclo/régimen no encontrado"

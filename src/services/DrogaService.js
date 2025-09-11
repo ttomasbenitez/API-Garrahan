@@ -27,7 +27,9 @@ export class DrogaService {
     }
     const droga = await this.obtener(droga_id);
     if (!droga) {
-      throw new Error(ERROR_DROGA_NO_ENCONTRADA);
+      const err = new Error(ERROR_DROGA_NO_ENCONTRADA);
+      err.status = 404;
+      throw err;
     }
     return droga;
   }

@@ -1,6 +1,10 @@
+import AdministracionMedicacion from '../domain/protocolo/administracionMedicacion.js';
+import ValidadorAdministracionMedicacion from '../domain/validadores/validadorAdministracionMedicacion.js';
+
 export class ProtocoloService {
   constructor(protocoloRepo) {
     this.protocoloRepo = protocoloRepo;
+    this.validadorAdministracionMedicacion = new ValidadorAdministracionMedicacion();
   }
 
   async crear(protocolo) {
@@ -36,5 +40,24 @@ export class ProtocoloService {
   async agregarAdministracion(protocolo, ciclo, administracion_medicaciones) {
     await protocolo.agregarAdministracion(ciclo, administracion_medicaciones, this.protocoloRepo);
     return protocolo;
+  }
+
+  async validarAdministraciones(payload, drogaService) {
+    const payloadValidado = this.validadorAdministracionMedicacion.validar(payload);
+    return await Promise.all(
+      payloadValidado.map(async (a) => {
+
+        await drogaService.validarDroga(a.id_droga);
+
+        return new AdministracionMedicacion(
+          Number(a.id_droga),
+          Number(a.dosis),
+          a.dosis_unidad,
+          a.frecuencia,
+          Number(a.administracion_diaria),
+          Number(a.frecuencia_diaria),
+        );
+      })
+    );
   }
 }

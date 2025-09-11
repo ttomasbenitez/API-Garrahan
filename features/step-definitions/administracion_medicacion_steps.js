@@ -7,7 +7,6 @@ let datosAdmin;
 let response;
 
 Given(/^existe en la base de datos un ciclo para el protocolo "(.*)" con ciclo_id "(.*)" y regimen "(.*)"$/, async function (idProtocolo, cicloId, regimen) {
-
   const dataTable = {
     protocolo_id: idProtocolo,
     ciclo_id: cicloId,
@@ -24,7 +23,6 @@ Given(/^existe en la base de datos un ciclo para el protocolo "(.*)" con ciclo_i
 });
 
 Given(/^existe en la base de datos una droga con id "(.*)" y con los datos:$/,async function (idDroga, dataTable) {
-
   await request(app)
     .post('/droga')
     .send([dataTable.rowsHash()])
@@ -33,7 +31,16 @@ Given(/^existe en la base de datos una droga con id "(.*)" y con los datos:$/,as
 });
 
 Given(/^quiero agregar administración de medicación con los siguientes datos$/, function (dataTable) {
-  datosAdmin = dataTable.rowsHash();
+  datosAdmin = [dataTable.rowsHash()].map((row) => {
+    return {
+      id_droga: Number(row.id_droga),
+      dosis: Number(row.dosis),
+      dosis_unidad: row.dosis_unidad,
+      frecuencia: row.frecuencia,
+      administracion_diaria: Number(row.administracion_diaria),
+      frecuencia_diaria: Number(row.frecuencia_diaria),
+    };
+  });
 });
 
 When(/^publico en la API "(.*)" con los datos de la administración$/, async function (endpoint) {
@@ -57,13 +64,22 @@ Then(/^la administración se crea correctamente$/, function () {
   assert.strictEqual(response.status, 201);
   const admin = response.body.ciclos[0].administracion_medicacion[0];
   assert.ok(admin.id);
-  compararAdmin(admin, datosAdmin);
+  compararAdmin(admin, datosAdmin[0]);
   response = null;
   datosAdmin = [];
 });
 
 Given(/^quiero agregar múltiples administraciones con los siguientes items$/, function (dataTable) {
-  datosAdmin = dataTable.hashes();
+  datosAdmin = dataTable.hashes().map((v) => {
+    return {
+      id_droga: Number(v.id_droga),
+      dosis: Number(v.dosis),
+      dosis_unidad: v.dosis_unidad,
+      frecuencia: v.frecuencia,
+      administracion_diaria: Number(v.administracion_diaria),
+      frecuencia_diaria: Number(v.frecuencia_diaria),
+    };
+  });
 });
 
 Then(/^se crean "(.*)" administraciones para el protocolo "(.*)" ciclo "(.*)" régimen "(.*)"$/, function (cantidad, idProtocolo, idCiclo, regimen) {
@@ -82,3 +98,10 @@ Then(/^se crean "(.*)" administraciones para el protocolo "(.*)" ciclo "(.*)" r�
   datosAdmin = [];
 });
 
+Then(/^el sistema responde "(.*)"$/, function (responseStatus) {
+  assert.strictEqual(response.status, Number(responseStatus));
+});
+
+Then(/^el error contiene "(.*)"$/, function (mensajeError) {
+  assert.ok(response.body.message === mensajeError || response.body.message.some((msj) => msj.message === mensajeError));
+});

@@ -1,5 +1,5 @@
 import oracledb from 'oracledb';
-import { ERROR_DROGA_NO_ENCONTRADA, ERROR_DROGRA_CREACION } from '../errors/droga.js';
+import { ERROR_DROGRA_CREACION } from '../errors/droga.js';
 import Droga from '../domain/droga/index.js';
 
 export class RepositorioDroga {
@@ -61,7 +61,7 @@ export class RepositorioDroga {
     );
 
     if (result.rows.length === 0) {
-      throw new Error(ERROR_DROGA_NO_ENCONTRADA);
+      return null;
     }
 
     return new Droga(...result.rows[0]);
