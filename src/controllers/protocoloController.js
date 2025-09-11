@@ -44,9 +44,12 @@ async function agregarCiclo(req, res, service) {
   try {
     const protocoloId = Number(req.params.id);
     const payload = Array.isArray(req.body) ? req.body : [req.body];
+    const errors = [];
+
     const ciclos = payload.map((c) => {
       if (!c.ciclo_id || !c.regimen || !c.duracion_semanas || c.ciclo_final === undefined || !c.repeticiones) {
-        return res.status(400).json({ error: 'validation_error' });
+        errors.push('validation_error');
+        return;
       }
       const ciclo = new Ciclo(
         Number(c.ciclo_id),
@@ -58,6 +61,10 @@ async function agregarCiclo(req, res, service) {
       );
       return ciclo;
     });
+
+    if (errors.length > 0) {
+      return res.status(400).json({ error: ERROR_CAMPOS_REQUERIDOS });
+    }
 
     const protocolo = await service.agregarCiclos(protocoloId, ciclos);
     logger.info('Ciclo agregado al protocolo ID: %d', protocoloId);
