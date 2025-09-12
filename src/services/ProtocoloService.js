@@ -1,10 +1,12 @@
 import AdministracionMedicacion from '../domain/protocolo/administracionMedicacion.js';
 import ValidadorAdministracionMedicacion from '../domain/validadores/validadorAdministracionMedicacion.js';
+import ValidadorProtocolo from '../domain/validadores/validadorProtocolo.js';
 
 export class ProtocoloService {
   constructor(protocoloRepo) {
     this.protocoloRepo = protocoloRepo;
     this.validadorAdministracionMedicacion = new ValidadorAdministracionMedicacion();
+    this.validadorProtocolo = new ValidadorProtocolo();
   }
 
   async crear(protocolo) {
@@ -25,14 +27,6 @@ export class ProtocoloService {
     const protocolo = await this.obtener(protocoloId);
     for (const ciclo of ciclos) {
       await protocolo.agregarCiclo(ciclo, this.protocoloRepo);
-    }
-    return protocolo;
-  }
-
-  async validarProtocolo(protocoloId) {
-    const protocolo = await this.obtener(protocoloId);
-    if (!protocolo) {
-      throw new Error(`No se encontró el protocolo con id ${protocoloId}`);
     }
     return protocolo;
   }
@@ -59,5 +53,9 @@ export class ProtocoloService {
         );
       })
     );
+  }
+
+  validarProtocolo(payload) {
+    return this.validadorProtocolo.validar(payload);
   }
 }

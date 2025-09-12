@@ -32,6 +32,14 @@ Then('el protocolo se crea correctamente', function () {
   assert.strictEqual(response.body.nombre, data.nombre);
   assert.strictEqual(response.body.enfermedad, data.enfermedad);
   assert.strictEqual(response.body.linea, data.linea);
+  data = {};
+  response = null;
+});
+
+Then('el sistema responde correctamente', function () {
+  if (!response) throw new Error('No se recibió respuesta');
+  data = {};
+  response = null;
 });
 
 Given(/^existe en la base de datos un protocolo con el nombre de "(.*)" con id "(.*)"$/, async function (nombreProtocolo, _idProtocolo) {
@@ -49,7 +57,6 @@ When(/^consulto en la API "(.*)"$/, async function (endpoint) {
 });
 
 Then(/^el sistema me devuelve el protocolo con id "(.*)"$/, function (id) {
-  if (!response) throw new Error('No se recibió respuesta');
   if (response.status !== 200) throw new Error(`Status esperado 200, recibido ${response.status}`);
   response = JSON.parse(response.body);
   assert.strictEqual(response.protocolo_id, parseInt(id, 10));
@@ -117,4 +124,7 @@ Then(/^el ciclo de tratamiento se agrega correctamente al protocolo "(.*)" con l
   compareCicle(idProtocolo, idCiclo2);
 });
 
-
+Then(/^responde "(.*)" con el mensaje "(.*)"$/, function (statusCode, mensajeError) {
+  assert.strictEqual(response.status, parseInt(statusCode, 10));
+  assert.ok(response.body.message.includes(mensajeError));
+});

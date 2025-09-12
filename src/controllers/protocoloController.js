@@ -13,17 +13,14 @@ export const makeProtocoloController = (protocoloService, drogaService) => ({
 
 async function crearProtocolo(req, res, service) {
   try {
-    const { nombre, enfermedad, linea } = req.body;
-    if (!nombre || !enfermedad || !linea) {
-      return res.status(400).json({ error: 'Faltan campos requeridos' });
-    }
-    const protocolo = new Protocolo(nombre, enfermedad, linea);
+    const payload = service.validarProtocolo(req.body);
+    const protocolo = new Protocolo(payload.nombre, payload.enfermedad, payload.linea);
     await service.crear(protocolo);
     logger.info('Protocolo creado con ID: %d', protocolo.protocolo_id);
     res.status(201).json(protocolo);
   } catch (error) {
     logger.error('Error al crear protocolo: %o', error);
-    res.status(500).json({ error: error.message });
+    res.status(error.status || 500).json({ error: error.message, message: error.details ?? error.message });
   }
 }
 
@@ -84,7 +81,7 @@ async function agregarAdministracion(req, res, protocoloService, drogaService) {
 
     const administracion_medicaciones = await protocoloService.validarAdministraciones(payload, drogaService);
 
-    const protocolo = await protocoloService.validarProtocolo(protocoloId);
+    const protocolo = await protocoloService.obtener(protocoloId);
     const ciclo = protocolo.validarCicloEnRegimen(cicloId, regimen);
 
     const protocoloConAdmin = await protocoloService.agregarAdministracion(
