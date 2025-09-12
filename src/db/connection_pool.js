@@ -1,5 +1,5 @@
 import oracledb from 'oracledb';
-import config from '../../config.js';    
+import config from '../../config.js';
 
 class oracleBD {
   pool = null;

@@ -30,7 +30,7 @@ BeforeAll({ timeout: 200_000 }, async function () {
   const port = container.getMappedPort(config.oracle.port);
   // Actualizo con los datos dinámicos de testcontainers
   config.oracle.connectString = `${host}:${port}/${config.oracle.service}`;
-  
+
   // Conexión de administrador para crear usuario app_user
   const sysConn = await oracledb.getConnection({
     user: config.oracle.admin,
@@ -44,19 +44,19 @@ BeforeAll({ timeout: 200_000 }, async function () {
     EXCEPTION WHEN OTHERS THEN NULL;
     END;
   `, { username: config.oracle.appUser });
-  
+
   await sysConn.execute(`
-    CREATE USER ` + config.oracle.appUser + ` IDENTIFIED BY ` + config.oracle.userPassword
-  );
-  
-  await sysConn.execute(`
-    GRANT CONNECT, RESOURCE, CREATE SESSION, CREATE TABLE, CREATE SEQUENCE, CREATE TRIGGER TO ` + config.oracle.appUser
-  );
-  
-  await sysConn.execute(`
-    ALTER USER ` + config.oracle.appUser + ` QUOTA UNLIMITED ON USERS
+    CREATE USER ${config.oracle.appUser} IDENTIFIED BY ${config.oracle.userPassword}
   `);
-  
+
+  await sysConn.execute(`
+    GRANT CONNECT, RESOURCE, CREATE SESSION, CREATE TABLE, CREATE SEQUENCE, CREATE TRIGGER TO ${config.oracle.appUser}
+  `);
+
+  await sysConn.execute(`
+    ALTER USER ${config.oracle.appUser} QUOTA UNLIMITED ON USERS
+  `);
+
 
   // Inicializar pool y obtener una conexión para cargar el schema
   await oracleDBInstance.init();

@@ -1,8 +1,8 @@
-import dotenv from "dotenv";
-import path from "path";
+import dotenv from 'dotenv';
+import path from 'path';
 
 // Define qué archivo cargar según NODE_ENV
-const envFile = `.env.${process.env.NODE_ENV || "dev"}`;
+const envFile = `.env.${process.env.NODE_ENV || 'dev'}`;
 
 // Carga el archivo correcto
 dotenv.config({ path: path.resolve(process.cwd(), envFile) });
@@ -16,8 +16,7 @@ export default {
     adminPassword: process.env.ORACLE_PASSWORD,
     appUser: process.env.ORACLE_APP_USER,
     userPassword: process.env.ORACLE_USER_PASSWORD,
-    connectString: 
-    `${process.env.ORACLE_HOST}:${process.env.ORACLE_PORT}/${process.env.ORACLE_SERVICE}`
+    connectString: `${process.env.ORACLE_HOST}:${process.env.ORACLE_PORT}/${process.env.ORACLE_SERVICE}`
   },
   app: {
     port: process.env.APP_PORT || 3000,
