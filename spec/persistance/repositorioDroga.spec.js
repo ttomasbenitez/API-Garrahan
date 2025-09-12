@@ -104,7 +104,6 @@ describe(RepositorioDroga, () => {
       droga.dosis_unidad,
       droga.dosis_maxima,
       droga.dosis_maxima_unidad,
-      null,
       drogaId
     ];
     // Creamos el mock de la conexión y su método execute
@@ -127,7 +126,7 @@ describe(RepositorioDroga, () => {
       dosis_unidad: expectedDroga[3],
       dosis_maxima: expectedDroga[4],
       dosis_maxima_unidad: expectedDroga[5],
-      id_droga: expectedDroga[7]
+      id_droga: expectedDroga[6]
     });
   });
 });

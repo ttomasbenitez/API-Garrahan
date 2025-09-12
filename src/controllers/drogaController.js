@@ -31,7 +31,6 @@ async function crearDroga(req, res, service) {
       d.dosis_unidad,
       Number(d.dosis_maxima),
       d.dosis_maxima_unidad,
-      d.volumen_ml_por_dosis ? Number(d.volumen_ml_por_dosis) : null,
     ));
 
     await service.crear(drogas);

@@ -26,8 +26,7 @@ CREATE TABLE droga (
   dosis NUMBER,
   dosis_unidad VARCHAR2(20),
   dosis_maxima NUMBER,
-  dosis_maxima_unidad VARCHAR2(20),
-  volumen_ml_por_dosis NUMBER
+  dosis_maxima_unidad VARCHAR2(20)
 );
 
 -- Tabla administracion_medicacion

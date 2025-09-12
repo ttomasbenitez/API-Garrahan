@@ -21,7 +21,6 @@ Feature: Administrar medicación en un ciclo de tratamiento
       | dosis_unidad         | mg/ml           |
       | dosis_maxima         | 2               | 
       | dosis_maxima_unidad  | mg              |
-      | volumen_ml_por_dosis | 100             |
 
   Scenario: US-05.1 Agregar una administración (una sola droga) a un ciclo
     Given quiero agregar administración de medicación con los siguientes datos

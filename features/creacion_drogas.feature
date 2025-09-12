@@ -35,7 +35,6 @@ Feature: Creación de Drogas
       | dosis_unidad         | mg/ml           |
       | dosis_maxima         | 2               | 
       | dosis_maxima_unidad  | mg              |
-      | volumen_ml_por_dosis | 100             |
     When publico en la API "/droga" con los datos de la droga
     Then obtengo los datos de las Drogas con el id "2" y "3"
     And se crea correctamente
