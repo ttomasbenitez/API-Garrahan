@@ -1,6 +1,6 @@
 class Protocolo {
 
-  constructor(nombre, enfermedad, linea, id) {
+  constructor(nombre, enfermedad, linea, id = null) {
     this.nombre = nombre;
     this.enfermedad = enfermedad;
     this.linea = linea;

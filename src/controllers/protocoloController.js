@@ -17,7 +17,7 @@ async function crearProtocolo(req, res, service) {
     if (!nombre || !enfermedad || !linea) {
       return res.status(400).json({ error: 'Faltan campos requeridos' });
     }
-    const protocolo = new Protocolo(nombre, enfermedad, linea, null);
+    const protocolo = new Protocolo(nombre, enfermedad, linea);
     await service.crear(protocolo);
     logger.info('Protocolo creado con ID: %d', protocolo.protocolo_id);
     res.status(201).json(protocolo);
