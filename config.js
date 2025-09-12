@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 
 // Define qué archivo cargar según NODE_ENV
-const envFile = `.env.${process.env.NODE_ENV || 'dev'}`;
+const envFile = `.env.${process.env.NODE_ENV || 'test.example'}`;
 
 // Carga el archivo correcto
 dotenv.config({ path: path.resolve(process.cwd(), envFile) });
@@ -20,6 +20,6 @@ export default {
   },
   app: {
     port: process.env.APP_PORT || 3000,
-    node_env: process.env.NODE_ENV || 'dev'
+    node_env: process.env.NODE_ENV || 'test'
   }
 };
