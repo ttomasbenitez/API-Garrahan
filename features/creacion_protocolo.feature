@@ -51,10 +51,18 @@ Feature: Crear un protocolo
         When publico en la API "/protocolo/4/ciclo" con los datos
         Then el ciclo de tratamiento se agrega correctamente al protocolo "4" con los ids "3","4"
         And el sistema responde correctamente
-        
+
     Scenario: US-01.5 No puedo crear un protocolo sin su nombre
         Given quiero crear el protocolo con el nombre de ""
         And enfermedad "Osteosarcoma"
         And de linea de tratamiento "primera linea"
         When publico en la API "/protocolo" con los datos
         Then responde "400" con el mensaje "nombre es requerido"
+        And el sistema responde correctamente
+    
+     Scenario: US-01.6 No puedo crear un protocolo sin su enfermedad
+        Given quiero crear el protocolo con el nombre de "Osteosarcoma GBTO 2006 - No metastásico"
+        And enfermedad ""
+        And de linea de tratamiento "primera linea"
+        When publico en la API "/protocolo" con los datos
+        Then responde "400" con el mensaje "enfermedad es requerido"
