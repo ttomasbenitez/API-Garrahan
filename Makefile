@@ -8,16 +8,19 @@ build:
 	docker compose -f docker-compose.yaml build
 
 up:
-	docker compose -f docker-compose.yaml up -d
+	docker compose --env-file .env.dev -f docker-compose.yaml up -d
 
 down:
-	docker compose -f docker-compose.yaml down
+	docker compose --env-file .env.dev -f docker-compose.yaml down
 
 logs:
-	docker compose -f docker-compose.yaml logs -f
+	docker compose --env-file .env.dev -f docker-compose.yaml logs -f
 
 test:
-	npm test
+	NODE_ENV=test npm run test
+
+cucumber:
+	NODE_ENV=test npm run cucumber
 
 clean:
 	docker compose -f docker-compose.yaml down --rmi all --volumes --remove-orphans

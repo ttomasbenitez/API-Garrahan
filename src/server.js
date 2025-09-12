@@ -1,14 +1,13 @@
 import app from './app.js';
 import oracleDB from './db/connection_pool.js';
 import logger from './utils/logger.js';
-
-const PORT = process.env.PORT || 3000;
+import config from '../config.js';
 
 async function startServer() {
   try {
     await oracleDB.init();
     logger.info('Conexión a Oracle establecida, iniciando servidor...');
-    app.listen(PORT, () => logger.info(`Servidor escuchando en puerto ${PORT}`));
+    app.listen(config.app.port, () => logger.info(`Servidor escuchando en puerto ${config.app.port}`));
     const shutdown = async (signal) => {
       try {
         logger.info(`Recibí ${signal}. Cerrando...`);
@@ -32,6 +31,6 @@ async function startServer() {
   }
 }
 
-if (process.env.NODE_ENV !== 'test') {
+if (config.app.node_env !== 'test') {
   startServer();
 }

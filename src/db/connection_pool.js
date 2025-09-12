@@ -1,15 +1,14 @@
 import oracledb from 'oracledb';
-import dotenv from 'dotenv';
-dotenv.config();
+import config from '../../config.js';    
 
 class oracleBD {
   pool = null;
 
   async init() {
     this.pool = await oracledb.createPool({
-      user: process.env.ORACLE_USER,
-      password: process.env.ORACLE_PASSWORD,
-      connectString: process.env.ORACLE_CONNECT_STRING,
+      user: config.oracle.appUser,
+      password: config.oracle.userPassword,
+      connectString: config.oracle.connectString,
       poolMin: 2,
       poolMax: 10,
       poolIncrement: 1

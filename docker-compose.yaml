@@ -2,11 +2,11 @@ services:
   oracle:
     image: container-registry.oracle.com/database/express:21.3.0-xe
     ports:
-      - "1521:1521"
+      - "${ORACLE_PORT}:${ORACLE_PORT}"
     environment:
-      ORACLE_PWD: app_pass
+      ORACLE_PWD: ${ORACLE_PASSWORD}
     healthcheck:
-      test: ["CMD-SHELL", "echo 'SELECT 1 FROM DUAL;' | sqlplus -s system/app_pass@XEPDB1 || exit 1"]
+      test: ["CMD-SHELL", "echo 'SELECT 1 FROM DUAL;' | sqlplus -s ${ORACLE_ADMIN}/${ORACLE_PASSWORD}@${ORACLE_SERVICE} || exit 1"]
       interval: 15s
       timeout: 20s
       retries: 20
@@ -14,7 +14,14 @@ services:
   init-oracle:
     image: container-registry.oracle.com/database/express:21.3.0-xe
     environment:
-      ORACLE_PWD: app_pass
+      ORACLE_CDB: ${ORACLE_CDB}
+      ORACLE_ADMIN: ${ORACLE_ADMIN}
+      ORACLE_PASSWORD: ${ORACLE_PASSWORD}
+      ORACLE_HOST: ${ORACLE_HOST}
+      ORACLE_PORT: ${ORACLE_PORT}
+      ORACLE_SERVICE: ${ORACLE_SERVICE}
+      ORACLE_APP_USER: ${ORACLE_APP_USER}
+      ORACLE_USER_PASSWORD: ${ORACLE_USER_PASSWORD}
     depends_on:
       oracle:
         condition: service_healthy
@@ -29,16 +36,15 @@ services:
 
   flyway:
     image: flyway/flyway
-    env_file:
-      - .env
     environment:
-      FLYWAY_URL: jdbc:oracle:thin:@//oracle:1521/XEPDB1
-      FLYWAY_USER: ${ORACLE_USER}
-      FLYWAY_PASSWORD: ${ORACLE_PASSWORD}
-      FLYWAY_DEFAULT_SCHEMA: ${ORACLE_USER}
+      FLYWAY_URL: jdbc:oracle:thin:@//${ORACLE_HOST}:${ORACLE_PORT}/${ORACLE_SERVICE}
+      FLYWAY_USER: ${ORACLE_APP_USER}
+      FLYWAY_PASSWORD: ${ORACLE_USER_PASSWORD}
+      FLYWAY_SCHEMAS: ${ORACLE_APP_USER}
+      FLYWAY_DEFAULT_SCHEMA: ${ORACLE_APP_USER}
+      FLYWAY_LOCATIONS: filesystem:/flyway/sql
       FLYWAY_BASELINE_ON_MIGRATE: true
       FLYWAY_CREATE_SCHEMAS: false
-      FLYWAY_SCHEMAS: ${ORACLE_USER}
     volumes:
       - ./src/db/migrations:/flyway/sql
     depends_on:
@@ -49,10 +55,16 @@ services:
   app:
     build: .
     ports:
-      - "3000:3000"
-    env_file:
-      - .env
+      - "${APP_PORT}:${APP_PORT}"
     depends_on:
       flyway:
         condition: service_completed_successfully
+    command: npm run dev       
+    volumes:
+      - .:/app                 
+      - /app/node_modules
+    environment:
+      ORACLE_USER: ${ORACLE_APP_USER}
+      ORACLE_PASSWORD: ${ORACLE_USER_PASSWORD}
+      ORACLE_CONNECT_STRING: ${ORACLE_HOST}:${ORACLE_PORT}/${ORACLE_SERVICE}
 

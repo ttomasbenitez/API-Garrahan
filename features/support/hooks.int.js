@@ -1,9 +1,12 @@
-import { BeforeAll, AfterAll, Before, After } from '@cucumber/cucumber';
+import { BeforeAll, AfterAll, Before, setDefaultTimeout } from '@cucumber/cucumber';
 import { GenericContainer, Wait } from 'testcontainers';
 import oracledb from 'oracledb';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import oracleDBInstance from '../../src/db/connection_pool.js';
+import config from '../../config.js';
+
+setDefaultTimeout(180_000);
 
 let container;
 
@@ -14,44 +17,46 @@ async function runSql(connection, sqlText) {
   }
 }
 
-BeforeAll({ timeout: 180_000 }, async function () {
+BeforeAll({ timeout: 200_000 }, async function () {
   // Levantar contenedor Oracle
   container = await new GenericContainer('gvenzl/oracle-xe')
-    .withEnvironment({ ORACLE_PASSWORD: 'oracle' })
-    .withExposedPorts(1521)
+    .withEnvironment({ ORACLE_PASSWORD: config.oracle.adminPassword })
+    .withExposedPorts(config.oracle.port)
     .withWaitStrategy(Wait.forLogMessage('DATABASE IS READY TO USE!'))
     .withStartupTimeout(120_000)
     .start();
 
   const host = container.getHost();
-  const port = container.getMappedPort(1521);
-  const service = 'XEPDB1';
-  const sysConnect = `${host}:${port}/${service}`;
-
+  const port = container.getMappedPort(config.oracle.port);
+  // Actualizo con los datos dinámicos de testcontainers
+  config.oracle.connectString = `${host}:${port}/${config.oracle.service}`;
+  
   // Conexión de administrador para crear usuario app_user
   const sysConn = await oracledb.getConnection({
-    user: 'system',
-    password: 'oracle',
-    connectString: sysConnect,
+    user: config.oracle.admin,
+    password: config.oracle.adminPassword,
+    connectString: config.oracle.connectString,
   });
 
   await sysConn.execute(`
     BEGIN
-      EXECUTE IMMEDIATE 'DROP USER app_user CASCADE';
+      EXECUTE IMMEDIATE 'DROP USER ' || :username || ' CASCADE';
     EXCEPTION WHEN OTHERS THEN NULL;
     END;
-  `);
-  await sysConn.execute('CREATE USER app_user IDENTIFIED BY app_pass');
+  `, { username: config.oracle.appUser });
+  
   await sysConn.execute(`
-    GRANT CONNECT, RESOURCE, CREATE SESSION, CREATE TABLE, CREATE SEQUENCE, CREATE TRIGGER TO app_user
+    CREATE USER ` + config.oracle.appUser + ` IDENTIFIED BY ` + config.oracle.userPassword
+  );
+  
+  await sysConn.execute(`
+    GRANT CONNECT, RESOURCE, CREATE SESSION, CREATE TABLE, CREATE SEQUENCE, CREATE TRIGGER TO ` + config.oracle.appUser
+  );
+  
+  await sysConn.execute(`
+    ALTER USER ` + config.oracle.appUser + ` QUOTA UNLIMITED ON USERS
   `);
-  await sysConn.execute('ALTER USER app_user QUOTA UNLIMITED ON USERS');
-  await sysConn.close();
-
-  // Configurar variables de entorno para el pool
-  process.env.ORACLE_USER = 'app_user';
-  process.env.ORACLE_PASSWORD = 'app_pass';
-  process.env.ORACLE_CONNECT_STRING = `${host}:${port}/${service}`;
+  
 
   // Inicializar pool y obtener una conexión para cargar el schema
   await oracleDBInstance.init();
