@@ -66,3 +66,11 @@ Feature: Crear un protocolo
         And de linea de tratamiento "primera linea"
         When publico en la API "/protocolo" con los datos
         Then responde "400" con el mensaje "enfermedad es requerido"
+
+    Scenario: US-01.6 No puedo crear un protocolo sin su enfermedad
+        Given quiero crear el protocolo con el nombre de "Osteosarcoma GBTO 2006 - No metastásico"
+        And enfermedad "Osteosarcoma"
+        And de linea de tratamiento ""
+        When publico en la API "/protocolo" con los datos
+        Then responde "400" con el mensaje "linea es requerido"
+
