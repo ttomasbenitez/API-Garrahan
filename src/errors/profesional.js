@@ -1,0 +1,4 @@
+const ERROR_PROFESIONAL_NO_ENCONTRADO = 'Profesional no encontrado';
+const ERROR_PROFESIONAL_CREACION = 'Error al crear el profesional';
+
+export { ERROR_PROFESIONAL_NO_ENCONTRADO, ERROR_PROFESIONAL_CREACION };

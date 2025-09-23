@@ -31,4 +31,5 @@ jobs:
 
       # 5. Correr tests
       - name: Correr tests
-        run: npm test
+        run: npm run test
+
