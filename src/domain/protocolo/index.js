@@ -35,7 +35,7 @@ class Protocolo {
     if (!this.ciclos || this.ciclos.length === 0) {
       throw new Error('El protocolo no tiene ciclos definidos');
     }
-    const ciclo = this.ciclos.find(c => c.id === cicloId && c.regimen === regimen);
+    const ciclo = this.ciclos.find(c => c.ciclo_id === cicloId && c.regimen === regimen);
     if (!ciclo) {
       throw new Error(`No se encontró el ciclo ${cicloId} en el régimen ${regimen} del protocolo ${this.protocolo_id}`);
     }

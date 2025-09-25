@@ -49,7 +49,7 @@ export class RepositorioProtocolo {
 
     return result.rows.map(row => {
       const ciclo = Ciclo.fromRow(row);
-      const key = `${ciclo.id}-${ciclo.regimen}`;
+      const key = `${ciclo.ciclo_id}-${ciclo.regimen}`;
       ciclo.administracion_medicacion = administracionesPorCiclo[key] || [];
       return ciclo;
     });
@@ -76,7 +76,7 @@ export class RepositorioProtocolo {
 
         const binds = ciclos.map(ciclo => ({
           protocolo_id: protocoloId,
-          ciclo_id: ciclo.id,
+          ciclo_id: ciclo.ciclo_id,
           regimen: ciclo.regimen,
           duracion_semanas: ciclo.duracion_semanas,
           ciclo_final: ciclo.ciclo_final ? 1 : 0,
@@ -124,7 +124,7 @@ export class RepositorioProtocolo {
 
         const binds = administracion_medicaciones.map(a => ({
           protocolo_id: toNum(protocolo.protocolo_id),
-          ciclo_id: toNum(ciclo.id),
+          ciclo_id: toNum(ciclo.ciclo_id),
           regimen: toNum(ciclo.regimen),
           id_droga: toNum(a.id_droga),
           dosis: toNum(a.dosis),

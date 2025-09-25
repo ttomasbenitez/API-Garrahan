@@ -90,7 +90,7 @@ Then(/^se crean "(.*)" administraciones para el protocolo "(.*)" ciclo "(.*)" r√
   assert.ok(admin1.id);
   assert.ok(admin2.id);
   assert.strictEqual(response.body.protocolo_id, Number(idProtocolo));
-  assert.strictEqual(response.body.ciclos[1].id, Number(idCiclo));
+  assert.strictEqual(response.body.ciclos[1].ciclo_id, Number(idCiclo));
   assert.strictEqual(response.body.ciclos[1].regimen, Number(regimen));
   compararAdmin(admin1, datosAdmin[0]);
   compararAdmin(admin2, datosAdmin[1]);

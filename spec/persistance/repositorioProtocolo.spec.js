@@ -195,7 +195,7 @@ describe(RepositorioProtocolo, () => {
     expect(sql).toMatch(/INSERT\s+INTO\s+ciclo/i);
     expect(binds[0]).toMatchObject({
       protocolo_id: 123,
-      ciclo_id: ciclo.id,
+      ciclo_id: ciclo.ciclo_id,
       regimen: ciclo.regimen,
       duracion_semanas: ciclo.duracion_semanas,
       ciclo_final: ciclo.ciclo_final ? 1 : 0,

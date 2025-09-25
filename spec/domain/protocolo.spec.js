@@ -109,7 +109,7 @@ describe('Protocolo', () => {
     });
     await agregarCiclo(id, [new Ciclo(10, id, 0, 5, false, 1)]);
     expect(protocolo.ciclos.length).toBe(1);
-    expect(protocolo.ciclos[0].id).toBe(10);
+    expect(protocolo.ciclos[0].ciclo_id).toBe(10);
     expect(protocolo.ciclos[0].regimen).toBe(0);
     expect(protocolo.ciclos[0].duracion_semanas).toBe(5);
   });

@@ -84,12 +84,12 @@ Given(/^quiero agregar al protocolo con id "(.*)" un ciclo de tratamiento con lo
 });
 
 const compareCicle = (idProtocolo, idCiclo) => {
-  const index = response.ciclos.findIndex(c => c.id === parseInt(idCiclo, 10));
+  const index = response.ciclos.findIndex(c => c.ciclo_id === parseInt(idCiclo, 10));
   if (index === -1) throw new Error(`No se encontró el ciclo con id ${idCiclo} en el protocolo ${idProtocolo}`);
   const ciclo = response.ciclos[index];
   const esperado = data.find(d => d.ciclo_id === idCiclo);
   assert.ok(esperado, `No se encontraron datos esperados para el ciclo con id ${idCiclo}`);
-  assert.strictEqual(ciclo.id, parseInt(esperado.ciclo_id, 10));
+  assert.strictEqual(ciclo.ciclo_id, parseInt(esperado.ciclo_id, 10));
   assert.strictEqual(ciclo.protocolo_id, parseInt(esperado.protocolo_id, 10));
   assert.strictEqual(ciclo.regimen, parseInt(esperado.regimen, 10));
   assert.strictEqual(ciclo.duracion_semanas, parseInt(esperado.duracion_semanas, 10));
