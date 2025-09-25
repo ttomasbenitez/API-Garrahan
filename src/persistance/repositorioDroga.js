@@ -11,31 +11,22 @@ export class RepositorioDroga {
     try {
       const result = await this.db.withConnection(async (conn) => {
         const sql = `
-        INSERT INTO droga (medicamento, presentacion, dosis, dosis_unidad, dosis_maxima, dosis_maxima_unidad)
-        VALUES (:medicamento, :presentacion, :dosis, :dosis_unidad, :dosis_maxima, :dosis_maxima_unidad)
-        RETURNING id_droga INTO :id
+        INSERT INTO droga (nombre_generico, codigo_farmacia)
+        VALUES (:nombre_generico, :codigo_farmacia)
+        RETURNING droga_id INTO :id
       `;
-        const toNum = (v) => (v === undefined || v === null || v === '' ? null : Number(v));
         const toStr = (v) => (v === undefined || v === null ? null : String(v));
 
         const binds = drogas.map(d => ({
-          medicamento: toStr(d.medicamento),
-          presentacion: toStr(d.presentacion),
-          dosis: toNum(d.dosis),
-          dosis_unidad: toStr(d.dosis_unidad),
-          dosis_maxima: toNum(d.dosis_maxima),
-          dosis_maxima_unidad: toStr(d.dosis_maxima_unidad),
+          nombre_generico: toStr(d.nombre_generico),
+          codigo_farmacia: toStr(d.codigo_farmacia),
         }));
 
         const opts = {
           autoCommit: true,
           bindDefs: {
-            medicamento: { type: oracledb.STRING, maxSize: 100 },
-            presentacion: { type: oracledb.STRING, maxSize: 100 },
-            dosis: { type: oracledb.NUMBER },
-            dosis_unidad: { type: oracledb.STRING, maxSize: 20 },
-            dosis_maxima: { type: oracledb.NUMBER },
-            dosis_maxima_unidad: { type: oracledb.STRING, maxSize: 20 },
+            nombre_generico: { type: oracledb.STRING, maxSize: 100 },
+            codigo_farmacia: { type: oracledb.STRING, maxSize: 100 },
             id: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
           }
         };
@@ -54,7 +45,7 @@ export class RepositorioDroga {
 
   async obtener(id) {
     const result = await this.db.execute(
-      'SELECT medicamento, presentacion, dosis, dosis_unidad, dosis_maxima, dosis_maxima_unidad, id_droga FROM droga WHERE id_droga = :id',
+      'SELECT nombre_generico, codigo_farmacia, droga_id FROM droga WHERE droga_id = :id',
       [id]
     );
 

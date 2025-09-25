@@ -1,13 +1,9 @@
 class Droga {
 
-  constructor(medicamento, presentacion, dosis, dosis_unidad, dosis_maxima, dosis_maxima_unidad, id_droga = null) {
-    this.medicamento = medicamento ?? null;
-    this.presentacion = presentacion ?? null;
-    this.dosis = dosis ?? null;
-    this.dosis_unidad = dosis_unidad ?? null;
-    this.dosis_maxima = dosis_maxima ?? null;
-    this.dosis_maxima_unidad = dosis_maxima_unidad ?? null;
-    this.id_droga = id_droga ?? null;
+  constructor(nombre_generico, codigo_farmacia, droga_id = null) {
+    this.nombre_generico = nombre_generico ?? null;
+    this.codigo_farmacia = codigo_farmacia ?? null;
+    this.droga_id = droga_id ?? null;
   }
 
 }

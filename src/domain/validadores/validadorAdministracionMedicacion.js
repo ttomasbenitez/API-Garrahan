@@ -26,11 +26,11 @@ class ValidadorAdministracionMedicacion {
   _validarItemAdministracionMedicacion(a, idx) {
     const errors = [];
 
-    // id_droga
-    if (!a.id_droga) {
-      errors.push({ index: idx, field: 'id_droga', message: MSG_REQ('id_droga') });
-    } else if (!Number.isInteger(a.id_droga) || a.id_droga <= 0) {
-      errors.push({ index: idx, field: 'id_droga', message: MSG_INT_POS('id_droga') });
+    // droga_id
+    if (!a.droga_id) {
+      errors.push({ index: idx, field: 'droga_id', message: MSG_REQ('droga_id') });
+    } else if (!Number.isInteger(a.droga_id) || a.droga_id <= 0) {
+      errors.push({ index: idx, field: 'droga_id', message: MSG_INT_POS('droga_id') });
     }
 
     // dosis

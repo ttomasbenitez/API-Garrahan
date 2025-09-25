@@ -57,12 +57,8 @@ describe(RepositorioDroga, () => {
     const [sql, binds, opts] = connExecuteMock.mock.calls[0];
     expect(sql).toMatch(/INSERT\s+INTO\s+droga/i);
     expect(binds[0]).toMatchObject({
-      medicamento: droga.medicamento,
-      presentacion: droga.presentacion,
-      dosis: droga.dosis,
-      dosis_unidad: droga.dosis_unidad,
-      dosis_maxima: droga.dosis_maxima,
-      dosis_maxima_unidad: droga.dosis_maxima_unidad
+      nombre_generico: droga.nombre_generico,
+      codigo_farmacia: droga.codigo_farmacia,
     });
     expect(opts).toMatchObject({ autoCommit: true });
   });
@@ -76,20 +72,12 @@ describe(RepositorioDroga, () => {
     const [sql, binds, opts] = connExecuteMock.mock.calls[0];
     expect(sql).toMatch(/INSERT\s+INTO\s+droga/i);
     expect(binds[0]).toMatchObject({
-      medicamento: drogas[0].medicamento,
-      presentacion: drogas[0].presentacion,
-      dosis: drogas[0].dosis,
-      dosis_unidad: drogas[0].dosis_unidad,
-      dosis_maxima: drogas[0].dosis_maxima,
-      dosis_maxima_unidad: drogas[0].dosis_maxima_unidad
+      nombre_generico: drogas[0].nombre_generico,
+      codigo_farmacia: drogas[0].codigo_farmacia,
     });
     expect(binds[1]).toMatchObject({
-      medicamento: drogas[1].medicamento,
-      presentacion: drogas[1].presentacion,
-      dosis: drogas[1].dosis,
-      dosis_unidad: drogas[1].dosis_unidad,
-      dosis_maxima: drogas[1].dosis_maxima,
-      dosis_maxima_unidad: drogas[1].dosis_maxima_unidad
+      nombre_generico: drogas[1].nombre_generico,
+      codigo_farmacia: drogas[1].codigo_farmacia,
     });
     expect(opts).toMatchObject({ autoCommit: true });
   });
@@ -98,12 +86,8 @@ describe(RepositorioDroga, () => {
     await agregarDroga();
     const drogaId = 0;
     const expectedDroga = [
-      droga.medicamento,
-      droga.presentacion,
-      droga.dosis,
-      droga.dosis_unidad,
-      droga.dosis_maxima,
-      droga.dosis_maxima_unidad,
+      droga.nombre_generico,
+      droga.codigo_farmacia,
       drogaId
     ];
     // Creamos el mock de la conexión y su método execute
@@ -120,13 +104,9 @@ describe(RepositorioDroga, () => {
 
     expect(drogaObtenida).toBeInstanceOf(Droga);
     expect(drogaObtenida).toMatchObject({
-      medicamento: expectedDroga[0],
-      presentacion: expectedDroga[1],
-      dosis: expectedDroga[2],
-      dosis_unidad: expectedDroga[3],
-      dosis_maxima: expectedDroga[4],
-      dosis_maxima_unidad: expectedDroga[5],
-      id_droga: expectedDroga[6]
+      nombre_generico: expectedDroga[0],
+      codigo_farmacia: expectedDroga[1],
+      droga_id: expectedDroga[2]
     });
   });
 });

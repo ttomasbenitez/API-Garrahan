@@ -11,7 +11,7 @@ export class DrogaService {
 
     const ids = await this.drogaRepo.guardar(drogas);
     drogas.forEach((droga, index) => {
-      droga.id_droga = ids[index];
+      droga.droga_id = ids[index];
     });
 
     return ids;

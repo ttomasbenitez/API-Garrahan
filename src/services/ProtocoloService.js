@@ -39,10 +39,10 @@ export class ProtocoloService {
     return await Promise.all(
       payloadValidado.map(async (a) => {
 
-        await drogaService.validarDroga(a.id_droga);
+        await drogaService.validarDroga(a.droga_id);
 
         return new AdministracionMedicacion(
-          Number(a.id_droga),
+          Number(a.droga_id),
           Number(a.dosis),
           a.dosis_unidad,
           a.frecuencia,

@@ -13,28 +13,20 @@ async function crearDroga(req, res, service) {
     const payload = Array.isArray(req.body) ? req.body : [req.body];
 
     const faltantes = payload.filter(d =>
-      !d.medicamento ||
-      !d.presentacion ||
-      !d.dosis ||
-      !d.dosis_unidad ||
-      !d.dosis_maxima ||
-      !d.dosis_maxima_unidad
+      !d.nombre_generico ||
+      !d.codigo_farmacia
     );
     if (faltantes.length > 0) {
       return res.status(400).json({ error: ERROR_CAMPOS_REQUERIDOS });
     }
 
     const drogas = payload.map(d => new Droga(
-      d.medicamento,
-      d.presentacion,
-      Number(d.dosis),
-      d.dosis_unidad,
-      Number(d.dosis_maxima),
-      d.dosis_maxima_unidad,
+      d.nombre_generico,
+      d.codigo_farmacia,
     ));
 
     await service.crear(drogas);
-    logger.info('Drogas creadas con IDs: %o', drogas.map(d => d.id_droga).join(', '));
+    logger.info('Drogas creadas con IDs: %o', drogas.map(d => d.droga_id).join(', '));
     res.status(201).json(drogas);
   } catch (error) {
     logger.error('Error al crear la droga: %o', error);

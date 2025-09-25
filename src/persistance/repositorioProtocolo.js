@@ -32,7 +32,7 @@ export class RepositorioProtocolo {
     );
 
     const administracion_medicaciones = await this.db.execute(
-      `SELECT protocolo_id, ciclo_id, regimen, id_droga, dosis, dosis_unidad, frecuencia, administracion_diaria, frecuencia_diaria, id
+      `SELECT protocolo_id, ciclo_id, regimen, droga_id, dosis, dosis_unidad, frecuencia, administracion_diaria, frecuencia_diaria, id
        FROM administracion_medicacion
        WHERE protocolo_id = :id`,
       [protocoloId],
@@ -114,8 +114,8 @@ export class RepositorioProtocolo {
     try {
       const result = await this.db.withConnection(async (conn) => {
         const sql = `
-        INSERT INTO administracion_medicacion (protocolo_id, ciclo_id, regimen, id_droga, dosis, dosis_unidad, frecuencia, administracion_diaria, frecuencia_diaria)
-        VALUES (:protocolo_id, :ciclo_id, :regimen, :id_droga, :dosis, :dosis_unidad, :frecuencia, :administracion_diaria, :frecuencia_diaria)
+        INSERT INTO administracion_medicacion (protocolo_id, ciclo_id, regimen, droga_id, dosis, dosis_unidad, frecuencia, administracion_diaria, frecuencia_diaria)
+        VALUES (:protocolo_id, :ciclo_id, :regimen, :droga_id, :dosis, :dosis_unidad, :frecuencia, :administracion_diaria, :frecuencia_diaria)
         RETURNING id INTO :id
       `;
 
@@ -126,7 +126,7 @@ export class RepositorioProtocolo {
           protocolo_id: toNum(protocolo.protocolo_id),
           ciclo_id: toNum(ciclo.ciclo_id),
           regimen: toNum(ciclo.regimen),
-          id_droga: toNum(a.id_droga),
+          droga_id: toNum(a.droga_id),
           dosis: toNum(a.dosis),
           dosis_unidad: toStr(a.dosis_unidad),
           frecuencia: toStr(a.frecuencia),
@@ -140,7 +140,7 @@ export class RepositorioProtocolo {
             protocolo_id: { type: oracledb.NUMBER },
             ciclo_id: { type: oracledb.NUMBER },
             regimen: { type: oracledb.NUMBER },
-            id_droga: { type: oracledb.NUMBER },
+            droga_id: { type: oracledb.NUMBER },
             dosis: { type: oracledb.NUMBER },
             dosis_unidad: { type: oracledb.STRING, maxSize: 20 },
             frecuencia: { type: oracledb.STRING, maxSize: 100 },

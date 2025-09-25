@@ -33,7 +33,7 @@ Given(/^existe en la base de datos una droga con id "(.*)" y con los datos:$/,as
 Given(/^quiero agregar administración de medicación con los siguientes datos$/, function (dataTable) {
   datosAdmin = [dataTable.rowsHash()].map((row) => {
     return {
-      id_droga: Number(row.id_droga),
+      droga_id: Number(row.droga_id),
       dosis: Number(row.dosis),
       dosis_unidad: row.dosis_unidad,
       frecuencia: row.frecuencia,
@@ -51,7 +51,7 @@ When(/^publico en la API "(.*)" con los datos de la administración$/, async fun
 });
 
 const compararAdmin = (admin1, admin2) => {
-  assert.strictEqual(admin1.id_droga, Number(admin2.id_droga));
+  assert.strictEqual(admin1.droga_id, Number(admin2.droga_id));
   assert.strictEqual(admin1.dosis, Number(admin2.dosis));
   assert.strictEqual(admin1.dosis_unidad, admin2.dosis_unidad);
   assert.strictEqual(admin1.frecuencia, admin2.frecuencia);
@@ -72,7 +72,7 @@ Then(/^la administración se crea correctamente$/, function () {
 Given(/^quiero agregar múltiples administraciones con los siguientes items$/, function (dataTable) {
   datosAdmin = dataTable.hashes().map((v) => {
     return {
-      id_droga: Number(v.id_droga),
+      droga_id: Number(v.droga_id),
       dosis: Number(v.dosis),
       dosis_unidad: v.dosis_unidad,
       frecuencia: v.frecuencia,
