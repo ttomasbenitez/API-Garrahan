@@ -42,19 +42,32 @@ describe(RepositorioProtocolo, () => {
   };
 
   const agregarCiclo = async (idProtocolo) => {
-    ciclo = new Ciclo(1, idProtocolo, 0, 5, false);
+    ciclo = new Ciclo(1, idProtocolo, 0, 5, false, 0);
 
+    // Creamos el mock de la conexión y su método execute
+    const ids = Array.from({ length: 1 }, (v, i) => ({ id: [i] }));
+    // Creamos el mock de la conexión y su método execute
     // Creamos el mock de la conexión y su método execute
     const connExecuteMock = jest.fn().mockResolvedValueOnce({
       rowsAffected: 1,
-      outBinds: { id: [1] }
+      outBinds: ids,
+      rows: [
+        admins
+      ],
     });
 
+    // Mock para db.withConnection
     db.withConnection.mockImplementation(async (fn) => {
-      return await fn({ execute: connExecuteMock });
+      return await fn({
+        execute: jest.fn().mockResolvedValue({
+          rowsAffected: 1,
+          outBinds: { id: [123] },
+        }),
+        executeMany: connExecuteMock,
+      });
     });
 
-    await repo.agregarCiclo(idProtocolo, ciclo);
+    await repo.agregarCiclo(idProtocolo, [ciclo]);
     return connExecuteMock;
   };
 
@@ -180,12 +193,13 @@ describe(RepositorioProtocolo, () => {
 
     const [sql, binds, opts] = connExecuteMock.mock.calls[0];
     expect(sql).toMatch(/INSERT\s+INTO\s+ciclo/i);
-    expect(binds).toMatchObject({
+    expect(binds[0]).toMatchObject({
       protocolo_id: 123,
       ciclo_id: ciclo.id,
       regimen: ciclo.regimen,
       duracion_semanas: ciclo.duracion_semanas,
       ciclo_final: ciclo.ciclo_final ? 1 : 0,
+      repeticiones: ciclo.repeticiones,
     });
     expect(opts).toMatchObject({ autoCommit: true });
   });
@@ -196,7 +210,7 @@ describe(RepositorioProtocolo, () => {
 
     db.execute.mockResolvedValue({
       rows: [
-        [1, id, 0, 5, false]
+        [1, id, 0, 5, false, 0]
       ]
     });
 

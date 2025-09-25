@@ -25,9 +25,7 @@ export class ProtocoloService {
 
   async agregarCiclos(protocoloId, ciclos) {
     const protocolo = await this.obtener(protocoloId);
-    for (const ciclo of ciclos) {
-      await protocolo.agregarCiclo(ciclo, this.protocoloRepo);
-    }
+    await protocolo.agregarCiclo(ciclos, this.protocoloRepo);
     return protocolo;
   }
 

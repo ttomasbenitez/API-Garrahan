@@ -28,7 +28,7 @@ class Protocolo {
       this.ciclos = [];
     }
     await repositorioProtocolo.agregarCiclo(this.protocolo_id, ciclo);
-    this.ciclos.push(ciclo);
+    this.ciclos.push(...ciclo);
   }
 
   validarCicloEnRegimen(cicloId, regimen) {

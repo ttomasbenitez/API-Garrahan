@@ -36,13 +36,19 @@ Feature: Creación de Drogas
       | dosis_maxima         | 2               | 
       | dosis_maxima_unidad  | mg              |
     When publico en la API "/droga" con los datos de la droga
-    Then obtengo los datos de las Drogas con el id "2" y "3"
+    Then obtengo los datos de las Drogas con el id "1" y "2"
     And se crea correctamente
 
   Scenario: US-04.3 Obtener una droga creada por su id
-    Given que existe el medicamento "CISPLATINO" con id "2"
-    When consulto en la API "/droga/2" por su id
-    Then el sistema me devuelve la droga con id "2"
+    Given existe en la base de datos una droga con id "1" y con los datos:
+      | medicamento         | CISPLATINO      |
+      | presentacion        | CAPSULA         |
+      | dosis               | 10              |
+      | dosis_unidad        | mg              |
+      | dosis_maxima        | 10              | 
+      | dosis_maxima_unidad | mg              |
+    When consulto en la API "/droga/1" por su id
+    Then el sistema me devuelve la droga con id "1"
     And el medicamento es "CISPLATINO"
     And la "presentacion" es "CAPSULA"
     And la "dosis" es "10"

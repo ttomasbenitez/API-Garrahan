@@ -1,8 +1,10 @@
-import { BeforeAll, AfterAll, Before, setDefaultTimeout } from '@cucumber/cucumber';
+// features/support/hooks.db.ts
+import { BeforeAll, AfterAll, Before, After, setDefaultTimeout } from '@cucumber/cucumber';
 import { GenericContainer, Wait } from 'testcontainers';
 import oracledb from 'oracledb';
 import fs from 'node:fs/promises';
 import path from 'node:path';
+
 import oracleDBInstance from '../../src/db/connection_pool.js';
 import config from '../../config.js';
 
@@ -10,84 +12,53 @@ setDefaultTimeout(180_000);
 
 let container;
 
+/** Ejecuta un .sql “plano” con statements DDL simples separados por ; al final de línea */
 async function runSql(connection, sqlText) {
-  const stmts = sqlText.split(/;\s*$/m).map(s => s.trim()).filter(Boolean);
+  const stmts = sqlText
+    .split(/;\s*$/m)
+    .map(s => s.trim())
+    .filter(Boolean);
   for (const s of stmts) {
     await connection.execute(s);
   }
 }
 
-BeforeAll({ timeout: 200_000 }, async function () {
-  // Levantar contenedor Oracle
-  container = await new GenericContainer('gvenzl/oracle-xe')
-    .withEnvironment({ ORACLE_PASSWORD: config.oracle.adminPassword })
-    .withExposedPorts(config.oracle.port)
-    .withWaitStrategy(Wait.forLogMessage('DATABASE IS READY TO USE!'))
-    .withStartupTimeout(120_000)
-    .start();
+/** Deshabilita TODAS las FKs del esquema actual */
+async function disableFks(conn) {
+  const plsql = `
+  BEGIN
+    FOR c IN (
+      SELECT constraint_name, table_name
+      FROM user_constraints
+      WHERE constraint_type = 'R' AND status = 'ENABLED'
+    ) LOOP
+      EXECUTE IMMEDIATE 'ALTER TABLE "'||c.table_name||'" DISABLE CONSTRAINT "'||c.constraint_name||'"';
+    END LOOP;
+  END;`;
+  await conn.execute(plsql);
+}
 
-  const host = container.getHost();
-  const port = container.getMappedPort(config.oracle.port);
-  // Actualizo con los datos dinámicos de testcontainers
-  config.oracle.connectString = `${host}:${port}/${config.oracle.service}`;
+/** Rehabilita TODAS las FKs del esquema actual */
+async function enableFks(conn) {
+  const plsql = `
+  BEGIN
+    FOR c IN (
+      SELECT constraint_name, table_name
+      FROM user_constraints
+      WHERE constraint_type = 'R' AND status = 'DISABLED'
+    ) LOOP
+      EXECUTE IMMEDIATE 'ALTER TABLE "'||c.table_name||'" ENABLE CONSTRAINT "'||c.constraint_name||'"';
+    END LOOP;
+  END;`;
+  await conn.execute(plsql);
+}
 
-  // Conexión de administrador para crear usuario app_user
-  const sysConn = await oracledb.getConnection({
-    user: config.oracle.admin,
-    password: config.oracle.adminPassword,
-    connectString: config.oracle.connectString,
-  });
-
-  await sysConn.execute(`
-    BEGIN
-      EXECUTE IMMEDIATE 'DROP USER ' || :username || ' CASCADE';
-    EXCEPTION WHEN OTHERS THEN NULL;
-    END;
-  `, { username: config.oracle.appUser });
-
-  await sysConn.execute(`
-    CREATE USER ${config.oracle.appUser} IDENTIFIED BY ${config.oracle.userPassword}
-  `);
-
-  await sysConn.execute(`
-    GRANT CONNECT, RESOURCE, CREATE SESSION, CREATE TABLE, CREATE SEQUENCE, CREATE TRIGGER TO ${config.oracle.appUser}
-  `);
-
-  await sysConn.execute(`
-    ALTER USER ${config.oracle.appUser} QUOTA UNLIMITED ON USERS
-  `);
-
-
-  // Inicializar pool y obtener una conexión para cargar el schema
-  await oracleDBInstance.init();
-  const pool = oracleDBInstance.getPool();
-  const connection = await pool.getConnection();
-
-  const ddlPath = path.join(process.cwd(), 'features/support/schema.sql');
-  const ddl = await fs.readFile(ddlPath, 'utf8');
-  await runSql(connection, ddl);
-
-  // Limpiar tablas antes de los tests
-  await connection.execute(`
-    BEGIN
-      EXECUTE IMMEDIATE 'TRUNCATE TABLE tratamiento_paciente';
-      EXECUTE IMMEDIATE 'TRUNCATE TABLE administracion_medicacion';
-      EXECUTE IMMEDIATE 'TRUNCATE TABLE ciclo';
-      EXECUTE IMMEDIATE 'TRUNCATE TABLE protocolo';
-      EXECUTE IMMEDIATE 'TRUNCATE TABLE droga';
-      EXECUTE IMMEDIATE 'TRUNCATE TABLE paciente';
-      EXECUTE IMMEDIATE 'TRUNCATE TABLE profesional';
-    EXCEPTION WHEN OTHERS THEN NULL;
-    END;
-  `);
-
-  await connection.close(); // devuelve al pool
-});
-const cleanedFor = new Set();
-
+/** Trunca tablas. Ajustá el orden si no deshabilitás FKs. */
 async function truncateTables(conn) {
   const tables = [
+    'TRATAMIENTO_PACIENTE',        // si la tenés
     'ADMINISTRACION_MEDICACION',
+    'PRESENTACION',                // si la tenés
     'CICLO',
     'PROTOCOLO',
     'DROGA',
@@ -98,13 +69,15 @@ async function truncateTables(conn) {
     try {
       await conn.execute(`TRUNCATE TABLE "${t}"`);
     } catch (e) {
+      // ORA-00942: table or view does not exist → ignorar en tests
       if (e.errorNum !== 942) console.warn(`[TRUNCATE ${t}] ${e.message}`);
     }
   }
 }
+
 /**
- * Resetea TODAS las columnas IDENTITY del esquema a START WITH 1
- * (sin alterar las secuencias ISEQ$$_…)
+ * Resetea TODAS las columnas IDENTITY a START WITH 1 y las convierte a BY DEFAULT.
+ * Requiere que las tablas estén VACÍAS (por eso truncamos antes).
  */
 async function resetIdentityColumns(conn) {
   const res = await conn.execute(
@@ -114,12 +87,10 @@ async function resetIdentityColumns(conn) {
     { outFormat: oracledb.OUT_FORMAT_OBJECT }
   );
 
-  for (const row of res.rows ?? []) {
+  for (const row of (res.rows ?? [])) {
     const t = row.TABLE_NAME;
     const c = row.COLUMN_NAME;
-    // Nota: la sintaxis correcta es ALTER TABLE ... MODIFY ... GENERATED AS IDENTITY (START WITH 1)
-    // y sólo funciona si la tabla está vacía (por eso truncamos antes).
-    const sql = `ALTER TABLE "${t}" MODIFY ("${c}" GENERATED AS IDENTITY (START WITH 1))`;
+    const sql = `ALTER TABLE "${t}" MODIFY ("${c}" GENERATED BY DEFAULT AS IDENTITY (START WITH 1))`;
     try {
       await conn.execute(sql);
     } catch (e) {
@@ -129,19 +100,84 @@ async function resetIdentityColumns(conn) {
   await conn.commit();
 }
 
-Before({ timeout: 60_000 }, async function ({ gherkinDocument }) {
-  const uri = gherkinDocument?.uri;
-  if (!uri || cleanedFor.has(uri)) return;
+/** Opcional: semillas mínimas determinísticas (IDs fijos para estabilidad de tests) */
+async function seedMinimal(conn) {
+  // Ejemplos (adaptá a tus tablas reales):
+  // Usamos IDs fijos porque dejamos las identidades en BY DEFAULT.
+  await conn.execute(
+    'INSERT INTO PROFESIONAL (PROFESIONAL_ID, NOMBRE) VALUES (1001, \'Dra. Test\')'
+  ).catch(() => {});
+  await conn.execute(
+    'INSERT INTO PACIENTE (PACIENTE_ID, NOMBRE, FECHA_NAC) VALUES (2001, \'Paciente Demo\', DATE \'2015-05-01\')'
+  ).catch(() => {});
+}
 
+/** Limpieza dura: FK off → TRUNCATE → reset IDENTITY → FK on */
+async function hardClean(conn) {
+  await disableFks(conn);
+  await truncateTables(conn);
+  await resetIdentityColumns(conn);
+  await enableFks(conn);
+  await conn.commit();
+}
+
+/** Arranque: contenedor Oracle + usuario + pool + schema.sql */
+BeforeAll({ timeout: 200_000 }, async function () {
+  container = await new GenericContainer('gvenzl/oracle-xe')
+    .withEnvironment({ ORACLE_PASSWORD: config.oracle.adminPassword })
+    .withExposedPorts(config.oracle.port)
+    .withWaitStrategy(Wait.forLogMessage('DATABASE IS READY TO USE!'))
+    .withStartupTimeout(120_000)
+    .start();
+
+  const host = container.getHost();
+  const port = container.getMappedPort(config.oracle.port);
+  config.oracle.connectString = `${host}:${port}/${config.oracle.service}`;
+
+  // Conexión SYS para crear app_user
+  const sysConn = await oracledb.getConnection({
+    user: config.oracle.admin,
+    password: config.oracle.adminPassword,
+    connectString: config.oracle.connectString,
+  });
+
+  await sysConn.execute(`
+    BEGIN
+      EXECUTE IMMEDIATE 'DROP USER ' || :username || ' CASCADE';
+    EXCEPTION WHEN OTHERS THEN NULL;
+    END;`,
+  { username: config.oracle.appUser }
+  );
+
+  await sysConn.execute(`CREATE USER ${config.oracle.appUser} IDENTIFIED BY ${config.oracle.userPassword}`);
+  await sysConn.execute(`GRANT CONNECT, RESOURCE, CREATE SESSION, CREATE TABLE, CREATE SEQUENCE, CREATE TRIGGER TO ${config.oracle.appUser}`);
+  await sysConn.execute(`ALTER USER ${config.oracle.appUser} QUOTA UNLIMITED ON USERS`);
+  await sysConn.close();
+
+  // Pool de la app y carga de schema
+  await oracleDBInstance.init();
+  const pool = oracleDBInstance.getPool();
+  const conn = await pool.getConnection();
+
+  const ddlPath = path.join(process.cwd(), 'features/support/schema.sql');
+  const ddl = await fs.readFile(ddlPath, 'utf8');
+  await runSql(conn, ddl);
+
+  // Limpieza inicial (opcional, asegura arranque limpio)
+  await hardClean(conn);
+
+  await conn.close();
+});
+
+Before({ timeout: 60_000 }, async function () {
   const pool = oracleDBInstance.getPool();
   const conn = await pool.getConnection();
   try {
-    await truncateTables(conn);
-    await resetIdentityColumns(conn);
+    await hardClean(conn);
+    await seedMinimal(conn); // opcional
   } finally {
     await conn.close();
   }
-  cleanedFor.add(uri);
 });
 
 AfterAll({ timeout: 180_000 }, async function () {

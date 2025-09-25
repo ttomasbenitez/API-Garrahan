@@ -39,6 +39,26 @@ describe('Protocolo', () => {
     return await repo.guardar(protocolo);
   };
 
+  const agregarCiclo = async (idProtocolo, ciclos) => {
+    const ids = Array.from({ length: 1 }, (v, i) => ({ id: [i] }));
+    const connExecuteMock = jest.fn().mockResolvedValueOnce({
+      rowsAffected: 1,
+      outBinds: ids,
+    });
+
+    // Mock para db.withConnection
+    db.withConnection.mockImplementation(async (fn) => {
+      return await fn({
+        execute: jest.fn().mockResolvedValue({
+          rowsAffected: ciclos.length,
+          outBinds: { id: [idProtocolo] },
+        }),
+        executeMany: connExecuteMock,
+      });
+    });
+    await protocolo.agregarCiclo(ciclos, repo);
+  };
+
   beforeEach(() => {
     db = oracleDB;
     repo = new RepositorioProtocolo(db);
@@ -71,14 +91,32 @@ describe('Protocolo', () => {
 
   test('deberia poder agregar ciclos asociados al protocolo', async () => {
     const id = await agregarProtocolo();
-    await protocolo.agregarCiclo(new Ciclo(1, id, 0, 5, false), repo);
+
+    const connExecuteMock = jest.fn().mockResolvedValueOnce({
+      rowsAffected: 1,
+      outBinds: [{ id: [1] }],
+    });
+
+    // Mock para db.withConnection
+    db.withConnection.mockImplementation(async (fn) => {
+      return await fn({
+        execute: jest.fn().mockResolvedValue({
+          rowsAffected: 1,
+          outBinds: { id: [123] },
+        }),
+        executeMany: connExecuteMock,
+      });
+    });
+    await agregarCiclo(id, [new Ciclo(10, id, 0, 5, false, 1)]);
     expect(protocolo.ciclos.length).toBe(1);
+    expect(protocolo.ciclos[0].id).toBe(10);
+    expect(protocolo.ciclos[0].regimen).toBe(0);
+    expect(protocolo.ciclos[0].duracion_semanas).toBe(5);
   });
 
   test('puedo validar si un ciclo de un regimen existe en el protocolo', async () => {
     const id = await agregarProtocolo();
-    await protocolo.agregarCiclo(new Ciclo(1, id, 0, 2, false), repo);
-    await protocolo.agregarCiclo(new Ciclo(1, id, 1, 5, true), repo);
+    await agregarCiclo(id, [new Ciclo(1, id, 0, 2, false), new Ciclo(1, id, 1, 5, true)]);
 
     const ciclo1Regimen0 = protocolo.validarCicloEnRegimen(1, 0);
     expect(ciclo1Regimen0).toBeInstanceOf(Ciclo);

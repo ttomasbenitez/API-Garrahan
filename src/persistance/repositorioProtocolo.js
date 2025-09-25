@@ -1,6 +1,6 @@
 import oracledb from 'oracledb';
 import Protocolo from '../domain/protocolo/index.js';
-import { ERROR_PROTOCOLO_CREACION, ERROR_PROTOCOLO_NO_ENCONTRADO, ERROR_PROTOCOLO_CICLO } from '../errors/protocolo.js';
+import { ERROR_PROTOCOLO_CREACION, ERROR_PROTOCOLO_NO_ENCONTRADO } from '../errors/protocolo.js';
 import Ciclo from '../domain/protocolo/ciclo.js';
 import AdministracionMedicacion from '../domain/protocolo/administracionMedicacion.js';
 
@@ -67,28 +67,47 @@ export class RepositorioProtocolo {
     return Protocolo.fromRow(result.rows[0], ciclos);
   }
 
-  async agregarCiclo(protocoloId, ciclo) {
-    return await this.db.withConnection(async (conn) => {
-      const result = await conn.execute(
-        `INSERT INTO ciclo (protocolo_id, ciclo_id, regimen, duracion_semanas, ciclo_final, repeticiones)
-        VALUES (:protocolo_id, :ciclo_id, :regimen, :duracion_semanas, :ciclo_final, :repeticiones)
-        RETURNING ciclo_id INTO :id`,
-        {
+  async agregarCiclo(protocoloId, ciclos) {
+    try {
+      const result = await this.db.withConnection(async (conn) => {
+        const sql =
+          `INSERT INTO ciclo (protocolo_id, ciclo_id, regimen, duracion_semanas, ciclo_final, repeticiones)
+          VALUES (:protocolo_id, :ciclo_id, :regimen, :duracion_semanas, :ciclo_final, :repeticiones)`;
+
+        const binds = ciclos.map(ciclo => ({
           protocolo_id: protocoloId,
           ciclo_id: ciclo.id,
           regimen: ciclo.regimen,
           duracion_semanas: ciclo.duracion_semanas,
           ciclo_final: ciclo.ciclo_final ? 1 : 0,
           repeticiones: ciclo.repeticiones,
-          id: { dir: oracledb.BIND_OUT, type: oracledb.NUMBER }
-        },
-        { autoCommit: true }
-      );
+        }));
+
+        const opts = {
+          autoCommit: true,
+          bindDefs: {
+            protocolo_id: { type: oracledb.NUMBER },
+            ciclo_id: { type: oracledb.NUMBER },
+            regimen: { type: oracledb.NUMBER },
+            duracion_semanas: { type: oracledb.NUMBER },
+            ciclo_final: { type: oracledb.NUMBER },
+            repeticiones: { type: oracledb.NUMBER },
+          }
+        };
+
+        return await conn.executeMany(sql, binds, opts);
+      });
+
       if (result.rowsAffected === 0) {
-        throw new Error(ERROR_PROTOCOLO_CICLO);
+        throw new Error('Error al agregar ciclos al protocolo');
       }
-      return result.outBinds.id[0];
-    });
+
+      return ciclos;
+    }
+    catch(err) {
+      console.error(err);
+      throw new Error('Error al agregar ciclos al protocolo');
+    }
   }
 
   async agregarAdministracion(protocolo, ciclo, administracion_medicaciones) {
