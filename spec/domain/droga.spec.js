@@ -3,8 +3,9 @@
 import Droga from '../../src/domain/droga';
 describe('Droga', () => {
   test('deberia crear una droga con todos los campos obligatorios', () => {
-    const droga = new Droga('CISPLATINO', 'FRASCO AMPOLLA', 10, 'mg', 10, 'mg');
+    const droga = new Droga('CISPLATINO', 'CISPLATINO1', 0);
     expect(droga.nombre_generico).toBe('CISPLATINO');
-    expect(droga.codigo_farmacia).toBe('FRASCO AMPOLLA');
+    expect(droga.codigo_farmacia).toBe('CISPLATINO1');
+    expect(droga.droga_id).toBe(0);
   });
 });

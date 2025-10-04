@@ -1,3 +1,4 @@
+@wip
 Feature: Administrar medicación en un ciclo de tratamiento
   Como sistema de prescripción
   Quiero registrar la administración de medicación por ciclo y régimen

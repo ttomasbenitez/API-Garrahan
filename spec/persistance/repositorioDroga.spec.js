@@ -23,7 +23,7 @@ describe(RepositorioDroga, () => {
   const drogas = [];
   const agregarDroga = async (cantidad = 1) => {
     for(let i = 0; i < cantidad; i++) {
-      droga = new Droga('Ciclofosfamida', 'Oral', 50 + i, 'mg/m2', 150 + i, 'mg/m2');
+      droga = new Droga('Ciclofosfamida', 'CFM-100', i);
       drogas.push(droga);
     }
     const ids = Array.from({ length: cantidad }, (v, i) => ({ id: [i] }));

@@ -10,6 +10,7 @@ export class DrogaService {
   async crear(drogas) {
 
     const ids = await this.drogaRepo.guardar(drogas);
+
     drogas.forEach((droga, index) => {
       droga.droga_id = ids[index];
     });
