@@ -22,3 +22,10 @@ export const UNIT_NORMALIZATION_MAP = Object.freeze({
   'mg': 'mg',
   'g': 'g',
 });
+
+// Re-exportar errores específicos de módulos
+export * from './paciente.js';
+export * from './profesional.js';
+export * from './droga.js';
+export * from './protocolo.js';
+export * from './pacienteProfesional.js';

@@ -71,3 +71,13 @@ CREATE TABLE paciente (
   obra_social VARCHAR2(100),
   FOREIGN KEY (profesional_id) REFERENCES profesional(id)
 );
+
+-- Relación N a N paciente ↔ profesional (equipo tratante)
+CREATE TABLE paciente_profesional (
+  profesional_id NUMBER NOT NULL,
+  paciente_id    NUMBER NOT NULL,
+  rol            VARCHAR2(50),
+  CONSTRAINT pk_paciente_profesional PRIMARY KEY (profesional_id, paciente_id),
+  CONSTRAINT fk_pprof_prof FOREIGN KEY (profesional_id) REFERENCES profesional(id),
+  CONSTRAINT fk_pprof_pac  FOREIGN KEY (paciente_id)    REFERENCES paciente(id)
+);

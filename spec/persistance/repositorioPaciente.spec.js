@@ -13,7 +13,11 @@ describe(RepositorioPaciente, () => {
   let repo;
 
   beforeEach(() => {
-    connection = { execute: jest.fn() };
+    connection = { 
+      execute: jest.fn(),
+      rollback: jest.fn(),
+      commit: jest.fn()
+    };
     repo = new RepositorioPaciente(connection);
   });
 
@@ -30,11 +34,12 @@ describe(RepositorioPaciente, () => {
     const id = await repo.guardar(paciente);
 
     expect(id).toBe(123);
-    expect(connection.execute).toHaveBeenCalledTimes(1);
+    expect(connection.execute).toHaveBeenCalledTimes(2); // Paciente + asignación profesional
 
-    const [sql, binds, opts] = connection.execute.mock.calls[0];
-    expect(sql).toMatch(/INSERT\s+INTO\s+paciente/i);
-    expect(binds).toMatchObject({
+
+    const [sql1, binds1, opts1] = connection.execute.mock.calls[0];
+    expect(sql1).toMatch(/INSERT\s+INTO\s+paciente/i);
+    expect(binds1).toMatchObject({
       nombre: paciente.nombre,
       apellido: paciente.apellido,
       id_hospitalario: paciente.id_hospitalario,
@@ -44,7 +49,16 @@ describe(RepositorioPaciente, () => {
       profesional_id: paciente.profesional_id,
       id: { dir: expect.any(Number), type: expect.any(Number) }
     });
-    expect(opts).toMatchObject({ autoCommit: true });
+    expect(opts1).toMatchObject({ autoCommit: true });
+
+    const [sql2, binds2, opts2] = connection.execute.mock.calls[1];
+    expect(sql2).toMatch(/INSERT\s+INTO\s+paciente_profesional/i);
+    expect(binds2).toMatchObject({
+      profesional_id: paciente.profesional_id,
+      paciente_id: 123,
+      rol: 'Médico Tratante'
+    });
+    expect(opts2).toMatchObject({ autoCommit: true });
   });
 
   test('guardar paciente lanza error si no se crea', async () => {

@@ -62,6 +62,7 @@ async function truncateTables(conn) {
     'CICLO',
     'PROTOCOLO',
     'DROGA',
+    'PACIENTE_PROFESIONAL',
     'PACIENTE',
     'PROFESIONAL'
   ];

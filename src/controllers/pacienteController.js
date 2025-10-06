@@ -4,6 +4,7 @@ import logger from '../utils/logger.js';
 export const makePacienteController = (pacienteService) => ({
   crear: (req, res) => crearPaciente(req, res, pacienteService),
   obtener: (req, res) => obtenerPaciente(req, res, pacienteService),
+  obtenerEquipoTratante: (req, res) => obtenerEquipoTratante(req, res, pacienteService),
 });
 
 async function crearPaciente(req, res, service) {
@@ -34,6 +35,18 @@ async function obtenerPaciente(req, res, service) {
     res.status(200).json(JSON.stringify(paciente));
   } catch (error) {
     logger.error('Error al obtener paciente: %o', error);
+    res.status(500).json({ error: error.message });
+  }
+}
+
+async function obtenerEquipoTratante(req, res, service) {
+  try {
+    const { id } = req.params;
+    const equipo = await service.obtenerEquipoTratante(id);
+    logger.info('Equipo tratante obtenido para paciente ID: %d', id);
+    res.status(200).json(equipo);
+  } catch (error) {
+    logger.error('Error al obtener equipo tratante: %o', error);
     res.status(500).json({ error: error.message });
   }
 }
