@@ -7,11 +7,11 @@ let datosAdmin = [];
 let response = {};
 
 Given('que tengo los siguientes datos de la vía de administración:', function (dataTable) {
-  datosAdmin = [dataTable.rowsHash()].map((row) => {
-    return {
+  [dataTable.rowsHash()].forEach((row) => {
+    datosAdmin.push({
       nombre: row.nombre,
       codigo: row.codigo,
-    };
+    });
   });
 });
 
@@ -32,6 +32,20 @@ Then('se crea correctamente la vía de administración', function () {
   assert.ok(response);
   assert.strictEqual(response.status, 201);
   datosAdmin = [];
-  response = {};
+  response = null;
 });
 
+const compararVia = (via1, via2) => {
+  assert.strictEqual(via1.nombre, via2.nombre);
+  assert.strictEqual(via1.codigo, via2.codigo);
+};
+
+Then('obtengo los datos de las vías con el id {string} y {string}', function (id1, id2) {
+  const body = response.body;
+  const via1 = body[0];
+  const via2 = body[1];
+  compararVia(via1, datosAdmin[0]);
+  compararVia(via2,datosAdmin[1]);
+  assert.strictEqual(via1.via_id, Number(id1));
+  assert.strictEqual(via2.via_id, Number(id2));
+});

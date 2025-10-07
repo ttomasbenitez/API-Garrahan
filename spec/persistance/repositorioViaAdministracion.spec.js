@@ -64,4 +64,26 @@ describe(RepositorioViaAdministracion, () => {
     expect(opts).toMatchObject({ autoCommit: true });
   });
 
+  test('guardar varias vias en simultanero funciona correctamente devolviendo las vias con sus ids', async () => {
+    const {connExecuteMock, id} = await agregarVia(2);
+
+    expect(id[0]).toBe(0);
+    expect(id[1]).toBe(1);
+    expect(db.withConnection).toHaveBeenCalledTimes(1);
+
+
+    const [sql, binds, opts] = connExecuteMock.mock.calls[0];
+    expect(sql).toMatch(/INSERT\s+INTO\s+via_administracion/i);
+
+    expect(binds[0]).toMatchObject({
+      nombre: via.nombre,
+      codigo: via.codigo
+    });
+    expect(binds[1]).toMatchObject({
+      nombre: via.nombre,
+      codigo: via.codigo
+    });
+    expect(opts).toMatchObject({ autoCommit: true });
+  });
+
 });

@@ -65,7 +65,8 @@ async function truncateTables(conn) {
     'DROGA',
     'PACIENTE_PROFESIONAL',
     'PACIENTE',
-    'PROFESIONAL'
+    'PROFESIONAL',
+    'VIA_ADMINISTRACION'
   ];
   for (const t of tables) {
     try {

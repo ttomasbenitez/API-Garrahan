@@ -25,7 +25,7 @@ export class RepositorioViaAdministracion {
           autoCommit: true,
           bindDefs: {
             nombre: { type: oracledb.STRING, maxSize: 100 },
-            codigo: { type: oracledb.STRING, maxSize: 100 },
+            codigo: { type: oracledb.STRING, maxSize: 50 },
             id: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
           }
         };

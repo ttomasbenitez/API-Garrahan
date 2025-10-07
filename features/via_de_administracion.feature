@@ -11,15 +11,15 @@ Feature: Gestión de Vías de Administración
     Then el "nombre" de la via es "Intravenosa"
     And el "codigo" de la via es "IV"
     And se crea correctamente la vía de administración
-  @wip
+
   Scenario: US-06.2 Crear varias vías de administración
     Given que tengo los siguientes datos de la vía de administración:
-      | nombre | Intravenosa |
-      | codigo | IV          |
+      | nombre | Nasal       |
+      | codigo | NA          |
     And que tengo los siguientes datos de la vía de administración:
       | nombre | Oral        |
       | codigo | PO          |
-    When publico en la API "/via-administracion" con los datos de las vías
+    When publico la API "/via-administracion" con los datos de la vía
     Then obtengo los datos de las vías con el id "1" y "2"
     And se crea correctamente la vía de administración
   @wip
