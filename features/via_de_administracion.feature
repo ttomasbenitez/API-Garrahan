@@ -4,16 +4,17 @@ Feature: Gestión de Vías de Administración
   Para poder asignarlas a la administración de medicación y consultarlas por nombre y código
 
   @wip
-  Scenario: US-05.1 Crear una nueva vía de administración
+  Scenario: US-06.1 Crear una nueva vía de administración
     Given que tengo los siguientes datos de la vía de administración:
-      | nombre | Intravenosa |
-      | codigo | IV          |
+      | nombre      | Intravenosa |
+      | codigo      | IV          |
+      | descripcion | Vía para administración por vena |
     When publico en la API "/via-administracion" con los datos de la vía
     Then el "nombre" de la via es "Intravenosa"
     And el "codigo"  de la via es "IV"
     And se crea correctamente la vía de administración
   @wip
-  Scenario: US-05.2 Crear varias vías de administración
+  Scenario: US-06.2 Crear varias vías de administración
     Given que tengo los siguientes datos de la vía de administración:
       | nombre | Intravenosa |
       | codigo | IV          |
@@ -24,7 +25,7 @@ Feature: Gestión de Vías de Administración
     Then obtengo los datos de las vías con el id "1" y "2"
     And se crea correctamente la vía de administración
   @wip
-  Scenario: US-05.3 Obtener una vía de administración creada por su id
+  Scenario: US-06.3 Obtener una vía de administración creada por su id
     Given existe en la base de datos una vía de administración con id "1" y con los datos:
       | nombre | Intravenosa |
       | codigo | IV          |
@@ -34,7 +35,7 @@ Feature: Gestión de Vías de Administración
     And el "codigo"  de la via es "IV"
     And responde correctamente la vía de administración
   @wip
-  Scenario: US-05.4 Listar todas las vías de administración
+  Scenario: US-06.4 Listar todas las vías de administración
     Given existen en la base de datos las siguientes vías de administración:
       | id | nombre       | codigo |
       | 1  | Intravenosa  | IV     |
@@ -45,7 +46,7 @@ Feature: Gestión de Vías de Administración
     And el segundo registro tiene "nombre" = "Oral" y "codigo" = "PO"
     And responde correctamente la vía de administración
   @wip
-  Scenario: US-05.5 Actualizar una vía de administración existente
+  Scenario: US-06.5 Actualizar una vía de administración existente
     Given existe en la base de datos una vía de administración con id "2" y con los datos:
       | nombre | Oral |
       | codigo | PO   |
@@ -56,7 +57,7 @@ Feature: Gestión de Vías de Administración
     And el "codigo" de la via es "PO-CAPS"
     And se actualiza correctamente
   @wip
-  Scenario: US-05.6 Eliminar una vía de administración sin uso
+  Scenario: US-06.6 Eliminar una vía de administración sin uso
     Given existe en la base de datos una vía de administración con id "3" y con los datos:
       | nombre | Sublingual |
       | codigo | SL         |
