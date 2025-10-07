@@ -3,15 +3,13 @@ Feature: Gestión de Vías de Administración
   Quiero mantener un catálogo de vías de administración
   Para poder asignarlas a la administración de medicación y consultarlas por nombre y código
 
-  @wip
   Scenario: US-06.1 Crear una nueva vía de administración
     Given que tengo los siguientes datos de la vía de administración:
       | nombre      | Intravenosa |
       | codigo      | IV          |
-      | descripcion | Vía para administración por vena |
-    When publico en la API "/via-administracion" con los datos de la vía
+    When publico la API "/via-administracion" con los datos de la vía
     Then el "nombre" de la via es "Intravenosa"
-    And el "codigo"  de la via es "IV"
+    And el "codigo" de la via es "IV"
     And se crea correctamente la vía de administración
   @wip
   Scenario: US-06.2 Crear varias vías de administración

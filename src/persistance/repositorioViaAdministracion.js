@@ -1,5 +1,5 @@
 import oracledb from 'oracledb';
-import { ERROR_VIA_ADMINISTRACION_CREACION } from '../errors/viaAdministracion';
+import { ERROR_VIA_ADMINISTRACION_CREACION } from '../errors/viaAdministracion.js';
 
 export class RepositorioViaAdministracion {
   constructor(db) {

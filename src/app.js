@@ -23,6 +23,10 @@ import { PacienteProfesionalService } from './services/PacienteProfesionalServic
 import { makePacienteProfesionalController } from './controllers/pacienteProfesionalController.js';
 import pacienteProfesionalRoutes from './routes/pacienteProfesional.js';
 import authRouter from './routes/auth.js';
+import { RepositorioViaAdministracion } from './persistance/repositorioViaAdministracion.js';
+import { ViaAdministracionService } from './services/ViaAdministracionService.js';
+import { makeViaAdministracionController } from './controllers/viaAdministracionController.js';
+import viaAdministracionRoutes from './routes/viaAdministracion.js';
 
 const app = express();
 // paciente
@@ -48,6 +52,10 @@ const pacienteProfesionalService = new PacienteProfesionalService(
   profesionalService
 );
 const pacienteProfesionalController = makePacienteProfesionalController(pacienteProfesionalService);
+// via administracion
+const respositorioViaAdministracion = new RepositorioViaAdministracion(oracleDBInstance);
+const viaAdministracionService = new ViaAdministracionService(respositorioViaAdministracion);
+const viaAdministracionController = makeViaAdministracionController(viaAdministracionService);
 
 app.use(express.json());
 app.use(cors({
@@ -64,5 +72,6 @@ app.use('/paciente', pacientesRoutes(pacienteController));
 app.use('/profesional', profesionalesRoutes(profesionalController));
 app.use('/droga', drogasRoutes(drogaController));
 app.use('/paciente-profesional', pacienteProfesionalRoutes(pacienteProfesionalController));
+app.use('/via-administracion', viaAdministracionRoutes(viaAdministracionController));
 
 export default app;
