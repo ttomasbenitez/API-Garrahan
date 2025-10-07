@@ -13,7 +13,7 @@ describe(RepositorioPaciente, () => {
   let repo;
 
   beforeEach(() => {
-    connection = { 
+    connection = {
       execute: jest.fn(),
       rollback: jest.fn(),
       commit: jest.fn()

@@ -15,7 +15,8 @@ When(/^publico en la API "(.*)" con los datos de la droga$/, async function (end
   response = await request(app)
     .post(endpoint)
     .send(droga)
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 });
 
 Then(/^obtengo los datos de la droga con el id "(.*)"$/, function (id) {
@@ -63,14 +64,16 @@ Given(/^su id es "(.*)"$/, async function (_id) {
   response = await request(app)
     .post('/droga')
     .send(droga)
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 });
 
 
 When(/^consulto en la API "(.*)" por su id$/, async function (endpoint) {
   response = await request(app)
     .get(endpoint)
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 });
 
 Then(/^el sistema me devuelve la droga con id "(.*)"$/, function (id) {

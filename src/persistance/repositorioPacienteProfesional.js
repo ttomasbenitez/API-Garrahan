@@ -8,7 +8,7 @@ export class RepositorioPacienteProfesional {
   async asignar(profesional_id, paciente_id, rol = 'Médico Tratante') {
     // 1. Verificar que el profesional existe
     const profesionalExiste = await this.connection.execute(
-      `SELECT COUNT(*) as count FROM profesional WHERE id = :profesional_id`,
+      'SELECT COUNT(*) as count FROM profesional WHERE id = :profesional_id',
       { profesional_id },
       { outFormat: oracledb.OUT_FORMAT_OBJECT }
     );
@@ -54,7 +54,7 @@ export class RepositorioPacienteProfesional {
       [paciente_id],
       { outFormat: oracledb.OUT_FORMAT_OBJECT }
     );
-    
+
     return result.rows.map(row => ({
       profesional_id: row.PROFESIONAL_ID,
       paciente_id: row.PACIENTE_ID,
@@ -79,7 +79,7 @@ export class RepositorioPacienteProfesional {
       [profesional_id],
       { outFormat: oracledb.OUT_FORMAT_OBJECT }
     );
-    
+
     return result.rows.map(row => ({
       profesional_id: row.PROFESIONAL_ID,
       paciente_id: row.PACIENTE_ID,
@@ -106,7 +106,7 @@ export class RepositorioPacienteProfesional {
 
   async removerTodosProfesionalesDePaciente(paciente_id) {
     const result = await this.connection.execute(
-      `DELETE FROM paciente_profesional WHERE paciente_id = :paciente_id`,
+      'DELETE FROM paciente_profesional WHERE paciente_id = :paciente_id',
       [paciente_id],
       { autoCommit: true }
     );

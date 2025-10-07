@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import cookieParser from 'cookie-parser';
 import routes from './routes/index.js';
 import oracleDBInstance from './db/connection_pool.js';
 import protocolosRoutes from './routes/protocolos.js';
@@ -21,6 +22,7 @@ import { RepositorioDroga } from './persistance/repositorioDroga.js';
 import { PacienteProfesionalService } from './services/PacienteProfesionalService.js';
 import { makePacienteProfesionalController } from './controllers/pacienteProfesionalController.js';
 import pacienteProfesionalRoutes from './routes/pacienteProfesional.js';
+import authRouter from './routes/auth.js';
 
 const app = express();
 // paciente
@@ -47,8 +49,15 @@ const pacienteProfesionalService = new PacienteProfesionalService(
 );
 const pacienteProfesionalController = makePacienteProfesionalController(pacienteProfesionalService);
 
-app.use(cors());
 app.use(express.json());
+app.use(cors({
+  origin: 'http://localhost:3003', // frontend Next
+  credentials: true
+}));
+app.use(cookieParser());
+
+app.use('/', routes);
+app.use('/auth', authRouter);
 app.use('/', routes);
 app.use('/protocolo', protocolosRoutes(protocoloController));
 app.use('/paciente', pacientesRoutes(pacienteController));

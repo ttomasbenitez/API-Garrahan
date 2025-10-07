@@ -1,10 +1,11 @@
 // features/support/hooks.db.ts
-import { BeforeAll, AfterAll, Before, After, setDefaultTimeout } from '@cucumber/cucumber';
+import { BeforeAll, AfterAll, Before, setDefaultTimeout } from '@cucumber/cucumber';
 import { GenericContainer, Wait } from 'testcontainers';
 import oracledb from 'oracledb';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-
+import request from 'supertest';
+import app from '../../src/app.js';
 import oracleDBInstance from '../../src/db/connection_pool.js';
 import config from '../../config.js';
 
@@ -168,6 +169,15 @@ BeforeAll({ timeout: 200_000 }, async function () {
   await hardClean(conn);
 
   await conn.close();
+});
+
+Before(async function () {
+  const res = await request(app)
+    .post('/auth/login-test')
+    .send({ id: '2', name: 'Dr. Juan', role: 'admin' })
+    .set('Accept', 'application/json');
+
+  this.sessionCookie = res.headers['set-cookie'];
 });
 
 Before({ timeout: 60_000 }, async function () {

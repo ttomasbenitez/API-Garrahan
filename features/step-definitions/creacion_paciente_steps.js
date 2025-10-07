@@ -35,7 +35,8 @@ Given(/^profesional_id$/, async function () {
   const response = await request(app)
     .post('/profesional')
     .send({nombre: 'Walter', apellido: 'Perez', dni: '12345678', matricula: 'MAT12345', especialidad: 'Pediatria'})
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
   if (response.status !== 201) {
     throw new Error(`No se pudo crear el profesional necesario para el paciente. Status recibido: ${response.status}`);
   }
@@ -48,7 +49,8 @@ Given(
     const profesional_res = await request(app)
       .post('/profesional')
       .send({ nombre: 'Walter', apellido: 'García', dni: 20912121, id: profesional_id })
-      .set('Accept', 'application/json');
+      .set('Accept', 'application/json')
+      .set('Cookie', this.sessionCookie);
     if (profesional_res.status !== 201) throw new Error(`No se pudo crear el profesional: ${profesional_res.status}`);
 
     const res = await request(app)
@@ -56,7 +58,8 @@ Given(
       .send({ nombre: nombre, apellido: apellido, id_hospitalario: id_hospitalario, fecha_nacimiento: fecha_nacimiento
         , peso: peso, sexo: sexo, profesional_id: profesional_id
       })
-      .set('Accept', 'application/json');
+      .set('Accept', 'application/json')
+      .set('Cookie', this.sessionCookie);
     if (res.status !== 201) throw new Error(`No se pudo crear el paciente: ${res.status}`);
 
     this.paciente.id = res.body.id;
@@ -66,7 +69,8 @@ Given(
 When(/^consulto en la API de pacientes por él$/, async function () {
   const response = await request(app)
     .get(`/paciente/${this.paciente.id}`)
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
   this.response = response;
 });
 
@@ -75,7 +79,8 @@ When(/^publico en el endpoint "(.*)" con los datos$/, async function (endpoint) 
   const response = await request(app)
     .post(endpoint)
     .send(this.paciente)
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
   this.response = response;
 });
 

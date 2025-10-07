@@ -22,7 +22,8 @@ When(/^publico en la API "(.*)" con los datos$/, async function (endpoint) {
   response = await request(app)
     .post(endpoint)
     .send(data)
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 });
 
 Then('el protocolo se crea correctamente', function () {
@@ -47,13 +48,15 @@ Given(/^existe en la base de datos un protocolo con el nombre de "(.*)" con id "
   await request(app)
     .post('/protocolo')
     .send(data)
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 });
 
 When(/^consulto en la API "(.*)"$/, async function (endpoint) {
   response = await request(app)
     .get(endpoint)
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 });
 
 Then(/^el sistema me devuelve el protocolo con id "(.*)"$/, function (id) {
@@ -99,7 +102,8 @@ const compareCicle = (idProtocolo, idCiclo) => {
 Then(/^el ciclo de tratamiento se agrega correctamente al protocolo "(.*)" con id "(.*)"$/,  async function (idProtocolo, idCiclo) {
   response = await request(app)
     .get('/protocolo/' + idProtocolo)
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 
   if (!response) throw new Error('No se recibió respuesta');
   if (response.status !== 200) throw new Error(`Status esperado 200, recibido ${response.status}`);
@@ -113,7 +117,8 @@ Then(/^el ciclo de tratamiento se agrega correctamente al protocolo "(.*)" con i
 Then(/^el ciclo de tratamiento se agrega correctamente al protocolo "(.*)" con los ids "(.*)","(.*)"$/,  async function (idProtocolo, idCiclo1, idCiclo2) {
   response = await request(app)
     .get('/protocolo/' + idProtocolo)
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 
   if (!response) throw new Error('No se recibió respuesta');
   if (response.status !== 200) throw new Error(`Status esperado 200, recibido ${response.status}`);

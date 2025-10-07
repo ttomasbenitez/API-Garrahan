@@ -35,19 +35,19 @@ export const ERROR_DB_TRANSACCION = 'Error en la transacción de base de datos';
 export const ERROR_DB_CONSTRAINT = 'Violación de restricción de base de datos';
 
 // Mensajes informativos
-export const MSG_PROFESIONAL_AGREGADO = (profesionalId, pacienteId) => 
+export const MSG_PROFESIONAL_AGREGADO = (profesionalId, pacienteId) =>
   `Profesional ${profesionalId} agregado como colaborador al paciente ${pacienteId}`;
 
-export const MSG_PROFESIONAL_PRINCIPAL_CAMBIADO = (pacienteId, profesionalId) => 
+export const MSG_PROFESIONAL_PRINCIPAL_CAMBIADO = (pacienteId, profesionalId) =>
   `Profesional principal del paciente ${pacienteId} cambiado a ${profesionalId}`;
 
-export const MSG_COLABORADOR_REMOVIDO = (profesionalId, pacienteId) => 
+export const MSG_COLABORADOR_REMOVIDO = (profesionalId, pacienteId) =>
   `Profesional ${profesionalId} removido como colaborador del paciente ${pacienteId}`;
 
-export const MSG_EQUIPO_OBTENIDO = (pacienteId, cantidad) => 
+export const MSG_EQUIPO_OBTENIDO = (pacienteId, cantidad) =>
   `Equipo tratante obtenido para paciente ${pacienteId}: ${cantidad} profesionales`;
 
-export const MSG_PACIENTES_OBTENIDOS = (profesionalId, cantidad) => 
+export const MSG_PACIENTES_OBTENIDOS = (profesionalId, cantidad) =>
   `Pacientes obtenidos para profesional ${profesionalId}: ${cantidad} pacientes`;
 
 // Roles válidos

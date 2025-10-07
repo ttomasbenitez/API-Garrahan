@@ -9,8 +9,8 @@ export class PacienteService {
     return id;
   }
 
-  async obtener(id) { 
-    return this.pacienteRepo.obtener(id); 
+  async obtener(id) {
+    return this.pacienteRepo.obtener(id);
   }
 
   async obtenerEquipoTratante(paciente_id) {

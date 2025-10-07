@@ -1,12 +1,10 @@
 import { ERROR_CAMPOS_REQUERIDOS } from '../errors/index.js';
-import { 
-  ERROR_PROFESIONAL_NO_ENCONTRADO, 
+import {
   ERROR_PROFESIONAL_YA_ASIGNADO,
   MSG_PROFESIONAL_AGREGADO,
   MSG_PROFESIONAL_PRINCIPAL_CAMBIADO,
   MSG_EQUIPO_OBTENIDO,
   MSG_PACIENTES_OBTENIDOS,
-  ERROR_CODES
 } from '../errors/pacienteProfesional.js';
 import logger from '../utils/logger.js';
 
@@ -32,8 +30,8 @@ export class PacienteProfesionalService {
       throw new Error(ERROR_PROFESIONAL_YA_ASIGNADO);
     }
 
-    return await this.pacienteProfesionalRepo.asignar(profesional_id, paciente_id, rol);
     logger.info(MSG_PROFESIONAL_AGREGADO(profesional_id, paciente_id));
+    return await this.pacienteProfesionalRepo.asignar(profesional_id, paciente_id, rol);
   }
 
   async cambiarProfesionalPrincipal(paciente_id, nuevo_profesional_id) {
@@ -72,7 +70,7 @@ export class PacienteProfesionalService {
 
     // Obtener equipo actual
     const equipo = await this.obtenerEquipoTratante(paciente_id);
-    
+
     // Verificar que no sea el médico tratante
     const profesionalARemover = equipo.find(p => p.profesional_id.toString() === profesional_id.toString());
     if (profesionalARemover && profesionalARemover.rol === 'Médico Tratante') {

@@ -18,7 +18,8 @@ Given(/^existe en la base de datos un ciclo para el protocolo "(.*)" con ciclo_i
   await request(app)
     .post('/protocolo/' + idProtocolo + '/ciclo')
     .send(dataTable)
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 
 });
 
@@ -26,7 +27,8 @@ Given(/^existe en la base de datos una droga con id "(.*)" y con los datos:$/,as
   await request(app)
     .post('/droga')
     .send([dataTable.rowsHash()])
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 
 });
 
@@ -47,7 +49,8 @@ When(/^publico en la API "(.*)" con los datos de la administración$/, async fun
   response = await request(app)
     .post(endpoint)
     .send(datosAdmin)
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 });
 
 const compararAdmin = (admin1, admin2) => {

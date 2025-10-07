@@ -36,7 +36,8 @@ When(/^publico en el endpoint de profesionales "(.*)" con los datos$/, async fun
   const response = await request(app)
     .post(endpoint)
     .send(this.profesional)
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
   this.response = response;
 });
 
@@ -62,7 +63,8 @@ Given(
     const res = await request(app)
       .post('/profesional')
       .send({ nombre, apellido, dni, matricula, especialidad })
-      .set('Accept', 'application/json');
+      .set('Accept', 'application/json')
+      .set('Cookie', this.sessionCookie);
     if (res.status !== 201) throw new Error(`No se pudo crear el profesional: ${res.status}`);
 
     this.id_esperado = res.body.id;
@@ -70,7 +72,10 @@ Given(
 );
 
 When(/^consulto en la API de profesionales$/, async function () {
-  this.response = await request(app).get(`/profesional/${this.id_esperado}`).set('Accept', 'application/json');
+  this.response = await request(app)
+    .get(`/profesional/${this.id_esperado}`)
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 });
 
 Then(/^el sistema me devuelve el profesional con id correspondiente$/, function () {

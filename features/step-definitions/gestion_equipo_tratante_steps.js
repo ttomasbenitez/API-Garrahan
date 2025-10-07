@@ -1,7 +1,6 @@
 import { Given, When, Then, Before } from '@cucumber/cucumber';
 import request from 'supertest';
 import app from '../../src/app.js';
-import assert from 'node:assert/strict';
 
 Before(function () {
   this.paciente = {};
@@ -17,18 +16,19 @@ Then('el profesional queda asignado automáticamente como "Médico Tratante"', a
   }
 
   const pacienteId = this.response.body.id;
-  
+
   // Consultar el equipo tratante
   const equipoResponse = await request(app)
     .get(`/paciente/${pacienteId}/equipo-tratante`)
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 
   if (equipoResponse.status !== 200) {
     throw new Error(`Error al obtener equipo tratante: ${equipoResponse.status}`);
   }
 
   const equipo = equipoResponse.body;
-  
+
   // Verificar que hay al menos un profesional asignado
   if (!Array.isArray(equipo) || equipo.length === 0) {
     throw new Error('No se encontró ningún profesional asignado automáticamente');
@@ -53,13 +53,13 @@ Given('existe un paciente creado por un profesional', async function () {
     .send({
       nombre: 'Dr. Principal',
       apellido: 'García',
-      dni: "12345678",
       dni: '12345678',
       matricula: 'MAT123',
       especialidad: 'Cardiología'
     })
-    .set('Accept', 'application/json');
-  
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
+
   this.profesionalPrincipal.id = profResponse.body.id;
 
   // Crear paciente
@@ -68,15 +68,16 @@ Given('existe un paciente creado por un profesional', async function () {
     .send({
       nombre: 'Juan',
       apellido: 'Pérez',
-      dni: "12345678",
+      dni: '12345678',
       id_hospitalario: 'P12345',
       fecha_nacimiento: '2020-05-21',
       peso: 30,
       sexo: 'M',
       profesional_id: this.profesionalPrincipal.id
     })
-    .set('Accept', 'application/json');
-  
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
+
   this.paciente.id = pacResponse.body.id;
 });
 
@@ -86,13 +87,13 @@ Given('existe otro profesional disponible', async function () {
     .send({
       nombre: 'Dr. Colaborador',
       apellido: 'López',
-      dni: "12345678",
-      dni: '87654321',
+      dni: '12345678',
       matricula: 'MAT456',
       especialidad: 'Neurología'
     })
-    .set('Accept', 'application/json');
-  
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
+
   this.profesionalColaborador.id = response.body.id;
 });
 
@@ -104,7 +105,8 @@ When('agrego el segundo profesional como colaborador del paciente', async functi
       paciente_id: this.paciente.id,
       rol: 'Colaborador'
     })
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 });
 
 Then('el profesional se agrega correctamente al equipo tratante', function () {
@@ -117,10 +119,11 @@ Then('el profesional se agrega correctamente al equipo tratante', function () {
 Then('el paciente tiene 2 profesionales asignados', async function () {
   const equipoResponse = await request(app)
     .get(`/paciente/${this.paciente.id}/equipo-tratante`)
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 
   this.equipoTratante = equipoResponse.body;
-  
+
   if (this.equipoTratante.length !== 2) {
     throw new Error(`Esperados 2 profesionales, encontrados ${this.equipoTratante.length}`);
   }
@@ -136,7 +139,8 @@ When('cambio el profesional principal del paciente', async function () {
     .send({
       nuevo_profesional_id: this.profesionalColaborador.id
     })
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 });
 
 Then('el profesional principal se actualiza correctamente', function () {
@@ -149,10 +153,11 @@ Then('el profesional principal se actualiza correctamente', function () {
 Then('solo queda el nuevo profesional como "Médico Tratante"', async function () {
   const equipoResponse = await request(app)
     .get(`/paciente/${this.paciente.id}/equipo-tratante`)
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 
   const equipo = equipoResponse.body;
-  
+
   if (equipo.length !== 1) {
     throw new Error(`Esperado 1 profesional, encontrados ${equipo.length}`);
   }
@@ -174,11 +179,12 @@ Given('existe un profesional con pacientes asignados', async function () {
     .send({
       nombre: 'Dr. Principal',
       apellido: 'Medico',
-      dni: "12345678",
+      dni: '12345678',
       especialidad: 'Oncología',
       matricula: '12345'
     })
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 
   this.profesionalPrincipal = profesionalResponse.body;
 
@@ -188,14 +194,15 @@ Given('existe un profesional con pacientes asignados', async function () {
     .send({
       nombre: 'Paciente',
       apellido: 'Test',
-      dni: "12345678",
+      dni: '12345678',
       id_hospitalario: `P-${Date.now()}`,
       fecha_nacimiento: '2010-01-01',
       peso: 25,
       sexo: 'M',
       profesional_id: this.profesionalPrincipal.id
     })
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 
   this.paciente = pacienteResponse.body;
 });
@@ -203,7 +210,8 @@ Given('existe un profesional con pacientes asignados', async function () {
 When('consulto los pacientes del profesional', async function () {
   this.response = await request(app)
     .get(`/paciente-profesional/profesional/${this.profesionalPrincipal.id}/pacientes`)
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 });
 
 Then('obtengo la lista de todos sus pacientes', function () {
@@ -225,11 +233,12 @@ Given('existe un paciente con profesional principal', async function () {
     .send({
       nombre: 'Dr. Principal',
       apellido: 'Medico',
-      dni: "12345678",
+      dni: '12345678',
       especialidad: 'Oncología',
       matricula: '12345'
     })
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 
   this.profesionalPrincipal = profesionalResponse.body;
 
@@ -239,14 +248,15 @@ Given('existe un paciente con profesional principal', async function () {
     .send({
       nombre: 'Paciente',
       apellido: 'Test',
-      dni: "12345678",
+      dni: '12345678',
       id_hospitalario: `P-${Date.now()}`,
       fecha_nacimiento: '2010-01-01',
       peso: 25,
       sexo: 'M',
       profesional_id: this.profesionalPrincipal.id
     })
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 
   this.paciente = pacienteResponse.body;
 });
@@ -258,11 +268,12 @@ Given('tiene un profesional colaborador agregado', async function () {
     .send({
       nombre: 'Dr. Colaborador',
       apellido: 'Especialista',
-      dni: "12345678",
+      dni: '12345678',
       especialidad: 'Cardiología',
       matricula: '67890'
     })
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 
   this.profesionalColaborador = profesionalColaboradorResponse.body;
 
@@ -274,13 +285,15 @@ Given('tiene un profesional colaborador agregado', async function () {
       paciente_id: this.paciente.id,
       rol: 'Colaborador'
     })
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 });
 
 When('consulto el equipo tratante del paciente', async function () {
   this.response = await request(app)
     .get(`/paciente/${this.paciente.id}/equipo-tratante`)
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 });
 
 Then('obtengo la lista completa de profesionales', function () {
@@ -309,7 +322,8 @@ Given('existe un paciente con su médico tratante', async function () {
 When('intento remover al médico tratante como colaborador', async function () {
   this.response = await request(app)
     .delete(`/paciente-profesional/profesional/${this.profesionalPrincipal.id}/paciente/${this.paciente.id}`)
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 });
 
 Then('obtengo un error indicando que no se puede remover', function () {
@@ -331,7 +345,8 @@ When('intento agregar el mismo profesional como colaborador', async function () 
       paciente_id: this.paciente.id,
       rol: 'Colaborador'
     })
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 });
 
 Then('obtengo un error indicando que ya está asignado', function () {
@@ -352,11 +367,12 @@ Given('que existe un paciente con nombre {string} y apellido {string}', async fu
     .send({
       nombre: 'Dr. Principal',
       apellido: 'Medico',
-      dni: "12345678",
+      dni: '12345678',
       especialidad: 'Oncología',
       matricula: '12345'
     })
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 
 
   this.profesionalPrincipal = profesionalResponse.body;
@@ -371,12 +387,13 @@ Given('que existe un paciente con nombre {string} y apellido {string}', async fu
     sexo: 'M',
     profesional_id: this.profesionalPrincipal.id
   };
-  
+
 
   const pacienteResponse = await request(app)
     .post('/paciente')
     .send(pacientePayload)
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 
 
   if (pacienteResponse.status !== 201) {
@@ -386,14 +403,15 @@ Given('que existe un paciente con nombre {string} y apellido {string}', async fu
   this.paciente = pacienteResponse.body;
 });
 
-Given('el paciente tiene al profesional con id {int} como médico tratante', async function (profesionalId) {
+Given('el paciente tiene al profesional con id {int} como médico tratante', async function (_profesionalId) {
   // El profesional ya está asignado como médico tratante al crear el paciente
   // Solo verificamos que efectivamente esté asignado
-  
-  
+
+
   const equipoResponse = await request(app)
     .get(`/paciente-profesional/paciente/${this.paciente.id}/equipo`)
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 
 
   if (equipoResponse.status !== 200) {
@@ -401,30 +419,31 @@ Given('el paciente tiene al profesional con id {int} como médico tratante', asy
   }
 
   const equipo = equipoResponse.body;
-  
+
   if (!Array.isArray(equipo)) {
     throw new Error(`Equipo no es un array: ${typeof equipo}`);
   }
-  
+
   const medicoTratante = equipo.find(p => p.rol === 'Médico Tratante');
-  
+
   if (!medicoTratante) {
     throw new Error('No se encontró médico tratante asignado');
   }
 });
 
-Given('el paciente tiene al profesional con id {int} como consultor', async function (profesionalId) {
+Given('el paciente tiene al profesional con id {int} como consultor', async function (_profesionalId) {
   // Crear otro profesional para ser consultor
   const profesionalResponse = await request(app)
     .post('/profesional')
     .send({
       nombre: 'Dr. Consultor',
       apellido: 'Especialista',
-      dni: "12345678",
+      dni: '12345678',
       especialidad: 'Cardiología',
       matricula: '67890'
     })
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 
   this.profesionalConsultor = profesionalResponse.body;
 
@@ -436,21 +455,23 @@ Given('el paciente tiene al profesional con id {int} como consultor', async func
       paciente_id: this.paciente.id,
       rol: 'Consultor'
     })
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 });
 
-When('cambio el profesional principal del paciente al profesional con id {int}', async function (nuevoProfesionalId) {
+When('cambio el profesional principal del paciente al profesional con id {int}', async function (_profesionalId) {
   // Crear nuevo profesional principal
   const nuevoProfesionalResponse = await request(app)
     .post('/profesional')
     .send({
       nombre: 'Dr. Nuevo',
       apellido: 'Principal',
-      dni: "12345678",
+      dni: '12345678',
       especialidad: 'Neurología',
       matricula: '11111'
     })
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 
   this.nuevoProfesional = nuevoProfesionalResponse.body;
 
@@ -460,43 +481,47 @@ When('cambio el profesional principal del paciente al profesional con id {int}',
     .send({
       nuevo_profesional_id: this.nuevoProfesional.id
     })
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 });
 
-Then('el paciente debe tener al profesional con id {int} como médico tratante', async function (profesionalId) {
+Then('el paciente debe tener al profesional con id {int} como médico tratante', async function (_profesionalId) {
   const equipoResponse = await request(app)
     .get(`/paciente-profesional/paciente/${this.paciente.id}/equipo`)
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 
   const equipo = equipoResponse.body;
   const medicoTratante = equipo.find(p => p.rol === 'Médico Tratante');
-  
+
   if (!medicoTratante || medicoTratante.profesional_id !== this.nuevoProfesional.id) {
-    throw new Error(`El nuevo profesional no es el médico tratante actual`);
+    throw new Error('El nuevo profesional no es el médico tratante actual');
   }
 });
 
-Then('el paciente debe mantener al profesional con id {int} como consultor', async function (profesionalId) {
+Then('el paciente debe mantener al profesional con id {int} como consultor', async function (_profesionalId) {
   const equipoResponse = await request(app)
     .get(`/paciente-profesional/paciente/${this.paciente.id}/equipo`)
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 
   const equipo = equipoResponse.body;
   const consultor = equipo.find(p => p.rol === 'Consultor' && p.profesional_id === this.profesionalConsultor.id);
-  
+
   if (!consultor) {
     throw new Error('El consultor no se mantuvo asignado');
   }
 });
 
-Then('el profesional con id {int} no debe estar asignado al paciente', async function (profesionalId) {
+Then('el profesional con id {int} no debe estar asignado al paciente', async function (_profesionalId) {
   const equipoResponse = await request(app)
     .get(`/paciente-profesional/paciente/${this.paciente.id}/equipo`)
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 
   const equipo = equipoResponse.body;
   const profesionalAnterior = equipo.find(p => p.profesional_id === this.profesionalPrincipal.id);
-  
+
   if (profesionalAnterior) {
     throw new Error('El profesional anterior todavía está asignado');
   }
@@ -510,7 +535,8 @@ When('intento agregar al profesional con id {int} como consultor del paciente', 
       paciente_id: this.paciente.id,
       rol: 'Consultor'
     })
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 });
 
 Then('debo recibir un error indicando que el profesional no existe', function () {
