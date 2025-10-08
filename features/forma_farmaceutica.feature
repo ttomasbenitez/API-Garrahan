@@ -1,0 +1,65 @@
+Feature: Gestión de Formas Farmacéuticas
+  Como sistema de prescripción
+  Quiero mantener un catálogo de formas farmacéuticas
+  Para poder asociarlas a las presentaciones de drogas y consultarlas por nombre y código
+  
+  @wip
+  Scenario: US-07.1 Crear una nueva forma farmacéutica
+    Given que tengo los siguientes datos de la forma farmacéutica:
+      | nombre | Comprimido |
+      | codigo | TAB        |
+    When publico en la API "/forma-farmaceutica" con los datos de la forma
+    Then el "nombre" de la forma farmaceutica es "Comprimido"
+    And el "codigo" de la forma farmaceutica es "TAB"
+    And se crea correctamente la forma farmaceutica
+  @wip
+  Scenario: US-07.2 Crear varias formas farmacéuticas
+    Given que tengo los siguientes datos de la forma farmacéutica:
+      | nombre | Comprimido |
+      | codigo | TAB        |
+    And que tengo los siguientes datos de la forma farmacéutica:
+      | nombre | Solución inyectable |
+      | codigo | SOL-INY             |
+    When publico en la API "/forma-farmaceutica" con los datos de las formas
+    Then obtengo los datos de las formas con el id "1" y "2"
+    And se crea correctamente la forma farmaceutica
+  @wip
+  Scenario: US-07.3 Obtener una forma farmacéutica creada por su id
+    Given existe en la base de datos una forma farmacéutica con id "1" y con los datos:
+      | nombre | Comprimido |
+      | codigo | TAB        |
+    When consulto en la API "/forma-farmaceutica/1" por su id
+    Then el sistema me devuelve la forma farmacéutica con id "1"
+    And el "nombre"  de la forma farmaceutica es "Comprimido"
+    And el "codigo"  de la forma farmaceutica es "TAB"
+    And se obtiene correctamente la forma farmaceutica
+  @wip
+  Scenario: US-07.4 Listar todas las formas farmacéuticas
+    Given existen en la base de datos las siguientes formas farmacéuticas:
+      | id | nombre              | codigo   |
+      | 1  | Comprimido          | TAB      |
+      | 2  | Solución inyectable | SOL-INY  |
+    When consulto en la API "/forma-farmaceutica"
+    Then el sistema me devuelve una lista con 2 formas farmacéuticas
+    And el primer registro tiene "nombre" = "Comprimido" y "codigo" = "TAB"
+    And el segundo registro tiene "nombre" = "Solución inyectable" y "codigo" = "SOL-INY"
+  @wip
+  Scenario: US-07.5 Actualizar una forma farmacéutica existente
+    Given existe en la base de datos una forma farmacéutica con id "2" y con los datos:
+      | nombre | Solución inyectable |
+      | codigo | SOL-INY             |
+    When publico en la API "/forma-farmaceutica/2" con los siguientes datos:
+      | nombre | Solución inyectable estéril |
+      | codigo | SOL-INY-EST                |
+    Then el "nombre" es "Solución inyectable estéril"
+    And el "codigo" es "SOL-INY-EST"
+    And se actualiza correctamente la forma farmaceutica
+  @wip
+  Scenario: US-07.6 Eliminar una forma farmacéutica sin uso
+    Given existe en la base de datos una forma farmacéutica con id "3" y con los datos:
+      | nombre | Jarabe |
+      | codigo | JAR    |
+    And la forma farmacéutica no está asociada a ninguna presentación de droga
+    When elimino la forma en la API "/forma-farmaceutica/3"
+    Then el sistema elimina la forma farmacéutica con id "3"
+    And se obtiene correctamente la forma farmaceutica
