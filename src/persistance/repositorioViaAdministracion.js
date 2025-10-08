@@ -1,5 +1,6 @@
 import oracledb from 'oracledb';
 import { ERROR_VIA_ADMINISTRACION_CREACION } from '../errors/viaAdministracion.js';
+import ViaAdministracion from '../domain/droga/viaAdministracion.js';
 
 export class RepositorioViaAdministracion {
   constructor(db) {
@@ -39,6 +40,19 @@ export class RepositorioViaAdministracion {
     } catch (error) {
       console.error('Error en RepositorioViaAdministracion.guardar:', error);
     }
+  }
+
+  async obtener(id) {
+    const result = await this.db.execute(
+      'SELECT nombre, codigo, via_id FROM via_administracion WHERE via_id = :id',
+      [id]
+    );
+
+    if (result.rows.length === 0) {
+      return null;
+    }
+
+    return new ViaAdministracion(...result.rows[0]);
   }
 
 }

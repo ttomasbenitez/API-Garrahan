@@ -19,7 +19,8 @@ When(/^publico la API "(.*)" con los datos de la vía$/, async function (endpoin
   response = await request(app)
     .post(endpoint)
     .send(datosAdmin)
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 });
 
 Then(/^el "(.*)" de la via es "(.*)"$/, function (key, valor) {
@@ -48,4 +49,40 @@ Then('obtengo los datos de las vías con el id {string} y {string}', function (i
   compararVia(via2,datosAdmin[1]);
   assert.strictEqual(via1.via_id, Number(id1));
   assert.strictEqual(via2.via_id, Number(id2));
+});
+
+Given('existe en la base de datos una vía de administración con id {string} y con los datos:', async function (string, dataTable) {
+  [dataTable.rowsHash()].forEach((row) => {
+    datosAdmin.push({
+      nombre: row.nombre,
+      codigo: row.codigo,
+    });
+  });
+  response = await request(app)
+    .post('/via-administracion')
+    .send(datosAdmin)
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
+});
+
+When(/^consulto en la API "(.*)" por su id de via$/, async function (endpoint) {
+  response = await request(app)
+    .get(endpoint)
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
+});
+
+
+Then(/^el sistema me devuelve la vía de administración con id "(.*)"$/, function (id) {
+  const body = response.body;
+  compararVia(body, datosAdmin[0]);
+  assert.strictEqual(body.via_id, Number(id));
+
+});
+
+Then('responde correctamente la vía de administración', function () {
+  assert.ok(response);
+  assert.strictEqual(response.status, 200);
+  datosAdmin = [];
+  response = null;
 });

@@ -22,15 +22,13 @@ Feature: Gestión de Vías de Administración
     When publico la API "/via-administracion" con los datos de la vía
     Then obtengo los datos de las vías con el id "1" y "2"
     And se crea correctamente la vía de administración
-  @wip
+
   Scenario: US-06.3 Obtener una vía de administración creada por su id
     Given existe en la base de datos una vía de administración con id "1" y con los datos:
       | nombre | Intravenosa |
       | codigo | IV          |
-    When consulto en la API "/via-administracion/1" por su id
+    When consulto en la API "/via-administracion/1" por su id de via
     Then el sistema me devuelve la vía de administración con id "1"
-    And el "nombre"  de la via es "Intravenosa"
-    And el "codigo"  de la via es "IV"
     And responde correctamente la vía de administración
   @wip
   Scenario: US-06.4 Listar todas las vías de administración

@@ -15,5 +15,8 @@ export class ViaAdministracionService {
     return ids;
   }
 
+  async obtener(idViaAdministracion) {
+    return await this.viaAdministracionRepo.obtener(idViaAdministracion);
+  }
 
 }
