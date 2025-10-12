@@ -52,7 +52,7 @@ export class RepositorioViaAdministracion {
       return null;
     }
 
-    return new ViaAdministracion(...result.rows[0]);
+    const row = result.rows[0];
+    return new ViaAdministracion(row.NOMBRE, row.CODIGO, row.VIA_ID);
   }
-
 }

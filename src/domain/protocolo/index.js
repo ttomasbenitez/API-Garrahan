@@ -9,7 +9,12 @@ class Protocolo {
   }
 
   static fromRow(row, ciclos = []) {
-    const protocolo = new Protocolo(row[1], row[2], row[3], row[0]);
+    const protocolo = new Protocolo(
+      row.NOMBRE,
+      row.ENFERMEDAD,
+      row.LINEA,
+      row.PROTOCOLO_ID
+    );
     protocolo.ciclos = ciclos;
     return protocolo;
   }

@@ -5,7 +5,6 @@ import Protocolo from '../../src/domain/protocolo';
 import AdministracionMedicacion from '../../src/domain/protocolo/administracionMedicacion.js';
 import { RepositorioProtocolo } from '../../src/persistance/repositorioProtocolo';
 
-// Mock de 'oracledb' porque lo usás adentro del método con require('oracledb')
 jest.mock('../../src/db/connection_pool.js', () => ({
   __esModule: true,
   default: {
@@ -17,7 +16,6 @@ jest.mock('../../src/db/connection_pool.js', () => ({
   }
 }));
 
-
 describe(RepositorioProtocolo, () => {
   let db;
   let repo;
@@ -28,7 +26,6 @@ describe(RepositorioProtocolo, () => {
   const agregarProtocolo = async () => {
     protocolo = new Protocolo('Osteosarcoma GBTO 2006 - No metastásico', 'Osteosarcoma', 'primera linea', 1);
 
-    // Creamos el mock de la conexión y su método execute
     const connExecuteMock = jest.fn().mockResolvedValue({
       rowsAffected: 1,
       outBinds: { id: [123] },
@@ -37,26 +34,19 @@ describe(RepositorioProtocolo, () => {
       return await fn({ execute: connExecuteMock });
     });
 
-
     return {id: await repo.guardar(protocolo), connExecuteMock};
   };
 
   const agregarCiclo = async (idProtocolo) => {
     ciclo = new Ciclo(1, idProtocolo, 0, 5, false, 0);
 
-    // Creamos el mock de la conexión y su método execute
     const ids = Array.from({ length: 1 }, (v, i) => ({ id: [i] }));
-    // Creamos el mock de la conexión y su método execute
-    // Creamos el mock de la conexión y su método execute
     const connExecuteMock = jest.fn().mockResolvedValueOnce({
       rowsAffected: 1,
       outBinds: ids,
-      rows: [
-        admins
-      ],
+      rows: [admins],
     });
 
-    // Mock para db.withConnection
     db.withConnection.mockImplementation(async (fn) => {
       return await fn({
         execute: jest.fn().mockResolvedValue({
@@ -73,22 +63,18 @@ describe(RepositorioProtocolo, () => {
 
   const agregarAdministraciones = async (cantidad = 1) => {
     for(let i = 0; i < cantidad; i++) {
-      const adminDiaria = new AdministracionMedicacion(1 + i, 50 * (i + 1), 'mg', '1,2,5', 0 + i, 1 + i);
+      const adminDiaria = new AdministracionMedicacion(1 + i, 50 * (i + 1), 'mg', '1,2,5', 0 + i, 1 + i, 1 + i);
       admins.push(adminDiaria);
     }
 
     const ids = Array.from({ length: cantidad }, (v, i) => ({ id: [i] }));
 
-    // Creamos el mock de la conexión y su método execute
     const connExecuteMock = jest.fn().mockResolvedValueOnce({
       rowsAffected: cantidad,
       outBinds: ids,
-      rows: [
-        admins
-      ],
+      rows: [admins],
     });
 
-    // Mock para db.withConnection
     db.withConnection.mockImplementation(async (fn) => {
       return await fn({
         execute: jest.fn().mockResolvedValue({
@@ -116,14 +102,12 @@ describe(RepositorioProtocolo, () => {
     expect(id).toBe(123);
     expect(db.withConnection).toHaveBeenCalledTimes(1);
 
-
     const [sql, binds, opts] = connExecuteMock.mock.calls[0];
     expect(sql).toMatch(/INSERT\s+INTO\s+protocolo/i);
     expect(binds).toMatchObject({
       nombre: protocolo.nombre,
       enfermedad: protocolo.enfermedad,
       linea: protocolo.linea
-      // el bind OUT 'id' lo provee el mock de oracledb
     });
     expect(opts).toMatchObject({ autoCommit: true });
   });
@@ -132,44 +116,49 @@ describe(RepositorioProtocolo, () => {
     const protocolo = new Protocolo('Osteosarcoma GBTO 2006 - No metastásico', 'Osteosarcoma', 'primera linea', 3);
 
     db.withConnection.mockImplementation(async (fn) => {
-      return await fn({ execute: jest.fn().mockResolvedValue({
-        rowsAffected: 0,
-        outBinds: { id: [] }
-      }) });
+      return await fn({
+        execute: jest.fn().mockResolvedValue({
+          rowsAffected: 0,
+          outBinds: { id: [] }
+        })
+      });
     });
 
     await expect(repo.guardar(protocolo)).rejects.toThrow('Error al crear el protocolo');
   });
 
   test('obtener protocolo funciona correctamente devolviendo el objeto Protocolo', async () => {
-    const row = [
-      123,
-      'Osteosarcoma GBTO 2006 - No metastásico',
-      'Osteosarcoma',
-      'primera linea'
-    ];
+    // CAMBIO: Ahora es un objeto con propiedades en mayúsculas
+    const row = {
+      PROTOCOLO_ID: 123,
+      NOMBRE: 'Osteosarcoma GBTO 2006 - No metastásico',
+      ENFERMEDAD: 'Osteosarcoma',
+      LINEA: 'primera linea'
+    };
 
     db.execute.mockResolvedValue({
       rows: [row]
     });
 
     db.withConnection.mockImplementation(async (fn) => {
-      return await fn({ execute: jest.fn().mockResolvedValue({
-        rows: [row]
-      }) });
+      return await fn({
+        execute: jest.fn().mockResolvedValue({
+          rows: [row]
+        })
+      });
     });
 
     const protocolo = await repo.obtener(123);
 
     expect(protocolo).toBeInstanceOf(Protocolo);
     expect(protocolo).toMatchObject({
-      nombre: row[1],
-      enfermedad: row[2],
-      linea: row[3],
-      protocolo_id: row[0]
+      nombre: 'Osteosarcoma GBTO 2006 - No metastásico',
+      enfermedad: 'Osteosarcoma',
+      linea: 'primera linea',
+      protocolo_id: 123
     });
 
-    expect(db.execute).toHaveBeenCalledTimes(3); // una vez para obtener el protocolo, otra para obtener los ciclos y otra para obtener las administraciones
+    expect(db.execute).toHaveBeenCalledTimes(3);
     const [sql, binds] = db.execute.mock.calls[0];
     expect(sql).toMatch(/SELECT\s+protocolo_id,\s+nombre,\s+enfermedad,\s+linea\s+FROM\s+protocolo/i);
     expect(binds).toEqual([123]);
@@ -187,8 +176,7 @@ describe(RepositorioProtocolo, () => {
     const {id} = await agregarProtocolo();
     const connExecuteMock = await agregarCiclo(id);
 
-
-    expect(db.withConnection).toHaveBeenCalledTimes(2); // una vez para guardar el protocolo y otra para agregar el ciclo
+    expect(db.withConnection).toHaveBeenCalledTimes(2);
     expect(connExecuteMock).toHaveBeenCalledTimes(1);
 
     const [sql, binds, opts] = connExecuteMock.mock.calls[0];
@@ -208,11 +196,22 @@ describe(RepositorioProtocolo, () => {
     const {id} = await agregarProtocolo();
     await agregarCiclo(id);
 
-    db.execute.mockResolvedValue({
-      rows: [
-        [1, id, 0, 5, false, 0]
-      ]
-    });
+    // Mock para la consulta de ciclos
+    db.execute
+      .mockResolvedValueOnce({
+        rows: [{
+          CICLO_ID: 1,
+          PROTOCOLO_ID: id,
+          REGIMEN: 0,
+          DURACION_SEMANAS: 5,
+          CICLO_FINAL: 0,
+          REPETICIONES: 0
+        }]
+      })
+      // Mock para la consulta de administracion_medicacion
+      .mockResolvedValueOnce({
+        rows: []
+      });
 
     const cicloObtenido = await repo.obtenerCiclos(id);
     expect(cicloObtenido[0]).toBeInstanceOf(Ciclo);
@@ -220,7 +219,6 @@ describe(RepositorioProtocolo, () => {
   });
 
   test('dado un protocolo con ciclos y administraciones, deberia poder obtener todo el objeto completo', async () => {
-
     const {id} = await agregarProtocolo();
     await agregarCiclo(id);
     await agregarAdministraciones(2);
@@ -229,21 +227,51 @@ describe(RepositorioProtocolo, () => {
 
     db.execute
       .mockResolvedValueOnce({
-        rows: [
-          [123, 'Protocolo de prueba', 'Enfermedad de prueba', 'Primera línea']
-        ]
-      }) // Para el protocolo
+        rows: [{
+          PROTOCOLO_ID: 123,
+          NOMBRE: 'Protocolo de prueba',
+          ENFERMEDAD: 'Enfermedad de prueba',
+          LINEA: 'Primera línea'
+        }]
+      })
+      .mockResolvedValueOnce({
+        rows: [{
+          CICLO_ID: 1,
+          PROTOCOLO_ID: 123,
+          REGIMEN: 0,
+          DURACION_SEMANAS: 4,
+          CICLO_FINAL: 0,
+          REPETICIONES: 1
+        }]
+      })
       .mockResolvedValueOnce({
         rows: [
-          [1, 123, 0, 4, false, 1]
+          {
+            PROTOCOLO_ID: 123,
+            CICLO_ID: 1,
+            REGIMEN: 0,
+            DROGA_ID: 1,
+            DOSIS: 50,
+            DOSIS_UNIDAD: 'mg',
+            FRECUENCIA: '1,2,5',
+            ADMINISTRACION_DIARIA: 0,
+            FRECUENCIA_DIARIA: 1,
+            ID: 1
+          },
+          {
+            PROTOCOLO_ID: 123,
+            CICLO_ID: 1,
+            REGIMEN: 0,
+            DROGA_ID: 2,
+            DOSIS: 100,
+            DOSIS_UNIDAD: 'mg',
+            FRECUENCIA: '1,2,5',
+            ADMINISTRACION_DIARIA: 1,
+            FRECUENCIA_DIARIA: 2,
+            ID: 2
+          }
         ]
-      }) // Para los ciclos
-      .mockResolvedValueOnce({
-        rows: [
-          [123, 1, 0, 1, 50, 'mg', '1,2,5', 0, 1],
-          [123, 1, 0, 2, 100, 'mg', '1,2,5', 1, 2]
-        ]
-      }); // Para las administraciones
+      });
 
     const protocoloObtenido = await repo.obtener(id);
 
@@ -256,6 +284,5 @@ describe(RepositorioProtocolo, () => {
     expect(administraciones[1]).toBeInstanceOf(AdministracionMedicacion);
     expect(administraciones[0]).toMatchObject(admins[0]);
     expect(administraciones[1]).toMatchObject(admins[1]);
-
   });
 });

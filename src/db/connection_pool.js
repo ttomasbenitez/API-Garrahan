@@ -1,6 +1,9 @@
 import oracledb from 'oracledb';
 import config from '../../config.js';
 
+// Configuración global
+oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
+
 class oracleBD {
   pool = null;
 

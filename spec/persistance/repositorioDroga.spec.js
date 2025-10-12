@@ -3,7 +3,7 @@ import oracleDB from '../../src/db/connection_pool.js';
 import Droga from '../../src/domain/droga';
 import { RepositorioDroga } from '../../src/persistance/repositorioDroga.js';
 
-// Mock de 'oracledb' porque lo usás adentro del método con require('oracledb')
+// Mock de 'oracledb'
 jest.mock('../../src/db/connection_pool.js', () => ({
   __esModule: true,
   default: {
@@ -15,28 +15,31 @@ jest.mock('../../src/db/connection_pool.js', () => ({
   }
 }));
 
-
 describe(RepositorioDroga, () => {
   let db;
   let repo;
   let droga;
   const drogas = [];
+
   const agregarDroga = async (cantidad = 1) => {
-    for(let i = 0; i < cantidad; i++) {
+    for (let i = 0; i < cantidad; i++) {
       droga = new Droga('Ciclofosfamida', 'CFM-100', i);
       drogas.push(droga);
     }
+
+    // IDs como objetos para OUT_FORMAT_OBJECT
     const ids = Array.from({ length: cantidad }, (v, i) => ({ id: [i] }));
-    // Creamos el mock de la conexión y su método execute
+
     const connExecuteMock = jest.fn().mockResolvedValue({
       rowsAffected: cantidad,
       outBinds: ids,
     });
+
     db.withConnection.mockImplementation(async (fn) => {
       return await fn({ executeMany: connExecuteMock });
     });
 
-    return {id: await repo.guardar(drogas), connExecuteMock};
+    return { id: await repo.guardar(drogas), connExecuteMock };
   };
 
   beforeEach(() => {
@@ -48,11 +51,10 @@ describe(RepositorioDroga, () => {
   });
 
   test('guardar droga funciona correctamente devolviendo el id de la creación', async () => {
-    const {connExecuteMock, id} = await agregarDroga();
+    const { connExecuteMock, id } = await agregarDroga();
 
     expect(id[0]).toBe(0);
     expect(db.withConnection).toHaveBeenCalledTimes(1);
-
 
     const [sql, binds, opts] = connExecuteMock.mock.calls[0];
     expect(sql).toMatch(/INSERT\s+INTO\s+droga/i);
@@ -64,7 +66,8 @@ describe(RepositorioDroga, () => {
   });
 
   test('puede guardar varias drogas en simultaneo', async () => {
-    const {connExecuteMock, id} = await agregarDroga(2);
+    const { connExecuteMock, id } = await agregarDroga(2);
+
     expect(id[0]).toBe(0);
     expect(id[1]).toBe(1);
     expect(db.withConnection).toHaveBeenCalledTimes(1);
@@ -85,17 +88,16 @@ describe(RepositorioDroga, () => {
   test('puedo obtener una droga por su id', async () => {
     await agregarDroga();
     const drogaId = 0;
-    const expectedDroga = [
-      droga.nombre_generico,
-      droga.codigo_farmacia,
-      drogaId
-    ];
-    // Creamos el mock de la conexión y su método execute
+
     db.execute.mockResolvedValue({
-      rows: [expectedDroga]
+      rows: [{
+        NOMBRE_GENERICO: droga.nombre_generico,
+        CODIGO_FARMACIA: droga.codigo_farmacia,
+        DROGA_ID: drogaId
+      }]
     });
 
-    const drogaObtenida = await repo.obtener(0);
+    const drogaObtenida = await repo.obtener(drogaId);
 
     expect(db.execute).toHaveBeenCalledTimes(1);
     const [sql] = db.execute.mock.calls[0];
@@ -104,9 +106,9 @@ describe(RepositorioDroga, () => {
 
     expect(drogaObtenida).toBeInstanceOf(Droga);
     expect(drogaObtenida).toMatchObject({
-      nombre_generico: expectedDroga[0],
-      codigo_farmacia: expectedDroga[1],
-      droga_id: expectedDroga[2]
+      nombre_generico: droga.nombre_generico,
+      codigo_farmacia: droga.codigo_farmacia,
+      droga_id: drogaId
     });
   });
 });

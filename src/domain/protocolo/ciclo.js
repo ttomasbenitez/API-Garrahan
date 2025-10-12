@@ -14,14 +14,15 @@ class Ciclo {
 
   static fromRow(row) {
     return new Ciclo(
-      row[0],
-      row[1],
-      row[2],
-      row[3],
-      row[4] === ES_CICLO_FINAL,
-      row[5]
+      row.CICLO_ID,
+      row.PROTOCOLO_ID,
+      row.REGIMEN,
+      row.DURACION_SEMANAS,
+      row.CICLO_FINAL === ES_CICLO_FINAL,
+      row.REPETICIONES
     );
   }
+
 
   agregarAdministracion(administracion_medicaciones) {
     if (!this.administracion_medicacion) {

@@ -89,17 +89,16 @@ describe(RepositorioViaAdministracion, () => {
   test('puedo obtener la via por su id', async () => {
     await agregarVia();
     const viaId = 0;
-    const expectedDroga = [
-      via.nombre,
-      via.codigo,
-      viaId
-    ];
-    // Creamos el mock de la conexión y su método execute
+
     db.execute.mockResolvedValue({
-      rows: [expectedDroga]
+      rows: [{
+        NOMBRE: via.nombre,
+        CODIGO: via.codigo,
+        VIA_ID: viaId
+      }]
     });
 
-    const viaObtenida = await repo.obtener(0);
+    const viaObtenida = await repo.obtener(viaId);
 
     expect(db.execute).toHaveBeenCalledTimes(1);
     const [sql] = db.execute.mock.calls[0];
@@ -108,9 +107,9 @@ describe(RepositorioViaAdministracion, () => {
 
     expect(viaObtenida).toBeInstanceOf(ViaAdministracion);
     expect(viaObtenida).toMatchObject({
-      nombre: expectedDroga[0],
-      codigo: expectedDroga[1],
-      via_id: expectedDroga[2]
+      nombre: via.nombre,
+      codigo: via.codigo,
+      via_id: viaId
     });
   });
 

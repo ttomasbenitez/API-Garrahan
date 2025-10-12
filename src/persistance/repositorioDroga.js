@@ -53,6 +53,7 @@ export class RepositorioDroga {
       return null;
     }
 
-    return new Droga(...result.rows[0]);
+    const row = result.rows[0];
+    return new Droga(row.NOMBRE_GENERICO, row.CODIGO_FARMACIA, row.DROGA_ID);
   }
 }

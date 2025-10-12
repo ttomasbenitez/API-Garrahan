@@ -75,13 +75,15 @@ describe('Protocolo', () => {
   });
 
   test('deberia obtener un protocolo con todos los campos a partir de un row', () => {
-    const row = [
-      1,
-      'Osteosarcoma GBTO 2006 - No metastásico',
-      'Osteosarcoma',
-      'primera linea'
-    ];
+    const row = {
+      PROTOCOLO_ID: 1,
+      NOMBRE: 'Osteosarcoma GBTO 2006 - No metastásico',
+      ENFERMEDAD: 'Osteosarcoma',
+      LINEA: 'primera linea'
+    };
+
     const protocolo = Protocolo.fromRow(row, []);
+
     expect(protocolo.nombre).toBe('Osteosarcoma GBTO 2006 - No metastásico');
     expect(protocolo.enfermedad).toBe('Osteosarcoma');
     expect(protocolo.linea).toBe('primera linea');
