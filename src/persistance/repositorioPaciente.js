@@ -66,8 +66,7 @@ export class RepositorioPaciente {
       `SELECT id, nombre, apellido, id_hospitalario, fecha_nacimiento, peso, sexo, profesional_id, ultima_modificacion, obra_social
            FROM paciente
            WHERE id = :id`,
-      [id],
-      { outFormat: oracledb.OUT_FORMAT_OBJECT }
+      [id]
     );
 
     if (result.rows.length === 0) {
