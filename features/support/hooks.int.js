@@ -66,7 +66,8 @@ async function truncateTables(conn) {
     'PACIENTE_PROFESIONAL',
     'PACIENTE',
     'PROFESIONAL',
-    'VIA_ADMINISTRACION'
+    'VIA_ADMINISTRACION',
+    'PROTOCOLO_PACIENTE'
   ];
   for (const t of tables) {
     try {
@@ -104,16 +105,16 @@ async function resetIdentityColumns(conn) {
 }
 
 /** Opcional: semillas mínimas determinísticas (IDs fijos para estabilidad de tests) */
-async function seedMinimal(conn) {
-  // Ejemplos (adaptá a tus tablas reales):
-  // Usamos IDs fijos porque dejamos las identidades en BY DEFAULT.
-  await conn.execute(
-    'INSERT INTO PROFESIONAL (PROFESIONAL_ID, NOMBRE) VALUES (1001, \'Dra. Test\')'
-  ).catch(() => {});
-  await conn.execute(
-    'INSERT INTO PACIENTE (PACIENTE_ID, NOMBRE, FECHA_NAC) VALUES (2001, \'Paciente Demo\', DATE \'2015-05-01\')'
-  ).catch(() => {});
-}
+//async function seedMinimal(conn) {
+//  // Ejemplos (adaptá a tus tablas reales):
+//  // Usamos IDs fijos porque dejamos las identidades en BY DEFAULT.
+//  await conn.execute(
+//    'INSERT INTO PROFESIONAL (PROFESIONAL_ID, NOMBRE) VALUES (1001, \'Dra. Test\')'
+//  ).catch(() => {});
+//  await conn.execute(
+//    'INSERT INTO PACIENTE (PACIENTE_ID, NOMBRE, FECHA_NAC) VALUES (2001, \'Paciente Demo\', DATE \'2015-05-01\')'
+//  ).catch(() => {});
+//}
 
 /** Limpieza dura: FK off → TRUNCATE → reset IDENTITY → FK on */
 async function hardClean(conn) {
@@ -186,7 +187,7 @@ Before({ timeout: 60_000 }, async function () {
   const conn = await pool.getConnection();
   try {
     await hardClean(conn);
-    await seedMinimal(conn); // opcional
+    //await seedMinimal(conn); // opcional
   } finally {
     await conn.close();
   }

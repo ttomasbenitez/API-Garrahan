@@ -78,6 +78,28 @@ CREATE TABLE paciente (
   FOREIGN KEY (profesional_id) REFERENCES profesional(id)
 );
 
+-- Asignación de un protocolo a un paciente y su ciclo actual
+CREATE TABLE protocolo_paciente (
+  protocolo_paciente_id   NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  paciente_id             NUMBER NOT NULL,
+  protocolo_id            NUMBER NOT NULL,
+  regimen                 NUMBER NOT NULL,
+  ciclo_actual_id         NUMBER NOT NULL, -- referencia a ciclo.ciclo_id
+  numero_ciclo            NUMBER,
+  fecha_inicio            DATE,
+  fecha_fin               DATE,
+  estado                  VARCHAR2(50),
+  profesional_id_asignador NUMBER,
+  fecha_asignacion        TIMESTAMP,
+  -- Índice único útil para evitar duplicados del mismo protocolo/regimen por paciente; incluye el ciclo actual
+  CONSTRAINT uq_ppaciente UNIQUE (paciente_id, protocolo_id, regimen),
+  -- Atención al orden: debe coincidir con el PK (protocolo_id, ciclo_id, regimen)
+  CONSTRAINT fk_pp_ciclo FOREIGN KEY (protocolo_id, ciclo_actual_id, regimen)
+    REFERENCES ciclo(protocolo_id, ciclo_id, regimen),
+  CONSTRAINT fk_pp_paciente   FOREIGN KEY (paciente_id) REFERENCES paciente(id),
+  CONSTRAINT fk_pp_prof_asig  FOREIGN KEY (profesional_id_asignador) REFERENCES profesional(id)
+);
+
 -- Relación N a N paciente ↔ profesional (equipo tratante)
 CREATE TABLE paciente_profesional (
   profesional_id NUMBER NOT NULL,

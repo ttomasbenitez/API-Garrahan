@@ -27,6 +27,10 @@ import { RepositorioViaAdministracion } from './persistance/repositorioViaAdmini
 import { ViaAdministracionService } from './services/ViaAdministracionService.js';
 import { makeViaAdministracionController } from './controllers/viaAdministracionController.js';
 import viaAdministracionRoutes from './routes/viaAdministracion.js';
+import { RepositorioProtocoloPaciente } from './persistance/repositorioProtocoloPaciente.js';
+import { ProtocoloPacienteService } from './services/ProtocoloPacienteService.js';
+import { makeProtocoloPacienteController } from './controllers/protocoloPacienteController.js';
+import protocoloPacienteRoutes from './routes/protocoloPaciente.js';
 
 const app = express();
 // paciente
@@ -56,6 +60,10 @@ const pacienteProfesionalController = makePacienteProfesionalController(paciente
 const respositorioViaAdministracion = new RepositorioViaAdministracion(oracleDBInstance);
 const viaAdministracionService = new ViaAdministracionService(respositorioViaAdministracion);
 const viaAdministracionController = makeViaAdministracionController(viaAdministracionService);
+// protocolo_paciente
+const repositorioProtocoloPaciente = new RepositorioProtocoloPaciente(oracleDBInstance);
+const protocoloPacienteService = new ProtocoloPacienteService(repositorioProtocoloPaciente);
+const protocoloPacienteController = makeProtocoloPacienteController(protocoloPacienteService);
 
 app.use(express.json());
 app.use(cors({
@@ -69,6 +77,7 @@ app.use('/auth', authRouter);
 app.use('/', routes);
 app.use('/protocolo', protocolosRoutes(protocoloController));
 app.use('/paciente', pacientesRoutes(pacienteController));
+app.use('/paciente', protocoloPacienteRoutes(protocoloPacienteController));
 app.use('/profesional', profesionalesRoutes(profesionalController));
 app.use('/droga', drogasRoutes(drogaController));
 app.use('/paciente-profesional', pacienteProfesionalRoutes(pacienteProfesionalController));
