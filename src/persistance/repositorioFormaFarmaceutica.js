@@ -1,6 +1,6 @@
 import OracleDB from 'oracledb';
-import { ERROR_FORMA_FARMACEUTICA_CREACION, ERROR_FORMA_FARMACEUTICA_NO_ENCONTRADA  } from '../errors/formaFarmaceutica.js';
-import FormaFarmaceutica from '../domain/formaFarmaceutica/index.js';
+import { ERROR_FORMA_FARMACEUTICA_CREACION } from '../errors/formaFarmaceutica.js';
+import FormaFarmaceutica from '../domain/droga/formaFarmaceutica.js';
 
 export class RepositorioFormaFarmaceutica {
   constructor(db) {
@@ -50,9 +50,10 @@ export class RepositorioFormaFarmaceutica {
     );
 
     if (!result.rows || result.rows.length === 0) {
-      throw new Error(ERROR_FORMA_FARMACEUTICA_NO_ENCONTRADA);
+      return null;
     }
-    return new FormaFarmaceutica(result.rows[0]);
+    const row = result.rows[0];
+    return new FormaFarmaceutica(row.NOMBRE, row.CODIGO, row.FORMA_FARMACEUTICA_ID);
   } catch (error) {
     console.error('Error en RepositorioFormaFarmaceutica.obtener:', error);
     throw error;
