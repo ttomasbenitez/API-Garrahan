@@ -1,0 +1,7 @@
+const ERROR_FORMA_FARMACEUTICA_CREACION = 'Error al crear la forma farmacéutica';
+const ERROR_FORMA_FARMACEUTICA_NO_ENCONTRADA = 'Forma farmacéutica no encontrada';
+
+export {
+  ERROR_FORMA_FARMACEUTICA_CREACION,
+  ERROR_FORMA_FARMACEUTICA_NO_ENCONTRADA,
+};
