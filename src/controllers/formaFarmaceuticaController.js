@@ -1,4 +1,4 @@
-import { formaFarmaceutica } from '../domain/formaFarmaceutica.js';
+import FormaFarmaceutica from '../domain/droga/formaFarmaceutica.js';
 import { ERROR_FORMA_FARMACEUTICA_NO_ENCONTRADA, ERROR_FORMA_FARMACEUTICA_CREACION, ERROR_ID_FORMA_FARMACEUTICA_INVALIDO, ERROR_OBTENER_FORMA_FARMACEUTICA } from '../errors/formaFarmaceutica.js';
 import logger from '../utils/logger.js';
 
@@ -21,7 +21,7 @@ async function crearFormaFarmaceutica(req, res, service) {
       return res.status(400).json({ error: 'Faltan campos requeridos' });
     }
 
-    const formas = payload.map(f => new formaFarmaceutica(
+    const formas = payload.map(f => new FormaFarmaceutica(
       f.descripcion,
       f.codigo_farmacia,
     ));
