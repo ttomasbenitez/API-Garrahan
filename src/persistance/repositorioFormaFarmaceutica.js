@@ -58,4 +58,20 @@ export class RepositorioFormaFarmaceutica {
     console.error('Error en RepositorioFormaFarmaceutica.obtener:', error);
     throw error;
   }
+
+  async listar() {
+    const result = await this.db.execute(
+      'SELECT nombre, codigo, forma_farmaceutica_id FROM forma_farmaceutica',
+      []
+    );
+    return result.rows.map(row => new FormaFarmaceutica(row.NOMBRE, row.CODIGO, row.FORMA_FARMACEUTICA_ID));
+  }
+
+  async actualizar(id, datos) {
+    const result = await this.db.execute(
+      'UPDATE forma_farmaceutica SET nombre = :nombre, codigo = :codigo WHERE forma_farmaceutica_id = :id',
+      [datos.nombre, datos.codigo, id]
+    );
+    return result.rowsAffected > 0;
+  }
 }

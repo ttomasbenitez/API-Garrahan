@@ -12,4 +12,11 @@ export class FormaFarmaceuticaService {
   async obtener(formaFarmaceuticaId) {
     return await this.formaFarmaceuticaRepo.obtener(formaFarmaceuticaId);
   }
+  async listar() {
+    return await this.formaFarmaceuticaRepo.listar();
+  }
+
+  async actualizar(id, datos) {
+    return await this.formaFarmaceuticaRepo.actualizar(id, datos);
+  }
 }
