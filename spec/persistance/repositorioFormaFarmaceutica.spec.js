@@ -125,19 +125,19 @@ describe(RepositorioFormaFarmaceutica, () => {
     expect(resultado[1]).toMatchObject({ nombre: 'Solución inyectable', codigo: 'SOL-INY', forma_farmaceutica_id: 2 });
   });
 
-  // test('actualizar una forma farmacéutica existente retorna true si se actualiza', async () => {
-  //   db.execute.mockImplementation(() => Promise.resolve({ rowsAffected: 1 }));
-  //   const actualizado = await repo.actualizar(2, { nombre: 'Solución inyectable estéril', codigo: 'SOL-INY-EST' });
-  //   expect(actualizado).toBe(true);
-  //   expect(db.execute).toHaveBeenCalledWith(
-  //     'UPDATE forma_farmaceutica SET nombre = :nombre, codigo = :codigo WHERE forma_farmaceutica_id = :id',
-  //     ['Solución inyectable estéril', 'SOL-INY-EST', 2]
-  //   );
-  // });
+  test('actualizar una forma farmacéutica existente retorna true si se actualiza', async () => {
+    db.execute.mockImplementation(() => Promise.resolve({ rowsAffected: 1 }));
+    const actualizado = await repo.actualizar(2, { nombre: 'Solución inyectable estéril', codigo: 'SOL-INY-EST' });
+    expect(actualizado).toBe(true);
+    expect(db.execute).toHaveBeenCalledWith(
+      'UPDATE forma_farmaceutica SET nombre = :nombre, codigo = :codigo WHERE forma_farmaceutica_id = :id',
+      ['Solución inyectable estéril', 'SOL-INY-EST', 2]
+    );
+  });
 
-  // test('actualizar una forma farmacéutica inexistente retorna false', async () => {
-  //   db.execute.mockImplementation(() => Promise.resolve({ rowsAffected: 0 }));
-  //   const actualizado = await repo.actualizar(999, { nombre: 'X', codigo: 'Y' });
-  //   expect(actualizado).toBe(false);
-  // });
+  test('actualizar una forma farmacéutica inexistente retorna false', async () => {
+    db.execute.mockImplementation(() => Promise.resolve({ rowsAffected: 0 }));
+    const actualizado = await repo.actualizar(999, { nombre: 'X', codigo: 'Y' });
+    expect(actualizado).toBe(false);
+  });
 });

@@ -45,7 +45,7 @@ Feature: Gestión de Formas Farmacéuticas
     And el primer registro de forma farmaceutica tiene "nombre" = "Comprimido" y "codigo" = "TAB"
     And el segundo registro de forma farmaceutica tiene "nombre" = "Solución inyectable" y "codigo" = "SOL-INY"
     And se obtiene correctamente la forma farmaceutica
-  @wip
+
   Scenario: US-07.5 Actualizar una forma farmacéutica existente
     Given existe en la base de datos una forma farmacéutica con id "1" y con los datos:
       | nombre | Solución inyectable |
