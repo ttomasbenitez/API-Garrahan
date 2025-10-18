@@ -48,6 +48,16 @@ Then(/^obtengo los datos de las formas con el id "(.*)" y "(.*)"$/, function (id
   assert.strictEqual(response.body[1].forma_farmaceutica_id, parseInt(id2, 10));
 });
 
+Given(/^existe en la base de datos una forma farmacéutica con id "(.*)" y con los datos:$/, async function (_id, dataTable) {
+  const data = dataTable.rowsHash();
+  formas.push(data);
+  response = await request(app)
+    .post('/forma-farmaceutica')
+    .send(formas)
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
+});
+
 When(/^consulto en la API de forma farmaceutica "(.*)" por su id$/, async function (endpoint) {
   response = await request(app)
     .get(endpoint)
@@ -77,6 +87,14 @@ Then(/^el sistema me devuelve una lista con (\d+) formas farmacéuticas en la co
   assert.ok(Array.isArray(response.body));
   assert.strictEqual(response.body.length, parseInt(cantidad, 10));
 });
+
+Then(/^se obtiene correctamente la forma farmaceutica$/, function () {
+  assert.ok(response);
+  assert.strictEqual(response.status, 200);
+  response = {};
+  formas = [];
+});
+
 
 Then(/^el primer registro de forma farmaceutica tiene "(.*)" = "(.*)" y "(.*)" = "(.*)"$/, function (campo1, valor1, campo2, valor2) {
   assert.strictEqual(String(response.body[0][campo1]), String(valor1));

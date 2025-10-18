@@ -22,7 +22,7 @@ Feature: Gestión de Formas Farmacéuticas
     When publico en la API de forma farmaceutica "/forma-farmaceutica" con los datos de las formas
     Then obtengo los datos de las formas con el id "1" y "2"
     And se crea correctamente la forma farmaceutica
-  @wip
+
   Scenario: US-07.3 Obtener una forma farmacéutica creada por su id
     Given existe en la base de datos una forma farmacéutica con id "1" y con los datos:
       | nombre | Comprimido |

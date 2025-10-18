@@ -53,7 +53,7 @@ export class RepositorioFormaFarmaceutica {
       return null;
     }
     const row = result.rows[0];
-    return new FormaFarmaceutica(row.NOMBRE, row.CODIGO, row.FORMA_ID);
+    return new FormaFarmaceutica(row.NOMBRE, row.CODIGO, row.FORMA_FARMACEUTICA_ID);
   } catch (error) {
     console.error('Error en RepositorioFormaFarmaceutica.obtener:', error);
     throw error;

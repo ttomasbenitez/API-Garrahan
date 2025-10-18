@@ -77,39 +77,39 @@ describe(RepositorioFormaFarmaceutica, () => {
     });
   });
 
-  // test('obtener forma farmacéutica por id funciona correctamente devolviendo la forma farmacéutica', async () => {
-  //   const formaFarmaceuticaData = { NOMBRE: 'Nombre 1', CODIGO: 'Código 1', FORMA_FARMACEUTICA_ID: 1 };
-  //   db.execute.mockImplementation((sql, binds, opts) => {
-  //     return Promise.resolve({ rows: [formaFarmaceuticaData], sql, binds, opts });
-  //   });
+  test('obtener forma farmacéutica por id funciona correctamente devolviendo la forma farmacéutica', async () => {
+    const formaFarmaceuticaData = { NOMBRE: 'Nombre 1', CODIGO: 'Código 1', FORMA_FARMACEUTICA_ID: 1 };
+    db.execute.mockImplementation((sql, binds, opts) => {
+      return Promise.resolve({ rows: [formaFarmaceuticaData], sql, binds, opts });
+    });
 
-  //   const resultado = await repo.obtener(1);
-  //   expect(resultado).toBeInstanceOf(FormaFarmaceutica);
-  //   expect(resultado).toMatchObject({
-  //     nombre: 'Nombre 1',
-  //     codigo: 'Código 1',
-  //     forma_farmaceutica_id: 1,
-  //   });
-  //   expect(db.execute).toHaveBeenCalledTimes(1);
+    const resultado = await repo.obtener(1);
+    expect(resultado).toBeInstanceOf(FormaFarmaceutica);
+    expect(resultado).toMatchObject({
+      nombre: 'Nombre 1',
+      codigo: 'Código 1',
+      forma_farmaceutica_id: 1,
+    });
+    expect(db.execute).toHaveBeenCalledTimes(1);
 
-  //   const [sql, binds] = db.execute.mock.calls[0];
-  //   expect(sql).toMatch(/SELECT\s+nombre,\s+codigo,\s+forma_farmaceutica_id\s+FROM\s+forma_farmaceutica/i);
-  //   expect(binds).toEqual([1]);
-  // });
+    const [sql, binds] = db.execute.mock.calls[0];
+    expect(sql).toMatch(/SELECT\s+nombre,\s+codigo,\s+forma_farmaceutica_id\s+FROM\s+forma_farmaceutica/i);
+    expect(binds).toEqual([1]);
+  });
 
-  // test('obtener forma farmacéutica por id devuelve null si no existe la forma farmacéutica', async () => {
-  //   db.execute.mockImplementation((sql, binds, opts) => {
-  //     return Promise.resolve({ rows: [], sql, binds, opts });
-  //   });
+  test('obtener forma farmacéutica por id devuelve null si no existe la forma farmacéutica', async () => {
+    db.execute.mockImplementation((sql, binds, opts) => {
+      return Promise.resolve({ rows: [], sql, binds, opts });
+    });
 
-  //   const resultado = await repo.obtener(999);
-  //   expect(resultado).toBeNull();
-  //   expect(db.execute).toHaveBeenCalledTimes(1);
+    const resultado = await repo.obtener(999);
+    expect(resultado).toBeNull();
+    expect(db.execute).toHaveBeenCalledTimes(1);
 
-  //   const [sql, binds] = db.execute.mock.calls[0];
-  //   expect(sql).toMatch(/SELECT\s+nombre,\s+codigo,\s+forma_farmaceutica_id\s+FROM\s+forma_farmaceutica/i);
-  //   expect(binds).toEqual([999]);
-  // });
+    const [sql, binds] = db.execute.mock.calls[0];
+    expect(sql).toMatch(/SELECT\s+nombre,\s+codigo,\s+forma_farmaceutica_id\s+FROM\s+forma_farmaceutica/i);
+    expect(binds).toEqual([999]);
+  });
 
   // test('listar todas las formas farmacéuticas devuelve un array de instancias', async () => {
   //   const rows = [
