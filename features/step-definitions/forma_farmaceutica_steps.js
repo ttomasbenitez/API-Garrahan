@@ -53,7 +53,7 @@ Given(/^existe en la base de datos una forma farmacéutica con id "(.*)" y con l
   formas.push(data);
   response = await request(app)
     .post('/forma-farmaceutica')
-    .send(formas)
+    .send(data)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
 });

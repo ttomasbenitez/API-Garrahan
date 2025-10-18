@@ -44,28 +44,34 @@ export class RepositorioFormaFarmaceutica {
   }
 
   async obtener(id) {
-    const result = await this.db.execute(
-      'SELECT nombre, codigo, forma_farmaceutica_id FROM forma_farmaceutica WHERE forma_farmaceutica_id = :id',
-      [id]
-    );
+    try {
+      const result = await this.db.execute(
+        'SELECT nombre, codigo, forma_farmaceutica_id FROM forma_farmaceutica WHERE forma_farmaceutica_id = :id',
+        [id]
+      );
 
-    if (!result.rows || result.rows.length === 0) {
-      return null;
+      if (!result.rows || result.rows.length === 0) {
+        return null;
+      }
+      const row = result.rows[0];
+      return new FormaFarmaceutica(row.NOMBRE, row.CODIGO, row.FORMA_FARMACEUTICA_ID);
+    } catch (error) {
+      console.error('Error en RepositorioFormaFarmaceutica.obtener:', error);
+      throw error;
     }
-    const row = result.rows[0];
-    return new FormaFarmaceutica(row.NOMBRE, row.CODIGO, row.FORMA_FARMACEUTICA_ID);
-  } catch (error) {
-    console.error('Error en RepositorioFormaFarmaceutica.obtener:', error);
-    throw error;
   }
 
   async listar() {
-    const result = await this.db.execute(
-      'SELECT nombre, codigo, forma_farmaceutica_id FROM forma_farmaceutica',
-      []
-    );
-    return result.rows.map(row => new FormaFarmaceutica(row.NOMBRE, row.CODIGO, row.FORMA_FARMACEUTICA_ID));
-  }
+    try {
+      const result = await this.db.execute(
+        'SELECT nombre, codigo, forma_farmaceutica_id FROM forma_farmaceutica',
+        []
+      );
+      return result.rows.map(row => new FormaFarmaceutica(row.NOMBRE, row.CODIGO, row.FORMA_FARMACEUTICA_ID));
+    } catch (error) {
+      console.error('Error en RepositorioFormaFarmaceutica.listar:', error);
+      throw error;
+    }}
 
   async actualizar(id, datos) {
     const result = await this.db.execute(

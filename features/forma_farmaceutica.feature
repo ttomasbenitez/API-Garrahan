@@ -32,26 +32,29 @@ Feature: Gestión de Formas Farmacéuticas
     And el campo "nombre" es "Comprimido" en la forma farmaceutica
     And el campo "codigo" es "TAB" en la forma farmaceutica
     And se obtiene correctamente la forma farmaceutica
-  @wip
+
   Scenario: US-07.4 Listar todas las formas farmacéuticas
-    Given existen en la base de datos las siguientes formas farmacéuticas:
-      | id | nombre              | codigo   |
-      | 1  | Comprimido          | TAB      |
-      | 2  | Solución inyectable | SOL-INY  |
-  When consulto en la API de forma farmaceutica "/forma-farmaceutica"
-  Then el sistema me devuelve una lista con 2 formas farmacéuticas en la consulta
-  And el primer registro de forma farmaceutica tiene "nombre" = "Comprimido" y "codigo" = "TAB"
-  And el segundo registro de forma farmaceutica tiene "nombre" = "Solución inyectable" y "codigo" = "SOL-INY"
-  @wip
-  Scenario: US-07.5 Actualizar una forma farmacéutica existente
-    Given existe en la base de datos una forma farmacéutica con id "2" y con los datos:
+    Given existe en la base de datos una forma farmacéutica con id "1" y con los datos:
+      | nombre | Comprimido |
+      | codigo | TAB        |
+    And existe en la base de datos una forma farmacéutica con id "2" y con los datos:
       | nombre | Solución inyectable |
       | codigo | SOL-INY             |
-  When publico en la API de forma farmaceutica "/forma-farmaceutica/2" con los siguientes datos:
+    When consulto en la API de forma farmaceutica "/forma-farmaceutica"
+    Then el sistema me devuelve una lista con 2 formas farmacéuticas en la consulta
+    And el primer registro de forma farmaceutica tiene "nombre" = "Comprimido" y "codigo" = "TAB"
+    And el segundo registro de forma farmaceutica tiene "nombre" = "Solución inyectable" y "codigo" = "SOL-INY"
+    And se obtiene correctamente la forma farmaceutica
+  @wip
+  Scenario: US-07.5 Actualizar una forma farmacéutica existente
+    Given existe en la base de datos una forma farmacéutica con id "1" y con los datos:
+      | nombre | Solución inyectable |
+      | codigo | SOL-INY             |
+    When publico en la API de forma farmaceutica "/forma-farmaceutica/1" con los siguientes datos:
       | nombre | Solución inyectable estéril |
-      | codigo | SOL-INY-EST                |
-  Then el campo "nombre" es "Solución inyectable estéril" en la respuesta de forma farmaceutica
-  And el campo "codigo" es "SOL-INY-EST" en la respuesta de forma farmaceutica
+      | codigo | SOL-INY-EST                 |
+    Then el campo "nombre" es "Solución inyectable estéril" en la respuesta de forma farmaceutica
+    And el campo "codigo" es "SOL-INY-EST" en la respuesta de forma farmaceutica
     And se actualiza correctamente la forma farmaceutica
   @wip
   Scenario: US-07.6 Eliminar una forma farmacéutica sin uso

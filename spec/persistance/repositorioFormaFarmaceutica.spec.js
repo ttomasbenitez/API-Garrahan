@@ -111,19 +111,19 @@ describe(RepositorioFormaFarmaceutica, () => {
     expect(binds).toEqual([999]);
   });
 
-  // test('listar todas las formas farmacéuticas devuelve un array de instancias', async () => {
-  //   const rows = [
-  //     { NOMBRE: 'Comprimido', CODIGO: 'TAB', FORMA_FARMACEUTICA_ID: 1 },
-  //     { NOMBRE: 'Solución inyectable', CODIGO: 'SOL-INY', FORMA_FARMACEUTICA_ID: 2 }
-  //   ];
-  //   db.execute.mockImplementation(() => Promise.resolve({ rows }));
-  //   const resultado = await repo.listar();
-  //   expect(Array.isArray(resultado)).toBe(true);
-  //   expect(resultado).toHaveLength(2);
-  //   expect(resultado[0]).toBeInstanceOf(FormaFarmaceutica);
-  //   expect(resultado[0]).toMatchObject({ nombre: 'Comprimido', codigo: 'TAB', forma_farmaceutica_id: 1 });
-  //   expect(resultado[1]).toMatchObject({ nombre: 'Solución inyectable', codigo: 'SOL-INY', forma_farmaceutica_id: 2 });
-  // });
+  test('listar todas las formas farmacéuticas devuelve un array de instancias', async () => {
+    const rows = [
+      { NOMBRE: 'Comprimido', CODIGO: 'TAB', FORMA_FARMACEUTICA_ID: 1 },
+      { NOMBRE: 'Solución inyectable', CODIGO: 'SOL-INY', FORMA_FARMACEUTICA_ID: 2 }
+    ];
+    db.execute.mockImplementation(() => Promise.resolve({ rows }));
+    const resultado = await repo.listar();
+    expect(Array.isArray(resultado)).toBe(true);
+    expect(resultado).toHaveLength(2);
+    expect(resultado[0]).toBeInstanceOf(FormaFarmaceutica);
+    expect(resultado[0]).toMatchObject({ nombre: 'Comprimido', codigo: 'TAB', forma_farmaceutica_id: 1 });
+    expect(resultado[1]).toMatchObject({ nombre: 'Solución inyectable', codigo: 'SOL-INY', forma_farmaceutica_id: 2 });
+  });
 
   // test('actualizar una forma farmacéutica existente retorna true si se actualiza', async () => {
   //   db.execute.mockImplementation(() => Promise.resolve({ rowsAffected: 1 }));
