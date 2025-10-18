@@ -14,16 +14,16 @@ async function crearFormaFarmaceutica(req, res, service) {
     const payload = Array.isArray(req.body) ? req.body : [req.body];
 
     const faltantes = payload.filter(f =>
-      !f.descripcion ||
-      !f.codigo_farmacia
+      !f.nombre ||
+      !f.codigo
     );
     if (faltantes.length > 0) {
       return res.status(400).json({ error: 'Faltan campos requeridos' });
     }
 
     const formas = payload.map(f => new FormaFarmaceutica(
-      f.descripcion,
-      f.codigo_farmacia,
+      f.nombre,
+      f.codigo,
     ));
 
     await service.crear(formas);

@@ -57,9 +57,7 @@ async function enableFks(conn) {
 /** Trunca tablas. Ajustá el orden si no deshabilitás FKs. */
 async function truncateTables(conn) {
   const tables = [
-    'TRATAMIENTO_PACIENTE',        // si la tenés
     'ADMINISTRACION_MEDICACION',
-    'PRESENTACION',                // si la tenés
     'CICLO',
     'PROTOCOLO',
     'DROGA',
@@ -67,6 +65,7 @@ async function truncateTables(conn) {
     'PACIENTE',
     'PROFESIONAL',
     'VIA_ADMINISTRACION',
+    'FORMA_FARMACEUTICA',
     'PROTOCOLO_PACIENTE'
   ];
   for (const t of tables) {

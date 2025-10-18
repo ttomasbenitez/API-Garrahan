@@ -58,8 +58,8 @@ When(/^consulto en la API de forma farmaceutica "(.*)" por su id$/, async functi
 Then(/^el sistema me devuelve la forma farmacéutica con id "(.*)"$/, function (id) {
   assert.ok(response);
   assert.strictEqual(response.status, 200);
-  assert.ok(response.body.forma_id);
-  assert.strictEqual(response.body.forma_id, parseInt(id, 10));
+  assert.ok(response.body.forma_farmaceutica_id);
+  assert.strictEqual(response.body.forma_farmaceutica_id, parseInt(id, 10));
 });
 
 Then(/^el campo "(.*)" es "(.*)" en la forma farmaceutica$/, function (campo, valor) {

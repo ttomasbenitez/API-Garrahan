@@ -1,8 +1,8 @@
 class FormaFarmaceutica {
-  constructor(nombre, codigo, forma_id = null) {
+  constructor(nombre, codigo, forma_farmaceutica_id = null) {
     this.nombre = nombre ?? null;
     this.codigo = codigo ?? null;
-    this.forma_id = forma_id ?? null;
+    this.forma_farmaceutica_id = forma_farmaceutica_id ?? null;
   }
 }
 

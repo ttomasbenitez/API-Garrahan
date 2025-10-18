@@ -2,36 +2,35 @@ Feature: Gestión de Formas Farmacéuticas
   Como sistema de prescripción
   Quiero mantener un catálogo de formas farmacéuticas
   Para poder asociarlas a las presentaciones de drogas y consultarlas por nombre y código
-  
-  @wip
+
   Scenario: US-07.1 Crear una nueva forma farmacéutica
     Given que tengo los siguientes datos de la forma farmacéutica:
       | nombre | Comprimido |
       | codigo | TAB        |
-  When publico en la API de forma farmaceutica "/forma-farmaceutica" con los datos de la forma
-  Then el campo "nombre" de la forma farmaceutica es "Comprimido"
-  And el campo "codigo" de la forma farmaceutica es "TAB"
+    When publico en la API de forma farmaceutica "/forma-farmaceutica" con los datos de la forma
+    Then el campo "nombre" de la forma farmaceutica es "Comprimido"
+    And el campo "codigo" de la forma farmaceutica es "TAB"
     And se crea correctamente la forma farmaceutica
-  @wip
+
   Scenario: US-07.2 Crear varias formas farmacéuticas
     Given que tengo los siguientes datos de la forma farmacéutica:
-      | nombre | Comprimido |
-      | codigo | TAB        |
+      | nombre | Cápsula dura |
+      | codigo | CAPD         |
     And que tengo los siguientes datos de la forma farmacéutica:
       | nombre | Solución inyectable |
       | codigo | SOL-INY             |
-  When publico en la API de forma farmaceutica "/forma-farmaceutica" con los datos de las formas
-  Then obtengo los datos de las formas con el id "1" y "2"
+    When publico en la API de forma farmaceutica "/forma-farmaceutica" con los datos de las formas
+    Then obtengo los datos de las formas con el id "1" y "2"
     And se crea correctamente la forma farmaceutica
   @wip
   Scenario: US-07.3 Obtener una forma farmacéutica creada por su id
     Given existe en la base de datos una forma farmacéutica con id "1" y con los datos:
       | nombre | Comprimido |
       | codigo | TAB        |
-  When consulto en la API de forma farmaceutica "/forma-farmaceutica/1" por su id
-  Then el sistema me devuelve la forma farmacéutica con id "1"
-  And el campo "nombre" es "Comprimido" en la forma farmaceutica
-  And el campo "codigo" es "TAB" en la forma farmaceutica
+    When consulto en la API de forma farmaceutica "/forma-farmaceutica/1" por su id
+    Then el sistema me devuelve la forma farmacéutica con id "1"
+    And el campo "nombre" es "Comprimido" en la forma farmaceutica
+    And el campo "codigo" es "TAB" en la forma farmaceutica
     And se obtiene correctamente la forma farmaceutica
   @wip
   Scenario: US-07.4 Listar todas las formas farmacéuticas
