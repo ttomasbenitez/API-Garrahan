@@ -48,6 +48,15 @@ CREATE TABLE presentacion_droga (
   CONSTRAINT fk_pres_forma  FOREIGN KEY (forma_farmaceutica_id) REFERENCES forma_farmaceutica(forma_farmaceutica_id)
 );
 
+CREATE TABLE presentacion_droga_via (
+  via_id          NUMBER NOT NULL,
+  presentacion_id NUMBER NOT NULL,
+  es_default      CHAR(1) DEFAULT '0' CHECK (es_default IN ('0','1')),
+  CONSTRAINT pk_pres_droga_via PRIMARY KEY (via_id, presentacion_id),
+  CONSTRAINT fk_pdv_via  FOREIGN KEY (via_id) REFERENCES via_administracion(via_id),
+  CONSTRAINT fk_pdv_pres FOREIGN KEY (presentacion_id) REFERENCES presentacion_droga(presentacion_id)
+);
+
 -- Tabla administracion_medicacion
 CREATE TABLE administracion_medicacion (
   id NUMBER GENERATED ALWAYS AS IDENTITY,

@@ -39,6 +39,10 @@ import { RepositorioPresentacionDroga } from './persistance/repositorioPresentac
 import { PresentacionDrogaService } from './services/PresentacionDrogaService.js';
 import { makePresentacionDrogaController } from './controllers/presentacionDrogaController.js';
 import presentacionDrogaRoutes from './routes/presentacionDroga.js';
+import { RepositorioPresentacionDrogaVia } from './persistance/repositorioPresentacionDrogaVia.js';
+import { PresentacionDrogaViaService } from './services/PresentacionDrogaViaService.js';
+import { makePresentacionDrogaViaController } from './controllers/presentacionDrogaViaController.js';
+import presentacionDrogaViaRoutes from './routes/presentacionDrogaVia.js';
 
 const app = express();
 // paciente
@@ -80,6 +84,10 @@ const protocoloPacienteController = makeProtocoloPacienteController(protocoloPac
 const repositorioPresentacionDroga = new RepositorioPresentacionDroga(oracleDBInstance);
 const presentacionDrogaService = new PresentacionDrogaService(repositorioPresentacionDroga);
 const presentacionDrogaController = makePresentacionDrogaController(presentacionDrogaService);
+// presentacion droga via
+const repositorioPresentacionDrogaVia = new RepositorioPresentacionDrogaVia(oracleDBInstance);
+const presentacionDrogaViaService = new PresentacionDrogaViaService(repositorioPresentacionDrogaVia);
+const presentacionDrogaViaController = makePresentacionDrogaViaController(presentacionDrogaViaService);
 
 app.use(express.json());
 app.use(cors({
@@ -100,5 +108,6 @@ app.use('/paciente-profesional', pacienteProfesionalRoutes(pacienteProfesionalCo
 app.use('/via-administracion', viaAdministracionRoutes(viaAdministracionController));
 app.use('/forma-farmaceutica', formaFarmaceuticaRoutes(formaFarmaceuticaController));
 app.use('/presentacion-droga', presentacionDrogaRoutes(presentacionDrogaController));
+app.use('/presentacion-droga-via', presentacionDrogaViaRoutes(presentacionDrogaViaController));
 
 export default app;

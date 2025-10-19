@@ -1,0 +1,13 @@
+const ERROR_PRESENTACION_DROGA_VIA_CREACION = 'Error al crear la presentación droga vía';
+const ERROR_PRESENTACION_DROGA_VIA_NO_ENCONTRADA = 'Presentación droga vía no encontrada';
+const ERROR_PRESENTACION_DROGA_VIA_ELIMINACION = 'Error al eliminar la presentación droga vía';
+const ERROR_ID_VIA_INVALIDO = 'ID de vía inválido';
+const ERROR_ID_PRESENTACION_INVALIDO = 'ID de presentación inválido';
+
+export {
+  ERROR_PRESENTACION_DROGA_VIA_CREACION,
+  ERROR_PRESENTACION_DROGA_VIA_NO_ENCONTRADA,
+  ERROR_PRESENTACION_DROGA_VIA_ELIMINACION,
+  ERROR_ID_VIA_INVALIDO,
+  ERROR_ID_PRESENTACION_INVALIDO,
+};
