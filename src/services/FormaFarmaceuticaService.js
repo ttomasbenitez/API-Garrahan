@@ -19,4 +19,8 @@ export class FormaFarmaceuticaService {
   async actualizar(id, datos) {
     return await this.formaFarmaceuticaRepo.actualizar(id, datos);
   }
+
+  async eliminar(id) {
+    return await this.formaFarmaceuticaRepo.eliminar(id);
+  }
 }

@@ -7,5 +7,6 @@ export default function buildFormaFarmaceuticaRouter(controller) {
   r.get('/:id', authMiddleware, requireRole('admin', 'medico'), controller.obtener);
   r.get('/', authMiddleware, requireRole('admin', 'medico'), controller.listar);
   r.put('/:id', authMiddleware, requireRole('admin'), controller.actualizar);
+  r.delete('/:id', authMiddleware, requireRole('admin'), controller.eliminar);
   return r;
 }

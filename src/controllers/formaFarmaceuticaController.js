@@ -1,5 +1,5 @@
 import FormaFarmaceutica from '../domain/droga/formaFarmaceutica.js';
-import { ERROR_FORMA_FARMACEUTICA_NO_ENCONTRADA, ERROR_FORMA_FARMACEUTICA_CREACION, ERROR_ID_FORMA_FARMACEUTICA_INVALIDO, ERROR_OBTENER_FORMA_FARMACEUTICA } from '../errors/formaFarmaceutica.js';
+import { ERROR_FORMA_FARMACEUTICA_NO_ENCONTRADA, ERROR_FORMA_FARMACEUTICA_CREACION, ERROR_ID_FORMA_FARMACEUTICA_INVALIDO, ERROR_OBTENER_FORMA_FARMACEUTICA, ERROR_FORMA_FARMACEUTICA_ELIMINACION, ERROR_FORMA_FARMACEUTICA_CON_PRESENTACIONES } from '../errors/formaFarmaceutica.js';
 import logger from '../utils/logger.js';
 
 export const makeFormaFarmaceuticaController = (formaFarmaceuticaService) => ({
@@ -7,6 +7,7 @@ export const makeFormaFarmaceuticaController = (formaFarmaceuticaService) => ({
   obtener: (req, res) => obtenerFormaFarmaceutica(req, res, formaFarmaceuticaService),
   listar: (req, res) => listarFormaFarmaceutica(req, res, formaFarmaceuticaService),
   actualizar: (req, res) => actualizarFormaFarmaceutica(req, res, formaFarmaceuticaService),
+  eliminar: (req, res) => eliminarFormaFarmaceutica(req, res, formaFarmaceuticaService),
 });
 
 async function crearFormaFarmaceutica(req, res, service) {
@@ -80,5 +81,25 @@ async function actualizarFormaFarmaceutica(req, res, service) {
   } catch (error) {
     logger.error('Error al actualizar forma farmacéutica: %o', error);
     res.status(500).json({ error: 'Error al actualizar forma farmacéutica' });
+  }
+}
+
+async function eliminarFormaFarmaceutica(req, res, service) {
+  try {
+    const idForma = parseInt(req.params.id, 10);
+    if (isNaN(idForma)) {
+      return res.status(400).json({ error: ERROR_ID_FORMA_FARMACEUTICA_INVALIDO });
+    }
+    await service.eliminar(idForma);
+    res.status(200).json({ eliminado: true, id: idForma });
+  } catch (error) {
+    logger.error('Error al eliminar forma farmacéutica: %o', error);
+    if (error.message.includes('presentaciones de droga asociadas')) {
+      return res.status(409).json({ error: ERROR_FORMA_FARMACEUTICA_CON_PRESENTACIONES });
+    }
+    if (error.message.includes('no encontrada')) {
+      return res.status(404).json({ error: ERROR_FORMA_FARMACEUTICA_NO_ENCONTRADA });
+    }
+    res.status(500).json({ error: ERROR_FORMA_FARMACEUTICA_ELIMINACION });
   }
 }

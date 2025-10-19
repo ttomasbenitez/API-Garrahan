@@ -140,4 +140,65 @@ describe(RepositorioFormaFarmaceutica, () => {
     const actualizado = await repo.actualizar(999, { nombre: 'X', codigo: 'Y' });
     expect(actualizado).toBe(false);
   });
+
+  test('eliminar una forma farmacéutica sin presentaciones asociadas funciona correctamente', async () => {
+    // Mock para verificar que no tiene presentaciones (COUNT = 0)
+    db.execute.mockImplementationOnce(() => Promise.resolve({
+      rows: [{ TOTAL: 0 }]
+    }));
+
+    // Mock para el DELETE
+    db.execute.mockImplementationOnce(() => Promise.resolve({
+      rowsAffected: 1
+    }));
+
+    const resultado = await repo.eliminar(1);
+
+    expect(resultado).toBe(true);
+    expect(db.execute).toHaveBeenCalledTimes(2);
+
+    // Verificar que primero consulta las presentaciones
+    const [sqlCount, bindsCount] = db.execute.mock.calls[0];
+    expect(sqlCount).toMatch(/SELECT\s+COUNT\(\*\)\s+as\s+total\s+FROM\s+presentacion_droga/i);
+    expect(bindsCount).toEqual([1]);
+
+    // Verificar que luego ejecuta el DELETE
+    const [sqlDelete, bindsDelete] = db.execute.mock.calls[1];
+    expect(sqlDelete).toMatch(/DELETE\s+FROM\s+forma_farmaceutica/i);
+    expect(bindsDelete).toEqual([1]);
+  });
+
+  test('eliminar una forma farmacéutica con presentaciones asociadas lanza error', async () => {
+    // Mock para verificar que SÍ tiene presentaciones (COUNT > 0)
+    db.execute.mockImplementationOnce(() => Promise.resolve({
+      rows: [{ TOTAL: 3 }] // Tiene 3 presentaciones asociadas
+    }));
+
+    await expect(repo.eliminar(1)).rejects.toThrow(
+      'No se puede eliminar la forma farmacéutica porque tiene presentaciones de droga asociadas'
+    );
+
+    // Debe llamar solo a la verificación, NO al DELETE
+    expect(db.execute).toHaveBeenCalledTimes(1);
+
+    const [sqlCount, bindsCount] = db.execute.mock.calls[0];
+    expect(sqlCount).toMatch(/SELECT\s+COUNT\(\*\)\s+as\s+total\s+FROM\s+presentacion_droga/i);
+    expect(bindsCount).toEqual([1]);
+  });
+
+  test('eliminar una forma farmacéutica inexistente lanza error', async () => {
+    // Mock para verificar que no tiene presentaciones
+    db.execute.mockImplementationOnce(() => Promise.resolve({
+      rows: [{ TOTAL: 0 }]
+    }));
+
+    // Mock para el DELETE que no afecta filas (no existe)
+    db.execute.mockImplementationOnce(() => Promise.resolve({
+      rowsAffected: 0
+    }));
+
+    await expect(repo.eliminar(999)).rejects.toThrow('Forma farmacéutica no encontrada');
+
+    expect(db.execute).toHaveBeenCalledTimes(2);
+  });
 });

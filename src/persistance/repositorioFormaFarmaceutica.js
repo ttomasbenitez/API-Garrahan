@@ -80,4 +80,41 @@ export class RepositorioFormaFarmaceutica {
     );
     return result.rowsAffected > 0;
   }
+
+  async tienePresentacionesAsociadas(id) {
+    try {
+      const result = await this.db.execute(
+        'SELECT COUNT(*) as total FROM presentacion_droga WHERE forma_farmaceutica_id = :id',
+        [id]
+      );
+      return result.rows[0].TOTAL > 0;
+    } catch (error) {
+      console.error('Error en RepositorioFormaFarmaceutica.tienePresentacionesAsociadas:', error);
+      throw error;
+    }
+  }
+
+  async eliminar(id) {
+    try {
+      // Primero verificar si tiene presentaciones asociadas
+      const tieneAsociaciones = await this.tienePresentacionesAsociadas(id);
+      if (tieneAsociaciones) {
+        throw new Error('No se puede eliminar la forma farmacéutica porque tiene presentaciones de droga asociadas');
+      }
+
+      const result = await this.db.execute(
+        'DELETE FROM forma_farmaceutica WHERE forma_farmaceutica_id = :id',
+        [id]
+      );
+
+      if (result.rowsAffected === 0) {
+        throw new Error('Forma farmacéutica no encontrada');
+      }
+
+      return true;
+    } catch (error) {
+      console.error('Error en RepositorioFormaFarmaceutica.eliminar:', error);
+      throw error;
+    }
+  }
 }

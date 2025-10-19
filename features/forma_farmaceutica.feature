@@ -53,15 +53,15 @@ Feature: Gestión de Formas Farmacéuticas
     When publico en la API de forma farmaceutica "/forma-farmaceutica/1" con los siguientes datos:
       | nombre | Solución inyectable estéril |
       | codigo | SOL-INY-EST                 |
-    Then el campo "nombre" es "Solución inyectable estéril" en la respuesta de forma farmaceutica
-    And el campo "codigo" es "SOL-INY-EST" en la respuesta de forma farmaceutica
-    And se actualiza correctamente la forma farmaceutica
-  @wip
-  Scenario: US-07.6 Eliminar una forma farmacéutica sin uso
-    Given existe en la base de datos una forma farmacéutica con id "3" y con los datos:
-      | nombre | Jarabe |
-      | codigo | JAR    |
-    And la forma farmacéutica no está asociada a ninguna presentación de droga
-    When elimino la forma en la API "/forma-farmaceutica/3"
-    Then el sistema elimina la forma farmacéutica con id "3"
-    And se obtiene correctamente la forma farmaceutica
+  Then el campo "nombre" es "Solución inyectable estéril" en la respuesta de forma farmaceutica
+  And el campo "codigo" es "SOL-INY-EST" en la respuesta de forma farmaceutica
+  And se actualiza correctamente la forma farmaceutica
+
+Scenario: US-07.6 Eliminar una forma farmacéutica sin uso
+  Given existe en la base de datos una forma farmacéutica con id "3" y con los datos:
+    | nombre | Jarabe |
+    | codigo | JAR    |
+  And la forma farmacéutica no está asociada a ninguna presentación de droga
+  When elimino la forma en la API "/forma-farmaceutica/3"
+  Then el sistema elimina la forma farmacéutica con id "3"
+  And se obtiene correctamente la forma farmaceutica

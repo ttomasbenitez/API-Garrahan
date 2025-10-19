@@ -51,11 +51,15 @@ Then(/^obtengo los datos de las formas con el id "(.*)" y "(.*)"$/, function (id
 Given(/^existe en la base de datos una forma farmacéutica con id "(.*)" y con los datos:$/, async function (_id, dataTable) {
   const data = dataTable.rowsHash();
   formas.push(data);
-  response = await request(app)
+  const createResponse = await request(app)
     .post('/forma-farmaceutica')
     .send(data)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
+  // Guardar el ID real creado
+  const formaCreada = Array.isArray(createResponse.body) ? createResponse.body[0] : createResponse.body;
+  this.createdFormaId = formaCreada.forma_farmaceutica_id;
+  response = createResponse;
 });
 
 When(/^consulto en la API de forma farmaceutica "(.*)" por su id$/, async function (endpoint) {
@@ -123,4 +127,26 @@ Then(/^se actualiza correctamente la forma farmaceutica$/, function () {
   assert.ok(response);
   assert.strictEqual(response.status, 200);
   response = {};
+});
+
+Given(/^la forma farmacéutica no está asociada a ninguna presentación de droga$/, function () {
+  // Este step es declarativo - la validación se hace en el backend
+  // No hay presentaciones creadas en este escenario, así que está limpio
+  assert.ok(true);
+});
+
+When(/^elimino la forma en la API "(.*)"$/, async function (endpoint) {
+  const realEndpoint = endpoint.replace(/\/\d+$/, `/${this.createdFormaId}`);
+  response = await request(app)
+    .delete(realEndpoint)
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
+});
+
+Then(/^el sistema elimina la forma farmacéutica con id "(.*)"$/, function (_id) {
+  assert.ok(response);
+  assert.strictEqual(response.status, 200);
+  assert.strictEqual(response.body.eliminado, true);
+  // Validar con el ID real creado
+  assert.strictEqual(response.body.id, this.createdFormaId);
 });
