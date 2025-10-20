@@ -4,14 +4,16 @@ Feature: Gestión de equipo tratante paciente-profesional
   Para permitir equipos tratantes, cambios de profesional y colaboradores
 
   Scenario: US-05.1 Al crear un paciente se asigna automáticamente al profesional tratante
-    Given quiero crear un paciente con nombre "Juan"
-    And apellido "Pérez"
-    And id_hospitalario "P12345"
-    And fecha_nacimiento "2020-05-21"
-    And peso "30"
-    And sexo "M"
+     Given quiero crear un paciente con los siguientes datos:
+            | nombre            | Juan        |
+            | apellido          | Pérez       |
+            | id_hospitalario   | P12345      |
+            | fecha_nacimiento  | 2020-05-21  |
+            | peso              | 30          |
+            | sexo              | M           |
+            | obra_social       | OSDE        |
     And profesional_id
-    When publico en el endpoint "/paciente" con los datos
+    When publico en el endpoint "/paciente" con los datos del paciente
     Then el paciente se crea correctamente
     And el profesional queda asignado automáticamente como "Médico Tratante"
 

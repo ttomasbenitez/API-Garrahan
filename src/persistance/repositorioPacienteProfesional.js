@@ -8,7 +8,7 @@ export class RepositorioPacienteProfesional {
   async asignar(profesional_id, paciente_id, rol = 'Médico Tratante') {
     // 1. Verificar que el profesional existe
     const profesionalExiste = await this.connection.execute(
-      'SELECT COUNT(*) as count FROM profesional WHERE id = :profesional_id',
+      'SELECT COUNT(*) as count FROM profesional WHERE profesional_id = :profesional_id',
       { profesional_id },
       { outFormat: oracledb.OUT_FORMAT_OBJECT }
     );
@@ -48,7 +48,7 @@ export class RepositorioPacienteProfesional {
       `SELECT pp.profesional_id, pp.paciente_id, pp.rol,
               p.nombre, p.apellido, p.especialidad, p.matricula
        FROM paciente_profesional pp
-       JOIN profesional p ON pp.profesional_id = p.id  
+       JOIN profesional p ON pp.profesional_id = p.profesional_id  
        WHERE pp.paciente_id = :paciente_id
        ORDER BY pp.rol DESC, p.apellido, p.nombre`,
       [paciente_id],
@@ -73,7 +73,7 @@ export class RepositorioPacienteProfesional {
       `SELECT pp.profesional_id, pp.paciente_id, pp.rol,
               pac.nombre, pac.apellido, pac.id_hospitalario, pac.sexo, pac.fecha_nacimiento
        FROM paciente_profesional pp
-       JOIN paciente pac ON pp.paciente_id = pac.id  
+       JOIN paciente pac ON pp.paciente_id = pac.paciente_id  
        WHERE pp.profesional_id = :profesional_id
        ORDER BY pac.apellido, pac.nombre`,
       [profesional_id],

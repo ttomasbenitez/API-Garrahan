@@ -14,13 +14,13 @@ Feature: Creación profesional
 
     Scenario: US-02.2 Obtener un profesional creado por su id
         Given existe un profesional con nombre "Walter", apellido "Perez", dni "20981812", matricula "MP12345", especialidad "Oncología"
-        When consulto en la API de profesionales
+        When consulto en la API "/profesional/1" por su id de profesional
         Then el sistema me devuelve el profesional con id correspondiente
-        And el nombre del profesional es "Walter"
-        And apellido del profesional es "Perez"
-        And dni del profesional es "20981812"
-        And matricula del profesional es "MP12345"
-        And especialidad del profesional es "Oncología"
+        And "nombre" del profesional es "Walter"
+        And "apellido" del profesional es "Perez"
+        And "dni" del profesional es "20981812"
+        And "matricula" del profesional es "MP12345"
+        And "especialidad" del profesional es "Oncología"
 
     Scenario: US-02.3 Crear profesional sin dni
         Given quiero crear un profesional con nombre "Walter"

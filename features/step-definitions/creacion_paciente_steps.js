@@ -1,34 +1,19 @@
 import { Given, When, Then, Before } from '@cucumber/cucumber';
 import request from 'supertest';
 import app from '../../src/app.js';
+import assert from 'node:assert/strict';
 
 Before(function () {
   this.paciente = {};
   this.response = null;
 });
 
-Given(/^quiero crear un paciente con nombre "(.*)"$/, function (nombre) {
-  this.paciente.nombre = nombre;
+Given(/^quiero crear un paciente con los siguientes datos:$/, function (dataTable) {
+  this.paciente = dataTable.rowsHash();
 });
 
-Given(/^apellido "(.*)"$/, function (apellido) {
-  this.paciente.apellido = apellido;
-});
-
-Given(/^id_hospitalario "(.*)"$/, function (idHospitalario) {
-  this.paciente.id_hospitalario = idHospitalario;
-});
-
-Given(/^fecha_nacimiento "(.*)"$/, function (fecha) {
-  this.paciente.fecha_nacimiento = fecha;
-});
-
-Given(/^peso "(.*)"$/, function (peso) {
-  this.paciente.peso = parseInt(peso);
-});
-
-Given(/^sexo "(.*)"$/, function (sexo) {
-  this.paciente.sexo = sexo;
+Given(/^existe un paciente con los siguientes datos:$/, function (dataTable) {
+  this.paciente = dataTable.rowsHash();
 });
 
 Given(/^profesional_id$/, async function () {
@@ -40,7 +25,7 @@ Given(/^profesional_id$/, async function () {
   if (response.status !== 201) {
     throw new Error(`No se pudo crear el profesional necesario para el paciente. Status recibido: ${response.status}`);
   }
-  this.paciente.profesional_id = response.body.id;
+  this.paciente.profesional_id = response.body.profesional_id;
 });
 
 Given(
@@ -62,20 +47,26 @@ Given(
       .set('Cookie', this.sessionCookie);
     if (res.status !== 201) throw new Error(`No se pudo crear el paciente: ${res.status}`);
 
-    this.paciente.id = res.body.id;
+    this.paciente.paciente_id = res.body.paciente_id;
   }
 );
 
-When(/^consulto en la API de pacientes por él$/, async function () {
+When(/^consulto en la API "(.*)" por su id de paciente$/, async function (endpoint) {
+  await request(app)
+    .post('/paciente')
+    .send(this.paciente)
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
+
   const response = await request(app)
-    .get(`/paciente/${this.paciente.id}`)
+    .get(endpoint)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
   this.response = response;
 });
 
 
-When(/^publico en el endpoint "(.*)" con los datos$/, async function (endpoint) {
+When(/^publico en el endpoint "(.*)" con los datos del paciente$/, async function (endpoint) {
   const response = await request(app)
     .post(endpoint)
     .send(this.paciente)
@@ -86,58 +77,23 @@ When(/^publico en el endpoint "(.*)" con los datos$/, async function (endpoint) 
 
 Then('el paciente se crea correctamente', function () {
   if (!this.response) throw new Error('No se recibió respuesta');
-  if (this.response.status !== 201) throw new Error(`Status esperado 201, recibido ${this.response.status}`);
+  assert.ok(this.response);
+  assert.strictEqual(this.response.status, 201);
   if (!this.response.body) throw new Error('No se recibió id del paciente');
 });
 
 Then(/^el sistema me devuelve el paciente correspondiente$/, function () {
   if (!this.response) throw new Error('No hay respuesta');
-  if (this.response.status !== 200) throw new Error(`Status esperado 200, recibido ${this.response.status}`);
-  this.response = JSON.parse(this.response.body);
-  if (this.response.id.toString() !== this.paciente.id.toString()) {
-    throw new Error(`ID esperado ${this.paciente.id}, recibido ${this.response.id}`);
-  }
+  assert.ok(this.response);
+  assert.strictEqual(this.response.status, 200);
+  this.body = this.response.body;
 });
 
-Then(/^el nombre del paciente esperado es "(.*)"$/, function (nombreEsperado) {
-  if (this.response.nombre !== nombreEsperado) {
-    throw new Error(`Nombre esperado ${nombreEsperado}, recibido ${this.response.nombre}`);
-  }
+Then(/^"(.*)" del paciente esperado es "(.*)"$/, function (key, value) {
+  assert(this.body[key].toString() === value, `Se esperaba ${value} pero se obtuvo ${this.body[key]}`);
 });
 
-Then(/^apellido esperado "(.*)"$/, function (apellidoEsperado) {
-  if (this.response.apellido !== apellidoEsperado) {
-    throw new Error(`Apellido esperado ${apellidoEsperado}, recibido ${this.response.apellido}`);
-  }
-});
-
-Then(/^id_hospitalario esperado "(.*)"$/, function (id_hospitalarioEsperado) {
-  if (this.response.id_hospitalario !== id_hospitalarioEsperado) {
-    throw new Error(`id_hospitalario esperado ${id_hospitalarioEsperado}, recibido ${this.response.idHospitalario}`);
-  }
-});
-
-Then(/^fecha_nacimiento esperada "(.*)"$/, function (fecha_nacimientoEsperada) {
-  if (this.response.fecha_nacimiento !== fecha_nacimientoEsperada) {
-    throw new Error(`fecha_nacimiento esperada ${fecha_nacimientoEsperada}, recibido ${this.response.fecha_nacimiento}`);
-  }
-});
-
-Then(/^peso esperado "(.*)"$/, function (pesoEsperado) {
-  if (this.response.peso !== parseInt(pesoEsperado)) {
-    throw new Error(`Peso esperado ${pesoEsperado}, recibido ${this.response.peso}`);
-  }
-});
-
-Then(/^sexo esperado "(.*)"$/, function (sexoEsperado) {
-  if (this.response.sexo !== sexoEsperado) {
-    throw new Error(`Sexo esperado ${sexoEsperado}, recibido ${this.response.sexo}`);
-  }
-});
-
-Then(/^profesional_id esperado "(.*)"$/, function (profesional_idEsperado) {
-  if (this.response.profesional_id !== parseInt(profesional_idEsperado)) {
-    throw new Error(`profesional_id esperado ${profesional_idEsperado}, recibido ${this.response.profesional_id}`);
-  }
+Then(/^"(.*)" del paciente esperada es "(.*)"$/, function (key, value) {
+  assert(this.body[key].toString() === value, `Se esperaba ${value} pero se obtuvo ${this.body[key]}`);
 });
 

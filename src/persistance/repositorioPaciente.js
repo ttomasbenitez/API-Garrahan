@@ -10,14 +10,14 @@ export class RepositorioPaciente {
   }
 
   async guardar(paciente) {
-    // Crear el paciente primero
+
     const result = await this.connection.execute(
       `INSERT INTO paciente (
             nombre, apellido, id_hospitalario, fecha_nacimiento, peso, sexo, profesional_id, ultima_modificacion, obra_social
           ) VALUES (
-            :nombre, :apellido, :id_hospitalario, :fecha_nacimiento, :peso, :sexo, :profesional_id, :ultima_modificacion, :obra_social
+            :nombre, :apellido, :id_hospitalario, :fecha_nacimiento, :peso, :sexo, :profesional_id, SYSDATE, :obra_social
           )
-          RETURNING id INTO :id`,
+          RETURNING paciente_id INTO :id`,
       {
         nombre: paciente.nombre,
         apellido: paciente.apellido,
@@ -26,7 +26,6 @@ export class RepositorioPaciente {
         peso: paciente.peso,
         sexo: paciente.sexo,
         profesional_id: paciente.profesional_id,
-        ultima_modificacion: paciente.ultima_modificacion,
         obra_social: paciente.obra_social,
         id: { dir: oracledb.BIND_OUT, type: oracledb.NUMBER },
       },
@@ -62,10 +61,11 @@ export class RepositorioPaciente {
   }
 
   async obtener(id) {
+
     const result = await this.connection.execute(
-      `SELECT id, nombre, apellido, id_hospitalario, fecha_nacimiento, peso, sexo, profesional_id, ultima_modificacion, obra_social
+      `SELECT paciente_id, nombre, apellido, id_hospitalario, fecha_nacimiento, peso, sexo, profesional_id, ultima_modificacion, obra_social
            FROM paciente
-           WHERE id = :id`,
+           WHERE paciente_id = :id`,
       [id]
     );
 
@@ -82,9 +82,9 @@ export class RepositorioPaciente {
       row.PESO,
       row.SEXO,
       row.PROFESIONAL_ID,
-      row.ID,
+      row.OBRA_SOCIAL,
       row.ULTIMA_MODIFICACION,
-      row.OBRA_SOCIAL
+      row.PACIENTE_ID,
     );
   }
 
@@ -92,7 +92,7 @@ export class RepositorioPaciente {
 
     // 1. Actualizar el profesional_id en la tabla paciente
     const updateResult = await this.connection.execute(
-      'UPDATE paciente SET profesional_id = :nuevo_profesional_id WHERE id = :paciente_id',
+      'UPDATE paciente SET profesional_id = :nuevo_profesional_id WHERE paciente_id = :paciente_id',
       {
         nuevo_profesional_id,
         paciente_id

@@ -97,7 +97,7 @@ CREATE TABLE administracion_medicacion (
   cantidad_dias     NUMBER,
   administracion_diaria NUMBER,
   frecuencia_diaria NUMBER,
-  CONSTRAINT pk_admin PRIMARY KEY (admin_id), -- clave simple para poder referenciar desde receta_detalle
+  CONSTRAINT pk_admin PRIMARY KEY (admin_id),
   CONSTRAINT uq_admin_ctx UNIQUE (protocolo_id, ciclo_id, regimen, droga_id, via_id),
   CONSTRAINT fk_admin_ciclo FOREIGN KEY (protocolo_id, ciclo_id, regimen)
     REFERENCES ciclo(protocolo_id, ciclo_id, regimen),

@@ -23,7 +23,7 @@ describe(RepositorioPaciente, () => {
 
   test('guardar paciente funciona correctamente devolviendo el id de la creación', async () => {
     const paciente = new Paciente(
-      'Juan', 'Pérez', 'P12345', '2020-05-21', 30, 'M', 101, null
+      'Juan', 'Pérez', 'P12345', '2020-05-21', 30, 'M', 101, 'OSDE'
     );
 
     connection.execute.mockResolvedValue({
@@ -47,7 +47,8 @@ describe(RepositorioPaciente, () => {
       peso: paciente.peso,
       sexo: paciente.sexo,
       profesional_id: paciente.profesional_id,
-      id: { dir: expect.any(Number), type: expect.any(Number) }
+      obra_social: paciente.obra_social,
+      id : { dir: expect.any(Number), type: expect.any(Number) }
     });
     expect(opts1).toMatchObject({ autoCommit: true });
 
@@ -83,9 +84,9 @@ describe(RepositorioPaciente, () => {
       PESO: 30,
       SEXO: 'M',
       PROFESIONAL_ID: 101,
-      ID: 123,
+      PACIENTE_ID: 123,
       ULTIMA_MODIFICACION: null,
-      OBRA_SOCIAL: null
+      OBRA_SOCIAL: 'OSDE'
     };
 
     connection.execute.mockResolvedValue({
@@ -103,14 +104,14 @@ describe(RepositorioPaciente, () => {
       peso: row.PESO,
       sexo: row.SEXO,
       profesional_id: row.PROFESIONAL_ID,
-      id: row.ID,
+      paciente_id: row.PACIENTE_ID,
       ultima_modificacion: row.ULTIMA_MODIFICACION,
       obra_social: row.OBRA_SOCIAL
     });
 
     expect(connection.execute).toHaveBeenCalledTimes(1);
     const [sql, binds] = connection.execute.mock.calls[0];
-    expect(sql).toMatch(/SELECT\s+id,\s+nombre,\s+apellido,\s+id_hospitalario/i);
+    expect(sql).toMatch(/SELECT\s+paciente_id,\s+nombre,\s+apellido,\s+id_hospitalario/i);
     expect(binds).toEqual([123]);
   });
 

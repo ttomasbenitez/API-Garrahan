@@ -36,32 +36,32 @@ export class RepositorioProtocolo {
       [protocoloId]
     );
 
-    const administracion_medicaciones = await this.db.execute(
-      `SELECT protocolo_id, ciclo_id, regimen, droga_id, dosis, dosis_unidad, frecuencia, administracion_diaria, frecuencia_diaria, id
-       FROM administracion_medicacion
-       WHERE protocolo_id = :id`,
-      [protocoloId],
-    );
+    // const administracion_medicaciones = await this.db.execute(
+    //   `SELECT protocolo_id, ciclo_id, regimen, droga_id, dosis, dosis_unidad, frecuencia, administracion_diaria, frecuencia_diaria, id
+    //    FROM administracion_medicacion
+    //    WHERE protocolo_id = :id`,
+    //   [protocoloId],
+    // );
 
-    const administracionesPorCiclo = administracion_medicaciones.rows.reduce((acc, row) => {
-      const key = `${row.CICLO_ID}-${row.REGIMEN}`;
-      if (!acc[key]) acc[key] = [];
-      acc[key].push(new AdministracionMedicacion(
-        row.DROGA_ID,
-        row.DOSIS,
-        row.DOSIS_UNIDAD,
-        row.FRECUENCIA,
-        row.ADMINISTRACION_DIARIA,
-        row.FRECUENCIA_DIARIA,
-        row.ID
-      ));
-      return acc;
-    }, {});
+    // const administracionesPorCiclo = administracion_medicaciones.rows.reduce((acc, row) => {
+    //   const key = `${row.CICLO_ID}-${row.REGIMEN}`;
+    //   if (!acc[key]) acc[key] = [];
+    //   acc[key].push(new AdministracionMedicacion(
+    //     row.DROGA_ID,
+    //     row.DOSIS,
+    //     row.DOSIS_UNIDAD,
+    //     row.FRECUENCIA,
+    //     row.ADMINISTRACION_DIARIA,
+    //     row.FRECUENCIA_DIARIA,
+    //     row.ID
+    //   ));
+    //   return acc;
+    // }, {});
 
     return result.rows.map(row => {
       const ciclo = Ciclo.fromRow(row);
-      const key = `${ciclo.ciclo_id}-${ciclo.regimen}`;
-      ciclo.administracion_medicacion = administracionesPorCiclo[key] || [];
+      // const key = `${ciclo.ciclo_id}-${ciclo.regimen}`;
+      // ciclo.administracion_medicacion = administracionesPorCiclo[key] || [];
       return ciclo;
     });
   }

@@ -1,7 +1,5 @@
 class Paciente {
-  constructor(nombre, apellido, id_hospitalario, fecha_nacimiento, peso, sexo, profesional_id, id, ultima_modificacion, obra_social) {
-    if (!id_hospitalario) throw new Error('id_hospitalario es obligatorio');
-    if (!profesional_id) throw new Error('profesional_id es obligatorio');
+  constructor(nombre, apellido, id_hospitalario, fecha_nacimiento, peso, sexo, profesional_id, obra_social, ultima_modificacion, paciente_id) {
 
     this.nombre = nombre ?? null;
     this.apellido = apellido ?? null;
@@ -10,7 +8,7 @@ class Paciente {
     this.peso = peso ?? null;
     this.sexo = sexo ?? null;
     this.profesional_id = profesional_id;
-    this.id = id ?? null;
+    this.paciente_id = paciente_id ?? null;
     this.ultima_modificacion = ultima_modificacion ?? null;
     this.obra_social = obra_social ?? null;
   }

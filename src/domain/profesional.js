@@ -1,5 +1,5 @@
 class Profesional {
-  constructor(nombre, apellido, dni, matricula, especialidad, id) {
+  constructor(nombre, apellido, dni, matricula, especialidad, profesional_id) {
     if (!nombre || !apellido || !dni) throw new Error('Faltan datos obligatorios');
 
     this.nombre = nombre;
@@ -7,7 +7,7 @@ class Profesional {
     this.dni = dni;
     this.matricula = matricula ?? null;
     this.especialidad = especialidad ?? null;
-    this.id = id ?? null;
+    this.profesional_id = profesional_id ?? null;
   }
 }
 

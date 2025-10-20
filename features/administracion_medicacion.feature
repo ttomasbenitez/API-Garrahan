@@ -15,7 +15,7 @@ Feature: Administrar medicación en un ciclo de tratamiento
       | nombre_generico     | CISPLATINO      |
       | codigo_farmacia     | AAA1            |
 
-  Scenario: US-05.1 Agregar una administración (una sola droga) a un ciclo
+  Scenario: US-10.1 Agregar una administración (una sola droga) a un ciclo
     Given quiero agregar administración de medicación con los siguientes datos
       | droga_id              | 2      |
       | dosis                 | 50     |
@@ -26,7 +26,7 @@ Feature: Administrar medicación en un ciclo de tratamiento
     When publico en la API "/protocolo/1/ciclo/1/regimen/0/administracion" con los datos de la administración
     Then la administración se crea correctamente
 
-  Scenario: US-05.2 Agregar varias administraciones en una sola llamada (array)
+  Scenario: US-10.2 Agregar varias administraciones en una sola llamada (array)
     Given quiero agregar múltiples administraciones con los siguientes items
       | droga_id | dosis | dosis_unidad | frecuencia | administracion_diaria | frecuencia_diaria |
       | 2        | 50    | mg           | 1,2        | 2                     | 1                 |
@@ -34,7 +34,7 @@ Feature: Administrar medicación en un ciclo de tratamiento
     When publico en la API "/protocolo/1/ciclo/1/regimen/1/administracion" con los datos de la administración
     Then se crean "2" administraciones para el protocolo "1" ciclo "1" régimen "1"
 
-  Scenario: US-05.3 Validación: campos requeridos
+  Scenario: US-10.3 Validación: campos requeridos
     Given quiero agregar administración de medicación con los siguientes datos
       | dosis        | 50 |
       | dosis_unidad | mg |
@@ -43,7 +43,7 @@ Feature: Administrar medicación en un ciclo de tratamiento
     Then el sistema responde "400"
     And el error contiene "droga_id es requerido"
 
-  Scenario: US-05.4 Validación: dosis debe ser positiva cuando se informa
+  Scenario: US-10.4 Validación: dosis debe ser positiva cuando se informa
     Given quiero agregar administración de medicación con los siguientes datos
       | droga_id     | 10  |
       | dosis        | -10 |
@@ -53,7 +53,7 @@ Feature: Administrar medicación en un ciclo de tratamiento
     And el error contiene "dosis debe ser > 0"
   
   @wip
-  Scenario: US-05.5 Conflicto por duplicado (misma droga ya cargada en ese ciclo/régimen)
+  Scenario: US-10.5 Conflicto por duplicado (misma droga ya cargada en ese ciclo/régimen)
     Given quiero agregar administración de medicación con los siguientes datos
       | droga_id     | 10 |
       | dosis        | 50 |
@@ -62,7 +62,7 @@ Feature: Administrar medicación en un ciclo de tratamiento
     Then el sistema responde "409"
     And el error contiene "administración ya existente"
 
-  Scenario: US-05.6 Error por FK: droga inexistente
+  Scenario: US-10.6 Error por FK: droga inexistente
     Given quiero agregar administración de medicación con los siguientes datos
       | droga_id              | 2232   |
       | dosis                 | 50     |
@@ -74,7 +74,7 @@ Feature: Administrar medicación en un ciclo de tratamiento
     Then el sistema responde "404"
     And el error contiene "droga no encontrada"
   @wip
-  Scenario: US-05.7 Error por FK: ciclo/régimen inexistente
+  Scenario: US-10.7 Error por FK: ciclo/régimen inexistente
     Given quiero agregar administración de medicación con los siguientes datos
       | droga_id     | 10 |
       | dosis        | 50 |

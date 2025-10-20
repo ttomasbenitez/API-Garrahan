@@ -7,15 +7,25 @@ import oracleDBInstance from '../../src/db/connection_pool.js';
 let datosProtocoloPaciente;
 let response;
 let profesional_id;
+let paciente_id;
 
 Given(/^existe en la base de datos un paciente con id "(.*)" llamado "(.*)"$/, async function (idPaciente, nombreCompleto) {
+
   const [nombre, apellido] = nombreCompleto.split(' ');
-  await oracleDBInstance.execute(
-    `INSERT INTO PACIENTE (ID, NOMBRE, APELLIDO, ID_HOSPITALARIO, PROFESIONAL_ID) 
-     VALUES (:id, :nombre, :apellido, :idh, :profesional_id)`,
-    { id: Number(idPaciente), nombre, apellido, idh: `H-${idPaciente}`,  profesional_id: Number(profesional_id) },
-    { autoCommit: true }
-  );
+  const pacResponse = await request(app)
+    .post('/paciente')
+    .send({
+      nombre,
+      apellido,
+      dni: '12345678',
+      id_hospitalario: 'P12345',
+      fecha_nacimiento: '2020-05-21',
+      peso: 30,
+      sexo: 'M',
+      obra_social: 'OSDE',
+      profesional_id,
+    });
+  paciente_id = pacResponse.body.paciente_id;
 });
 
 Given(/^existe en la base de datos un protocolo con id "(.*)" llamado "(.*)"$/, async function (idProtocolo, nombreProtocolo) {
@@ -41,14 +51,14 @@ Given(/^existe en la base de datos un ciclo con protocolo_id "(.*)", ciclo_id "(
 });
 
 Given(/^existe en la base de datos un profesional con id "(.*)" llamado "(.*)"$/, async function (idProfesional, nombreCompleto) {
-  profesional_id = idProfesional;
   const [nombre, apellido] = nombreCompleto.split(' ');
-  await oracleDBInstance.execute(
-    `INSERT INTO PROFESIONAL (ID, NOMBRE, APELLIDO, DNI, MATRICULA) 
-     VALUES (:id, :nombre, :apellido, :dni, 'MAT123')`,
-    { id: Number(idProfesional), nombre, apellido, dni: '20582578' },
-    { autoCommit: true }
-  );
+  const profesional_res = await request(app)
+    .post('/profesional')
+    .send({ nombre, apellido, dni: 20912121 })
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
+
+  profesional_id = profesional_res.body.profesional_id;
 });
 
 Given(/^quiero asignar a un paciente un protocolo con los siguientes datos$/, function (dataTable) {

@@ -17,31 +17,6 @@ describe(RepositorioProfesional, () => {
     repo = new RepositorioProfesional(connection);
   });
 
-  test('guardar profesional con ID manual funciona correctamente', async () => {
-    const profesional = new Profesional('Walter', 'Perez', 20981812, 'MP12345', 'Oncología', 123);
-
-    connection.execute.mockResolvedValue({
-      rowsAffected: 1
-    });
-
-    const id = await repo.guardar(profesional);
-
-    expect(id).toBe(123);
-    expect(connection.execute).toHaveBeenCalledTimes(1);
-
-    const [sql, binds, opts] = connection.execute.mock.calls[0];
-    expect(sql).toMatch(/INSERT\s+INTO\s+profesional/i);
-    expect(binds).toMatchObject({
-      nombre: profesional.nombre,
-      apellido: profesional.apellido,
-      dni: profesional.dni,
-      matricula: profesional.matricula,
-      especialidad: profesional.especialidad
-    });
-    expect(binds.id).toBe(123); // id manual
-    expect(opts).toMatchObject({ autoCommit: true });
-  });
-
   test('guardar profesional con ID autogenerado funciona correctamente', async () => {
     const profesional = new Profesional('Ana', 'Gomez', 20999999, 'MP54321', 'Pediatría');
 
@@ -86,7 +61,7 @@ describe(RepositorioProfesional, () => {
       DNI: 20981812,
       MATRICULA: 'MP12345',
       ESPECIALIDAD: 'Oncología',
-      ID: 123,
+      PROFESIONAL_ID: 123,
     };
 
     connection.execute.mockResolvedValue({
@@ -102,12 +77,12 @@ describe(RepositorioProfesional, () => {
       dni: row.DNI,
       matricula: row.MATRICULA,
       especialidad: row.ESPECIALIDAD,
-      id: row.ID,
+      profesional_id: row.PROFESIONAL_ID,
     });
 
     expect(connection.execute).toHaveBeenCalledTimes(1);
     const [sql, binds] = connection.execute.mock.calls[0];
-    expect(sql).toMatch(/SELECT\s+id,\s+nombre,\s+apellido,\s+dni/i);
+    expect(sql).toMatch(/SELECT\s+profesional_id,\s+nombre,\s+apellido,\s+dni/i);
     expect(binds).toEqual([123]);
   });
 
