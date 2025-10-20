@@ -24,7 +24,10 @@ Given(/^existe en la base de datos un paciente con id "(.*)" llamado "(.*)"$/, a
       sexo: 'M',
       obra_social: 'OSDE',
       profesional_id,
-    });
+    })
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
+
   paciente_id = pacResponse.body.paciente_id;
 });
 
@@ -111,7 +114,7 @@ Given(/^existe en la base de datos un protocolo asignado al paciente con id "(.*
   };
 
   await request(app)
-    .post(`/paciente/${idPaciente}/protocolos`)
+    .post(`/paciente/${paciente_id}/protocolos`)
     .send(datosProtocoloPaciente)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);

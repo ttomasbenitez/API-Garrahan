@@ -1,4 +1,4 @@
-@wip
+
 Feature: Asignar y consultar protocolos de un paciente
   Como sistema de prescripción
   Quiero asignar protocolos a pacientes
@@ -19,11 +19,11 @@ Feature: Asignar y consultar protocolos de un paciente
       | fecha_inicio            | 2025-10-07 |
       | estado                  | ACTIVO   |
       | profesional_id_asignador | 1        |
-    When publico en la API "/paciente/12/protocolos" con esos datos
+    When publico en la API "/paciente/1/protocolos" con esos datos
     Then la asignación se crea correctamente
 
   Scenario: US-11.2 Obtener protocolos asignados a un paciente
-    Given existe en la base de datos un protocolo asignado al paciente con id "12" con los siguientes datos
+    Given existe en la base de datos un protocolo asignado al paciente con id "1" con los siguientes datos
       | protocolo_id            | 1        |
       | regimen                 | 0        |
       | ciclo_actual_id         | 1        |
@@ -74,7 +74,7 @@ Feature: Asignar y consultar protocolos de un paciente
     And el error contiene el texto "protocolo ya asignado al paciente"
 
   Scenario: US-11.7 Obtener un protocolo específico de un paciente
-    Given existe en la base de datos un protocolo asignado al paciente con id "12" con los siguientes datos
+    Given existe en la base de datos un protocolo asignado al paciente con id "1" con los siguientes datos
       | protocolo_id            | 1        |
       | regimen                 | 0        |
       | ciclo_actual_id         | 1        |
@@ -82,6 +82,6 @@ Feature: Asignar y consultar protocolos de un paciente
       | fecha_inicio            | 2025-10-07 |
       | estado                  | ACTIVO   |
       | profesional_id_asignador | 1        |
-    When consulto la API "/paciente/12/protocolos/1"
+    When consulto la API "/paciente/1/protocolos/1"
     Then el sistema devuelve un protocolo con regimen igual a "0"
     And el estado es "ACTIVO"
