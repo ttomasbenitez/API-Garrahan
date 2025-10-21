@@ -23,7 +23,8 @@ CREATE TABLE paciente (
   peso               FLOAT,
   ultima_modificacion TIMESTAMP,
   sexo               CHAR(1) CHECK (sexo IN ('M','F')),
-  obra_social        VARCHAR2(100)
+  obra_social        VARCHAR2(100),
+  profesional_id     NUMBER
 );
 
 CREATE INDEX idx_paciente_nombre ON paciente(nombre, apellido);
