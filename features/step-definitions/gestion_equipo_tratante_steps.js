@@ -1,6 +1,7 @@
 import { Given, When, Then, Before } from '@cucumber/cucumber';
 import request from 'supertest';
 import app from '../../src/app.js';
+import oracleDBInstance from '../../src/db/connection_pool.js';
 
 Before(function () {
   this.paciente = {};
@@ -35,7 +36,7 @@ Then('el profesional queda asignado automáticamente como "Médico Tratante"', a
   }
 
   // Verificar que el profesional asignado es el que creó el paciente
-  const profesionalAsignado = equipo.find(p => p.profesional_id === this.paciente.profesional_id);
+  const profesionalAsignado = equipo.find(p => p.profesional_id === Number(this.paciente.profesional_id));
   if (!profesionalAsignado) {
     throw new Error(`El profesional ${this.paciente.profesional_id} no está asignado al paciente`);
   }
@@ -82,20 +83,14 @@ Given('existe un paciente creado por un profesional', async function () {
   this.paciente.paciente_id = pacResponse.body.paciente_id;
 });
 
-Given('existe otro profesional disponible', async function () {
-  const response = await request(app)
-    .post('/profesional')
-    .send({
-      nombre: 'Dr. Colaborador',
-      apellido: 'López',
-      dni: '12345678',
-      matricula: 'MAT456',
-      especialidad: 'Neurología'
-    })
-    .set('Accept', 'application/json')
-    .set('Cookie', this.sessionCookie);
-
-  this.profesionalColaborador.profesional_id = response.body.profesional_id;
+Given('existe otro profesional con id {string} disponible', async function (idProfesional) {
+  this.profesionalColaborador.profesional_id = Number(idProfesional);
+  await oracleDBInstance.execute(
+    `INSERT INTO profesional (profesional_id, nombre, apellido, dni, matricula, especialidad) 
+     VALUES (:id, 'Marcos', 'López', '21122123', 'MP12343', 'Oncología')`,
+    { id: this.profesionalColaborador.profesional_id },
+    { autoCommit: true }
+  );
 });
 
 When('agrego el segundo profesional como colaborador del paciente', async function () {
@@ -174,21 +169,6 @@ Then('solo queda el nuevo profesional como "Médico Tratante"', async function (
 });
 
 Given('existe un profesional con pacientes asignados', async function () {
-  // Crear profesional principal
-  const profesionalResponse = await request(app)
-    .post('/profesional')
-    .send({
-      nombre: 'Dr. Principal',
-      apellido: 'Medico',
-      dni: '12345678',
-      especialidad: 'Oncología',
-      matricula: '12345'
-    })
-    .set('Accept', 'application/json')
-    .set('Cookie', this.sessionCookie);
-
-  this.profesionalPrincipal = profesionalResponse.body;
-
   // Crear paciente
   const pacienteResponse = await request(app)
     .post('/paciente')
@@ -201,7 +181,7 @@ Given('existe un profesional con pacientes asignados', async function () {
       peso: 25,
       sexo: 'M',
       obra_social: 'OSDE',
-      profesional_id: this.profesionalPrincipal.profesional_id
+      profesional_id: this.profesionalLogueadoId
     })
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
@@ -211,7 +191,7 @@ Given('existe un profesional con pacientes asignados', async function () {
 
 When('consulto los pacientes del profesional', async function () {
   this.response = await request(app)
-    .get(`/paciente-profesional/profesional/${this.profesionalPrincipal.profesional_id}/pacientes`)
+    .get(`/paciente-profesional/profesional/${this.profesionalLogueadoId}/pacientes`)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
 });
@@ -364,22 +344,6 @@ Then('obtengo un error indicando que ya está asignado', function () {
 });
 
 Given('que existe un paciente con nombre {string} y apellido {string}', async function (nombre, apellido) {
-  // Crear profesional primero
-  const profesionalResponse = await request(app)
-    .post('/profesional')
-    .send({
-      nombre: 'Dr. Principal',
-      apellido: 'Medico',
-      dni: '12345678',
-      especialidad: 'Oncología',
-      matricula: '12345'
-    })
-    .set('Accept', 'application/json')
-    .set('Cookie', this.sessionCookie);
-
-
-  this.profesionalPrincipal = profesionalResponse.body;
-
   // Crear paciente
   const pacientePayload = {
     nombre,
@@ -389,7 +353,7 @@ Given('que existe un paciente con nombre {string} y apellido {string}', async fu
     peso: 25,
     sexo: 'M',
     obra_social: 'OSDE',
-    profesional_id: this.profesionalPrincipal.profesional_id
+    profesional_id: this.profesionalLogueadoId
   };
 
 
@@ -435,27 +399,22 @@ Given('el paciente tiene al profesional con id {int} como médico tratante', asy
   }
 });
 
-Given('el paciente tiene al profesional con id {int} como consultor', async function (_profesionalId) {
+Given('el paciente tiene al profesional con id {int} como consultor', async function (profesionalId) {
   // Crear otro profesional para ser consultor
-  const profesionalResponse = await request(app)
-    .post('/profesional')
-    .send({
-      nombre: 'Dr. Consultor',
-      apellido: 'Especialista',
-      dni: '12345678',
-      especialidad: 'Cardiología',
-      matricula: '67890'
-    })
-    .set('Accept', 'application/json')
-    .set('Cookie', this.sessionCookie);
+  this.profesionalConsultorId = Number(profesionalId);
+  await oracleDBInstance.execute(
+    `INSERT INTO profesional (profesional_id, nombre, apellido, dni, matricula, especialidad) 
+     VALUES (:id, 'Walter', 'Martinez', '19122123', 'MP12125', 'Oncología')`,
+    { id: this.profesionalConsultorId },
+    { autoCommit: true }
+  );
 
-  this.profesionalConsultor = profesionalResponse.body;
 
   // Agregarlo como consultor
   await request(app)
     .post('/paciente-profesional/agregar-colaborador')
     .send({
-      profesional_id: this.profesionalConsultor.profesional_id,
+      profesional_id: this.profesionalConsultorId,
       paciente_id: this.paciente.paciente_id,
       rol: 'Consultor'
     })
@@ -463,27 +422,21 @@ Given('el paciente tiene al profesional con id {int} como consultor', async func
     .set('Cookie', this.sessionCookie);
 });
 
-When('cambio el profesional principal del paciente al profesional con id {int}', async function (_profesionalId) {
+When('cambio el profesional principal del paciente al profesional con id {int}', async function (profesionalId) {
   // Crear nuevo profesional principal
-  const nuevoProfesionalResponse = await request(app)
-    .post('/profesional')
-    .send({
-      nombre: 'Dr. Nuevo',
-      apellido: 'Principal',
-      dni: '12345678',
-      especialidad: 'Neurología',
-      matricula: '11111'
-    })
-    .set('Accept', 'application/json')
-    .set('Cookie', this.sessionCookie);
-
-  this.nuevoProfesional = nuevoProfesionalResponse.body;
+  this.nuevoProfesionalId = Number(profesionalId);
+  await oracleDBInstance.execute(
+    `INSERT INTO profesional (profesional_id, nombre, apellido, dni, matricula, especialidad) 
+     VALUES (:id, 'Jorge', 'Martinez', '17122123', 'MP121', 'Oncología')`,
+    { id: this.nuevoProfesionalId },
+    { autoCommit: true }
+  );
 
   // Cambiar profesional principal
   this.response = await request(app)
     .put(`/paciente-profesional/paciente/${this.paciente.paciente_id}/profesional-principal`)
     .send({
-      nuevo_profesional_id: this.nuevoProfesional.profesional_id
+      nuevo_profesional_id: this.nuevoProfesionalId
     })
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
@@ -498,7 +451,7 @@ Then('el paciente debe tener al profesional con id {int} como médico tratante',
   const equipo = equipoResponse.body;
   const medicoTratante = equipo.find(p => p.rol === 'Médico Tratante');
 
-  if (!medicoTratante || medicoTratante.profesional_id !== this.nuevoProfesional.profesional_id) {
+  if (!medicoTratante || medicoTratante.profesional_id !== this.nuevoProfesionalId) {
     throw new Error('El nuevo profesional no es el médico tratante actual');
   }
 });
@@ -510,7 +463,7 @@ Then('el paciente debe mantener al profesional con id {int} como consultor', asy
     .set('Cookie', this.sessionCookie);
 
   const equipo = equipoResponse.body;
-  const consultor = equipo.find(p => p.rol === 'Consultor' && p.profesional_id === this.profesionalConsultor.profesional_id);
+  const consultor = equipo.find(p => p.rol === 'Consultor' && p.profesional_id === this.profesionalConsultorId);
 
   if (!consultor) {
     throw new Error('El consultor no se mantuvo asignado');

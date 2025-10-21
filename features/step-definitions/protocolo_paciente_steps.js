@@ -6,7 +6,6 @@ import oracleDBInstance from '../../src/db/connection_pool.js';
 
 let datosProtocoloPaciente;
 let response;
-let profesional_id;
 let paciente_id;
 
 Given(/^existe en la base de datos un paciente con id "(.*)" llamado "(.*)"$/, async function (idPaciente, nombreCompleto) {
@@ -23,7 +22,6 @@ Given(/^existe en la base de datos un paciente con id "(.*)" llamado "(.*)"$/, a
       peso: 30,
       sexo: 'M',
       obra_social: 'OSDE',
-      profesional_id,
     })
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
@@ -51,17 +49,6 @@ Given(/^existe en la base de datos un ciclo con protocolo_id "(.*)", ciclo_id "(
     },
     { autoCommit: true }
   );
-});
-
-Given(/^existe en la base de datos un profesional con id "(.*)" llamado "(.*)"$/, async function (idProfesional, nombreCompleto) {
-  const [nombre, apellido] = nombreCompleto.split(' ');
-  const profesional_res = await request(app)
-    .post('/profesional')
-    .send({ nombre, apellido, dni: 20912121 })
-    .set('Accept', 'application/json')
-    .set('Cookie', this.sessionCookie);
-
-  profesional_id = profesional_res.body.profesional_id;
 });
 
 Given(/^quiero asignar a un paciente un protocolo con los siguientes datos$/, function (dataTable) {

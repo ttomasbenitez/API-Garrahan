@@ -3,6 +3,9 @@ Feature: Gestión de equipo tratante paciente-profesional
   Quiero gestionar la relación entre pacientes y profesionales
   Para permitir equipos tratantes, cambios de profesional y colaboradores
 
+  Background:
+    Given estoy logueado como médico con id "2"
+
   Scenario: US-05.1 Al crear un paciente se asigna automáticamente al profesional tratante
      Given quiero crear un paciente con los siguientes datos:
             | nombre            | Juan        |
@@ -12,26 +15,25 @@ Feature: Gestión de equipo tratante paciente-profesional
             | peso              | 30          |
             | sexo              | M           |
             | obra_social       | OSDE        |
-    And profesional_id
     When publico en el endpoint "/paciente" con los datos del paciente
     Then el paciente se crea correctamente
     And el profesional queda asignado automáticamente como "Médico Tratante"
 
   Scenario: US-05.2 Puedo agregar un profesional colaborador a un paciente
     Given existe un paciente creado por un profesional
-    And existe otro profesional disponible
+    And existe otro profesional con id "3" disponible
     When agrego el segundo profesional como colaborador del paciente
     Then el profesional se agrega correctamente al equipo tratante
     And el paciente tiene 2 profesionales asignados
 
   Scenario: US-05.3 Cambiar profesional principal sin afectar consultores
     Given que existe un paciente con nombre "Carlos" y apellido "Mendez"
-    And el paciente tiene al profesional con id 1 como médico tratante
-    And el paciente tiene al profesional con id 2 como consultor
-    When cambio el profesional principal del paciente al profesional con id 3
-    Then el paciente debe tener al profesional con id 3 como médico tratante
-    And el paciente debe mantener al profesional con id 2 como consultor
-    And el profesional con id 1 no debe estar asignado al paciente
+    And el paciente tiene al profesional con id 2 como médico tratante
+    And el paciente tiene al profesional con id 3 como consultor
+    When cambio el profesional principal del paciente al profesional con id 4
+    Then el paciente debe tener al profesional con id 4 como médico tratante
+    And el paciente debe mantener al profesional con id 3 como consultor
+    And el profesional con id 2 no debe estar asignado al paciente
 
   Scenario: US-05.4 Puedo obtener el equipo tratante de un paciente
     Given existe un paciente con profesional principal
