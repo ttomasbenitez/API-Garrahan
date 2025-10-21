@@ -36,9 +36,9 @@ Then('el profesional queda asignado automáticamente como "Médico Tratante"', a
   }
 
   // Verificar que el profesional asignado es el que creó el paciente
-  const profesionalAsignado = equipo.find(p => p.profesional_id === Number(this.paciente.profesional_id));
+  const profesionalAsignado = equipo.find(p => p.profesional_id === this.profesionalLogueadoId);
   if (!profesionalAsignado) {
-    throw new Error(`El profesional ${this.paciente.profesional_id} no está asignado al paciente`);
+    throw new Error(`El profesional ${this.profesionalLogueadoId} no está asignado al paciente`);
   }
 
   // Verificar el rol por defecto

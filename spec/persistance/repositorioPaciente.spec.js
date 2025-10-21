@@ -23,7 +23,7 @@ describe(RepositorioPaciente, () => {
 
   test('guardar paciente funciona correctamente devolviendo el id de la creación', async () => {
     const paciente = new Paciente(
-      'Juan', 'Pérez', 'P12345', '2020-05-21', 30, 'M', 101, 'OSDE'
+      'Juan', 'Pérez', 'P12345', '2020-05-21', 30, 'M', 'OSDE'
     );
 
     connection.execute.mockResolvedValue({
@@ -34,7 +34,7 @@ describe(RepositorioPaciente, () => {
     const id = await repo.guardar(paciente);
 
     expect(id).toBe(123);
-    expect(connection.execute).toHaveBeenCalledTimes(2); // Paciente + asignación profesional
+    expect(connection.execute).toHaveBeenCalledTimes(1); // Crear paciente
 
 
     const [sql1, binds1, opts1] = connection.execute.mock.calls[0];
@@ -46,25 +46,15 @@ describe(RepositorioPaciente, () => {
       fecha_nacimiento: paciente.fecha_nacimiento,
       peso: paciente.peso,
       sexo: paciente.sexo,
-      profesional_id: paciente.profesional_id,
       obra_social: paciente.obra_social,
       id : { dir: expect.any(Number), type: expect.any(Number) }
     });
     expect(opts1).toMatchObject({ autoCommit: true });
-
-    const [sql2, binds2, opts2] = connection.execute.mock.calls[1];
-    expect(sql2).toMatch(/INSERT\s+INTO\s+paciente_profesional/i);
-    expect(binds2).toMatchObject({
-      profesional_id: paciente.profesional_id,
-      paciente_id: 123,
-      rol: 'Médico Tratante'
-    });
-    expect(opts2).toMatchObject({ autoCommit: true });
   });
 
   test('guardar paciente lanza error si no se crea', async () => {
     const paciente = new Paciente(
-      'Lucía', 'Gómez', 'P67890', '2011-11-10', 55, 'F', 102, null
+      'Lucía', 'Gómez', 'P67890', '2011-11-10', 55, 'F', null
     );
 
     connection.execute.mockResolvedValue({
@@ -83,7 +73,6 @@ describe(RepositorioPaciente, () => {
       FECHA_NACIMIENTO: '2020-05-21',
       PESO: 30,
       SEXO: 'M',
-      PROFESIONAL_ID: 101,
       PACIENTE_ID: 123,
       ULTIMA_MODIFICACION: null,
       OBRA_SOCIAL: 'OSDE'
@@ -103,7 +92,6 @@ describe(RepositorioPaciente, () => {
       fecha_nacimiento: row.FECHA_NACIMIENTO,
       peso: row.PESO,
       sexo: row.SEXO,
-      profesional_id: row.PROFESIONAL_ID,
       paciente_id: row.PACIENTE_ID,
       ultima_modificacion: row.ULTIMA_MODIFICACION,
       obra_social: row.OBRA_SOCIAL

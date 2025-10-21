@@ -19,8 +19,8 @@ async function crearPaciente(req, res, service) {
 
     const fecha_nacimiento_date = fecha_nacimiento ? new Date(fecha_nacimiento) : null;
 
-    const paciente = new Paciente(nombre, apellido, id_hospitalario, fecha_nacimiento_date, peso, sexo, profesional_id, obra_social);
-    await service.crear(paciente);
+    const paciente = new Paciente(nombre, apellido, id_hospitalario, fecha_nacimiento_date, peso, sexo, obra_social);
+    await service.crear(paciente, profesional_id);
     logger.info('Paciente creado con ID: %d', paciente.paciente_id);
     res.status(201).json(paciente);
   } catch (error) {

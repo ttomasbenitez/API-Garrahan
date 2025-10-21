@@ -4,10 +4,10 @@ export class PacienteService {
     this.pacienteProfesionalRepo = pacienteProfesionalRepo;
   }
 
-  async crear(paciente) {
+  async crear(paciente, profesional_id) {
     const id = await this.pacienteRepo.guardar(paciente);
     paciente.paciente_id = id;
-    await this.pacienteProfesionalRepo.asignar(paciente.profesional_id, paciente.paciente_id);
+    await this.pacienteProfesionalRepo.asignar(profesional_id, paciente.paciente_id);
     return id;
   }
 

@@ -120,7 +120,6 @@ export class RepositorioPacienteProfesional {
       row.FECHA_NACIMIENTO ? new Date(row.FECHA_NACIMIENTO).toISOString().split('T')[0] : null,
       row.PESO,
       row.SEXO,
-      row.PROFESIONAL_ID,
       row.OBRA_SOCIAL,
       row.ULTIMA_MODIFICACION,
       row.PACIENTE_ID
