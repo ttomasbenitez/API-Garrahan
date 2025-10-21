@@ -14,4 +14,10 @@ services:
       - DOCKER_HOST=unix:///var/run/docker.sock
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    networks:
+      - dev_container
 
+networks:
+  dev_container:
+    external: true
+    name: api-garrahan_testing_net
