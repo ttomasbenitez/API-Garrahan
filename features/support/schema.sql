@@ -16,9 +16,7 @@ CREATE TABLE paciente (
   peso               FLOAT,
   ultima_modificacion TIMESTAMP,
   sexo               CHAR(1) CHECK (sexo IN ('M','F')),
-  obra_social        VARCHAR2(100),
-  profesional_id       NUMBER, -- TODO: eliminar este campo si no es necesario
-  FOREIGN KEY (profesional_id) REFERENCES profesional(profesional_id)
+  obra_social        VARCHAR2(100)
 );
 
 CREATE INDEX idx_paciente_nombre ON paciente(nombre, apellido);
