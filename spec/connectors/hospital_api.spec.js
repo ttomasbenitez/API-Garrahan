@@ -44,4 +44,16 @@ describe('ApiHospitalConector', () => {
     await expect(conector.obtenerPaciente('999'))
       .rejects.toThrow('Error al consultar la API del hospital');
   });
+
+  test('_normalizarFhir maneja valores faltantes devolviendo nulls', () => {
+    const fhirDataIncompleto = { id: '1' };
+    const resultado = conector._normalizarFhir(fhirDataIncompleto);
+    expect(resultado).toEqual({
+      nombre: null,
+      apellido: null,
+      id_hospitalario: null,
+      fecha_nacimiento: null,
+      sexo: null
+    });
+  });
 });
