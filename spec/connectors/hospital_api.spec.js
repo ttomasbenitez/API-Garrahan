@@ -56,4 +56,11 @@ describe('ApiHospitalConector', () => {
       sexo: null
     });
   });
+
+  test('lanza error si fetch falla por error de red', async () => {
+    global.fetch.mockRejectedValue(new Error('Network error'));
+
+    await expect(conector.obtenerPaciente('500'))
+      .rejects.toThrow('Network error');
+  });
 });
