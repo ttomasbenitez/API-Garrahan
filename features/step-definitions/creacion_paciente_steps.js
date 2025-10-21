@@ -1,63 +1,66 @@
 import { Given, When, Then, Before } from '@cucumber/cucumber';
 import request from 'supertest';
+import oracleDBInstance from '../../src/db/connection_pool.js';
 import app from '../../src/app.js';
 import assert from 'node:assert/strict';
 
 Before(function () {
   this.paciente = {};
   this.response = null;
+  this.profesionalLogueadoId = null;
+});
+
+Given(/^estoy logueado como médico con id "(.*)"$/, async function (idProfesional) {
+  this.profesionalLogueadoId = Number(idProfesional);
+  await oracleDBInstance.execute(
+    `INSERT INTO profesional (profesional_id, nombre, apellido, dni, matricula, especialidad) 
+     VALUES (:id, 'Walter', 'Pérez', '20122123', 'MP12345', 'Oncología')`,
+    { id: Number(idProfesional) },
+    { autoCommit: true }
+  );
+
+  const res = await request(app)
+    .post('/auth/login-test')
+    .send({ id: idProfesional, name: 'Dr. Juan', role: 'medico' })
+    .set('Accept', 'application/json');
+
+  this.sessionCookie = res.headers['set-cookie'];
 });
 
 Given(/^quiero crear un paciente con los siguientes datos:$/, function (dataTable) {
   this.paciente = dataTable.rowsHash();
 });
 
-Given(/^existe un paciente con los siguientes datos:$/, function (dataTable) {
+Given(/^existe un paciente con los siguientes datos asociado al médico con id "(.*)":$/, async function (_idProfesional, dataTable) {
   this.paciente = dataTable.rowsHash();
-});
-
-Given(/^profesional_id$/, async function () {
-  const response = await request(app)
-    .post('/profesional')
-    .send({nombre: 'Walter', apellido: 'Perez', dni: '12345678', matricula: 'MAT12345', especialidad: 'Pediatria'})
-    .set('Accept', 'application/json')
-    .set('Cookie', this.sessionCookie);
-  if (response.status !== 201) {
-    throw new Error(`No se pudo crear el profesional necesario para el paciente. Status recibido: ${response.status}`);
-  }
-  this.paciente.profesional_id = response.body.profesional_id;
-});
-
-Given(
-  /^existe un paciente con nombre "(.*)", apellido "(.*)", id_hospitalario "(.*)", fecha_nacimiento "(.*)", peso "(.*)", sexo "(.*)", profesional_id "(.*)"$/,
-  async function (nombre, apellido, id_hospitalario, fecha_nacimiento, peso, sexo, profesional_id) {
-    const profesional_res = await request(app)
-      .post('/profesional')
-      .send({ nombre: 'Walter', apellido: 'García', dni: 20912121, id: profesional_id })
-      .set('Accept', 'application/json')
-      .set('Cookie', this.sessionCookie);
-    if (profesional_res.status !== 201) throw new Error(`No se pudo crear el profesional: ${profesional_res.status}`);
-
-    const res = await request(app)
-      .post('/paciente')
-      .send({ nombre: nombre, apellido: apellido, id_hospitalario: id_hospitalario, fecha_nacimiento: fecha_nacimiento
-        , peso: peso, sexo: sexo, profesional_id: profesional_id
-      })
-      .set('Accept', 'application/json')
-      .set('Cookie', this.sessionCookie);
-    if (res.status !== 201) throw new Error(`No se pudo crear el paciente: ${res.status}`);
-
-    this.paciente.paciente_id = res.body.paciente_id;
-  }
-);
-
-When(/^consulto en la API "(.*)" por su id de paciente$/, async function (endpoint) {
   await request(app)
     .post('/paciente')
     .send(this.paciente)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
 
+});
+
+Given(/^existe un paciente con los siguientes datos no asociado al médico con id "(.*)":$/, async function (_idProfesional, dataTable) {
+  this.paciente = dataTable.rowsHash();
+
+  await oracleDBInstance.execute(
+    `INSERT INTO paciente (nombre, apellido, id_hospitalario, fecha_nacimiento, peso, sexo, obra_social)
+    VALUES (:nombre, :apellido, :id_hospitalario, TO_DATE(:fecha_nacimiento, 'YYYY-MM-DD'), :peso, :sexo, :obra_social)`,
+    {
+      nombre: this.paciente.nombre,
+      apellido: this.paciente.apellido,
+      id_hospitalario: this.paciente.id_hospitalario,
+      fecha_nacimiento: this.paciente.fecha_nacimiento,
+      peso: this.paciente.peso,
+      sexo: this.paciente.sexo,
+      obra_social: this.paciente.obra_social
+    },
+    { autoCommit: true }
+  );
+});
+
+When(/^consulto en la API "(.*)" por su id de paciente$/, async function (endpoint) {
   const response = await request(app)
     .get(endpoint)
     .set('Accept', 'application/json')
@@ -80,6 +83,7 @@ Then('el paciente se crea correctamente', function () {
   assert.ok(this.response);
   assert.strictEqual(this.response.status, 201);
   if (!this.response.body) throw new Error('No se recibió id del paciente');
+  this.paciente = this.response.body;
 });
 
 Then(/^el sistema me devuelve el paciente correspondiente$/, function () {
@@ -97,3 +101,10 @@ Then(/^"(.*)" del paciente esperada es "(.*)"$/, function (key, value) {
   assert(this.body[key].toString() === value, `Se esperaba ${value} pero se obtuvo ${this.body[key]}`);
 });
 
+Then(/^el sistema devuelve el estado "(.*)"$/, function (responseStatus) {
+  assert.strictEqual(this.response.status, Number(responseStatus));
+});
+
+Then(/^el mensaje de error "(.*)"$/, function (mensajeError) {
+  assert.ok(this.response.body.error === mensajeError);
+});
