@@ -22,6 +22,7 @@ export const ERROR_RELACION_NO_ENCONTRADA = 'Relación paciente-profesional no e
 export const ERROR_CAMBIO_PROFESIONAL_PRINCIPAL = 'Error al cambiar el profesional principal';
 export const ERROR_AGREGAR_COLABORADOR = 'Error al agregar profesional colaborador';
 export const ERROR_REMOVER_COLABORADOR = 'Error al remover profesional colaborador';
+export const ERROR_PACIENTE_NO_ASOCIADO = 'Paciente no asociado a profesional';
 
 // Mensajes de error - Validaciones
 export const ERROR_ID_PACIENTE_REQUERIDO = 'El ID del paciente es requerido';

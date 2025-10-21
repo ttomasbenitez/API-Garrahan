@@ -1,5 +1,6 @@
 import Paciente from '../domain/paciente.js';
 import logger from '../utils/logger.js';
+import { ERROR_PACIENTE_NO_ASOCIADO } from '../errors/pacienteProfesional.js';
 
 export const makePacienteController = (pacienteService) => ({
   crear: (req, res) => crearPaciente(req, res, pacienteService),
@@ -9,7 +10,8 @@ export const makePacienteController = (pacienteService) => ({
 
 async function crearPaciente(req, res, service) {
   try {
-    const { nombre, apellido, id_hospitalario, fecha_nacimiento, peso, sexo, profesional_id, obra_social} = req.body;
+    const profesional_id = req.user.id;
+    const { nombre, apellido, id_hospitalario, fecha_nacimiento, peso, sexo, obra_social} = req.body;
     if (!id_hospitalario || !profesional_id) {
       logger.error('Error al crear paciente: Faltan campos requeridos' );
       return res.status(400).json({ error: 'Faltan campos requeridos' });
@@ -29,13 +31,19 @@ async function crearPaciente(req, res, service) {
 
 async function obtenerPaciente(req, res, service) {
   try {
+    const profesional_id = req.user.id;
     const { id } = req.params;
-    const paciente = await service.obtener(id);
+    const paciente = await service.obtenerPorProfesional(id, profesional_id);
     logger.info('Paciente obtenido con ID: %d', paciente.paciente_id);
     res.status(200).json(paciente);
   } catch (error) {
     logger.error('Error al obtener paciente: %o', error);
-    res.status(500).json({ error: error.message });
+    if (error.message === ERROR_PACIENTE_NO_ASOCIADO ) {
+      res.status(404).json({ error: error.message });
+    }
+    else {
+      res.status(500).json({ error: error.message });
+    }
   }
 }
 
