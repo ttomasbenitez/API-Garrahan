@@ -2,7 +2,7 @@
 import oracleDB from '../../src/db/connection_pool.js';
 import Ciclo from '../../src/domain/protocolo/ciclo.js';
 import Protocolo from '../../src/domain/protocolo';
-import AdministracionMedicacion from '../../src/domain/protocolo/administracionMedicacion.js';
+//import AdministracionMedicacion from '../../src/domain/protocolo/administracionMedicacion.js';
 import { RepositorioProtocolo } from '../../src/persistance/repositorioProtocolo';
 
 jest.mock('../../src/db/connection_pool.js', () => ({
@@ -61,32 +61,32 @@ describe(RepositorioProtocolo, () => {
     return connExecuteMock;
   };
 
-  const agregarAdministraciones = async (cantidad = 1) => {
-    for(let i = 0; i < cantidad; i++) {
-      const adminDiaria = new AdministracionMedicacion(1 + i, 50 * (i + 1), 'mg', '1,2,5', 0 + i, 1 + i, 1 + i);
-      admins.push(adminDiaria);
-    }
-
-    const ids = Array.from({ length: cantidad }, (v, i) => ({ id: [i] }));
-
-    const connExecuteMock = jest.fn().mockResolvedValueOnce({
-      rowsAffected: cantidad,
-      outBinds: ids,
-      rows: [admins],
-    });
-
-    db.withConnection.mockImplementation(async (fn) => {
-      return await fn({
-        execute: jest.fn().mockResolvedValue({
-          rowsAffected: 1,
-          outBinds: { id: [123] },
-        }),
-        executeMany: connExecuteMock,
-      });
-    });
-
-    return {id: await repo.guardar(admins), connExecuteMock};
-  };
+  //const agregarAdministraciones = async (cantidad = 1) => {
+  //  for(let i = 0; i < cantidad; i++) {
+  //    const adminDiaria = new AdministracionMedicacion(1 + i, 50 * (i + 1), 'mg', '1,2,5', 0 + i, 1 + i, 1 + i);
+  //    admins.push(adminDiaria);
+  //  }
+  //
+  //  const ids = Array.from({ length: cantidad }, (v, i) => ({ id: [i] }));
+  //
+  //  const connExecuteMock = jest.fn().mockResolvedValueOnce({
+  //    rowsAffected: cantidad,
+  //    outBinds: ids,
+  //    rows: [admins],
+  //  });
+  //
+  //  db.withConnection.mockImplementation(async (fn) => {
+  //    return await fn({
+  //      execute: jest.fn().mockResolvedValue({
+  //        rowsAffected: 1,
+  //        outBinds: { id: [123] },
+  //      }),
+  //      executeMany: connExecuteMock,
+  //    });
+  //  });
+  //
+  //  return {id: await repo.guardar(admins), connExecuteMock};
+  //};
 
   beforeEach(() => {
     db = oracleDB;

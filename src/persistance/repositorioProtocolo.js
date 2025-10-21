@@ -2,7 +2,7 @@ import oracledb from 'oracledb';
 import Protocolo from '../domain/protocolo/index.js';
 import { ERROR_PROTOCOLO_CREACION, ERROR_PROTOCOLO_NO_ENCONTRADO } from '../errors/protocolo.js';
 import Ciclo from '../domain/protocolo/ciclo.js';
-import AdministracionMedicacion from '../domain/protocolo/administracionMedicacion.js';
+//import AdministracionMedicacion from '../domain/protocolo/administracionMedicacion.js';
 
 export class RepositorioProtocolo {
   constructor(db) {
