@@ -38,4 +38,10 @@ describe('ApiHospitalConector', () => {
       sexo: 'M',
     });
   });
+
+  test('lanza error si la respuesta no es ok', async () => {
+    global.fetch.mockResolvedValue({ ok: false });
+    await expect(conector.obtenerPaciente('999'))
+      .rejects.toThrow('Error al consultar la API del hospital');
+  });
 });
