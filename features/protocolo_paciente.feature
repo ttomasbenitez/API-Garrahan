@@ -5,7 +5,7 @@ Feature: Asignar y consultar protocolos de un paciente
   Para poder registrar y consultar su tratamiento actual
 
   Background:
-    Given existe en la base de datos un profesional con id "1" llamado "Dr. García"
+    Given estoy logueado como médico con id "1"
     And existe en la base de datos un protocolo con id "1" llamado "Osteosarcoma GBTO 2006"
     And existe en la base de datos un ciclo con protocolo_id "1", ciclo_id "1" y regimen "0"
     And existe en la base de datos un paciente con id "1" llamado "Marcos Pérez"
