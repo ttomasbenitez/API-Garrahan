@@ -1,7 +1,8 @@
 export class PacienteService {
-  constructor(pacienteRepo, pacienteProfesionalRepo) {
+  constructor(pacienteRepo, pacienteProfesionalRepo, apiHospitalConector) {
     this.pacienteRepo = pacienteRepo;
     this.pacienteProfesionalRepo = pacienteProfesionalRepo;
+    this.apiHospitalConector = apiHospitalConector;
   }
 
   async crear(paciente, profesional_id) {
@@ -13,6 +14,10 @@ export class PacienteService {
 
   async obtener(id) {
     return this.pacienteRepo.obtener(id);
+  }
+
+  async obtenerExterno(id) {
+    return this.apiHospitalConector.obtenerPaciente(id);
   }
 
   async obtenerPorProfesional(paciente_id, profesional_id) {

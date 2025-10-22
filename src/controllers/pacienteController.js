@@ -6,6 +6,7 @@ export const makePacienteController = (pacienteService) => ({
   crear: (req, res) => crearPaciente(req, res, pacienteService),
   obtener: (req, res) => obtenerPaciente(req, res, pacienteService),
   obtenerEquipoTratante: (req, res) => obtenerEquipoTratante(req, res, pacienteService),
+  obtenerExterno: (req, res) => obtenerPacienteExterno(req, res, pacienteService),
 });
 
 async function crearPaciente(req, res, service) {
@@ -34,6 +35,23 @@ async function obtenerPaciente(req, res, service) {
     const profesional_id = req.user.id;
     const { id } = req.params;
     const paciente = await service.obtenerPorProfesional(id, profesional_id);
+    logger.info('Paciente obtenido con ID: %d', paciente.paciente_id);
+    res.status(200).json(paciente);
+  } catch (error) {
+    logger.error('Error al obtener paciente: %o', error);
+    if (error.message === ERROR_PACIENTE_NO_ASOCIADO ) {
+      res.status(404).json({ error: error.message });
+    }
+    else {
+      res.status(500).json({ error: error.message });
+    }
+  }
+}
+
+async function obtenerPacienteExterno(req, res, service) {
+  try {
+    const { id } = req.params;
+    const paciente = await service.obtenerExterno(id);
     logger.info('Paciente obtenido con ID: %d', paciente.paciente_id);
     res.status(200).json(paciente);
   } catch (error) {

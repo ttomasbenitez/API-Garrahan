@@ -44,6 +44,7 @@ import { PresentacionDrogaViaService } from './services/PresentacionDrogaViaServ
 import { makePresentacionDrogaViaController } from './controllers/presentacionDrogaViaController.js';
 import presentacionDrogaViaRoutes from './routes/presentacionDrogaVia.js';
 import { RepositorioPacienteProfesional } from './persistance/repositorioPacienteProfesional.js';
+import apiHospitalConector from './connectors/hospital_api.js';
 
 const app = express();
 
@@ -55,7 +56,7 @@ const profesionalController = makeProfesionalController(profesionalService);
 const repositorioPacienteProfesional = new RepositorioPacienteProfesional(oracleDBInstance);
 const repositorioPaciente = new RepositorioPaciente(oracleDBInstance);
 
-const pacienteService = new PacienteService(repositorioPaciente, repositorioPacienteProfesional);
+const pacienteService = new PacienteService(repositorioPaciente, repositorioPacienteProfesional, apiHospitalConector);
 const pacienteProfesionalService = new PacienteProfesionalService(
   repositorioPacienteProfesional,
   pacienteService,
