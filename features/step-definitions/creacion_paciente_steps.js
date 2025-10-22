@@ -60,6 +60,23 @@ Given(/^existe un paciente con los siguientes datos no asociado al médico con i
   );
 });
 
+Given('quiero obtener el paciente con id_hospitalario {string} del sistema del hospital', function (idHospitalario) {
+  this.paciente.id_hospitalario = idHospitalario;
+});
+
+Given('con nombre {string} y apellido {string}', function (nombre, apellido) {
+  this.paciente.nombre = nombre;
+  this.paciente.apellido = apellido;
+});
+
+When(/^consulto en la API externa "(.*)" por su id_hospitalario$/, async function (endpoint) {
+  const response = await request(app)
+    .get(endpoint)
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
+  this.response = response;
+});
+
 When(/^consulto en la API "(.*)" por su id de paciente$/, async function (endpoint) {
   const response = await request(app)
     .get(endpoint)
@@ -103,6 +120,13 @@ Then(/^"(.*)" del paciente esperada es "(.*)"$/, function (key, value) {
 
 Then(/^el sistema devuelve el estado "(.*)"$/, function (responseStatus) {
   assert.strictEqual(this.response.status, Number(responseStatus));
+});
+
+Then('el sistema devuelve el paciente esperado', function () {
+  assert.strictEqual(this.response.status, 200);
+  assert.strictEqual(this.response.body.id_hospitalario, this.paciente.id_hospitalario);
+  assert.strictEqual(this.response.body.nombre, this.paciente.nombre);
+  assert.strictEqual(this.response.body.apellido, this.paciente.apellido);
 });
 
 Then(/^el mensaje de error "(.*)"$/, function (mensajeError) {
