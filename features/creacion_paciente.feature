@@ -51,6 +51,12 @@ Feature: Creación paciente
         Then el sistema devuelve el estado "404"
         And el mensaje de error "Paciente no asociado a profesional"
 
+    Scenario: US-03.4 Obtener paciente de la api del hospital por su id_hospitalario
+        Given quiero obtener el paciente con id_hospitalario "2" del sistema del hospital
+        And con nombre "Juan" y apellido "Pérez"
+        When consulto en la API externa "/paciente/2/externo" por su id_hospitalario
+        Then el sistema devuelve el paciente esperado
+
     @wip
     Scenario: US-03.4 Crear paciente sin id_hospitalario
         Given existe un paciente con los siguientes datos:
