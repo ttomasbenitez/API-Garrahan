@@ -84,3 +84,15 @@ services:
     networks:
       - testing_net
 
+  mock-hospital-server:
+    build: .
+    ports:
+      - "${API_HOSPITAL_PORT}:${API_HOSPITAL_PORT}"
+    command: node mocks/hospital_server.js    
+    volumes:
+      - .:/app                 
+      - /app/node_modules
+    environment:
+      NODE_ENV: ${NODE_ENV}
+    networks:
+      - testing_net
