@@ -24,7 +24,7 @@ Feature: Creación de Drogas
     And se crea correctamente
 
   Scenario: US-04.3 Obtener una droga creada por su id
-    Given existe en la base de datos una droga con id "1" y con los datos:
+    Given que tengo los siguientes datos de la droga con id "1":
       | nombre_generico     | CISPLATINO      |
       | codigo_farmacia     | AAA1            |
     When consulto en la API "/droga/1" por su id

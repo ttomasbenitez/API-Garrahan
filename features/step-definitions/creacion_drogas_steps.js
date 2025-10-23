@@ -11,6 +11,15 @@ Given(/^que tengo los siguientes datos de la droga:$/, function (dataTable) {
   droga.push(data);
 });
 
+Given(/^que tengo los siguientes datos de la droga con id "(.*)":$/, async function (_id, dataTable) {
+  const data = dataTable.rowsHash();
+  response = await request(app)
+    .post('/droga')
+    .send(data)
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
+});
+
 When(/^publico en la API "(.*)" con los datos de la droga$/, async function (endpoint) {
   response = await request(app)
     .post(endpoint)
