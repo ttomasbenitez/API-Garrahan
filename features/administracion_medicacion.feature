@@ -10,7 +10,7 @@ Feature: Gestión de Administración de Medicación
       | regimen              | 1   |
       | droga_id             | 1001|
       | via_id               | 7   |
-    When publico la API "/administracion-medicacion" con los datos de la administración
+    When publico la API "/administraciones-medicacion" con los datos de la administración
     Then el "protocolo_id" de la admin es "10"
     And el "ciclo_id" de la admin es "1"
     And el "regimen" de la admin es "1"
@@ -35,7 +35,7 @@ Feature: Gestión de Administración de Medicación
       | via_id              | 5    |
       | administracion_diaria | 1  |
       | frecuencia_diaria   | 2    |
-    When publico la API "/administracion-medicacion" con los datos de la administración
+    When publico la API "/administraciones-medicacion" con los datos de la administración
     Then obtengo los datos de las administraciones con el id "1" y "2"
     And se crea correctamente la administración de medicación
 
@@ -49,7 +49,7 @@ Feature: Gestión de Administración de Medicación
       | via_id       | 7    |
       | fuerza_valor | 50   |
       | fuerza_unidad| mg   |
-    When consulto en la API "/administracion-medicacion/1" por su id de administración
+    When consulto en la API "/administraciones-medicacion/1" por su id de administración
     Then el sistema me devuelve la administración de medicación con id "1"
     And responde correctamente la administración de medicación
 
@@ -59,7 +59,7 @@ Feature: Gestión de Administración de Medicación
       | id | protocolo_id | ciclo_id | regimen | droga_id | via_id |
       | 1  | 10           | 1        | 1       | 1001     | 7      |
       | 2  | 10           | 1        | 2       | 1002     | 7      |
-    When consulto en la API "/administracion-medicacion"
+    When consulto en la API "/administraciones-medicacion"
     Then el sistema me devuelve una lista con 2 administraciones de medicación
     And el primer registro tiene "protocolo_id" = "10" y "regimen" = "1"
     And el segundo registro tiene "protocolo_id" = "10" y "regimen" = "2"
@@ -72,7 +72,7 @@ Feature: Gestión de Administración de Medicación
       | 1  | 10           | 1        | 1       | 1001     | 7      |
       | 2  | 10           | 1        | 2       | 1002     | 7      |
       | 3  | 10           | 2        | 1       | 1001     | 5      |
-    When consulto en la API "/administracion-medicacion?protocolo_id=10&ciclo_id=1&regimen=1"
+    When consulto en la API "/administraciones-medicacion?protocolo_id=10&ciclo_id=1&regimen=1"
     Then el sistema me devuelve una lista con 1 administración de medicación
     And el primer registro tiene "droga_id" = "1001" y "via_id" = "7"
     And responde correctamente la administración de medicación
@@ -85,7 +85,7 @@ Feature: Gestión de Administración de Medicación
       | regimen      | 2    |
       | droga_id     | 1002 |
       | via_id       | 7    |
-    When publico en la API "/administracion-medicacion" con los siguientes datos:
+    When publico en la API "/administraciones-medicacion" con los siguientes datos:
       | protocolo_id | 10   |
       | ciclo_id     | 1    |
       | regimen      | 2    |
@@ -101,7 +101,7 @@ Feature: Gestión de Administración de Medicación
       | regimen      | 1    |
       | droga_id     | 1001 |
       | via_id       | 7    |
-    When publico en la API "/administracion-medicacion" con los siguientes datos:
+    When publico en la API "/administraciones-medicacion" con los siguientes datos:
       | protocolo_id | 10   |
       | ciclo_id     | 1    |
       | regimen      | 1    |
@@ -110,7 +110,7 @@ Feature: Gestión de Administración de Medicación
     Then se crea correctamente la administración de medicación
   @wip
   Scenario: US-10.8 Rechazar foreign key inválida hacia CICLO (compuesta)
-    When publico en la API "/administracion-medicacion" con los siguientes datos:
+    When publico en la API "/administraciones-medicacion" con los siguientes datos:
       | protocolo_id | 99   |
       | ciclo_id     | 1    |
       | regimen      | 1    |
@@ -120,7 +120,7 @@ Feature: Gestión de Administración de Medicación
     And no se crea la administración de medicación
   @wip
   Scenario: US-10.9 Rechazar foreign key inválida a DROGA
-    When publico en la API "/administracion-medicacion" con los siguientes datos:
+    When publico en la API "/administraciones-medicacion" con los siguientes datos:
       | protocolo_id | 10   |
       | ciclo_id     | 1    |
       | regimen      | 1    |
@@ -130,7 +130,7 @@ Feature: Gestión de Administración de Medicación
     And no se crea la administración de medicación
   @wip
   Scenario: US-10.10 Rechazar foreign key inválida a VÍA
-    When publico en la API "/administracion-medicacion" con los siguientes datos:
+    When publico en la API "/administraciones-medicacion" con los siguientes datos:
       | protocolo_id | 10   |
       | ciclo_id     | 1    |
       | regimen      | 1    |
@@ -141,7 +141,7 @@ Feature: Gestión de Administración de Medicación
 
   @wip
   Scenario: US-10.13 Rechazar nulos en campos obligatorios
-    When publico en la API "/administracion-medicacion" con los siguientes datos:
+    When publico en la API "/administraciones-medicacion" con los siguientes datos:
       | protocolo_id |      |
       | ciclo_id     | 1    |
       | regimen      | 1    |
@@ -162,7 +162,7 @@ Feature: Gestión de Administración de Medicación
       | fuerza_unidad        | mg  |
       | administracion_diaria| 1   |
       | frecuencia_diaria    | 2   |
-    When publico en la API "/administracion-medicacion/2" con los siguientes datos:
+    When publico en la API "/administraciones-medicacion/2" con los siguientes datos:
       | fuerza_valor         | 120 |
       | administracion_diaria| 2   |
     Then el "fuerza_valor" es "120"
@@ -183,7 +183,7 @@ Feature: Gestión de Administración de Medicación
       | regimen      | 1    |
       | droga_id     | 1001 |
       | via_id       | 7    |
-    When publico en la API "/administracion-medicacion/3" con los siguientes datos:
+    When publico en la API "/administraciones-medicacion/3" con los siguientes datos:
       | ciclo_id   | 1    |
       | regimen    | 1    |
       | via_id     | 7    |
@@ -199,6 +199,6 @@ Feature: Gestión de Administración de Medicación
       | droga_id     | 1001 |
       | via_id       | 7    |
     And la administración no está referenciada por otras entidades
-    When elimino la administración en la API "/administracion-medicacion/4"
+    When elimino la administración en la API "/administraciones-medicacion/4"
     Then el sistema elimina la administración de medicación con id "4"
     And se elimina correctamente
