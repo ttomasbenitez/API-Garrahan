@@ -1,84 +1,204 @@
-@wip
-Feature: Administrar medicación en un ciclo de tratamiento
+Feature: Gestión de Administración de Medicación
   Como sistema de prescripción
-  Quiero registrar la administración de medicación por ciclo y régimen
-  Para poder prescribir dosis y frecuencias en cada protocolo
-
-  Background:
-    Given existe en la base de datos un protocolo con el nombre de "Osteosarcoma GBTO 2006 - No metastásico" con id "1"
-    And existe en la base de datos un ciclo para el protocolo "1" con ciclo_id "1" y regimen "0"
-    And existe en la base de datos un ciclo para el protocolo "1" con ciclo_id "1" y regimen "1"
-    And existe en la base de datos una droga con id "1" y con los datos:
-      | nombre_generico     | CISPLATINO      |
-      | codigo_farmacia     | AAA1            |
-    And existe en la base de datos una droga con id "2" y con los datos:
-      | nombre_generico     | CISPLATINO      |
-      | codigo_farmacia     | AAA1            |
-
-  Scenario: US-10.1 Agregar una administración (una sola droga) a un ciclo
-    Given quiero agregar administración de medicación con los siguientes datos
-      | droga_id              | 2      |
-      | dosis                 | 50     |
-      | dosis_unidad          | mg     |
-      | frecuencia            | 1,2    |
-      | administracion_diaria | 0      |
-      | frecuencia_diaria     | 2      |
-    When publico en la API "/protocolo/1/ciclo/1/regimen/0/administracion" con los datos de la administración
-    Then la administración se crea correctamente
-
-  Scenario: US-10.2 Agregar varias administraciones en una sola llamada (array)
-    Given quiero agregar múltiples administraciones con los siguientes items
-      | droga_id | dosis | dosis_unidad | frecuencia | administracion_diaria | frecuencia_diaria |
-      | 2        | 50    | mg           | 1,2        | 2                     | 1                 |
-      | 1        | 1.2   | mg/kg        | 1,5        | 1                     | 7                 |
-    When publico en la API "/protocolo/1/ciclo/1/regimen/1/administracion" con los datos de la administración
-    Then se crean "2" administraciones para el protocolo "1" ciclo "1" régimen "1"
-
-  Scenario: US-10.3 Validación: campos requeridos
-    Given quiero agregar administración de medicación con los siguientes datos
-      | dosis        | 50 |
-      | dosis_unidad | mg |
-      | frecuencia   | D1 |
-    When publico en la API "/protocolo/1/ciclo/1/regimen/0/administracion" con los datos de la administración
-    Then el sistema responde "400"
-    And el error contiene "droga_id es requerido"
-
-  Scenario: US-10.4 Validación: dosis debe ser positiva cuando se informa
-    Given quiero agregar administración de medicación con los siguientes datos
-      | droga_id     | 10  |
-      | dosis        | -10 |
-      | dosis_unidad | mg  |
-    When publico en la API "/protocolo/1/ciclo/1/regimen/0/administracion" con los datos de la administración
-    Then el sistema responde "400"
-    And el error contiene "dosis debe ser > 0"
-  
+  Quiero mantener registros de administración de medicación por protocolo/ciclo/régimen
+  Para poder asignar droga y vía con su esquema de dosificación
   @wip
-  Scenario: US-10.5 Conflicto por duplicado (misma droga ya cargada en ese ciclo/régimen)
-    Given quiero agregar administración de medicación con los siguientes datos
-      | droga_id     | 10 |
-      | dosis        | 50 |
-      | dosis_unidad | mg |
-    When publico en la API "/protocolo/1/ciclo/1/regimen/0/administracion" con los datos de la administración
-    Then el sistema responde "409"
-    And el error contiene "administración ya existente"
-
-  Scenario: US-10.6 Error por FK: droga inexistente
-    Given quiero agregar administración de medicación con los siguientes datos
-      | droga_id              | 2232   |
-      | dosis                 | 50     |
-      | dosis_unidad          | mg     |
-      | frecuencia            | 1,2    |
-      | administracion_diaria | 0      |
-      | frecuencia_diaria     | 2      |
-    When publico en la API "/protocolo/1/ciclo/1/regimen/0/administracion" con los datos de la administración
-    Then el sistema responde "404"
-    And el error contiene "droga no encontrada"
+  Scenario: US-10.1 Crear una nueva administración de medicación
+    Given que tengo los siguientes datos de la administración de medicación:
+      | protocolo_id         | 10  |
+      | ciclo_id             | 1   |
+      | regimen              | 1   |
+      | droga_id             | 1001|
+      | via_id               | 7   |
+    When publico la API "/administracion-medicacion" con los datos de la administración
+    Then el "protocolo_id" de la admin es "10"
+    And el "ciclo_id" de la admin es "1"
+    And el "regimen" de la admin es "1"
+    And el "droga_id" de la admin es "1001"
+    And el "via_id" de la admin es "7"
+    And se crea correctamente la administración de medicación
   @wip
-  Scenario: US-10.7 Error por FK: ciclo/régimen inexistente
-    Given quiero agregar administración de medicación con los siguientes datos
-      | droga_id     | 10 |
-      | dosis        | 50 |
-      | dosis_unidad | mg |
-    When publico en la API "/protocolo/1/ciclo/99/regimen/7/administracion" con los datos de la administración
-    Then el sistema responde "404"
-    And el error contiene "ciclo/régimen no encontrado"
+  Scenario: US-10.2 Crear varias administraciones de medicación
+    Given que tengo los siguientes datos de la administración de medicación:
+      | protocolo_id | 10   |
+      | ciclo_id     | 1    |
+      | regimen      | 2    |
+      | droga_id     | 1002 |
+      | via_id       | 7    |
+      | fuerza_valor | 100  |
+      | fuerza_unidad| mg   |
+    And que tengo los siguientes datos de la administración de medicación:
+      | protocolo_id        | 10   |
+      | ciclo_id            | 2    |
+      | regimen             | 1    |
+      | droga_id            | 1001 |
+      | via_id              | 5    |
+      | administracion_diaria | 1  |
+      | frecuencia_diaria   | 2    |
+    When publico la API "/administracion-medicacion" con los datos de la administración
+    Then obtengo los datos de las administraciones con el id "1" y "2"
+    And se crea correctamente la administración de medicación
+
+  @wip
+  Scenario: US-10.3 Obtener una administración de medicación por su id
+    Given existe en la base de datos una administración de medicación con id "1" y con los datos:
+      | protocolo_id | 10   |
+      | ciclo_id     | 1    |
+      | regimen      | 1    |
+      | droga_id     | 1001 |
+      | via_id       | 7    |
+      | fuerza_valor | 50   |
+      | fuerza_unidad| mg   |
+    When consulto en la API "/administracion-medicacion/1" por su id de administración
+    Then el sistema me devuelve la administración de medicación con id "1"
+    And responde correctamente la administración de medicación
+
+  @wip
+  Scenario: US-10.4 Listar todas las administraciones de medicación
+    Given existen en la base de datos las siguientes administraciones de medicación:
+      | id | protocolo_id | ciclo_id | regimen | droga_id | via_id |
+      | 1  | 10           | 1        | 1       | 1001     | 7      |
+      | 2  | 10           | 1        | 2       | 1002     | 7      |
+    When consulto en la API "/administracion-medicacion"
+    Then el sistema me devuelve una lista con 2 administraciones de medicación
+    And el primer registro tiene "protocolo_id" = "10" y "regimen" = "1"
+    And el segundo registro tiene "protocolo_id" = "10" y "regimen" = "2"
+    And responde correctamente la administración de medicación
+
+  @wip
+  Scenario: US-10.5 Listar administraciones por contexto (protocolo/ciclo/régimen)
+    Given existen en la base de datos las siguientes administraciones de medicación:
+      | id | protocolo_id | ciclo_id | regimen | droga_id | via_id |
+      | 1  | 10           | 1        | 1       | 1001     | 7      |
+      | 2  | 10           | 1        | 2       | 1002     | 7      |
+      | 3  | 10           | 2        | 1       | 1001     | 5      |
+    When consulto en la API "/administracion-medicacion?protocolo_id=10&ciclo_id=1&regimen=1"
+    Then el sistema me devuelve una lista con 1 administración de medicación
+    And el primer registro tiene "droga_id" = "1001" y "via_id" = "7"
+    And responde correctamente la administración de medicación
+
+  @wip
+  Scenario: US-10.6 Rechazar duplicado por combinación única (protocolo, ciclo, régimen, droga, vía)
+    Given existe en la base de datos una administración de medicación con los datos:
+      | protocolo_id | 10   |
+      | ciclo_id     | 1    |
+      | regimen      | 2    |
+      | droga_id     | 1002 |
+      | via_id       | 7    |
+    When publico en la API "/administracion-medicacion" con los siguientes datos:
+      | protocolo_id | 10   |
+      | ciclo_id     | 1    |
+      | regimen      | 2    |
+      | droga_id     | 1002 |
+      | via_id       | 7    |
+    Then el sistema rechaza la creación por combinación única duplicada
+    And no se crea la administración de medicación
+  @wip
+  Scenario: US-10.7 Aceptar mismo contexto con distinta vía
+    Given existe en la base de datos una administración de medicación con los datos:
+      | protocolo_id | 10   |
+      | ciclo_id     | 1    |
+      | regimen      | 1    |
+      | droga_id     | 1001 |
+      | via_id       | 7    |
+    When publico en la API "/administracion-medicacion" con los siguientes datos:
+      | protocolo_id | 10   |
+      | ciclo_id     | 1    |
+      | regimen      | 1    |
+      | droga_id     | 1001 |
+      | via_id       | 5    |
+    Then se crea correctamente la administración de medicación
+  @wip
+  Scenario: US-10.8 Rechazar foreign key inválida hacia CICLO (compuesta)
+    When publico en la API "/administracion-medicacion" con los siguientes datos:
+      | protocolo_id | 99   |
+      | ciclo_id     | 1    |
+      | regimen      | 1    |
+      | droga_id     | 1001 |
+      | via_id       | 7    |
+    Then el sistema rechaza la creación por clave foránea inválida a "ciclo"
+    And no se crea la administración de medicación
+  @wip
+  Scenario: US-10.9 Rechazar foreign key inválida a DROGA
+    When publico en la API "/administracion-medicacion" con los siguientes datos:
+      | protocolo_id | 10   |
+      | ciclo_id     | 1    |
+      | regimen      | 1    |
+      | droga_id     | 9999 |
+      | via_id       | 7    |
+    Then el sistema rechaza la creación por clave foránea inválida a "droga"
+    And no se crea la administración de medicación
+  @wip
+  Scenario: US-10.10 Rechazar foreign key inválida a VÍA
+    When publico en la API "/administracion-medicacion" con los siguientes datos:
+      | protocolo_id | 10   |
+      | ciclo_id     | 1    |
+      | regimen      | 1    |
+      | droga_id     | 1001 |
+      | via_id       | 999  |
+    Then el sistema rechaza la creación por clave foránea inválida a "via_administracion"
+    And no se crea la administración de medicación
+
+  @wip
+  Scenario: US-10.13 Rechazar nulos en campos obligatorios
+    When publico en la API "/administracion-medicacion" con los siguientes datos:
+      | protocolo_id |      |
+      | ciclo_id     | 1    |
+      | regimen      | 1    |
+      | droga_id     | 1001 |
+      | via_id       | 7    |
+    Then el sistema rechaza la creación por campos obligatorios faltantes
+    And no se crea la administración de medicación
+
+  @wip
+  Scenario: US-10.14 Actualizar una administración de medicación existente (campos opcionales)
+    Given existe en la base de datos una administración de medicación con id "2" y con los datos:
+      | protocolo_id         | 10  |
+      | ciclo_id             | 1   |
+      | regimen              | 2   |
+      | droga_id             | 1002|
+      | via_id               | 7   |
+      | fuerza_valor         | 100 |
+      | fuerza_unidad        | mg  |
+      | administracion_diaria| 1   |
+      | frecuencia_diaria    | 2   |
+    When publico en la API "/administracion-medicacion/2" con los siguientes datos:
+      | fuerza_valor         | 120 |
+      | administracion_diaria| 2   |
+    Then el "fuerza_valor" es "120"
+    And el "administracion_diaria" es "2"
+    And se actualiza correctamente
+
+  @wip
+  Scenario: US-10.15 Rechazar actualización que viola la combinación única
+    Given existe en la base de datos una administración de medicación con id "3" y con los datos:
+      | protocolo_id | 10   |
+      | ciclo_id     | 2    |
+      | regimen      | 1    |
+      | droga_id     | 1001 |
+      | via_id       | 5    |
+    And existe en la base de datos otra administración de medicación con los datos:
+      | protocolo_id | 10   |
+      | ciclo_id     | 1    |
+      | regimen      | 1    |
+      | droga_id     | 1001 |
+      | via_id       | 7    |
+    When publico en la API "/administracion-medicacion/3" con los siguientes datos:
+      | ciclo_id   | 1    |
+      | regimen    | 1    |
+      | via_id     | 7    |
+    Then el sistema rechaza la actualización por combinación única duplicada
+    And no se actualiza la administración de medicación
+
+  @wip
+  Scenario: US-10.16 Eliminar una administración de medicación sin uso
+    Given existe en la base de datos una administración de medicación con id "4" y con los datos:
+      | protocolo_id | 10   |
+      | ciclo_id     | 1    |
+      | regimen      | 1    |
+      | droga_id     | 1001 |
+      | via_id       | 7    |
+    And la administración no está referenciada por otras entidades
+    When elimino la administración en la API "/administracion-medicacion/4"
+    Then el sistema elimina la administración de medicación con id "4"
+    And se elimina correctamente
