@@ -69,3 +69,23 @@ Then('se crea correctamente la administración de medicación', function () {
   response = {};
   data = [];
 });
+
+const compararAdmin = (admin1, admin2) => {
+  assert.strictEqual(String(admin1.droga_id), String(admin2.droga_id));
+  assert.strictEqual(String(admin1.via_id), String(admin2.via_id));
+  assert.strictEqual(String(admin1.fuerza_valor), String(admin2.fuerza_valor));
+  assert.strictEqual(String(admin1.fuerza_unidad), String(admin2.fuerza_unidad));
+  assert.strictEqual(String(admin1.cantidad_dias), String(admin2.cantidad_dias));
+  assert.strictEqual(String(admin1.administracion_diaria), String(admin2.administracion_diaria));
+  assert.strictEqual(String(admin1.frecuencia_diaria), String(admin2.frecuencia_diaria));
+};
+
+Then('obtengo los datos de las administraciones con el id {string} y {string}', function (id1, id2) {
+  assert.ok(Array.isArray(admin));
+  assert.strictEqual(admin.length, 2);
+  assert.strictEqual(String(admin[0].id), String(id1));
+  assert.strictEqual(String(admin[1].id), String(id2));
+  compararAdmin(admin[0], data[0]);
+  compararAdmin(admin[1], data[1]);
+
+});

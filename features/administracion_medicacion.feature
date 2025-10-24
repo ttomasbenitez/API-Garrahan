@@ -62,20 +62,24 @@ Feature: Gestión de Administración de Medicación
     And el "frecuencia_diaria" de la admin es "5"
     And se crea correctamente la administración de medicación
 
-  @wip
   Scenario: US-10.2 Crear varias administraciones de medicación
     Given que tengo los siguientes datos de la administración de medicación:
-      | droga_id      | 1002 |
-      | via_id        | 7    |
-      | fuerza_valor  | 100  |
-      | fuerza_unidad | mg   |
+      | droga_id              | 1    |
+      | via_id                |  2   |
+      | fuerza_valor          | 100  |
+      | fuerza_unidad         | mg   |
+      | cantidad_dias         |  3   |
+      | administracion_diaria |  1   |
+      | frecuencia_diaria     |  5   |
     And que tengo los siguientes datos de la administración de medicación:
-      | droga_id              | 1001 |
-      | via_id                | 5    |
+      | droga_id              | 2    |
+      | via_id                | 1    |
+      | fuerza_valor          | 10   |
+      | fuerza_unidad         | mg   |
+      | cantidad_dias         | 10   |
       | administracion_diaria | 1    |
       | frecuencia_diaria     | 2    |
-    When publico la API "/protocolos/10/ciclo/1/regimen/2/administracion" con los datos de la administración
-    And publico la API "/protocolos/10/ciclo/2/regimen/1/administracion" con los datos de la administración
+    When publico la API "/protocolo/1/ciclo/1/regimen/1/administracion" con los datos de la administración
     Then obtengo los datos de las administraciones con el id "1" y "2"
     And se crea correctamente la administración de medicación
 
