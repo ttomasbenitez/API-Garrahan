@@ -53,6 +53,20 @@ export class RepositorioProtocolo {
     return new Protocolo(row.NOMBRE, row.ENFERMEDAD, row.LINEA, row.PROTOCOLO_ID, ciclos);
   }
 
+  async obtenerTodos() {
+    const result = await this.db.execute(
+      'SELECT protocolo_id, nombre, enfermedad, linea FROM protocolo'
+    );
+
+    const protocolos = [];
+    for (const row of result.rows) {
+      const ciclos = await this.obtenerCiclos(row.PROTOCOLO_ID);
+      protocolos.push(new Protocolo(row.NOMBRE, row.ENFERMEDAD, row.LINEA, row.PROTOCOLO_ID, ciclos));
+    }
+
+    return protocolos;
+  }
+
   async agregarCiclo(protocoloId, ciclos) {
     try {
       const result = await this.db.withConnection(async (conn) => {

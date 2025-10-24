@@ -7,6 +7,7 @@ import logger from '../utils/logger.js';
 export const makeProtocoloController = (protocoloService, drogaService) => ({
   crear: (req, res) => crearProtocolo(req, res, protocoloService),
   obtener: (req, res) => obtenerProtocolo(req, res, protocoloService),
+  obtenerTodos: (req, res) => obtenerProtocolos(req, res, protocoloService),
   agregarCiclo: (req, res) => agregarCiclo(req, res, protocoloService),
   agregarAdministracion: (req, res) => agregarAdministracion(req, res, protocoloService, drogaService),
 });
@@ -30,7 +31,19 @@ async function obtenerProtocolo(req, res, service) {
     const { id } = req.params;
     const protocolo = await service.obtener(id);
     logger.info('Protocolo obtenido con ID: %d', protocolo.protocolo_id);
-    res.status(200).json(JSON.stringify(protocolo));
+    res.status(200).json(protocolo);
+  } catch (error) {
+    logger.error('Error al obtener protocolo: %o', error);
+    res.status(500).json({ error: error.message });
+  }
+}
+
+async function obtenerProtocolos(req, res, service) {
+  try {
+    const { id } = req.params;
+    const protocolos = await service.obtenerTodos(id);
+    logger.info('Protocolos obtenidos');
+    res.status(200).json(protocolos);
   } catch (error) {
     logger.error('Error al obtener protocolo: %o', error);
     res.status(500).json({ error: error.message });
