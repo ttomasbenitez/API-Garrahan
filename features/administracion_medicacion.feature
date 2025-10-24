@@ -84,45 +84,20 @@ Feature: Gestión de Administración de Medicación
     And se crea correctamente la administración de medicación
 
   @wip
-  Scenario: US-10.3 Obtener una administración de medicación por su id
-    Given existe en la base de datos una administración de medicación con id "1" y con los datos:
-      | protocolo_id  | 10   |
-      | ciclo_id      | 1    |
-      | regimen       | 1    |
-      | droga_id      | 1001 |
-      | via_id        | 7    |
-      | fuerza_valor  | 50   |
-      | fuerza_unidad | mg   |
-    When consulto en la API "/administraciones/1" por su id de administración
-    Then el sistema me devuelve la administración de medicación con id "1"
-    And responde correctamente la administración de medicación
-
-  @wip
-  Scenario: US-10.4 Listar todas las administraciones de medicación
+  Scenario: US-10.3 Listar administraciones por contexto (protocolo/ciclo/régimen)
     Given existen en la base de datos las siguientes administraciones de medicación:
-      | id | protocolo_id | ciclo_id | regimen | droga_id | via_id |
-      | 1  | 10           | 1        | 1       | 1001     | 7      |
-      | 2  | 10           | 1        | 2       | 1002     | 7      |
-    When consulto en la API "/administraciones"
-    Then el sistema me devuelve una lista con 2 administraciones de medicación
-    And el primer registro tiene "protocolo_id" = "10" y "regimen" = "1"
-    And el segundo registro tiene "protocolo_id" = "10" y "regimen" = "2"
+      | id | protocolo_id | ciclo_id | regimen | droga_id | via_id | fuerza_valor | fuerza_unidad | cantidad_dias | administracion_diaria | frecuencia_diaria |
+      | 1  | 1            | 1        | 1       | 1        | 1      | 50           | mg            | 5             | 1                     | 3                 |
+      | 2  | 1            | 1        | 1       | 2        | 1      | 100          | mg            | 3             | 1                     | 2                 |
+      | 3  | 1            | 2        | 1       | 2        | 2      | 80           | mg            | 4             | 1                     | 4                 |
+    When consulto en la API "/protocolos/1/ciclo/1/regimen/1/administracion"
+    Then el sistema me devuelve una lista con "2" administración de medicación
+    And el "1" registro tiene "droga_id" = "1" y "via_id" = "1"
+    And el "2" registro tiene "droga_id" = "2" y "via_id" = "1"
     And responde correctamente la administración de medicación
 
   @wip
-  Scenario: US-10.5 Listar administraciones por contexto (protocolo/ciclo/régimen)
-    Given existen en la base de datos las siguientes administraciones de medicación:
-      | id | protocolo_id | ciclo_id | regimen | droga_id | via_id |
-      | 1  | 10           | 1        | 1       | 1001     | 7      |
-      | 2  | 10           | 1        | 2       | 1002     | 7      |
-      | 3  | 10           | 2        | 1       | 1001     | 5      |
-    When consulto en la API "/protocolos/10/ciclo/1/regimen/1/administraciones"
-    Then el sistema me devuelve una lista con 1 administración de medicación
-    And el primer registro tiene "droga_id" = "1001" y "via_id" = "7"
-    And responde correctamente la administración de medicación
-
-  @wip
-  Scenario: US-10.6 Rechazar duplicado por combinación única (protocolo, ciclo, régimen, droga, vía)
+  Scenario: US-10.4 Rechazar duplicado por combinación única (protocolo, ciclo, régimen, droga, vía)
     Given existe en la base de datos una administración de medicación con los datos:
       | protocolo_id | 10   |
       | ciclo_id     | 1    |
@@ -136,7 +111,7 @@ Feature: Gestión de Administración de Medicación
     And no se crea la administración de medicación
 
   @wip
-  Scenario: US-10.7 Aceptar mismo contexto con distinta vía
+  Scenario: US-10.5 Aceptar mismo contexto con distinta vía
     Given existe en la base de datos una administración de medicación con los datos:
       | protocolo_id | 10   |
       | ciclo_id     | 1    |
@@ -149,7 +124,7 @@ Feature: Gestión de Administración de Medicación
     Then se crea correctamente la administración de medicación
 
   @wip
-  Scenario: US-10.8 Rechazar foreign key inválida hacia CICLO (compuesta)
+  Scenario: US-10.6 Rechazar foreign key inválida hacia CICLO (compuesta)
     When publico la API "/protocolos/99/ciclo/1/regimen/1/administracion" con los siguientes datos:
       | droga_id | 1001 |
       | via_id   | 7    |
@@ -157,7 +132,7 @@ Feature: Gestión de Administración de Medicación
     And no se crea la administración de medicación
 
   @wip
-  Scenario: US-10.9 Rechazar foreign key inválida a DROGA
+  Scenario: US-10.7 Rechazar foreign key inválida a DROGA
     When publico la API "/protocolos/10/ciclo/1/regimen/1/administracion" con los siguientes datos:
       | droga_id | 9999 |
       | via_id   | 7    |
@@ -165,7 +140,7 @@ Feature: Gestión de Administración de Medicación
     And no se crea la administración de medicación
 
   @wip
-  Scenario: US-10.10 Rechazar foreign key inválida a VÍA
+  Scenario: US-10.8 Rechazar foreign key inválida a VÍA
     When publico la API "/protocolos/10/ciclo/1/regimen/1/administracion" con los siguientes datos:
       | droga_id | 1001 |
       | via_id   | 999  |
@@ -173,7 +148,7 @@ Feature: Gestión de Administración de Medicación
     And no se crea la administración de medicación
 
   @wip
-  Scenario: US-10.13 Rechazar nulos en campos obligatorios
+  Scenario: US-10.9 Rechazar nulos en campos obligatorios
     When publico la API "/protocolos/10/ciclo/1/regimen/1/administracion" con los siguientes datos:
       | droga_id |      |
       | via_id   | 7    |
@@ -181,7 +156,7 @@ Feature: Gestión de Administración de Medicación
     And no se crea la administración de medicación
 
   @wip
-  Scenario: US-10.14 Actualizar una administración de medicación existente (campos opcionales)
+  Scenario: US-10.10 Actualizar una administración de medicación existente (campos opcionales)
     Given existe en la base de datos una administración de medicación con id "2" y con los datos:
       | protocolo_id         | 10  |
       | ciclo_id             | 1   |
@@ -200,7 +175,7 @@ Feature: Gestión de Administración de Medicación
     And se actualiza correctamente
 
   @wip
-  Scenario: US-10.15 Rechazar actualización que viola la combinación única
+  Scenario: US-10.11 Rechazar actualización que viola la combinación única
     Given existe en la base de datos una administración de medicación con id "3" y con los datos:
       | protocolo_id | 10   |
       | ciclo_id     | 2    |
@@ -221,7 +196,7 @@ Feature: Gestión de Administración de Medicación
     And no se actualiza la administración de medicación
 
   @wip
-  Scenario: US-10.16 Eliminar una administración de medicación sin uso
+  Scenario: US-10.12 Eliminar una administración de medicación sin uso
     Given existe en la base de datos una administración de medicación con id "4" y con los datos:
       | protocolo_id | 10   |
       | ciclo_id     | 1    |

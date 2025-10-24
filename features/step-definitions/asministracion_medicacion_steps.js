@@ -87,5 +87,16 @@ Then('obtengo los datos de las administraciones con el id {string} y {string}', 
   assert.strictEqual(String(admin[1].id), String(id2));
   compararAdmin(admin[0], data[0]);
   compararAdmin(admin[1], data[1]);
+});
 
+Given('existen en la base de datos las siguientes administraciones de medicación:', function (dataTable) {
+  const admins = dataTable.hashes();
+  const promises = admins.map((admin) => {
+    return request(app)
+      .post(`protocolo/${admin.protocolo_id}/ciclo/${admin.ciclo_id}/regimen/${admin.regimen}/administracion`)
+      .send(admin)
+      .set('Accept', 'application/json')
+      .set('Cookie', this.sessionCookie);
+  });
+  return Promise.all(promises);
 });
