@@ -46,6 +46,7 @@ Given(/^que tengo los siguientes datos de la presentacion de droga:$/, function 
   const presentacion = {
     droga_id: parseInt(data.droga_id, 10),
     forma_farmaceutica_id: parseInt(data.forma_farmaceutica_id, 10),
+    codigo_farmacia: data.codigo_farmacia,
     estado: data.estado,
     fuerza_valor: parseInt(data.fuerza_valor, 10),
     fuerza_unidad: data.fuerza_unidad
@@ -79,6 +80,7 @@ Given(/^existe en la base de datos una presentacion de droga con id "(.*)" y con
   const presentacion = {
     droga_id: parseInt(data.droga_id, 10),
     forma_farmaceutica_id: parseInt(data.forma_farmaceutica_id, 10),
+    codigo_farmacia: data.codigo_farmacia,
     estado: data.estado,
     fuerza_valor: parseInt(data.fuerza_valor, 10),
     fuerza_unidad: data.fuerza_unidad

@@ -39,6 +39,7 @@ Given(/^que existe una presentacion de droga con los siguientes datos:$/, async 
   const presentacion = {
     droga_id: createdDrogaId,
     forma_farmaceutica_id: createdFormaId,
+    codigo_farmacia: data.codigo_farmacia,
     estado: data.estado,
     fuerza_valor: parseInt(data.fuerza_valor, 10),
     fuerza_unidad: data.fuerza_unidad

@@ -6,7 +6,6 @@ Feature: Gestión de Presentación Droga Vía
   Scenario: US-09.1 Crear una nueva presentación droga vía
     Given que existe una droga con los siguientes datos:
       | nombre_generico | Ibuprofeno |
-      | codigo_farmacia | IBU001     |
       | estado          | Activo     |
       | codigo_atc      | M01AE01    |
     And que existe una forma farmaceutica con los siguientes datos:
@@ -14,9 +13,10 @@ Feature: Gestión de Presentación Droga Vía
       | codigo | AMP     |
       | estado | Activo  |
     And que existe una presentacion de droga con los siguientes datos:
-      | estado        | Activo |
-      | fuerza_valor  | 100    |
-      | fuerza_unidad | mg     |
+      | codigo_farmacia | IBU001 |
+      | estado          | Activo |
+      | fuerza_valor    | 100    |
+      | fuerza_unidad   | mg     |
     And que existe una via de administracion con los siguientes datos:
       | nombre | Intravenosa |
       | codigo | IV          |
@@ -26,7 +26,6 @@ Feature: Gestión de Presentación Droga Vía
   Scenario: US-09.2 Obtener una presentación droga vía por sus IDs
     Given que existe una droga con los siguientes datos:
       | nombre_generico | Paracetamol |
-      | codigo_farmacia | PAR001      |
       | estado          | Activo      |
       | codigo_atc      | N02BE01     |
     And que existe una forma farmaceutica con los siguientes datos:
@@ -34,9 +33,10 @@ Feature: Gestión de Presentación Droga Vía
       | codigo | TAB     |
       | estado | Activo  |
     And que existe una presentacion de droga con los siguientes datos:
-      | estado        | Activo |
-      | fuerza_valor  | 500    |
-      | fuerza_unidad | mg     |
+      | codigo_farmacia | PAR001 | 
+      | estado          | Activo |
+      | fuerza_valor    | 500    |
+      | fuerza_unidad   | mg     |
     And que existe una via de administracion con los siguientes datos:
       | nombre | Oral |
       | codigo | PO   |
@@ -48,7 +48,6 @@ Feature: Gestión de Presentación Droga Vía
   Scenario: US-09.3 Listar todas las vías de una presentación de droga
     Given que existe una droga con los siguientes datos:
       | nombre_generico | Morfina |
-      | codigo_farmacia | MOR001  |
       | estado          | Activo  |
       | codigo_atc      | N02AA01 |
     And que existe una forma farmaceutica con los siguientes datos:
@@ -56,9 +55,10 @@ Feature: Gestión de Presentación Droga Vía
       | codigo | AMP     |
       | estado | Activo  |
     And que existe una presentacion de droga con los siguientes datos:
-      | estado        | Activo |
-      | fuerza_valor  | 10     |
-      | fuerza_unidad | mg     |
+      | codigo_farmacia | MOR001 |
+      | estado          | Activo |
+      | fuerza_valor    | 10     |
+      | fuerza_unidad   | mg     |
     And que existen las siguientes vias de administracion:
       | nombre       | codigo |
       | Intravenosa  | IV     |
@@ -72,7 +72,6 @@ Feature: Gestión de Presentación Droga Vía
   Scenario: US-09.4 Eliminar una presentación droga vía
     Given que existe una droga con los siguientes datos:
       | nombre_generico | Amoxicilina |
-      | codigo_farmacia | AMO001      |
       | estado          | Activo      |
       | codigo_atc      | J01CA04     |
     And que existe una forma farmaceutica con los siguientes datos:
@@ -80,9 +79,10 @@ Feature: Gestión de Presentación Droga Vía
       | codigo | CAP     |
       | estado | Activo  |
     And que existe una presentacion de droga con los siguientes datos:
-      | estado        | Activo |
-      | fuerza_valor  | 500    |
-      | fuerza_unidad | mg     |
+      | codigo_farmacia | AMO001 |
+      | estado          | Activo |
+      | fuerza_valor    | 500    |
+      | fuerza_unidad   | mg     |
     And que existe una via de administracion con los siguientes datos:
       | nombre | Oral |
       | codigo | PO   |

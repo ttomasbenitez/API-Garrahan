@@ -28,10 +28,8 @@ Feature: Gestión de Administración de Medicación
       | repeticiones     | 1 |
     And existe la droga con id "1" y con los datos:
       | nombre_generico | CISPLATINO |
-      | codigo_farmacia | AAA1       |
     And existe la droga con id "2" y con los datos:
       | nombre_generico | VINCRISTINA |
-      | codigo_farmacia | BBB2        |
     And existe la vía de administración con id "1" y con los datos:
       | nombre | Intravenosa |
       | codigo | IV          |

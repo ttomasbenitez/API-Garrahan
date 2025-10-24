@@ -12,18 +12,12 @@ async function crearDroga(req, res, service) {
   try {
     const payload = Array.isArray(req.body) ? req.body : [req.body];
 
-    const faltantes = payload.filter(d =>
-      !d.nombre_generico ||
-      !d.codigo_farmacia
-    );
+    const faltantes = payload.filter(d =>!d.nombre_generico);
     if (faltantes.length > 0) {
       return res.status(400).json({ error: ERROR_CAMPOS_REQUERIDOS });
     }
 
-    const drogas = payload.map(d => new Droga(
-      d.nombre_generico,
-      d.codigo_farmacia,
-    ));
+    const drogas = payload.map(d => new Droga(d.nombre_generico,));
 
     await service.crear(drogas);
     logger.info('Drogas creadas con IDs: %o', drogas.map(d => d.droga_id).join(', '));

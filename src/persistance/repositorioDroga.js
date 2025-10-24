@@ -11,22 +11,20 @@ export class RepositorioDroga {
     try {
       const result = await this.db.withConnection(async (conn) => {
         const sql = `
-        INSERT INTO droga (nombre_generico, codigo_farmacia)
-        VALUES (:nombre_generico, :codigo_farmacia)
+        INSERT INTO droga (nombre_generico)
+        VALUES (:nombre_generico)
         RETURNING droga_id INTO :id
       `;
         const toStr = (v) => (v === undefined || v === null ? null : String(v));
 
         const binds = drogas.map(d => ({
           nombre_generico: toStr(d.nombre_generico),
-          codigo_farmacia: toStr(d.codigo_farmacia),
         }));
 
         const opts = {
           autoCommit: true,
           bindDefs: {
             nombre_generico: { type: oracledb.STRING, maxSize: 100 },
-            codigo_farmacia: { type: oracledb.STRING, maxSize: 100 },
             id: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
           }
         };
@@ -45,7 +43,7 @@ export class RepositorioDroga {
 
   async obtener(id) {
     const result = await this.db.execute(
-      'SELECT nombre_generico, codigo_farmacia, droga_id FROM droga WHERE droga_id = :id',
+      'SELECT nombre_generico, droga_id FROM droga WHERE droga_id = :id',
       [id]
     );
 
@@ -54,6 +52,6 @@ export class RepositorioDroga {
     }
 
     const row = result.rows[0];
-    return new Droga(row.NOMBRE_GENERICO, row.CODIGO_FARMACIA, row.DROGA_ID);
+    return new Droga(row.NOMBRE_GENERICO, row.DROGA_ID);
   }
 }

@@ -60,7 +60,6 @@ describe(RepositorioDroga, () => {
     expect(sql).toMatch(/INSERT\s+INTO\s+droga/i);
     expect(binds[0]).toMatchObject({
       nombre_generico: droga.nombre_generico,
-      codigo_farmacia: droga.codigo_farmacia,
     });
     expect(opts).toMatchObject({ autoCommit: true });
   });
@@ -76,11 +75,9 @@ describe(RepositorioDroga, () => {
     expect(sql).toMatch(/INSERT\s+INTO\s+droga/i);
     expect(binds[0]).toMatchObject({
       nombre_generico: drogas[0].nombre_generico,
-      codigo_farmacia: drogas[0].codigo_farmacia,
     });
     expect(binds[1]).toMatchObject({
       nombre_generico: drogas[1].nombre_generico,
-      codigo_farmacia: drogas[1].codigo_farmacia,
     });
     expect(opts).toMatchObject({ autoCommit: true });
   });
@@ -92,7 +89,6 @@ describe(RepositorioDroga, () => {
     db.execute.mockResolvedValue({
       rows: [{
         NOMBRE_GENERICO: droga.nombre_generico,
-        CODIGO_FARMACIA: droga.codigo_farmacia,
         DROGA_ID: drogaId
       }]
     });
@@ -107,7 +103,6 @@ describe(RepositorioDroga, () => {
     expect(drogaObtenida).toBeInstanceOf(Droga);
     expect(drogaObtenida).toMatchObject({
       nombre_generico: droga.nombre_generico,
-      codigo_farmacia: droga.codigo_farmacia,
       droga_id: drogaId
     });
   });

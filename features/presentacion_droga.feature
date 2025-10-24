@@ -5,8 +5,8 @@ Feature: Gestión de Presentaciones de Droga
 
   Scenario: US-08.1 Crear una nueva presentación de droga
     Given que existen las siguientes drogas:
-      | nombre      | codigo_farmacia | estado | codigo_atc |
-      | Paracetamol | PAR001          | Activo | N02BE01    |
+      | nombre      | estado | codigo_atc |
+      | Paracetamol | Activo | N02BE01    |
     And que existen las siguientes formas farmaceuticas:
       | nombre   | codigo | estado |
       | Tableta  | TAB    | Activo |
@@ -14,6 +14,7 @@ Feature: Gestión de Presentaciones de Droga
     And que tengo los siguientes datos de la presentacion de droga:
       | droga_id              | 1         |
       | forma_farmaceutica_id | 2         |
+      | codigo_farmacia       | PAR001    |
       | estado                | Activo    |
       | fuerza_valor          | 500       |
       | fuerza_unidad         | mg        |
@@ -24,8 +25,8 @@ Feature: Gestión de Presentaciones de Droga
 
   Scenario: US-08.2 Obtener una presentacion de droga por su id
     Given que existen las siguientes drogas:
-      | nombre      | codigo_farmacia | estado | codigo_atc |
-      | Paracetamol | PAR001          | Activo | N02BE01    |
+      | nombre      | estado | codigo_atc |
+      | Paracetamol | Activo | N02BE01    |
     And que existen las siguientes formas farmaceuticas:
       | nombre   | codigo | estado |
       | Tableta  | TAB    | Activo |
@@ -33,6 +34,7 @@ Feature: Gestión de Presentaciones de Droga
     And existe en la base de datos una presentacion de droga con id "1" y con los datos:
       | droga_id              | 1         |
       | forma_farmaceutica_id | 2         |
+      | codigo_farmacia       | PAR001    |
       | estado                | Activo    |
       | fuerza_valor          | 500       |
       | fuerza_unidad         | mg        |
@@ -44,8 +46,8 @@ Feature: Gestión de Presentaciones de Droga
 
   Scenario: US-08.3 Listar todas las presentaciones de droga
     Given que existen las siguientes drogas:
-      | nombre      | codigo_farmacia | estado | codigo_atc |
-      | Paracetamol | PAR001          | Activo | N02BE01    |
+      | nombre      | estado | codigo_atc |
+      | Paracetamol | Activo | N02BE01    |
     And que existen las siguientes formas farmaceuticas:
       | nombre    | codigo | estado |
       | Tableta   | TAB    | Activo |
@@ -54,12 +56,14 @@ Feature: Gestión de Presentaciones de Droga
     And existe en la base de datos una presentacion de droga con id "1" y con los datos:
       | droga_id              | 1         |
       | forma_farmaceutica_id | 2         |
+      | codigo_farmacia       | PAR001    |
       | estado                | Activo    |
       | fuerza_valor          | 500       |
       | fuerza_unidad         | mg        |
     And existe en la base de datos una presentacion de droga con id "2" y con los datos:
       | droga_id              | 1         |
       | forma_farmaceutica_id | 3         |
+      | codigo_farmacia       | PAR002    |
       | estado                | Activo    |
       | fuerza_valor          | 200       |
       | fuerza_unidad         | mg        |
@@ -71,9 +75,9 @@ Feature: Gestión de Presentaciones de Droga
 
   Scenario: US-08.4 Eliminar una presentacion de droga
     Given que existen las siguientes drogas:
-      | nombre      | codigo_farmacia | estado | codigo_atc |
-      | Paracetamol | PAR001          | Activo | N02BE01    |
-      | Ibuprofeno  | IBU001          | Activo | M01AE01    |
+      | nombre      | estado | codigo_atc |
+      | Paracetamol | Activo | N02BE01    |
+      | Ibuprofeno  | Activo | M01AE01    |
     And que existen las siguientes formas farmaceuticas:
       | nombre    | codigo | estado |
       | Tableta   | TAB    | Activo |
@@ -83,6 +87,7 @@ Feature: Gestión de Presentaciones de Droga
     And existe en la base de datos una presentacion de droga con id "3" y con los datos:
       | droga_id              | 2         |
       | forma_farmaceutica_id | 4         |
+      | codigo_farmacia       | IBU001    |
       | estado                | Inactivo  |
       | fuerza_valor          | 100       |
       | fuerza_unidad         | mg        |

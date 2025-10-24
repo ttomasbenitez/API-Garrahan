@@ -12,13 +12,15 @@ export const makePresentacionDrogaController = (service) => ({
 async function crearPresentacion(req, res, service) {
   try {
     const payload = Array.isArray(req.body) ? req.body : [req.body];
-    const faltantes = payload.filter(p => !p.droga_id || !p.forma_farmaceutica_id);
+    const faltantes = payload.filter(p => !p.droga_id || !p.forma_farmaceutica_id
+      || !p.codigo_farmacia);
     if (faltantes.length > 0) {
       return res.status(400).json({ error: 'Faltan campos requeridos' });
     }
     const presentaciones = payload.map(p => new PresentacionDroga(
       p.droga_id,
       p.forma_farmaceutica_id,
+      p.codigo_farmacia,
       p.estado,
       p.fuerza_valor,
       p.fuerza_unidad

@@ -22,7 +22,7 @@ describe(RepositorioPresentacionDroga, () => {
 
   const agregarPresentacion = async (cantidad = 1) => {
     for (let i = 0; i < cantidad; i++) {
-      presentacion = new PresentacionDroga(1, 2, 'Activo', 500, 'mg');
+      presentacion = new PresentacionDroga(1, 2, 'PAR001', 'Activo', 500, 'mg');
       presentaciones.push(presentacion);
     }
     const ids = Array.from({ length: cantidad }, (v, i) => ({ id: [i] }));
@@ -56,6 +56,7 @@ describe(RepositorioPresentacionDroga, () => {
     expect(binds[0]).toEqual({
       droga_id: 1,
       forma_farmaceutica_id: 2,
+      codigo_farmacia: 'PAR001',
       estado: 'Activo',
       fuerza_valor: 500,
       fuerza_unidad: 'mg',
@@ -67,6 +68,7 @@ describe(RepositorioPresentacionDroga, () => {
     const presentacionData = {
       DROGA_ID: 1,
       FORMA_FARMACEUTICA_ID: 2,
+      CODIGO_FARMACIA: 'PAR001',
       ESTADO: 'Activo',
       FUERZA_VALOR: 500,
       FUERZA_UNIDAD: 'mg',
@@ -80,6 +82,7 @@ describe(RepositorioPresentacionDroga, () => {
     expect(resultado).toMatchObject({
       droga_id: 1,
       forma_farmaceutica_id: 2,
+      codigo_farmacia: 'PAR001',
       estado: 'Activo',
       fuerza_valor: 500,
       fuerza_unidad: 'mg',
@@ -93,16 +96,16 @@ describe(RepositorioPresentacionDroga, () => {
 
   test('listar todas las presentaciones de droga devuelve un array de instancias', async () => {
     const rows = [
-      { DROGA_ID: 1, FORMA_FARMACEUTICA_ID: 2, ESTADO: 'Activo', FUERZA_VALOR: 500, FUERZA_UNIDAD: 'mg', PRESENTACION_ID: 1 },
-      { DROGA_ID: 1, FORMA_FARMACEUTICA_ID: 3, ESTADO: 'Activo', FUERZA_VALOR: 200, FUERZA_UNIDAD: 'mg', PRESENTACION_ID: 2 }
+      { DROGA_ID: 1, FORMA_FARMACEUTICA_ID: 2, CODIGO_FARMACIA: 'PAR001', ESTADO: 'Activo', FUERZA_VALOR: 500, FUERZA_UNIDAD: 'mg', PRESENTACION_ID: 1 },
+      { DROGA_ID: 1, FORMA_FARMACEUTICA_ID: 3, CODIGO_FARMACIA: 'PAR002', ESTADO: 'Activo', FUERZA_VALOR: 200, FUERZA_UNIDAD: 'mg', PRESENTACION_ID: 2 }
     ];
     db.execute.mockImplementation(() => Promise.resolve({ rows }));
     const resultado = await repo.listar();
     expect(Array.isArray(resultado)).toBe(true);
     expect(resultado).toHaveLength(2);
     expect(resultado[0]).toBeInstanceOf(PresentacionDroga);
-    expect(resultado[0]).toMatchObject({ droga_id: 1, forma_farmaceutica_id: 2, estado: 'Activo', fuerza_valor: 500, fuerza_unidad: 'mg', presentacion_id: 1 });
-    expect(resultado[1]).toMatchObject({ droga_id: 1, forma_farmaceutica_id: 3, estado: 'Activo', fuerza_valor: 200, fuerza_unidad: 'mg', presentacion_id: 2 });
+    expect(resultado[0]).toMatchObject({ droga_id: 1, forma_farmaceutica_id: 2, codigo_farmacia: 'PAR001', estado: 'Activo', fuerza_valor: 500, fuerza_unidad: 'mg', presentacion_id: 1 });
+    expect(resultado[1]).toMatchObject({ droga_id: 1, forma_farmaceutica_id: 3, codigo_farmacia: 'PAR002',estado: 'Activo', fuerza_valor: 200, fuerza_unidad: 'mg', presentacion_id: 2 });
   });
 
   test('eliminar una presentacion de droga existente retorna true si se elimina', async () => {
