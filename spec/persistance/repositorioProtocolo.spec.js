@@ -4,6 +4,7 @@ import Ciclo from '../../src/domain/protocolo/ciclo.js';
 import Protocolo from '../../src/domain/protocolo';
 //import AdministracionMedicacion from '../../src/domain/protocolo/administracionMedicacion.js';
 import { RepositorioProtocolo } from '../../src/persistance/repositorioProtocolo';
+import AdministracionMedicacion from '../../src/domain/protocolo/administracionMedicacion.js';
 
 jest.mock('../../src/db/connection_pool.js', () => ({
   __esModule: true,
@@ -61,32 +62,32 @@ describe(RepositorioProtocolo, () => {
     return connExecuteMock;
   };
 
-  //const agregarAdministraciones = async (cantidad = 1) => {
-  //  for(let i = 0; i < cantidad; i++) {
-  //    const adminDiaria = new AdministracionMedicacion(1 + i, 50 * (i + 1), 'mg', '1,2,5', 0 + i, 1 + i, 1 + i);
-  //    admins.push(adminDiaria);
-  //  }
-  //
-  //  const ids = Array.from({ length: cantidad }, (v, i) => ({ id: [i] }));
-  //
-  //  const connExecuteMock = jest.fn().mockResolvedValueOnce({
-  //    rowsAffected: cantidad,
-  //    outBinds: ids,
-  //    rows: [admins],
-  //  });
-  //
-  //  db.withConnection.mockImplementation(async (fn) => {
-  //    return await fn({
-  //      execute: jest.fn().mockResolvedValue({
-  //        rowsAffected: 1,
-  //        outBinds: { id: [123] },
-  //      }),
-  //      executeMany: connExecuteMock,
-  //    });
-  //  });
-  //
-  //  return {id: await repo.guardar(admins), connExecuteMock};
-  //};
+  const agregarAdministraciones = async (cantidad = 1) => {
+    for(let i = 0; i < cantidad; i++) {
+      const adminDiaria  = new AdministracionMedicacion(123, 1, 0, 10, 13,  50 * (i + 1), 'mg', 2+i, 0, 1, i);
+      admins.push(adminDiaria);
+    }
+
+    const ids = Array.from({ length: cantidad }, (v, i) => ({ id: [i] }));
+
+    const connExecuteMock = jest.fn().mockResolvedValueOnce({
+      rowsAffected: cantidad,
+      outBinds: ids,
+      rows: [admins],
+    });
+
+    db.withConnection.mockImplementation(async (fn) => {
+      return await fn({
+        execute: jest.fn().mockResolvedValue({
+          rowsAffected: 1,
+          outBinds: { id: [123] },
+        }),
+        executeMany: connExecuteMock,
+      });
+    });
+
+    return {id: await repo.guardar(admins), connExecuteMock};
+  };
 
   beforeEach(() => {
     db = oracleDB;
@@ -218,7 +219,6 @@ describe(RepositorioProtocolo, () => {
     expect(cicloObtenido[0]).toMatchObject(ciclo);
   });
 
-  // TODO: Habilitar este test cuando la funcionalidad esté completa
   // test('dado un protocolo con ciclos y administraciones, deberia poder obtener todo el objeto completo', async () => {
   //   const {id} = await agregarProtocolo();
   //   await agregarCiclo(id);
@@ -251,10 +251,11 @@ describe(RepositorioProtocolo, () => {
   //           PROTOCOLO_ID: 123,
   //           CICLO_ID: 1,
   //           REGIMEN: 0,
+  //           VIA_ID: 10,
   //           DROGA_ID: 1,
-  //           DOSIS: 50,
-  //           DOSIS_UNIDAD: 'mg',
-  //           FRECUENCIA: '1,2,5',
+  //           FUERZA: 50,
+  //           FUERZA_UNIDAD: 'mg',
+  //           CANTIDAD_DIAS: 2,
   //           ADMINISTRACION_DIARIA: 0,
   //           FRECUENCIA_DIARIA: 1,
   //           ID: 1
@@ -263,18 +264,20 @@ describe(RepositorioProtocolo, () => {
   //           PROTOCOLO_ID: 123,
   //           CICLO_ID: 1,
   //           REGIMEN: 0,
-  //           DROGA_ID: 2,
-  //           DOSIS: 100,
-  //           DOSIS_UNIDAD: 'mg',
-  //           FRECUENCIA: '1,2,5',
-  //           ADMINISTRACION_DIARIA: 1,
-  //           FRECUENCIA_DIARIA: 2,
+  //           VIA_ID: 10,
+  //           DROGA_ID: 1,
+  //           FUERZA: 50,
+  //           FUERZA_UNIDAD: 'mg',
+  //           CANTIDAD_DIAS: 2,
+  //           ADMINISTRACION_DIARIA: 0,
+  //           FRECUENCIA_DIARIA: 1,
   //           ID: 2
   //         }
   //       ]
   //     });
 
   //   const protocoloObtenido = await repo.obtener(id);
+  //   console.log(protocoloObtenido);
 
   //   const ciclos = protocoloObtenido.ciclos;
   //   const administraciones = ciclos[0].administracion_medicacion;

@@ -1,11 +1,9 @@
-import AdministracionMedicacion from '../domain/protocolo/administracionMedicacion.js';
-import ValidadorAdministracionMedicacion from '../domain/validadores/validadorAdministracionMedicacion.js';
 import ValidadorProtocolo from '../domain/validadores/validadorProtocolo.js';
 
 export class ProtocoloService {
-  constructor(protocoloRepo) {
+  constructor(protocoloRepo, administracionMedicacionRepo) {
     this.protocoloRepo = protocoloRepo;
-    this.validadorAdministracionMedicacion = new ValidadorAdministracionMedicacion();
+    this.administracionMedicacionRepo = administracionMedicacionRepo;
     this.validadorProtocolo = new ValidadorProtocolo();
   }
 
@@ -15,7 +13,9 @@ export class ProtocoloService {
     return id;
   }
 
-  async obtener(id) { return this.protocoloRepo.obtener(id); }
+  async obtener(id) {
+    return this.protocoloRepo.obtener(id);
+  }
 
   async agregarCiclo(protocoloId, ciclo) {
     const protocolo = await this.obtener(protocoloId);
@@ -30,27 +30,8 @@ export class ProtocoloService {
   }
 
   async agregarAdministracion(protocolo, ciclo, administracion_medicaciones) {
-    await protocolo.agregarAdministracion(ciclo, administracion_medicaciones, this.protocoloRepo);
+    await protocolo.agregarAdministracion(ciclo, administracion_medicaciones, this.administracionMedicacionRepo);
     return protocolo;
-  }
-
-  async validarAdministraciones(payload, drogaService) {
-    const payloadValidado = this.validadorAdministracionMedicacion.validar(payload);
-    return await Promise.all(
-      payloadValidado.map(async (a) => {
-
-        await drogaService.validarDroga(a.droga_id);
-
-        return new AdministracionMedicacion(
-          Number(a.droga_id),
-          Number(a.dosis),
-          a.dosis_unidad,
-          a.frecuencia,
-          Number(a.administracion_diaria),
-          Number(a.frecuencia_diaria),
-        );
-      })
-    );
   }
 
   validarProtocolo(payload) {

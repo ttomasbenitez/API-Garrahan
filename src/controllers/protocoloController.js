@@ -1,3 +1,4 @@
+import AdministracionMedicacion from '../domain/protocolo/administracionMedicacion.js';
 import Ciclo from '../domain/protocolo/ciclo.js';
 import Protocolo from '../domain/protocolo/index.js';
 import { ERROR_CAMPOS_REQUERIDOS } from '../errors/index.js';
@@ -71,7 +72,7 @@ async function agregarCiclo(req, res, service) {
   }
 }
 
-async function agregarAdministracion(req, res, protocoloService, drogaService) {
+async function agregarAdministracion(req, res, protocoloService) {
   try {
     const protocoloId = Number(req.params.id);
     const cicloId = Number(req.params.id_ciclo);
@@ -79,19 +80,34 @@ async function agregarAdministracion(req, res, protocoloService, drogaService) {
 
     const payload = Array.isArray(req.body) ? req.body : [req.body];
 
-    const administracion_medicaciones = await protocoloService.validarAdministraciones(payload, drogaService);
-
     const protocolo = await protocoloService.obtener(protocoloId);
     const ciclo = protocolo.validarCicloEnRegimen(cicloId, regimen);
+
+    const administracion_medicacion = payload.map(d => new AdministracionMedicacion(
+      protocoloId,
+      cicloId,
+      regimen,
+      Number(d.droga_id),
+      Number(d.via_id),
+      Number(d.fuerza_valor),
+      d.fuerza_unidad,
+      Number(d.cantidad_dias),
+      Number(d.administracion_diaria),
+      Number(d.frecuencia_diaria),
+    ));
 
     const protocoloConAdmin = await protocoloService.agregarAdministracion(
       protocolo,
       ciclo,
-      administracion_medicaciones,
+      administracion_medicacion,
     );
+    const protocoloFiltrado = {
+      ...protocoloConAdmin,
+      ciclos: protocoloConAdmin.ciclos.filter(c => c.ciclo_id === cicloId && c.regimen === regimen)
+    };
 
     logger.info('Administración agregada al ciclo ID: %d del protocolo ID: %d', cicloId, protocoloId);
-    res.status(201).json(protocoloConAdmin);
+    res.status(201).json(protocoloFiltrado);
   }
 
   catch (error) {

@@ -1,22 +1,11 @@
 class Protocolo {
 
-  constructor(nombre, enfermedad, linea, id = null) {
+  constructor(nombre, enfermedad, linea, protocolo_id = null, ciclos = []) {
     this.nombre = nombre;
     this.enfermedad = enfermedad;
     this.linea = linea;
-    this.protocolo_id = id;
-    this.ciclos = [];
-  }
-
-  static fromRow(row, ciclos = []) {
-    const protocolo = new Protocolo(
-      row.NOMBRE,
-      row.ENFERMEDAD,
-      row.LINEA,
-      row.PROTOCOLO_ID
-    );
-    protocolo.ciclos = ciclos;
-    return protocolo;
+    this.protocolo_id = protocolo_id;
+    this.ciclos = ciclos;
   }
 
   async guardar(repositorioProtocolo) {
@@ -47,12 +36,12 @@ class Protocolo {
     return ciclo;
   }
 
-  async agregarAdministracion(ciclo, administracion_medicaciones, repositorioProtocolo) {
-    const ids = await repositorioProtocolo.agregarAdministracion(this, ciclo, administracion_medicaciones);
+  async agregarAdministracion(ciclo, administracion_medicaciones, administracionMedicacionRepo) {
+    const ids = await administracionMedicacionRepo.guardar(administracion_medicaciones);
     administracion_medicaciones.forEach((adm, index) => {
       adm.id = ids[index];
     });
-    ciclo.agregarAdministracion(administracion_medicaciones, repositorioProtocolo);
+    ciclo.agregarAdministracion(administracion_medicaciones);
   }
 }
 

@@ -45,6 +45,7 @@ import { makePresentacionDrogaViaController } from './controllers/presentacionDr
 import presentacionDrogaViaRoutes from './routes/presentacionDrogaVia.js';
 import { RepositorioPacienteProfesional } from './persistance/repositorioPacienteProfesional.js';
 import apiHospitalConector from './connectors/hospital_api.js';
+import { RepositorioAdminisitracionMedicacion } from './persistance/repositorioAdministracionMedicacion.js';
 
 const app = express();
 
@@ -75,7 +76,8 @@ const formaFarmaceuticaService = new FormaFarmaceuticaService(repositorioFormaFa
 const formaFarmaceuticaController = makeFormaFarmaceuticaController(formaFarmaceuticaService);
 // protocolo
 const repositorioProtocolo = new RepositorioProtocolo(oracleDBInstance);
-const protocoloService = new ProtocoloService(repositorioProtocolo);
+const repositorioAdministracionMedicacion = new RepositorioAdminisitracionMedicacion(oracleDBInstance);
+const protocoloService = new ProtocoloService(repositorioProtocolo, repositorioAdministracionMedicacion);
 const protocoloController = makeProtocoloController(protocoloService, drogasService);
 // via administracion
 const respositorioViaAdministracion = new RepositorioViaAdministracion(oracleDBInstance);

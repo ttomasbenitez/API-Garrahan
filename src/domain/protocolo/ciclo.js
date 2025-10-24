@@ -1,4 +1,4 @@
-const ES_CICLO_FINAL = 1;
+
 
 class Ciclo {
 
@@ -11,18 +11,6 @@ class Ciclo {
     this.repeticiones = repeticiones;
     this.administracion_medicacion = [];
   }
-
-  static fromRow(row) {
-    return new Ciclo(
-      row.CICLO_ID,
-      row.PROTOCOLO_ID,
-      row.REGIMEN,
-      row.DURACION_SEMANAS,
-      row.CICLO_FINAL === ES_CICLO_FINAL,
-      row.REPETICIONES
-    );
-  }
-
 
   agregarAdministracion(administracion_medicaciones) {
     if (!this.administracion_medicacion) {

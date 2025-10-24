@@ -2,8 +2,6 @@ import oracledb from 'oracledb';
 import Protocolo from '../domain/protocolo/index.js';
 import { ERROR_PROTOCOLO_CREACION, ERROR_PROTOCOLO_NO_ENCONTRADO } from '../errors/protocolo.js';
 import Ciclo from '../domain/protocolo/ciclo.js';
-//import AdministracionMedicacion from '../domain/protocolo/administracionMedicacion.js';
-
 export class RepositorioProtocolo {
   constructor(db) {
     this.db = db;
@@ -36,32 +34,8 @@ export class RepositorioProtocolo {
       [protocoloId]
     );
 
-    // const administracion_medicaciones = await this.db.execute(
-    //   `SELECT protocolo_id, ciclo_id, regimen, droga_id, dosis, dosis_unidad, frecuencia, administracion_diaria, frecuencia_diaria, id
-    //    FROM administracion_medicacion
-    //    WHERE protocolo_id = :id`,
-    //   [protocoloId],
-    // );
-
-    // const administracionesPorCiclo = administracion_medicaciones.rows.reduce((acc, row) => {
-    //   const key = `${row.CICLO_ID}-${row.REGIMEN}`;
-    //   if (!acc[key]) acc[key] = [];
-    //   acc[key].push(new AdministracionMedicacion(
-    //     row.DROGA_ID,
-    //     row.DOSIS,
-    //     row.DOSIS_UNIDAD,
-    //     row.FRECUENCIA,
-    //     row.ADMINISTRACION_DIARIA,
-    //     row.FRECUENCIA_DIARIA,
-    //     row.ID
-    //   ));
-    //   return acc;
-    // }, {});
-
     return result.rows.map(row => {
-      const ciclo = Ciclo.fromRow(row);
-      // const key = `${ciclo.ciclo_id}-${ciclo.regimen}`;
-      // ciclo.administracion_medicacion = administracionesPorCiclo[key] || [];
+      const ciclo = new Ciclo(row.CICLO_ID, row.PROTOCOLO_ID, row.REGIMEN, row.DURACION_SEMANAS, row.CICLO_FINAL === 1, row.REPETICIONES);
       return ciclo;
     });
   }
@@ -75,7 +49,8 @@ export class RepositorioProtocolo {
     if (result.rows.length === 0) throw new Error(ERROR_PROTOCOLO_NO_ENCONTRADO);
 
     const ciclos = await this.obtenerCiclos(id);
-    return Protocolo.fromRow(result.rows[0], ciclos);
+    const row = result.rows[0];
+    return new Protocolo(row.NOMBRE, row.ENFERMEDAD, row.LINEA, row.PROTOCOLO_ID, ciclos);
   }
 
   async agregarCiclo(protocoloId, ciclos) {
