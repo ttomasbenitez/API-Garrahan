@@ -59,9 +59,36 @@ When(/^consulto en la API "(.*)"$/, async function (endpoint) {
     .set('Cookie', this.sessionCookie);
 });
 
+Then(/^el sistema me devuelve una lista que contiene los siguientes protocolos:$/, function (dataTable) {
+  if (!response) throw new Error('No se recibió respuesta');
+  if (response.status !== 200) throw new Error(`Status esperado 200, recibido ${response.status}`);
+
+  const actualProtocolos = response.body;
+  if (!Array.isArray(actualProtocolos)) {
+    throw new Error('La respuesta de la API no es un array, pero el test esperaba una lista.');
+  }
+
+  // Convertimos la tabla Gherkin en un array de objetos
+  const expectedProtocolos = dataTable.hashes();
+
+  for (const expected of expectedProtocolos) {
+    const idBuscado = parseInt(expected.protocolo_id, 10);
+
+    const actual = actualProtocolos.find(p => p.protocolo_id === idBuscado);
+
+    assert.ok(actual, `No se encontró el protocolo con id ${idBuscado} en la respuesta.`);
+
+    assert.strictEqual(
+      actual.nombre,
+      expected.nombre,
+      `El nombre para el protocolo id ${idBuscado} no coincide. Esperado: "${expected.nombre}", Recibido: "${actual.nombre}"`
+    );
+  }
+});
+
 Then(/^el sistema me devuelve el protocolo con id "(.*)"$/, function (id) {
   if (response.status !== 200) throw new Error(`Status esperado 200, recibido ${response.status}`);
-  response = JSON.parse(response.body);
+  response = response.body;
   assert.strictEqual(response.protocolo_id, parseInt(id, 10));
 });
 
@@ -107,7 +134,7 @@ Then(/^el ciclo de tratamiento se agrega correctamente al protocolo "(.*)" con i
 
   if (!response) throw new Error('No se recibió respuesta');
   if (response.status !== 200) throw new Error(`Status esperado 200, recibido ${response.status}`);
-  response = JSON.parse(response.body);
+  response = response.body;
   assert.strictEqual(response.protocolo_id, parseInt(idProtocolo, 10));
   assert.ok(response.ciclos);
   compareCicle(idProtocolo, idCiclo);
@@ -122,7 +149,7 @@ Then(/^el ciclo de tratamiento se agrega correctamente al protocolo "(.*)" con l
 
   if (!response) throw new Error('No se recibió respuesta');
   if (response.status !== 200) throw new Error(`Status esperado 200, recibido ${response.status}`);
-  response = JSON.parse(response.body);
+  response = response.body;
   assert.strictEqual(response.protocolo_id, parseInt(idProtocolo, 10));
   assert.ok(response.ciclos);
   compareCicle(idProtocolo, idCiclo1);
