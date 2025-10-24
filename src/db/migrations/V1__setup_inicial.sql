@@ -150,7 +150,7 @@ CREATE TABLE protocolo_paciente (
   paciente_id             NUMBER NOT NULL,
   protocolo_id            NUMBER NOT NULL,
   regimen                 NUMBER NOT NULL,
-  ciclo_actual_id         NUMBER NOT NULL, -- referencia a ciclo.ciclo_id
+  ciclo_actual_id         NUMBER NOT NULL,
   numero_ciclo            NUMBER,
   fecha_inicio            DATE,
   fecha_fin               DATE,
