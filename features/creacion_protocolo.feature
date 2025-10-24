@@ -18,8 +18,19 @@ Feature: Crear un protocolo
         And la enfermedad es "Osteosarcoma"
         And la linea de tratamiento es "primera linea"
         And el sistema responde correctamente
+    
+    Scenario: US-01.3 Obtener protocolos
+        Given existe en la base de datos un protocolo con el nombre de "Osteosarcoma GBTO 2006 - No metastásico" con id "1"
+        And existe en la base de datos un protocolo con el nombre de "ALL-BFM" con id "2"
+        And existe en la base de datos un protocolo con el nombre de "Hodgkin-LPH / EuroNet-PHL" con id "3"
+        When consulto en la API "/protocolo"
+        Then el sistema me devuelve una lista que contiene los siguientes protocolos:
+            | protocolo_id | nombre                                            |
+            | 1            | Osteosarcoma GBTO 2006 - No metastásico         |
+            | 2            | ALL-BFM                                           |
+            | 3            | Hodgkin-LPH / EuroNet-PHL                         |
  
-    Scenario: US-01.3 Agregar ciclo de tratamiento a un protocolo
+    Scenario: US-01.4 Agregar ciclo de tratamiento a un protocolo
         Given existe en la base de datos un protocolo con el nombre de "Osteosarcoma GBTO 2006 - No metastásico" con id "1"
         And quiero agregar al protocolo con id "1" un ciclo de tratamiento con los siguientes datos
             | protocolo_id     | 1               |
@@ -32,7 +43,7 @@ Feature: Crear un protocolo
         Then el ciclo de tratamiento se agrega correctamente al protocolo "1" con id "2"
         And el sistema responde correctamente
  
-    Scenario: US-01.4 Puedo agregar varios ciclos de tratamiento a un protocolo
+    Scenario: US-01.5 Puedo agregar varios ciclos de tratamiento a un protocolo
         Given existe en la base de datos un protocolo con el nombre de "Osteosarcoma GBTO 2006 - No metastásico" con id "1"
         And quiero agregar al protocolo con id "1" un ciclo de tratamiento con los siguientes datos
             | protocolo_id     | 1               |
@@ -52,7 +63,7 @@ Feature: Crear un protocolo
         Then el ciclo de tratamiento se agrega correctamente al protocolo "1" con los ids "3","4"
         And el sistema responde correctamente
 
-    Scenario: US-01.5 No puedo crear un protocolo sin su nombre
+    Scenario: US-01.6 No puedo crear un protocolo sin su nombre
         Given quiero crear el protocolo con el nombre de ""
         And enfermedad "Osteosarcoma"
         And de linea de tratamiento "primera linea"
@@ -60,14 +71,14 @@ Feature: Crear un protocolo
         Then responde "400" con el mensaje "nombre es requerido"
         And el sistema responde correctamente
     
-     Scenario: US-01.6 No puedo crear un protocolo sin su enfermedad
+     Scenario: US-01.7 No puedo crear un protocolo sin su enfermedad
         Given quiero crear el protocolo con el nombre de "Osteosarcoma GBTO 2006 - No metastásico"
         And enfermedad ""
         And de linea de tratamiento "primera linea"
         When publico en la API "/protocolo" con los datos
         Then responde "400" con el mensaje "enfermedad es requerido"
 
-    Scenario: US-01.6 No puedo crear un protocolo sin su enfermedad
+    Scenario: US-01.8 No puedo crear un protocolo sin su enfermedad
         Given quiero crear el protocolo con el nombre de "Osteosarcoma GBTO 2006 - No metastásico"
         And enfermedad "Osteosarcoma"
         And de linea de tratamiento ""
