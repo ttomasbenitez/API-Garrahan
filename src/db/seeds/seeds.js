@@ -1,4 +1,12 @@
 // seeds.js
+//import drogas from './data/drogas.json';
+//import presentaciones_droga from './data/presentaciones_droga.json';
+import { readFileSync } from 'fs';
+const drogas = JSON.parse(readFileSync(new URL('./data/drogas.json', import.meta.url)));
+const presentaciones_droga = JSON.parse(readFileSync(new URL('./data/presentaciones_droga.json', import.meta.url)));
+const presentaciones_droga_via = JSON.parse(readFileSync(new URL('./data/presentaciones_droga_via.json', import.meta.url)));
+
+
 async function login(role) {
   const res = await fetch('http://api-garrahan-app-1:3000/auth/login-test', {
     method: 'POST',
@@ -40,13 +48,6 @@ async function createProfesionales(cookie) {
 }
 
 async function createDrogas(cookie) {
-  const drogas = [
-    { nombre_generico: 'Cisplatina', codigo_farmacia: 'D1' },
-    { nombre_generico: 'Doxorrubicina', codigo_farmacia: 'D2' },
-    { nombre_generico: 'Metotrexato', codigo_farmacia: 'D3' },
-    { nombre_generico: 'Desrazozxane', codigo_farmacia: 'D4' },
-  ];
-
   const res = await fetch('http://api-garrahan-app-1:3000/droga', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Cookie': cookie },
@@ -57,8 +58,11 @@ async function createDrogas(cookie) {
 
 async function createFormasFarmaceuticas(cookie) {
   const formas = [
-    { nombre: 'Comprimido', codigo: 'VO' },
-    { nombre: 'Ampolla', codigo: 'IV' },
+    { nombre: 'COMPRIMIDO' },
+    { nombre: 'CÁPSULA' },
+    { nombre: 'FRASCO AMPOLLA' },
+    { nombre: 'VIAL' },
+    { nombre: 'JERINGA PRELLENADA' }
   ];
 
   const res = await fetch('http://api-garrahan-app-1:3000/forma-farmaceutica', {
@@ -70,16 +74,18 @@ async function createFormasFarmaceuticas(cookie) {
 }
 
 async function createPresentacionesDroga(cookie) {
-  const presentaciones = [
-    { droga_id: 1, forma_farmaceutica_id: 1, estado: 'Activo', fuerza_valor: 200, fuerza_unidad: 'mg/ml' },
-    { droga_id: 2, forma_farmaceutica_id: 1, estado: null, fuerza_valor: null, fuerza_unidad: null },
-    { droga_id: 3, forma_farmaceutica_id: 1, estado: null, fuerza_valor: null, fuerza_unidad: null },
-  ];
+  // estado para qué sirve?
+  //const presentaciones = [
+  //  { droga_id: 20, forma_farmaceutica_id: 3, estado: 'Activo', fuerza_valor: 10, fuerza_unidad: 'mg' }, //CISPLATINO
+  //  { droga_id: 20, forma_farmaceutica_id: 3, estado: 'Activo', fuerza_valor: 50, fuerza_unidad: 'mg' }, //CISPLATINO
+  //  { droga_id: 2, forma_farmaceutica_id: 1, estado: null, fuerza_valor: null, fuerza_unidad: null },
+  //  { droga_id: 3, forma_farmaceutica_id: 1, estado: null, fuerza_valor: null, fuerza_unidad: null },
+  //];
 
   const res = await fetch('http://api-garrahan-app-1:3000/presentacion-droga', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Cookie': cookie },
-    body: JSON.stringify(presentaciones),
+    body: JSON.stringify(presentaciones_droga),
   });
   console.log('Presentaciones de droga creadas:', await res.json());
 }
@@ -118,32 +124,30 @@ async function createViasAdministracion(cookie) {
 }
 
 async function createPresentacionDrogaVia(cookie) {
-  const presentaciones = [
-    { via_id: 1, presentacion_id: 1, es_default: '0' },
-    { via_id: 2, presentacion_id: 1, es_default: '0' },
-    { via_id: 1, presentacion_id: 2, es_default: '0' },
-  ];
-
   const res = await fetch('http://api-garrahan-app-1:3000/presentacion-droga-via', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Cookie': cookie },
-    body: JSON.stringify(presentaciones),
+    body: JSON.stringify(presentaciones_droga_via),
   });
   console.log('Presentaciones de droga por vía creadas:', await res.json());
 }
 
 async function createAdministracionesMedicacion(cookie) {
+  // REHACER.
   const administraciones = [
-    { protocolo_id: 1, ciclo_id: 1, regimen: 1, droga_id: 1, cantidad_dias: 2, administracion_diaria: 0, frecuencia_diaria: 1, fuerza_valor: 60,   fuerza_unidad: 'MG/M2', via_id: 1 },
-    { protocolo_id: 1, ciclo_id: 1, regimen: 1, droga_id: 2, cantidad_dias: 2, administracion_diaria: 0, frecuencia_diaria: 1, fuerza_valor: 37.5, fuerza_unidad: 'MG/M2', via_id: 1 },
-    { protocolo_id: 1, ciclo_id: 1, regimen: 1, droga_id: 3, cantidad_dias: 2, administracion_diaria: 0, frecuencia_diaria: 1, fuerza_valor: 12,   fuerza_unidad: 'G/M2',  via_id: 1 },
-    { protocolo_id: 1, ciclo_id: 2, regimen: 1, droga_id: 1, cantidad_dias: 2, administracion_diaria: 0, frecuencia_diaria: 1, fuerza_valor: 60,   fuerza_unidad: 'MG/M2', via_id: 1 },
-    { protocolo_id: 1, ciclo_id: 2, regimen: 1, droga_id: 2, cantidad_dias: 2, administracion_diaria: 0, frecuencia_diaria: 1, fuerza_valor: 37.5, fuerza_unidad: 'MG/M2', via_id: 1 },
-    { protocolo_id: 1, ciclo_id: 2, regimen: 1, droga_id: 3, cantidad_dias: 2, administracion_diaria: 0, frecuencia_diaria: 1, fuerza_valor: 12,   fuerza_unidad: 'G/M2',  via_id: 1 },
-    { protocolo_id: 1, ciclo_id: 3, regimen: 1, droga_id: 2, cantidad_dias: 2, administracion_diaria: 0, frecuencia_diaria: 1, fuerza_valor: 37.5, fuerza_unidad: 'MG/M2', via_id: 1 },
-    { protocolo_id: 1, ciclo_id: 3, regimen: 1, droga_id: 4, cantidad_dias: 2, administracion_diaria: 0, frecuencia_diaria: 1, fuerza_valor: 375,  fuerza_unidad: 'MG/M2', via_id: 1 },
-    { protocolo_id: 1, ciclo_id: 3, regimen: 1, droga_id: 3, cantidad_dias: 2, administracion_diaria: 0, frecuencia_diaria: 1, fuerza_valor: 12,   fuerza_unidad: 'G/M2',  via_id: 1 }
+    { protocolo_id: 1, ciclo_id: 1, regimen: 1, droga_id: 20, cantidad_dias: 2, administracion_diaria: 0, frecuencia_diaria: 1, fuerza_valor: 60,   fuerza_unidad: 'mg/m2', via_id: 1 },
+    { protocolo_id: 1, ciclo_id: 1, regimen: 1, droga_id: 34, cantidad_dias: 2, administracion_diaria: 0, frecuencia_diaria: 1, fuerza_valor: 37.5, fuerza_unidad: 'mg/m2', via_id: 1 },
+    { protocolo_id: 1, ciclo_id: 1, regimen: 1, droga_id: 68, cantidad_dias: 2, administracion_diaria: 0, frecuencia_diaria: 1, fuerza_valor: 12,   fuerza_unidad: 'gr/m2',  via_id: 1 },
+    { protocolo_id: 1, ciclo_id: 2, regimen: 1, droga_id: 20, cantidad_dias: 2, administracion_diaria: 0, frecuencia_diaria: 1, fuerza_valor: 60,   fuerza_unidad: 'mg/m2', via_id: 1 },
+    { protocolo_id: 1, ciclo_id: 2, regimen: 1, droga_id: 34, cantidad_dias: 2, administracion_diaria: 0, frecuencia_diaria: 1, fuerza_valor: 37.5, fuerza_unidad: 'mg/m2', via_id: 1 },
+    { protocolo_id: 1, ciclo_id: 2, regimen: 1, droga_id: 68, cantidad_dias: 2, administracion_diaria: 0, frecuencia_diaria: 1, fuerza_valor: 12,   fuerza_unidad: 'gr/m2',  via_id: 1 },
+    { protocolo_id: 1, ciclo_id: 3, regimen: 1, droga_id: 34, cantidad_dias: 2, administracion_diaria: 0, frecuencia_diaria: 1, fuerza_valor: 37.5, fuerza_unidad: 'mg/m2', via_id: 1 },
+    { protocolo_id: 1, ciclo_id: 3, regimen: 1, droga_id: 4, cantidad_dias: 2, administracion_diaria: 0, frecuencia_diaria: 1, fuerza_valor: 375,  fuerza_unidad: 'mg/m2', via_id: 1 },
+    { protocolo_id: 1, ciclo_id: 3, regimen: 1, droga_id: 4, cantidad_dias: 2, administracion_diaria: 0, frecuencia_diaria: 1, fuerza_valor: 375,  fuerza_unidad: 'mg/m2', via_id: 2 },
+    { protocolo_id: 1, ciclo_id: 3, regimen: 1, droga_id: 68, cantidad_dias: 2, administracion_diaria: 0, frecuencia_diaria: 1, fuerza_valor: 12,   fuerza_unidad: 'g/m2',  via_id: 1 }
   ];
+  //MISSING DEXRAZOXANE DE SU TABLA DE DROGAS DROGA-ID 4 ACÁ.
+  // 2do DEXRAZOXANE solo para dar la opción de VO y IV por lo pronto.
 
   for (const adm of administraciones) {
     const url = `http://api-garrahan-app-1:3000/protocolo/${adm.protocolo_id}/ciclo/${adm.ciclo_id}/regimen/${adm.regimen}/administracion`;
