@@ -111,13 +111,13 @@ CREATE TABLE administracion_medicacion (
 -- Receta emitida para un paciente en un ciclo/regimen
 CREATE TABLE receta_paciente (
   receta_id      NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  ciclo_id       NUMBER NOT NULL,
   protocolo_id   NUMBER NOT NULL,
+  ciclo_id       NUMBER NOT NULL,
   regimen        NUMBER NOT NULL,
   paciente_id    NUMBER NOT NULL,
   profesional_id NUMBER NOT NULL,
-  fecha_receta   DATE   NOT NULL,
-  estado_tratamiento VARCHAR2(100),
+  fecha_receta   DATE DEFAULT SYSDATE NOT NULL,
+  estado         VARCHAR2(100),
   peso           FLOAT,
   talla          FLOAT,
   superficie_corporal FLOAT,

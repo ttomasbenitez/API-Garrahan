@@ -2,6 +2,7 @@ import oracledb from 'oracledb';
 import Paciente from '../domain/paciente.js';
 import { ERROR_PACIENTE_CREACION, ERROR_PACIENTE_NO_ENCONTRADO } from '../errors/paciente.js';
 import { RepositorioPacienteProfesional } from './repositorioPacienteProfesional.js';
+import { toFloat, toStr } from '../utils/formatters.js';
 
 export class RepositorioPaciente {
   constructor(connection) {
@@ -19,13 +20,13 @@ export class RepositorioPaciente {
           )
           RETURNING paciente_id INTO :id`,
       {
-        nombre: paciente.nombre,
-        apellido: paciente.apellido,
-        id_hospitalario: paciente.id_hospitalario,
+        nombre: toStr(paciente.nombre),
+        apellido: toStr(paciente.apellido),
+        id_hospitalario: toStr(paciente.id_hospitalario),
         fecha_nacimiento: paciente.fecha_nacimiento,
-        peso: paciente.peso,
-        sexo: paciente.sexo,
-        obra_social: paciente.obra_social,
+        peso: toFloat(paciente.peso),
+        sexo: toStr(paciente.sexo),
+        obra_social: toStr(paciente.obra_social),
         id: { dir: oracledb.BIND_OUT, type: oracledb.NUMBER },
       },
       { autoCommit: true }

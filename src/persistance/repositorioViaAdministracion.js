@@ -1,6 +1,7 @@
 import oracledb from 'oracledb';
 import { ERROR_VIA_ADMINISTRACION_CREACION } from '../errors/viaAdministracion.js';
 import ViaAdministracion from '../domain/droga/viaAdministracion.js';
+import { toStr } from '../utils/formatters.js';
 
 export class RepositorioViaAdministracion {
   constructor(db) {
@@ -15,7 +16,6 @@ export class RepositorioViaAdministracion {
         VALUES (:nombre, :codigo)
         RETURNING via_id INTO :id
       `;
-        const toStr = (v) => (v === undefined || v === null ? null : String(v));
 
         const binds = viasAdministracion.map(d => ({
           nombre: toStr(d.nombre),

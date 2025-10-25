@@ -23,6 +23,7 @@ Given('existe el ciclo del protocolo {string} con:', function (string, dataTable
     .send(ciclo)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
+
 });
 
 Given('existe la droga con id {string} y con los datos:', function (string, dataTable) {

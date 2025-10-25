@@ -100,6 +100,29 @@ CREATE TABLE administracion_medicacion (
   CONSTRAINT fk_admin_via   FOREIGN KEY (via_id)   REFERENCES via_administracion(via_id)
 );
 
+
+-- ======= RECETAS / TRATAMIENTOS =======
+
+-- Receta emitida para un paciente en un ciclo/regimen
+CREATE TABLE receta_paciente (
+  receta_id      NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  ciclo_id       NUMBER NOT NULL,
+  protocolo_id   NUMBER NOT NULL,
+  regimen        NUMBER NOT NULL,
+  paciente_id    NUMBER NOT NULL,
+  profesional_id NUMBER NOT NULL,
+  fecha_receta   DATE DEFAULT SYSDATE NOT NULL,
+  estado         VARCHAR2(100),
+  peso           FLOAT,
+  talla          FLOAT,
+  superficie_corporal FLOAT,
+  CONSTRAINT fk_receta_paciente    FOREIGN KEY (paciente_id)  REFERENCES paciente(paciente_id),
+  CONSTRAINT fk_receta_profesional FOREIGN KEY (profesional_id) REFERENCES profesional(profesional_id),
+  CONSTRAINT fk_receta_ciclo       FOREIGN KEY (protocolo_id, ciclo_id, regimen)
+    REFERENCES ciclo(protocolo_id, ciclo_id, regimen)
+);
+
+-- Asignación de un protocolo a un paciente y su ciclo actual
 CREATE TABLE protocolo_paciente (
   protocolo_paciente_id   NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   paciente_id             NUMBER NOT NULL,
@@ -121,6 +144,7 @@ CREATE TABLE protocolo_paciente (
   CONSTRAINT fk_pp_prof_asig  FOREIGN KEY (profesional_id_asignador) REFERENCES profesional(profesional_id)
 );
 
+-- Relación N a N paciente ↔ profesional (equipo tratante)
 CREATE TABLE paciente_profesional (
   profesional_id NUMBER NOT NULL,
   paciente_id    NUMBER NOT NULL,
@@ -129,5 +153,7 @@ CREATE TABLE paciente_profesional (
   CONSTRAINT fk_pprof_prof FOREIGN KEY (profesional_id) REFERENCES profesional(profesional_id),
   CONSTRAINT fk_pprof_pac  FOREIGN KEY (paciente_id)    REFERENCES paciente(paciente_id)
 );
+
+-- ======= ÍNDICES DE APOYO =======
 
 CREATE INDEX idx_protocolo_nombre ON protocolo(nombre);

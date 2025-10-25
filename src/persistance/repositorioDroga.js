@@ -1,6 +1,7 @@
 import oracledb from 'oracledb';
 import { ERROR_DROGRA_CREACION } from '../errors/droga.js';
 import Droga from '../domain/droga/index.js';
+import { toStr } from '../utils/formatters.js';
 
 export class RepositorioDroga {
   constructor(db) {
@@ -15,7 +16,6 @@ export class RepositorioDroga {
         VALUES (:nombre_generico)
         RETURNING droga_id INTO :id
       `;
-        const toStr = (v) => (v === undefined || v === null ? null : String(v));
 
         const binds = drogas.map(d => ({
           nombre_generico: toStr(d.nombre_generico),

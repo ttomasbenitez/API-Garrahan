@@ -2,6 +2,7 @@ import oracledb from 'oracledb';
 import Protocolo from '../domain/protocolo/index.js';
 import { ERROR_PROTOCOLO_CREACION, ERROR_PROTOCOLO_NO_ENCONTRADO } from '../errors/protocolo.js';
 import Ciclo from '../domain/protocolo/ciclo.js';
+import { toStr } from '../utils/formatters.js';
 export class RepositorioProtocolo {
   constructor(db) {
     this.db = db;
@@ -14,9 +15,9 @@ export class RepositorioProtocolo {
          VALUES (:nombre, :enfermedad, :linea)
          RETURNING protocolo_id INTO :id`,
         {
-          nombre: protocolo.nombre,
-          enfermedad: protocolo.enfermedad,
-          linea: protocolo.linea,
+          nombre: toStr(protocolo.nombre),
+          enfermedad: toStr(protocolo.enfermedad),
+          linea: toStr(protocolo.linea),
           id: { dir: oracledb.BIND_OUT, type: oracledb.NUMBER }
         },
         { autoCommit: true }

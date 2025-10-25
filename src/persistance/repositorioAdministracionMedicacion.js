@@ -1,5 +1,6 @@
 import oracledb from 'oracledb';
 import { ERROR_ADMINISTRACION_MEDICACION_CREACION } from '../errors/administracionMedicacion.js';
+import { toNum, toStr } from '../utils/formatters.js';
 
 export class RepositorioAdminisitracionMedicacion {
   constructor(db) { this.db = db; }
@@ -20,8 +21,6 @@ export class RepositorioAdminisitracionMedicacion {
            :cantidad_dias, :administracion_diaria, :frecuencia_diaria)
         RETURNING admin_id INTO :id
       `;
-        const toNum = v => (v === null || v === '' || v === undefined ? null : Number(v));
-        const toStr = v => (v === null || v === '' || v === undefined ? null : String(v));
 
         const binds = administraciones.map(a => ({
           protocolo_id: toNum(a.protocolo_id),

@@ -1,6 +1,7 @@
 import OracleDB from 'oracledb';
 import { ERROR_PRESENTACION_DROGA_VIA_CREACION, ERROR_PRESENTACION_DROGA_VIA_ELIMINACION } from '../errors/presentacionDrogaVia.js';
 import PresentacionDrogaVia from '../domain/droga/presentacionDrogaVia.js';
+import { toNum } from '../utils/formatters.js';
 
 export class RepositorioPresentacionDrogaVia {
   constructor(db) {
@@ -16,8 +17,8 @@ export class RepositorioPresentacionDrogaVia {
         `;
 
         const binds = presentacionesVia.map(pv => ({
-          via_id: pv.via_id,
-          presentacion_id: pv.presentacion_id,
+          via_id: toNum(pv.via_id),
+          presentacion_id: toNum(pv.presentacion_id),
           es_default: pv.es_default || '0',
         }));
 

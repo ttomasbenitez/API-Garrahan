@@ -1,6 +1,7 @@
 import oracledb from 'oracledb';
 import Profesional from '../domain/profesional.js';
 import { ERROR_PROFESIONAL_CREACION, ERROR_PROFESIONAL_NO_ENCONTRADO } from '../errors/profesional.js';
+import { toNum, toStr } from '../utils/formatters.js';
 
 export class RepositorioProfesional {
   constructor(connection) {
@@ -17,11 +18,11 @@ export class RepositorioProfesional {
           )
           RETURNING profesional_id INTO :id`,
       {
-        nombre: profesional.nombre,
-        apellido: profesional.apellido,
-        dni: profesional.dni,
-        matricula: profesional.matricula,
-        especialidad: profesional.especialidad,
+        nombre: toStr(profesional.nombre),
+        apellido: toStr(profesional.apellido),
+        dni: toNum(profesional.dni),
+        matricula: toStr(profesional.matricula),
+        especialidad: toStr(profesional.especialidad),
         id: { dir: oracledb.BIND_OUT, type: oracledb.NUMBER },
       },
       { autoCommit: true }

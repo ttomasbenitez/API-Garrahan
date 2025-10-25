@@ -1,6 +1,7 @@
 import OracleDB from 'oracledb';
 import { ERROR_PRESENTACION_DROGA_CREACION, ERROR_PRESENTACION_DROGA_ELIMINACION } from '../errors/presentacionDroga.js';
 import PresentacionDroga from '../domain/droga/presentacionDroga.js';
+import { toNum, toStr } from '../utils/formatters.js';
 
 export class RepositorioPresentacionDroga {
   constructor(db) {
@@ -15,8 +16,6 @@ export class RepositorioPresentacionDroga {
         VALUES (:droga_id, :forma_farmaceutica_id, :codigo_farmacia, :estado, :fuerza_valor, :fuerza_unidad)
         RETURNING presentacion_id INTO :id
       `;
-        const toStr = (v) => (v === undefined || v === null ? null : String(v));
-        const toNum = (v) => (v === undefined || v === null ? null : Number(v));
         const binds = presentaciones.map(p => ({
           droga_id: toNum(p.droga_id),
           forma_farmaceutica_id: toNum(p.forma_farmaceutica_id),

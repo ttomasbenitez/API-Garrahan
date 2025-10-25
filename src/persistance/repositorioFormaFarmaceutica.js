@@ -1,6 +1,7 @@
 import OracleDB from 'oracledb';
 import { ERROR_FORMA_FARMACEUTICA_CREACION } from '../errors/formaFarmaceutica.js';
 import FormaFarmaceutica from '../domain/droga/formaFarmaceutica.js';
+import { toStr } from '../utils/formatters.js';
 
 export class RepositorioFormaFarmaceutica {
   constructor(db) {
@@ -15,7 +16,6 @@ export class RepositorioFormaFarmaceutica {
         VALUES (:nombre, :codigo)
         RETURNING forma_farmaceutica_id INTO :id
       `;
-        const toStr = (v) => (v === undefined || v === null ? null : String(v));
 
         const binds = formasFarmaceuticas.map(f => ({
           nombre: toStr(f.nombre),

@@ -58,6 +58,7 @@ async function enableFks(conn) {
 async function truncateTables(conn) {
   const tables = [
     'ADMINISTRACION_MEDICACION',
+    'RECETA_PACIENTE',
     'CICLO',
     'PROTOCOLO',
     'PRESENTACION_DROGA_VIA',
