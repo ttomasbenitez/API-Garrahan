@@ -1,3 +1,4 @@
+import { ERROR_RECETA_PACIENTE_CREACION_CODE } from '../../errors/receta.js';
 import { toFloat, toNum, toStr } from '../../utils/formatters.js';
 
 class RecetaPaciente {
@@ -22,34 +23,46 @@ class RecetaPaciente {
   }
 
   validar() {
-    if (this.protocolo_id  === null || this.ciclo_id  === null || this.regimen  === null) {
-      throw new Error('protocolo_id, ciclo_id y regimen son obligatorios.');
+    const error = (message, code) => {
+      const err = new Error(message);
+      err.status = 404;
+      err.code = code;
+      return err;
+    };
+
+    if (this.protocolo_id === null || this.ciclo_id === null || this.regimen === null) {
+      throw error('protocolo_id, ciclo_id y regimen son obligatorios.', ERROR_RECETA_PACIENTE_CREACION_CODE);
     }
-    if (this.paciente_id  === null) {
-      throw new Error('paciente_id es obligatorio.');
+
+    if (this.paciente_id === null) {
+      throw error('paciente_id es obligatorio.', ERROR_RECETA_PACIENTE_CREACION_CODE);
     }
-    if (this.profesional_id  === null) {
-      throw new Error('profesional_id es obligatorio.');
+
+    if (this.profesional_id === null) {
+      throw error('profesional_id es obligatorio.', ERROR_RECETA_PACIENTE_CREACION_CODE);
     }
 
     if (this.estado && this.estado.length > 100) {
-      throw new Error('estado no puede superar 100 caracteres.');
+      throw error('estado no puede superar 100 caracteres.', ERROR_RECETA_PACIENTE_CREACION_CODE);
     }
 
     if (this.peso === null || this.talla === null || this.superficie_corporal === null) {
-      throw new Error('peso, talla y superficie_corporal son obligatorios.');
+      throw error('peso, talla y superficie_corporal son obligatorios.', ERROR_RECETA_PACIENTE_CREACION_CODE);
     }
 
     if (this.peso <= 0) {
-      throw new Error('peso debe ser mayor que 0.');
+      throw error('peso debe ser mayor que 0.', ERROR_RECETA_PACIENTE_CREACION_CODE);
     }
+
     if (this.talla <= 0) {
-      throw new Error('talla debe ser mayor que 0.');
+      throw error('talla debe ser mayor que 0.', ERROR_RECETA_PACIENTE_CREACION_CODE);
     }
+
     if (this.superficie_corporal <= 0) {
-      throw new Error('superficie_corporal debe ser mayor que 0.');
+      throw error('superficie_corporal debe ser mayor que 0.', ERROR_RECETA_PACIENTE_CREACION_CODE);
     }
   }
+
 }
 
 export default RecetaPaciente;

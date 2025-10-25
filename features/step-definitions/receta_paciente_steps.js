@@ -63,3 +63,11 @@ Then('no se crea la receta', function () {
   data = null;
   response = null;
 });
+
+
+Then('el sistema rechaza la creación por campos obligatorios faltantes', function () {
+  assert.equal(response.status, 404);
+  assert.equal(response.body.error, 'protocolo_id, ciclo_id y regimen son obligatorios.');
+  assert.equal(response.body.code, 'RECETA_PACIENTE_CREACION_ERROR');
+
+});

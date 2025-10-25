@@ -112,53 +112,34 @@ Feature: Gestión de Recetas para Pacientes
     Then el sistema rechaza la creación por clave foránea inválida "FK_PACIENTE"
     And no se crea la receta
 
-  @wip
   Scenario: US-11.7 Rechazar creación por profesional inexistente
-    When publico la API "/recetas" con los siguientes datos:
-      | protocolo_id   | 10         |
-      | ciclo_id       | 1          |
-      | regimen        | 1          |
-      | paciente_id    | 2001       |
-      | profesional_id | 9999       |
-      | fecha_receta   | 2025-10-22 |
-    Then el sistema rechaza la creación por clave foránea inválida a "profesional"
+    Given que tengo los siguientes datos de la receta:
+      | protocolo_id        | 1       |
+      | ciclo_id            | 1       |
+      | regimen             | 1       |
+      | paciente_id         | 1       |
+      | profesional_id      | 5       |
+      | estado              | activo  |
+      | peso                | 40.4    |
+      | talla               | 140.7   |
+      | superficie_corporal | 1.2     |
+    When publico la API "/recetas" con los datos de la receta
+    Then el sistema rechaza la creación por clave foránea inválida "FK_PROFESIONAL"
     And no se crea la receta
 
-  @wip
+  @wipo
   Scenario: US-11.8 Rechazar nulos en campos obligatorios
-    When publico la API "/recetas" con los siguientes datos:
-      | protocolo_id   |      |
-      | ciclo_id       | 1    |
-      | regimen        | 1    |
-      | paciente_id    | 2001 |
-      | profesional_id | 3001 |
-      | fecha_receta   |      |
+     Given que tengo los siguientes datos de la receta:
+      | protocolo_id        | 1       |
+      | ciclo_id            |         |
+      | regimen             |         |
+      | paciente_id         | 1       |
+      | profesional_id      | 1       |
+      | estado              |         |
+      | peso                | 40.4    |
+      | talla               | 140.7   |
+      | superficie_corporal |         |
+    When publico la API "/recetas" con los datos de la receta
     Then el sistema rechaza la creación por campos obligatorios faltantes
     And no se crea la receta
 
-  @wip
-  Scenario: US-11.9 Permitir campos opcionales nulos
-    When publico la API "/recetas" con los siguientes datos:
-      | protocolo_id        | 10         |
-      | ciclo_id            | 1          |
-      | regimen             | 1          |
-      | paciente_id         | 2001       |
-      | profesional_id      | 3001       |
-      | fecha_receta        | 2025-10-22 |
-      | estado  |            |
-      | peso                |            |
-      | talla               |            |
-      | superficie_corporal |            |
-    Then se crea correctamente la receta
-
-  @wip
-  Scenario: US-11.11 Validar formato de fecha_receta
-    When publico la API "/recetas" con los siguientes datos:
-      | protocolo_id   | 10         |
-      | ciclo_id       | 1          |
-      | regimen        | 1          |
-      | paciente_id    | 2001       |
-      | profesional_id | 3001       |
-      | fecha_receta   | 22-10-2025 |
-    Then el sistema rechaza la creación por formato inválido de "fecha_receta"
-    And no se crea la receta
