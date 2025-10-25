@@ -53,3 +53,13 @@ Then('se crea correctamente la receta', function () {
 Then('el {string} de la receta es {string}', function (key, value) {
   assert(response.body[key].toString() === value, `Se esperaba ${value} pero se obtuvo ${response.body[key]}`);
 });
+
+Then('el sistema rechaza la creación por clave foránea inválida {string}', function (code) {
+  assert.equal(response.body.code, code);
+});
+
+Then('no se crea la receta', function () {
+  assert.equal(response.status, 404);
+  data = null;
+  response = null;
+});

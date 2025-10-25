@@ -47,15 +47,15 @@ Feature: Gestión de Recetas para Pacientes
 
   @wip
   Scenario: US-11.2 Obtener una receta por su id
-    Given existe en la base de datos una receta con id "5001" y con los datos:
-      | protocolo_id   | 10         |
+    Given existe en la base de datos una receta con id "1" y con los datos:
+      | protocolo_id   | 1          |
       | ciclo_id       | 1          |
       | regimen        | 1          |
-      | paciente_id    | 2001       |
-      | profesional_id | 3001       |
+      | paciente_id    | 1          |
+      | profesional_id | 1          |
       | fecha_receta   | 2025-10-22 |
-    When consulto en la API "/recetas/5001" por su id de receta
-    Then el sistema me devuelve la receta con id "5001"
+    When consulto en la API "/recetas/1" por su id de receta
+    Then el sistema me devuelve la receta con id "1"
     And responde correctamente la receta
 
   @wip
@@ -82,28 +82,34 @@ Feature: Gestión de Recetas para Pacientes
     Then el sistema me devuelve una lista con 2 recetas
     And responde correctamente la receta
 
-  @wip
   Scenario: US-11.5 Rechazar creación por FK compuesta de ciclo inválida
-    When publico la API "/recetas" con los siguientes datos:
-      | protocolo_id   | 99         |
-      | ciclo_id       | 1          |
-      | regimen        | 1          |
-      | paciente_id    | 2001       |
-      | profesional_id | 3001       |
-      | fecha_receta   | 2025-10-22 |
-    Then el sistema rechaza la creación por clave foránea inválida a "ciclo"
+    Given que tengo los siguientes datos de la receta:
+      | protocolo_id        | 1       |
+      | ciclo_id            | 1       |
+      | regimen             | 0       |
+      | paciente_id         | 1       |
+      | profesional_id      | 1       |
+      | estado              | activo  |
+      | peso                | 40.4    |
+      | talla               | 140.7   |
+      | superficie_corporal | 1.2     |
+    When publico la API "/recetas" con los datos de la receta
+    Then el sistema rechaza la creación por clave foránea inválida "FK_CICLO"
     And no se crea la receta
 
-  @wip
   Scenario: US-11.6 Rechazar creación por paciente inexistente
-    When publico la API "/recetas" con los siguientes datos:
-      | protocolo_id   | 10         |
-      | ciclo_id       | 1          |
-      | regimen        | 1          |
-      | paciente_id    | 9999       |
-      | profesional_id | 3001       |
-      | fecha_receta   | 2025-10-22 |
-    Then el sistema rechaza la creación por clave foránea inválida a "paciente"
+     Given que tengo los siguientes datos de la receta:
+      | protocolo_id        | 1       |
+      | ciclo_id            | 1       |
+      | regimen             | 1       |
+      | paciente_id         | 3       |
+      | profesional_id      | 1       |
+      | estado              | activo  |
+      | peso                | 40.4    |
+      | talla               | 140.7   |
+      | superficie_corporal | 1.2     |
+    When publico la API "/recetas" con los datos de la receta
+    Then el sistema rechaza la creación por clave foránea inválida "FK_PACIENTE"
     And no se crea la receta
 
   @wip

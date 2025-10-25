@@ -1,5 +1,6 @@
+import e from 'express';
 import RecetaPaciente from '../domain/receta/recetaPaciente.js';
-import { ERROR_RECETA_PACIENTE_CREACION } from '../errors/receta.js';
+import { ERROR_RECETA_PACIENTE_CREACION, ERROR_RECETA_PACIENTE_CREACION_CODE } from '../errors/receta.js';
 import logger from '../utils/logger.js';
 
 export const makeRecetaController = (recetaPacienteService) => ({
@@ -28,6 +29,6 @@ async function crearRecetaPaciente(req, res, service) {
     res.status(201).json(recetaPaciente);
   } catch (error) {
     logger.error('Error al crear la receta del paciente: %o', error);
-    res.status(500).json({ error: ERROR_RECETA_PACIENTE_CREACION });
+    res.status(error.status || 500).json({ error: error.message || ERROR_RECETA_PACIENTE_CREACION, code: error.code || ERROR_RECETA_PACIENTE_CREACION_CODE });
   }
 }
