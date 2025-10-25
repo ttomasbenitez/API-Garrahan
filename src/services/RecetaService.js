@@ -6,7 +6,10 @@ export class RecetaService {
   }
 
   async crearRecetaPaciente(receta) {
-
     return await this.recetaPacienteRepo.guardar(receta);
+  }
+
+  async obtenerRecetaPaciente(id) {
+    return await this.recetaPacienteRepo.obtener(id);
   }
 }

@@ -69,5 +69,46 @@ Then('el sistema rechaza la creación por campos obligatorios faltantes', functi
   assert.equal(response.status, 404);
   assert.equal(response.body.error, 'protocolo_id, ciclo_id y regimen son obligatorios.');
   assert.equal(response.body.code, 'RECETA_PACIENTE_CREACION_ERROR');
+});
 
+Given('existe en la base de datos una receta con id {string} y con los datos:', async function (string, dataTable) {
+  data = dataTable.rowsHash();
+  await request(app)
+    .post('/recetas')
+    .send(data)
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie)
+    .then(function (res) {
+      assert.ok(res.body);
+    });
+});
+
+When('consulto en la API {string} por su id de receta', async function (endpoint) {
+  await request(app)
+    .get(endpoint)
+    .send(data)
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie)
+    .then(function (res) {
+      response = res;
+    });
+});
+
+Then('el sistema me devuelve la receta con id {string}', function (id) {
+  assert.equal(Number(id), response.body.id);
+  assert.equal(Number(data.protocolo_id), response.body.protocolo_id);
+  assert.equal(Number(data.ciclo_id), response.body.ciclo_id);
+  assert.equal(Number(data.regimen), response.body.regimen);
+  assert.equal(Number(data.paciente_id), response.body.paciente_id);
+  assert.equal(Number(data.profesional_id), response.body.profesional_id);
+  assert.equal(data.estado, response.body.estado);
+  assert.equal(Number(data.peso), response.body.peso);
+  assert.equal(Number(data.talla), response.body.talla);
+  assert.equal(Number(data.superficie_corporal), response.body.superficie_corporal);
+});
+
+Then('responde correctamente la receta', function () {
+  assert.equal(response.status, 200);
+  data = null;
+  response = null;
 });

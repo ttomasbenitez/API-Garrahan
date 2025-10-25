@@ -8,7 +8,7 @@ export class RepositorioPacienteProfesional {
   }
 
   async asignar(profesional_id, paciente_id, rol = 'Médico Tratante') {
-    // 1. Verificar que el profesional existe
+
     const profesionalExiste = await this.connection.execute(
       'SELECT COUNT(*) as count FROM profesional WHERE profesional_id = :profesional_id',
       { profesional_id },
@@ -19,7 +19,6 @@ export class RepositorioPacienteProfesional {
       throw new Error('El profesional especificado no existe');
     }
 
-    // 2. Verificar que el profesional no esté ya asignado a este paciente
     const yaAsignado = await this.connection.execute(
       `SELECT COUNT(*) as count FROM paciente_profesional 
        WHERE profesional_id = :profesional_id AND paciente_id = :paciente_id`,
@@ -31,7 +30,6 @@ export class RepositorioPacienteProfesional {
       throw new Error('El profesional ya está asignado a este paciente');
     }
 
-    // 3. Crear la asignación
     const result = await this.connection.execute(
       `INSERT INTO paciente_profesional (profesional_id, paciente_id, rol)
        VALUES (:profesional_id, :paciente_id, :rol)`,

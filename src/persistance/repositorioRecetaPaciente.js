@@ -3,6 +3,7 @@ import { ERROR_RECETA_PACIENTE_CREACION } from '../errors/receta.js';
 import { FK_NOT_EXISTENT_CODE } from '../errors/index.js';
 import { toFloat, toNum, toStr } from '../utils/formatters.js';
 import { mapRecetaPacienteInsertError } from './errorsMapper.js';
+import RecetaPaciente from '../domain/receta/recetaPaciente.js';
 
 
 export class RepositorioRecetaPaciente {
@@ -42,6 +43,7 @@ export class RepositorioRecetaPaciente {
       if (result.rowsAffected === 0) {
         throw new Error(ERROR_RECETA_PACIENTE_CREACION);
       }
+
       const id = result.outBinds.id[0];
       const fecha_receta = result.outBinds.fecha_receta[0];
       if (!id || !fecha_receta) throw new Error(ERROR_RECETA_PACIENTE_CREACION);
@@ -56,6 +58,32 @@ export class RepositorioRecetaPaciente {
       }
       throw err;
     }
+  }
+
+  async obtener(id) {
+    const result = await this.connection.execute(
+      `SELECT protocolo_id, ciclo_id, regimen, paciente_id,
+              profesional_id, fecha_receta, estado,
+              peso, talla, superficie_corporal, receta_id
+       FROM receta_paciente
+       WHERE receta_id = :id`,
+      [id],
+    );
+
+    if (!result || !result.rows) {
+      console.error('Error: La consulta no devolvió un resultado válido.');
+      return null;
+    }
+
+    if (result.rows.length === 0) {
+      return null;
+    }
+
+    const row = result.rows[0];
+    return new RecetaPaciente(
+      row.PROTOCOLO_ID, row.CICLO_ID, row.REGIMEN, row.PACIENTE_ID, row.PROFESIONAL_ID,
+      row.ESTADO, row.PESO, row.TALLA, row.SUPERFICIE_CORPORAL, row.FECHA_RECETA, row.RECETA_ID
+    );
   }
 
 }

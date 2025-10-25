@@ -45,15 +45,17 @@ Feature: Gestión de Recetas para Pacientes
     And el "superficie_corporal" de la receta es "1.2"
     And se crea correctamente la receta
 
-  @wip
   Scenario: US-11.2 Obtener una receta por su id
     Given existe en la base de datos una receta con id "1" y con los datos:
-      | protocolo_id   | 1          |
-      | ciclo_id       | 1          |
-      | regimen        | 1          |
-      | paciente_id    | 1          |
-      | profesional_id | 1          |
-      | fecha_receta   | 2025-10-22 |
+      | protocolo_id        | 1       |
+      | ciclo_id            | 1       |
+      | regimen             | 1       |
+      | paciente_id         | 1       |
+      | profesional_id      | 1       |
+      | estado              | activo  |
+      | peso                | 40.4    |
+      | talla               | 140.7   |
+      | superficie_corporal | 1.2     |
     When consulto en la API "/recetas/1" por su id de receta
     Then el sistema me devuelve la receta con id "1"
     And responde correctamente la receta
