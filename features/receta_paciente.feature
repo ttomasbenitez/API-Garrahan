@@ -127,7 +127,6 @@ Feature: Gestión de Recetas para Pacientes
     Then el sistema rechaza la creación por clave foránea inválida "FK_PROFESIONAL"
     And no se crea la receta
 
-  @wipo
   Scenario: US-11.8 Rechazar nulos en campos obligatorios
      Given que tengo los siguientes datos de la receta:
       | protocolo_id        | 1       |
