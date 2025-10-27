@@ -18,7 +18,7 @@ Given(/^que existen las siguientes drogas:$/, async function (dataTable) {
     codigo_atc: row.codigo_atc
   }));
   response = await request(app)
-    .post('/droga')
+    .post('/drogas')
     .send(drogas)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);

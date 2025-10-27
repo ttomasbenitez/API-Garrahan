@@ -14,7 +14,7 @@ Given(/^que tengo los siguientes datos de la droga:$/, function (dataTable) {
 Given(/^que tengo los siguientes datos de la droga con id "(.*)":$/, async function (_id, dataTable) {
   const data = dataTable.rowsHash();
   response = await request(app)
-    .post('/droga')
+    .post('/drogas')
     .send(data)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
@@ -71,7 +71,7 @@ Then('se crea correctamente', function () {
 
 Given(/^su id es "(.*)"$/, async function (_id) {
   response = await request(app)
-    .post('/droga')
+    .post('/drogas')
     .send(droga)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);

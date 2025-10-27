@@ -127,7 +127,7 @@ app.use('/pacientes', pacientesRoutes(pacienteController));
 app.use('/pacientes', protocoloPacienteRoutes(protocoloPacienteController));
 app.use('/pacientes', protocoloActualRoutes(protocoloActualController));
 app.use('/profesionales', profesionalesRoutes(profesionalController));
-app.use('/droga', drogasRoutes(drogaController));
+app.use('/drogas', drogasRoutes(drogaController));
 app.use('/paciente-profesional', pacienteProfesionalRoutes(pacienteProfesionalController));
 app.use('/via-administracion', viaAdministracionRoutes(viaAdministracionController));
 app.use('/forma-farmaceutica', formaFarmaceuticaRoutes(formaFarmaceuticaController));

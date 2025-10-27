@@ -29,7 +29,7 @@ Given('existe el ciclo del protocolo {string} con:', function (string, dataTable
 Given('existe la droga con id {string} y con los datos:', function (string, dataTable) {
   const droga = dataTable.rowsHash();
   return request(app)
-    .post('/droga')
+    .post('/drogas')
     .send(droga)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);

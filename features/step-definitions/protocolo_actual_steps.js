@@ -18,7 +18,7 @@ let createdAdminId;
 Given(/^existe una Droga con nombre "(.*)" y droga_id (\d+)$/, async function (nombre, id) {
   const data = { nombre_generico: nombre, droga_id: parseInt(id, 10) };
   const createResponse = await request(app)
-    .post('/droga')
+    .post('/drogas')
     .send(data)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);

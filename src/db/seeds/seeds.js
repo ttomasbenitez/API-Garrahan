@@ -48,7 +48,7 @@ async function createProfesionales(cookie) {
 }
 
 async function createDrogas(cookie) {
-  const res = await fetch('http://api-garrahan-app-1:3000/droga', {
+  const res = await fetch('http://api-garrahan-app-1:3000/drogas', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Cookie': cookie },
     body: JSON.stringify(drogas),

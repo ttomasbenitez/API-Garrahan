@@ -13,7 +13,7 @@ let createdViasIds = [];
 Given(/^que existe una droga con los siguientes datos:$/, async function (dataTable) {
   const data = dataTable.rowsHash();
   const createResponse = await request(app)
-    .post('/droga')
+    .post('/drogas')
     .send(data)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
