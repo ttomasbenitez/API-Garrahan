@@ -100,7 +100,7 @@ Given(/^existe un Paciente con paciente_id (\d+) y nombre "(.*)"$/, async functi
   };
 
   const createResponse = await request(app)
-    .post('/paciente')
+    .post('/pacientes')
     .send(data)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
@@ -184,7 +184,7 @@ Given(/^el Paciente (\d+) tiene asignado el Protocolo (\d+), Regimen (\d+), y es
   };
 
   response = await request(app)
-    .post(`/paciente/${data.paciente_id}/protocolos`)
+    .post(`/pacientes/${data.paciente_id}/protocolos`)
     .send(data)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
@@ -193,9 +193,9 @@ Given(/^el Paciente (\d+) tiene asignado el Protocolo (\d+), Regimen (\d+), y es
 Given('el Paciente {int} no tiene ningún Protocolo asignado en protocolo_paciente', function (_pacId) {
 });
 
-When(/^el usuario consulta el endpoint GET \/paciente\/(\d+)\/protocolo-actual$/, async function (pacId) {
+When(/^el usuario consulta el endpoint GET \/pacientes\/(\d+)\/protocolo-actual$/, async function (pacId) {
   response = await request(app)
-    .get(`/paciente/${pacId}/protocolo-actual`)
+    .get(`/pacientes/${pacId}/protocolo-actual`)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
 });

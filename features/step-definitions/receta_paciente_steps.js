@@ -9,7 +9,7 @@ let data;
 Given('existe en la base de datos el paciente con id {string} y con los datos:', async function (string, dataTable) {
   const paciente = dataTable.rowsHash();
   await request(app)
-    .post('/paciente')
+    .post('/pacientes')
     .send(paciente)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);

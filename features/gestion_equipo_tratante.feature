@@ -15,7 +15,7 @@ Feature: Gestión de equipo tratante paciente-profesional
             | peso              | 30          |
             | sexo              | M           |
             | obra_social       | OSDE        |
-    When publico en el endpoint "/paciente" con los datos del paciente
+    When publico en el endpoint "/pacientes" con los datos del paciente
     Then el paciente se crea correctamente
     And el profesional queda asignado automáticamente como "Médico Tratante"
 

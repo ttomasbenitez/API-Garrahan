@@ -16,7 +16,7 @@ Feature: Creación paciente
             | peso              | 30          |
             | sexo              | M           |
             | obra_social       | OSDE        |
-        When publico en el endpoint "/paciente" con los datos del paciente
+        When publico en el endpoint "/pacientes" con los datos del paciente
         Then el paciente se crea correctamente
 
     Scenario: US-03.2 Obtener un paciente asignado al médico por su id
@@ -28,7 +28,7 @@ Feature: Creación paciente
             | peso              | 40          |
             | sexo              | M           |
             | obra_social       | OSDE        |
-        When consulto en la API "/paciente/1" por su id de paciente
+        When consulto en la API "/pacientes/1" por su id de paciente
         Then el sistema me devuelve el paciente correspondiente
         And "nombre" del paciente esperado es "Juan"
         And "apellido" del paciente esperado es "Pérez"
@@ -47,7 +47,7 @@ Feature: Creación paciente
             | peso              | 40          |
             | sexo              | M           |
             | obra_social       | OSDE        |
-        When consulto en la API "/paciente/1" por su id de paciente
+        When consulto en la API "/pacientes/1" por su id de paciente
         Then el sistema devuelve el estado "404"
         And el mensaje de error "Paciente no asociado a profesional"
 
@@ -55,7 +55,7 @@ Feature: Creación paciente
     Scenario: US-03.4 Obtener paciente de la api del hospital por su id_hospitalario
         Given quiero obtener el paciente con id_hospitalario "2" del sistema del hospital
         And con nombre "Juan" y apellido "Pérez"
-        When consulto en la API externa "/paciente/2/externo" por su id_hospitalario
+        When consulto en la API externa "/pacientes/2/externo" por su id_hospitalario
         Then el sistema devuelve el paciente esperado
 
     @wip
@@ -66,5 +66,5 @@ Feature: Creación paciente
             | fecha_nacimiento  | 2020-05-21  |
             | peso              | 40          |
             | sexo              | M           |
-        When publico en el endpoint "/paciente" con los datos del paciente
+        When publico en el endpoint "/pacientes" con los datos del paciente
         Then obtengo el error "Faltan campos requeridos"

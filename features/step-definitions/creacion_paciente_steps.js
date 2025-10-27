@@ -34,7 +34,7 @@ Given(/^quiero crear un paciente con los siguientes datos:$/, function (dataTabl
 Given(/^existe un paciente con los siguientes datos asociado al médico con id "(.*)":$/, async function (_idProfesional, dataTable) {
   this.paciente = dataTable.rowsHash();
   await request(app)
-    .post('/paciente')
+    .post('/pacientes')
     .send(this.paciente)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);

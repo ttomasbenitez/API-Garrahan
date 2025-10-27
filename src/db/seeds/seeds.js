@@ -168,7 +168,7 @@ async function createPacientes(cookie) {
     { nombre: 'Juan', apellido: 'Esposito', id_hospitalario: 'H002', fecha_nacimiento: null, peso: null, sexo: 'M', profesional_id: 2, obra_social: null }
   ];
   for (const p of pacientes) {
-    console.log('Paciente creado:', await (await fetch('http://api-garrahan-app-1:3000/paciente', {
+    console.log('Paciente creado:', await (await fetch('http://api-garrahan-app-1:3000/pacientes', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Cookie': cookie },
       body: JSON.stringify(p) })).json());

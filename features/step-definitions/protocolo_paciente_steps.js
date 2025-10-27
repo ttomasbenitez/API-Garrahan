@@ -12,7 +12,7 @@ Given(/^existe en la base de datos un paciente con id "(.*)" llamado "(.*)"$/, a
 
   const [nombre, apellido] = nombreCompleto.split(' ');
   const pacResponse = await request(app)
-    .post('/paciente')
+    .post('/pacientes')
     .send({
       nombre,
       apellido,
@@ -81,7 +81,7 @@ Given(/^ya existe una asignación para el paciente con id "(.*)" con los datos$/
   };
 
   await request(app)
-    .post(`/paciente/${idPaciente}/protocolos`)
+    .post(`/pacientes/${idPaciente}/protocolos`)
     .send(datosProtocoloPaciente)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
@@ -101,7 +101,7 @@ Given(/^existe en la base de datos un protocolo asignado al paciente con id "(.*
   };
 
   await request(app)
-    .post(`/paciente/${paciente_id}/protocolos`)
+    .post(`/pacientes/${paciente_id}/protocolos`)
     .send(datosProtocoloPaciente)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
@@ -109,7 +109,7 @@ Given(/^existe en la base de datos un protocolo asignado al paciente con id "(.*
 
 When(/^intento asignar el mismo protocolo o regimen nuevamente al paciente con id "(.*)"$/, async function (idPaciente) {
   response = await request(app)
-    .post(`/paciente/${idPaciente}/protocolos`)
+    .post(`/pacientes/${idPaciente}/protocolos`)
     .send(datosProtocoloPaciente)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);

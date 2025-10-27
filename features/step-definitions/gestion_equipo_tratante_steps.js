@@ -20,7 +20,7 @@ Then('el profesional queda asignado automáticamente como "Médico Tratante"', a
 
   // Consultar el equipo tratante
   const equipoResponse = await request(app)
-    .get(`/paciente/${pacienteId}/equipo-tratante`)
+    .get(`/pacientes/${pacienteId}/equipo-tratante`)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
 
@@ -65,7 +65,7 @@ Given('existe un paciente creado por un profesional', async function () {
 
   // Crear paciente
   const pacResponse = await request(app)
-    .post('/paciente')
+    .post('/pacientes')
     .send({
       nombre: 'Juan',
       apellido: 'Pérez',
@@ -114,7 +114,7 @@ Then('el profesional se agrega correctamente al equipo tratante', function () {
 
 Then('el paciente tiene 2 profesionales asignados', async function () {
   const equipoResponse = await request(app)
-    .get(`/paciente/${this.paciente.paciente_id}/equipo-tratante`)
+    .get(`/pacientes/${this.paciente.paciente_id}/equipo-tratante`)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
 
@@ -148,7 +148,7 @@ Then('el profesional principal se actualiza correctamente', function () {
 
 Then('solo queda el nuevo profesional como "Médico Tratante"', async function () {
   const equipoResponse = await request(app)
-    .get(`/paciente/${this.paciente.paciente_id}/equipo-tratante`)
+    .get(`/pacientes/${this.paciente.paciente_id}/equipo-tratante`)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
 
@@ -171,7 +171,7 @@ Then('solo queda el nuevo profesional como "Médico Tratante"', async function (
 Given('existe un profesional con pacientes asignados', async function () {
   // Crear paciente
   const pacienteResponse = await request(app)
-    .post('/paciente')
+    .post('/pacientes')
     .send({
       nombre: 'Paciente',
       apellido: 'Test',
@@ -226,7 +226,7 @@ Given('existe un paciente con profesional principal', async function () {
 
   // Crear paciente
   const pacienteResponse = await request(app)
-    .post('/paciente')
+    .post('/pacientes')
     .send({
       nombre: 'Paciente',
       apellido: 'Test',
@@ -274,7 +274,7 @@ Given('tiene un profesional colaborador agregado', async function () {
 
 When('consulto el equipo tratante del paciente', async function () {
   this.response = await request(app)
-    .get(`/paciente/${this.paciente.paciente_id}/equipo-tratante`)
+    .get(`/pacientes/${this.paciente.paciente_id}/equipo-tratante`)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
 });
@@ -358,7 +358,7 @@ Given('que existe un paciente con nombre {string} y apellido {string}', async fu
 
 
   const pacienteResponse = await request(app)
-    .post('/paciente')
+    .post('/pacientes')
     .send(pacientePayload)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);

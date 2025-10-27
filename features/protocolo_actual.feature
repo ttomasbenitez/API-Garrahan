@@ -24,7 +24,7 @@ Feature: Obtención del Tratamiento Activo de un Paciente
     And el Paciente 1 tiene asignado el Protocolo 1, Regimen 1, y está en el Ciclo Actual 1
 
   Scenario: Obtención exitosa del Protocolo y todos los detalles de la Medicación
-    When el usuario consulta el endpoint GET /paciente/1/protocolo-actual
+    When el usuario consulta el endpoint GET /pacientes/1/protocolo-actual
     Then la respuesta debe ser exitosa (código 200)
     And la respuesta debe incluir el Protocolo "A.B.C. (Estándar)" con protocolo_id 1
     And la respuesta debe indicar el Ciclo Actual 1 y Regimen 1
@@ -38,6 +38,6 @@ Feature: Obtención del Tratamiento Activo de un Paciente
 
   Scenario: El paciente no tiene un protocolo activo
       Given el Paciente 2 no tiene ningún Protocolo asignado en protocolo_paciente
-      When el usuario consulta el endpoint GET /paciente/2/protocolo-actual
+      When el usuario consulta el endpoint GET /pacientes/2/protocolo-actual
       Then la respuesta debe ser de "Recurso no encontrado" (código 404)
       And la respuesta debe indicar que "No se encontró un protocolo activo para el paciente"
