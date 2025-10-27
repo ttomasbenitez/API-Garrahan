@@ -47,7 +47,7 @@ Feature: Gestión de Administración de Medicación
       | cantidad_dias         |  3   |
       | administracion_diaria |  1   |
       | frecuencia_diaria     |  5   |
-    When publico la API "/protocolo/1/ciclo/1/regimen/1/administracion" con los datos de la administración
+    When publico la API "/protocolos/1/ciclos/1/regimenes/1/administraciones" con los datos de la administración
     Then el "protocolo_id" de la admin es "1"
     And el "ciclo_id" de la admin es "1"
     And el "regimen" de la admin es "1"
@@ -77,7 +77,7 @@ Feature: Gestión de Administración de Medicación
       | cantidad_dias         | 10   |
       | administracion_diaria | 1    |
       | frecuencia_diaria     | 2    |
-    When publico la API "/protocolo/1/ciclo/1/regimen/1/administracion" con los datos de la administración
+    When publico la API "/protocolos/1/ciclos/1/regimenes/1/administraciones" con los datos de la administración
     Then obtengo los datos de las administraciones con el id "1" y "2"
     And se crea correctamente la administración de medicación
 
@@ -88,7 +88,7 @@ Feature: Gestión de Administración de Medicación
       | 1  | 1            | 1        | 1       | 1        | 1      | 50           | mg            | 5             | 1                     | 3                 |
       | 2  | 1            | 1        | 1       | 2        | 1      | 100          | mg            | 3             | 1                     | 2                 |
       | 3  | 1            | 2        | 1       | 2        | 2      | 80           | mg            | 4             | 1                     | 4                 |
-    When consulto en la API "/protocolos/1/ciclo/1/regimen/1/administracion"
+    When consulto en la API "/protocolos/1/ciclos/1/regimenes/1/administraciones"
     Then el sistema me devuelve una lista con "2" administración de medicación
     And el "1" registro tiene "droga_id" = "1" y "via_id" = "1"
     And el "2" registro tiene "droga_id" = "2" y "via_id" = "1"
@@ -102,7 +102,7 @@ Feature: Gestión de Administración de Medicación
       | regimen      | 2    |
       | droga_id     | 1002 |
       | via_id       | 7    |
-    When publico la API "/protocolos/10/ciclo/1/regimen/2/administracion" con los siguientes datos:
+    When publico la API "/protocolos/10/ciclos/1/regimenes/2/administraciones" con los siguientes datos:
       | droga_id | 1002 |
       | via_id   | 7    |
     Then el sistema rechaza la creación por combinación única duplicada
@@ -116,14 +116,14 @@ Feature: Gestión de Administración de Medicación
       | regimen      | 1    |
       | droga_id     | 1001 |
       | via_id       | 7    |
-    When publico la API "/protocolos/10/ciclo/1/regimen/1/administracion" con los siguientes datos:
+    When publico la API "/protocolos/10/ciclos/1/regimenes/1/administraciones" con los siguientes datos:
       | droga_id | 1001 |
       | via_id   | 5    |
     Then se crea correctamente la administración de medicación
 
   @wip
   Scenario: US-10.6 Rechazar foreign key inválida hacia CICLO (compuesta)
-    When publico la API "/protocolos/99/ciclo/1/regimen/1/administracion" con los siguientes datos:
+    When publico la API "/protocolos/99/ciclos/1/regimenes/1/administraciones" con los siguientes datos:
       | droga_id | 1001 |
       | via_id   | 7    |
     Then el sistema rechaza la creación por clave foránea inválida a "ciclo"
@@ -131,7 +131,7 @@ Feature: Gestión de Administración de Medicación
 
   @wip
   Scenario: US-10.7 Rechazar foreign key inválida a DROGA
-    When publico la API "/protocolos/10/ciclo/1/regimen/1/administracion" con los siguientes datos:
+    When publico la API "/protocolos/10/ciclos/1/regimenes/1/administraciones" con los siguientes datos:
       | droga_id | 9999 |
       | via_id   | 7    |
     Then el sistema rechaza la creación por clave foránea inválida a "droga"
@@ -139,7 +139,7 @@ Feature: Gestión de Administración de Medicación
 
   @wip
   Scenario: US-10.8 Rechazar foreign key inválida a VÍA
-    When publico la API "/protocolos/10/ciclo/1/regimen/1/administracion" con los siguientes datos:
+    When publico la API "/protocolos/10/ciclos/1/regimenes/1/administraciones" con los siguientes datos:
       | droga_id | 1001 |
       | via_id   | 999  |
     Then el sistema rechaza la creación por clave foránea inválida a "via_administracion"
@@ -147,7 +147,7 @@ Feature: Gestión de Administración de Medicación
 
   @wip
   Scenario: US-10.9 Rechazar nulos en campos obligatorios
-    When publico la API "/protocolos/10/ciclo/1/regimen/1/administracion" con los siguientes datos:
+    When publico la API "/protocolos/10/ciclos/1/regimenes/1/administraciones" con los siguientes datos:
       | droga_id |      |
       | via_id   | 7    |
     Then el sistema rechaza la creación por campos obligatorios faltantes

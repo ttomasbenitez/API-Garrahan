@@ -122,7 +122,7 @@ app.use(cookieParser());
 app.use('/', routes);
 app.use('/auth', authRouter);
 app.use('/', routes);
-app.use('/protocolo', protocolosRoutes(protocoloController));
+app.use('/protocolos', protocolosRoutes(protocoloController));
 app.use('/paciente', pacientesRoutes(pacienteController));
 app.use('/paciente', protocoloPacienteRoutes(protocoloPacienteController));
 app.use('/paciente', protocoloActualRoutes(protocoloActualController));

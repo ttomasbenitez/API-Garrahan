@@ -46,7 +46,7 @@ Then('el sistema responde correctamente', function () {
 Given(/^existe en la base de datos un protocolo con el nombre de "(.*)" con id "(.*)"$/, async function (nombreProtocolo, _idProtocolo) {
   data = { nombre: nombreProtocolo, enfermedad: 'Osteosarcoma', linea: 'primera linea' };
   await request(app)
-    .post('/protocolo')
+    .post('/protocolos')
     .send(data)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
@@ -128,7 +128,7 @@ const compareCicle = (idProtocolo, idCiclo) => {
 
 Then(/^el ciclo de tratamiento se agrega correctamente al protocolo "(.*)" con id "(.*)"$/,  async function (idProtocolo, idCiclo) {
   response = await request(app)
-    .get('/protocolo/' + idProtocolo)
+    .get('/protocolos/' + idProtocolo)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
 
@@ -143,7 +143,7 @@ Then(/^el ciclo de tratamiento se agrega correctamente al protocolo "(.*)" con i
 
 Then(/^el ciclo de tratamiento se agrega correctamente al protocolo "(.*)" con los ids "(.*)","(.*)"$/,  async function (idProtocolo, idCiclo1, idCiclo2) {
   response = await request(app)
-    .get('/protocolo/' + idProtocolo)
+    .get('/protocolos/' + idProtocolo)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
 

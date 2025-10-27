@@ -19,7 +19,7 @@ async function login(role) {
 }
 
 async function createProtocolo(cookie) {
-  const res = await fetch('http://api-garrahan-app-1:3000/protocolo', {
+  const res = await fetch('http://api-garrahan-app-1:3000/protocolos', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Cookie': cookie },
     body: JSON.stringify({
@@ -101,7 +101,7 @@ async function createCiclos(cookie, protocoloId) {
     { ciclo_id: 4, regimen: 2, duracion_semanas: 1, ciclo_final: true,  repeticiones: 73 },
   ];
 
-  const res = await fetch(`http://api-garrahan-app-1:3000/protocolo/${protocoloId}/ciclo`, {
+  const res = await fetch(`http://api-garrahan-app-1:3000/protocolos/${protocoloId}/ciclos`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Cookie': cookie },
     body: JSON.stringify(ciclos),
@@ -150,7 +150,7 @@ async function createAdministracionesMedicacion(cookie) {
   // 2do DEXRAZOXANE solo para dar la opción de VO y IV por lo pronto.
 
   for (const adm of administraciones) {
-    const url = `http://api-garrahan-app-1:3000/protocolo/${adm.protocolo_id}/ciclo/${adm.ciclo_id}/regimen/${adm.regimen}/administracion`;
+    const url = `http://api-garrahan-app-1:3000/protocolos/${adm.protocolo_id}/ciclos/${adm.ciclo_id}/regimenes/${adm.regimen}/administraciones`;
 
     const res = await fetch(url, {
       method: 'POST',

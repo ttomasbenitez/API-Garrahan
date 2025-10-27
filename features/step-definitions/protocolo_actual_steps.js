@@ -119,7 +119,7 @@ Given(/^existe un Protocolo con protocolo_id (\d+) y nombre "(.*)"$/, async func
   };
 
   const createResponse = await request(app)
-    .post('/protocolo')
+    .post('/protocolos')
     .send(data)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
@@ -140,7 +140,7 @@ Given(/^el Protocolo (\d+) incluye un Ciclo {ciclo_id: (\d+), regimen: (\d+), du
   };
 
   response = await request(app)
-    .post(`/protocolo/${data.protocolo_id}/ciclo`)
+    .post(`/protocolos/${data.protocolo_id}/ciclos`)
     .send(data)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
@@ -163,7 +163,7 @@ Given(/^el Ciclo {protocolo_id: (\d+), ciclo_id: (\d+), regimen: (\d+)} tiene un
   };
 
   const createResponse = await request(app)
-    .post(`/protocolo/${adminData.protocolo_id}/ciclo/${adminData.ciclo_id}/regimen/${adminData.regimen}/administracion`)
+    .post(`/protocolos/${adminData.protocolo_id}/ciclos/${adminData.ciclo_id}/regimenes/${adminData.regimen}/administraciones`)
     .send(adminData)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);

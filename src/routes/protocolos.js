@@ -6,8 +6,8 @@ export default function buildProtocolosRouter(controller) {
   r.post('/', authMiddleware, requireRole('admin'), controller.crear);
   r.get('/', authMiddleware, requireRole('admin', 'medico'), controller.obtenerTodos);
   r.get('/:id', authMiddleware, requireRole('admin', 'medico'), controller.obtener);
-  r.post('/:id/ciclo', authMiddleware, requireRole('admin'), controller.agregarCiclo);
-  r.post('/:id/ciclo/:id_ciclo/regimen/:id_regimen/administracion',
+  r.post('/:id/ciclos', authMiddleware, requireRole('admin'), controller.agregarCiclo);
+  r.post('/:id/ciclos/:id_ciclo/regimenes/:id_regimen/administraciones',
     authMiddleware, requireRole('admin', 'medico'), controller.agregarAdministracion);
   return r;
 }

@@ -10,7 +10,7 @@ let admin = [];
 Given('existe en la base de datos el protocolo con id {string} y con los datos:', async function (string, dataTable) {
   const protocolo = dataTable.rowsHash();
   await request(app)
-    .post('/protocolo')
+    .post('/protocolos')
     .send(protocolo)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
@@ -19,7 +19,7 @@ Given('existe en la base de datos el protocolo con id {string} y con los datos:'
 Given('existe el ciclo del protocolo {string} con:', function (string, dataTable) {
   const ciclo = dataTable.rowsHash();
   return request(app)
-    .post(`/protocolo/${string}/ciclo`)
+    .post(`/protocolos/${string}/ciclos`)
     .send(ciclo)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
@@ -94,7 +94,7 @@ Given('existen en la base de datos las siguientes administraciones de medicació
   const admins = dataTable.hashes();
   const promises = admins.map((admin) => {
     return request(app)
-      .post(`protocolo/${admin.protocolo_id}/ciclo/${admin.ciclo_id}/regimen/${admin.regimen}/administracion`)
+      .post(`protocolos/${admin.protocolo_id}/ciclos/${admin.ciclo_id}/regimenes/${admin.regimen}/administraciones`)
       .send(admin)
       .set('Accept', 'application/json')
       .set('Cookie', this.sessionCookie);

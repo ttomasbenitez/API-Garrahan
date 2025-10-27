@@ -7,12 +7,12 @@ Feature: Crear un protocolo
         Given quiero crear el protocolo con el nombre de "Osteosarcoma GBTO 2006 - No metastásico" 
         And enfermedad "Osteosarcoma"
         And de linea de tratamiento "primera linea"
-        When publico en la API "/protocolo" con los datos
+        When publico en la API "/protocolos" con los datos
         Then el protocolo se crea correctamente
 
     Scenario: US-01.2 Obtener un protocolo creado por su id
         Given existe en la base de datos un protocolo con el nombre de "Osteosarcoma GBTO 2006 - No metastásico" con id "1"
-        When consulto en la API "/protocolo/1"
+        When consulto en la API "/protocolos/1"
         Then el sistema me devuelve el protocolo con id "1"
         And el nombre del protocolo es "Osteosarcoma GBTO 2006 - No metastásico"
         And la enfermedad es "Osteosarcoma"
@@ -23,7 +23,7 @@ Feature: Crear un protocolo
         Given existe en la base de datos un protocolo con el nombre de "Osteosarcoma GBTO 2006 - No metastásico" con id "1"
         And existe en la base de datos un protocolo con el nombre de "ALL-BFM" con id "2"
         And existe en la base de datos un protocolo con el nombre de "Hodgkin-LPH / EuroNet-PHL" con id "3"
-        When consulto en la API "/protocolo"
+        When consulto en la API "/protocolos"
         Then el sistema me devuelve una lista que contiene los siguientes protocolos:
             | protocolo_id | nombre                                            |
             | 1            | Osteosarcoma GBTO 2006 - No metastásico         |
@@ -39,7 +39,7 @@ Feature: Crear un protocolo
             | duracion_semanas | 5               |
             | ciclo_final      | false           |
             | repeticiones     | 1               |
-        When publico en la API "/protocolo/1/ciclo" con los datos
+        When publico en la API "/protocolos/1/ciclos" con los datos
         Then el ciclo de tratamiento se agrega correctamente al protocolo "1" con id "2"
         And el sistema responde correctamente
  
@@ -59,7 +59,7 @@ Feature: Crear un protocolo
             | duracion_semanas | 3               |
             | ciclo_final      | true            |
             | repeticiones     | 3               |
-        When publico en la API "/protocolo/1/ciclo" con los datos
+        When publico en la API "/protocolos/1/ciclos" con los datos
         Then el ciclo de tratamiento se agrega correctamente al protocolo "1" con los ids "3","4"
         And el sistema responde correctamente
 
@@ -67,7 +67,7 @@ Feature: Crear un protocolo
         Given quiero crear el protocolo con el nombre de ""
         And enfermedad "Osteosarcoma"
         And de linea de tratamiento "primera linea"
-        When publico en la API "/protocolo" con los datos
+        When publico en la API "/protocolos" con los datos
         Then responde "400" con el mensaje "nombre es requerido"
         And el sistema responde correctamente
     
@@ -75,13 +75,13 @@ Feature: Crear un protocolo
         Given quiero crear el protocolo con el nombre de "Osteosarcoma GBTO 2006 - No metastásico"
         And enfermedad ""
         And de linea de tratamiento "primera linea"
-        When publico en la API "/protocolo" con los datos
+        When publico en la API "/protocolos" con los datos
         Then responde "400" con el mensaje "enfermedad es requerido"
 
     Scenario: US-01.8 No puedo crear un protocolo sin su enfermedad
         Given quiero crear el protocolo con el nombre de "Osteosarcoma GBTO 2006 - No metastásico"
         And enfermedad "Osteosarcoma"
         And de linea de tratamiento ""
-        When publico en la API "/protocolo" con los datos
+        When publico en la API "/protocolos" con los datos
         Then responde "400" con el mensaje "linea es requerido"
 
