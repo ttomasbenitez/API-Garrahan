@@ -38,7 +38,7 @@ async function createProfesionales(cookie) {
   ];
 
   for (const p of profesionales) {
-    const res = await fetch('http://api-garrahan-app-1:3000/profesional', {
+    const res = await fetch('http://api-garrahan-app-1:3000/profesionales', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Cookie': cookie },
       body: JSON.stringify(p),

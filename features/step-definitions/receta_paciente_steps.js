@@ -18,7 +18,7 @@ Given('existe en la base de datos el paciente con id {string} y con los datos:',
 Given('existe en la base de datos el profesional con id {string} y con los datos:', async function (string, dataTable) {
   const profesional = dataTable.rowsHash();
   await request(app)
-    .post('/profesional')
+    .post('/profesionales')
     .send(profesional)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);

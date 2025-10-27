@@ -62,7 +62,7 @@ Given(
   /^existe un profesional con nombre "(.*)", apellido "(.*)", dni "(.*)", matricula "(.*)", especialidad "(.*)"$/,
   async function (nombre, apellido, dni, matricula, especialidad) {
     const res = await request(app)
-      .post('/profesional')
+      .post('/profesionales')
       .send({ nombre, apellido, dni, matricula, especialidad })
       .set('Accept', 'application/json')
       .set('Cookie', this.sessionCookie);

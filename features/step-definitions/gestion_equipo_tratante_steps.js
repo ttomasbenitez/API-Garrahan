@@ -50,7 +50,7 @@ Then('el profesional queda asignado automáticamente como "Médico Tratante"', a
 Given('existe un paciente creado por un profesional', async function () {
   // Crear profesional principal
   const profResponse = await request(app)
-    .post('/profesional')
+    .post('/profesionales')
     .send({
       nombre: 'Dr. Principal',
       apellido: 'García',
@@ -211,7 +211,7 @@ Then('obtengo la lista de todos sus pacientes', function () {
 Given('existe un paciente con profesional principal', async function () {
   // Crear profesional principal
   const profesionalResponse = await request(app)
-    .post('/profesional')
+    .post('/profesionales')
     .send({
       nombre: 'Dr. Principal',
       apellido: 'Medico',
@@ -247,7 +247,7 @@ Given('existe un paciente con profesional principal', async function () {
 Given('tiene un profesional colaborador agregado', async function () {
   // Crear otro profesional
   const profesionalColaboradorResponse = await request(app)
-    .post('/profesional')
+    .post('/profesionales')
     .send({
       nombre: 'Dr. Colaborador',
       apellido: 'Especialista',
