@@ -11,14 +11,14 @@ export const makePresentacionDrogaController = (service) => ({
 
 async function crearPresentacion(req, res, service) {
   try {
+    const droga_id = parseInt(req.params.droga_id, 10);
     const payload = Array.isArray(req.body) ? req.body : [req.body];
-    const faltantes = payload.filter(p => !p.droga_id || !p.forma_farmaceutica_id
-      || !p.codigo_farmacia);
+    const faltantes = payload.filter(p => !p.forma_farmaceutica_id || !p.codigo_farmacia);
     if (faltantes.length > 0) {
       return res.status(400).json({ error: 'Faltan campos requeridos' });
     }
     const presentaciones = payload.map(p => new PresentacionDroga(
-      p.droga_id,
+      droga_id,
       p.forma_farmaceutica_id,
       p.codigo_farmacia,
       p.estado,
@@ -36,7 +36,7 @@ async function crearPresentacion(req, res, service) {
 
 async function obtenerPresentacion(req, res, service) {
   try {
-    const id = parseInt(req.params.id, 10);
+    const id = parseInt(req.params.presentacion_id, 10);
     if (isNaN(id)) {
       return res.status(400).json({ error: ERROR_ID_PRESENTACION_DROGA_INVALIDO });
     }
@@ -51,9 +51,10 @@ async function obtenerPresentacion(req, res, service) {
   }
 }
 
-async function listarPresentaciones(_req, res, service) {
+async function listarPresentaciones(req, res, service) {
   try {
-    const presentaciones = await service.listar();
+    const droga_id = req.params.droga_id;
+    const presentaciones = await service.listar(droga_id);
     res.status(200).json(presentaciones);
   } catch (error) {
     logger.error('Error al listar presentaciones de droga: %o', error);
@@ -63,7 +64,7 @@ async function listarPresentaciones(_req, res, service) {
 
 async function eliminarPresentacion(req, res, service) {
   try {
-    const id = parseInt(req.params.id, 10);
+    const id = parseInt(req.params.presentacion_id, 10);
     if (isNaN(id)) {
       return res.status(400).json({ error: ERROR_ID_PRESENTACION_DROGA_INVALIDO });
     }

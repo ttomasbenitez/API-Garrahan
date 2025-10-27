@@ -24,6 +24,7 @@ export class RepositorioPresentacionDroga {
           fuerza_valor: toNum(p.fuerza_valor),
           fuerza_unidad: toStr(p.fuerza_unidad),
         }));
+
         const opts = {
           autoCommit: true,
           bindDefs: {
@@ -65,11 +66,12 @@ export class RepositorioPresentacionDroga {
     }
   }
 
-  async listar() {
+  async listar(droga_id) {
     try {
       const result = await this.db.execute(
-        'SELECT droga_id, forma_farmaceutica_id, estado, fuerza_valor, fuerza_unidad, presentacion_id FROM presentacion_droga',
-        []
+        `SELECT droga_id, forma_farmaceutica_id, estado, fuerza_valor, fuerza_unidad, 
+          presentacion_id FROM presentacion_droga WHERE droga_id = :droga_id`,
+        {droga_id}
       );
       return result.rows.map(row => new PresentacionDroga(row.DROGA_ID, row.FORMA_FARMACEUTICA_ID, row.CODIGO_FARMACIA, row.ESTADO, row.FUERZA_VALOR, row.FUERZA_UNIDAD, row.PRESENTACION_ID));
     } catch (error) {

@@ -131,7 +131,7 @@ app.use('/drogas', drogasRoutes(drogaController));
 app.use('/paciente-profesional', pacienteProfesionalRoutes(pacienteProfesionalController));
 app.use('/vias-administracion', viaAdministracionRoutes(viaAdministracionController));
 app.use('/formas-farmaceuticas', formaFarmaceuticaRoutes(formaFarmaceuticaController));
-app.use('/presentaciones-droga', presentacionDrogaRoutes(presentacionDrogaController));
+app.use('/drogas', presentacionDrogaRoutes(presentacionDrogaController));
 app.use('/presentaciones-droga-via', presentacionDrogaViaRoutes(presentacionDrogaViaController));
 app.use('/recetas', buildRecetasRouter(recetaController));
 

@@ -15,8 +15,8 @@ export class PresentacionDrogaService {
     return await this.presentacionDrogaRepo.obtener(id);
   }
 
-  async listar() {
-    return await this.presentacionDrogaRepo.listar();
+  async listar(droga_id) {
+    return await this.presentacionDrogaRepo.listar(droga_id);
   }
 
   async eliminar(id) {

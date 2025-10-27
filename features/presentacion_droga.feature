@@ -18,7 +18,7 @@ Feature: Gestión de Presentaciones de Droga
       | estado                | Activo    |
       | fuerza_valor          | 500       |
       | fuerza_unidad         | mg        |
-    When publico en la API de presentacion droga "/presentaciones-droga" con los datos de la presentacion
+    When publico en la API de presentacion droga "/drogas/1/presentaciones" con los datos de la presentacion
     Then el campo "droga_id" de la presentacion es "1"
     And el campo "forma_farmaceutica_id" de la presentacion es "2"
     And se crea correctamente la presentacion
@@ -38,7 +38,7 @@ Feature: Gestión de Presentaciones de Droga
       | estado                | Activo    |
       | fuerza_valor          | 500       |
       | fuerza_unidad         | mg        |
-    When consulto en la API de presentacion droga "/presentaciones-droga/1" por su id
+    When consulto en la API de presentacion droga "/drogas/1/presentaciones/1" por su id
     Then el sistema me devuelve la presentacion de droga con id "1"
     And el campo "droga_id" es "1" en la presentacion
     And el campo "forma_farmaceutica_id" es "2" en la presentacion
@@ -67,7 +67,7 @@ Feature: Gestión de Presentaciones de Droga
       | estado                | Activo    |
       | fuerza_valor          | 200       |
       | fuerza_unidad         | mg        |
-    When consulto en la API de presentacion droga "/presentaciones-droga"
+    When consulto en la API de presentacion droga "/drogas/1/presentaciones"
     Then el sistema me devuelve una lista con 2 presentaciones de droga en la consulta
     And el primer registro de presentacion tiene "droga_id" = "1" y "forma_farmaceutica_id" = "2"
     And el segundo registro de presentacion tiene "droga_id" = "1" y "forma_farmaceutica_id" = "3"
@@ -91,6 +91,6 @@ Feature: Gestión de Presentaciones de Droga
       | estado                | Inactivo  |
       | fuerza_valor          | 100       |
       | fuerza_unidad         | mg        |
-    When elimino la presentacion en la API "/presentaciones-droga/3"
+    When elimino la presentacion en la API "/drogas/2/presentaciones/3"
     Then el sistema elimina la presentacion de droga con id "3"
     And se elimina correctamente la presentacion

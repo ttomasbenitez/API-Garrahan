@@ -64,7 +64,7 @@ Given(/^existe una PresentacionDroga con presentacion_id (\d+), droga_id (\d+), 
   };
 
   const createResponse = await request(app)
-    .post('/presentaciones-droga')
+    .post(`/drogas/${data.droga_id}/presentaciones`)
     .send([data])
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
