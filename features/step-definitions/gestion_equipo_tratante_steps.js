@@ -131,7 +131,7 @@ Given('existe un paciente con un profesional asignado', async function () {
 
 When('cambio el profesional principal del paciente', async function () {
   this.response = await request(app)
-    .put(`/paciente-profesional/paciente/${this.paciente.paciente_id}/profesional-principal`)
+    .put(`/paciente-profesional/pacientes/${this.paciente.paciente_id}/profesional-principal`)
     .send({
       nuevo_profesional_id: this.profesionalColaborador.profesional_id
     })
@@ -191,7 +191,7 @@ Given('existe un profesional con pacientes asignados', async function () {
 
 When('consulto los pacientes del profesional', async function () {
   this.response = await request(app)
-    .get(`/paciente-profesional/profesional/${this.profesionalLogueadoId}/pacientes`)
+    .get(`/paciente-profesional/profesionales/${this.profesionalLogueadoId}/pacientes`)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
 });
@@ -304,7 +304,7 @@ Given('existe un paciente con su médico tratante', async function () {
 
 When('intento remover al médico tratante como colaborador', async function () {
   this.response = await request(app)
-    .delete(`/paciente-profesional/profesional/${this.profesionalPrincipal.profesional_id}/paciente/${this.paciente.paciente_id}`)
+    .delete(`/paciente-profesional/profesionales/${this.profesionalPrincipal.profesional_id}/pacientes/${this.paciente.paciente_id}`)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
 });
@@ -377,7 +377,7 @@ Given('el paciente tiene al profesional con id {int} como médico tratante', asy
 
 
   const equipoResponse = await request(app)
-    .get(`/paciente-profesional/paciente/${this.paciente.paciente_id}/equipo`)
+    .get(`/paciente-profesional/pacientes/${this.paciente.paciente_id}/equipo`)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
 
@@ -434,7 +434,7 @@ When('cambio el profesional principal del paciente al profesional con id {int}',
 
   // Cambiar profesional principal
   this.response = await request(app)
-    .put(`/paciente-profesional/paciente/${this.paciente.paciente_id}/profesional-principal`)
+    .put(`/paciente-profesional/pacientes/${this.paciente.paciente_id}/profesional-principal`)
     .send({
       nuevo_profesional_id: this.nuevoProfesionalId
     })
@@ -444,7 +444,7 @@ When('cambio el profesional principal del paciente al profesional con id {int}',
 
 Then('el paciente debe tener al profesional con id {int} como médico tratante', async function (_profesionalId) {
   const equipoResponse = await request(app)
-    .get(`/paciente-profesional/paciente/${this.paciente.paciente_id}/equipo`)
+    .get(`/paciente-profesional/pacientes/${this.paciente.paciente_id}/equipo`)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
 
@@ -458,7 +458,7 @@ Then('el paciente debe tener al profesional con id {int} como médico tratante',
 
 Then('el paciente debe mantener al profesional con id {int} como consultor', async function (_profesionalId) {
   const equipoResponse = await request(app)
-    .get(`/paciente-profesional/paciente/${this.paciente.paciente_id}/equipo`)
+    .get(`/paciente-profesional/pacientes/${this.paciente.paciente_id}/equipo`)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
 
@@ -472,7 +472,7 @@ Then('el paciente debe mantener al profesional con id {int} como consultor', asy
 
 Then('el profesional con id {int} no debe estar asignado al paciente', async function (_profesionalId) {
   const equipoResponse = await request(app)
-    .get(`/paciente-profesional/paciente/${this.paciente.paciente_id}/equipo`)
+    .get(`/paciente-profesional/pacientes/${this.paciente.paciente_id}/equipo`)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
 

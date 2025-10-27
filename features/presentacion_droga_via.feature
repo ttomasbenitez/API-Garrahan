@@ -65,7 +65,7 @@ Feature: Gestión de Presentación Droga Vía
       | Intramuscular| IM     |
       | Subcutánea   | SC     |
     And que existen las siguientes presentaciones droga via asociadas
-    When consulto en la API "/presentaciones-droga-via/presentacion/:presentacion_id" las vias de la presentacion
+    When consulto en la API "/presentaciones-droga-via/presentaciones/:presentacion_id" las vias de la presentacion
     Then el sistema me devuelve una lista con 3 vias
     And se obtiene correctamente las presentaciones droga via
 
