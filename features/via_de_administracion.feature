@@ -7,7 +7,7 @@ Feature: Gestión de Vías de Administración
     Given que tengo los siguientes datos de la vía de administración:
       | nombre      | Intravenosa |
       | codigo      | IV          |
-    When publico la API "/via-administracion" con los datos de la vía
+    When publico la API "/vias-administracion" con los datos de la vía
     Then el "nombre" de la via es "Intravenosa"
     And el "codigo" de la via es "IV"
     And se crea correctamente la vía de administración
@@ -19,7 +19,7 @@ Feature: Gestión de Vías de Administración
     And que tengo los siguientes datos de la vía de administración:
       | nombre | Oral        |
       | codigo | PO          |
-    When publico la API "/via-administracion" con los datos de la vía
+    When publico la API "/vias-administracion" con los datos de la vía
     Then obtengo los datos de las vías con el id "1" y "2"
     And se crea correctamente la vía de administración
 
@@ -27,7 +27,7 @@ Feature: Gestión de Vías de Administración
     Given existe en la base de datos una vía de administración con id "1" y con los datos:
       | nombre | Intravenosa |
       | codigo | IV          |
-    When consulto en la API "/via-administracion/1" por su id de via
+    When consulto en la API "/vias-administracion/1" por su id de via
     Then el sistema me devuelve la vía de administración con id "1"
     And responde correctamente la vía de administración
   @wip
@@ -36,7 +36,7 @@ Feature: Gestión de Vías de Administración
       | id | nombre       | codigo |
       | 1  | Intravenosa  | IV     |
       | 2  | Oral         | PO     |
-    When consulto en la API "/via-administracion"
+    When consulto en la API "/vias-administracion"
     Then el sistema me devuelve una lista con 2 vías de administración
     And el primer registro tiene "nombre" = "Intravenosa" y "codigo" = "IV"
     And el segundo registro tiene "nombre" = "Oral" y "codigo" = "PO"
@@ -46,7 +46,7 @@ Feature: Gestión de Vías de Administración
     Given existe en la base de datos una vía de administración con id "2" y con los datos:
       | nombre | Oral |
       | codigo | PO   |
-    When publico en la API "/via-administracion/2" con los siguientes datos:
+    When publico en la API "/vias-administracion/2" con los siguientes datos:
       | nombre | Oral en cápsulas |
       | codigo | PO-CAPS          |
     Then el "nombre" de la via es "Oral en cápsulas"
@@ -58,7 +58,7 @@ Feature: Gestión de Vías de Administración
       | nombre | Sublingual |
       | codigo | SL         |
     And la vía no está referenciada en ninguna administración de medicación
-    When elimino la vía en la API "/via-administracion/3"
+    When elimino la vía en la API "/vias-administracion/3"
     Then el sistema elimina la vía de administración con id "3"
     And se elimina correctamente
  

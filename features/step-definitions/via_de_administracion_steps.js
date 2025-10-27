@@ -59,7 +59,7 @@ Given('existe en la base de datos una vía de administración con id {string} y 
     });
   });
   response = await request(app)
-    .post('/via-administracion')
+    .post('/vias-administracion')
     .send(datosAdmin)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);

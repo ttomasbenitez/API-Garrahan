@@ -57,7 +57,7 @@ Given(/^que existe una presentacion de droga con los siguientes datos:$/, async 
 Given(/^que existe una via de administracion con los siguientes datos:$/, async function (dataTable) {
   const data = dataTable.rowsHash();
   const createResponse = await request(app)
-    .post('/via-administracion')
+    .post('/vias-administracion')
     .send(data)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
@@ -72,7 +72,7 @@ Given(/^que existen las siguientes vias de administracion:$/, async function (da
 
   for (const via of vias) {
     const createResponse = await request(app)
-      .post('/via-administracion')
+      .post('/vias-administracion')
       .send(via)
       .set('Accept', 'application/json')
       .set('Cookie', this.sessionCookie);

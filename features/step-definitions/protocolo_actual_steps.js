@@ -42,7 +42,7 @@ Given(/^existe una FormaFarmaceutica con nombre "(.*)", código "(.*)" y forma_f
 Given(/^existe una ViaAdministracion con nombre "(.*)", código "(.*)" y via_id (\d+)$/, async function (nombre, codigo, _id) {
   const data = { nombre: nombre, codigo: codigo };
   const createResponse = await request(app)
-    .post('/via-administracion')
+    .post('/vias-administracion')
     .send(data)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);

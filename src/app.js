@@ -129,7 +129,7 @@ app.use('/pacientes', protocoloActualRoutes(protocoloActualController));
 app.use('/profesionales', profesionalesRoutes(profesionalController));
 app.use('/drogas', drogasRoutes(drogaController));
 app.use('/paciente-profesional', pacienteProfesionalRoutes(pacienteProfesionalController));
-app.use('/via-administracion', viaAdministracionRoutes(viaAdministracionController));
+app.use('/vias-administracion', viaAdministracionRoutes(viaAdministracionController));
 app.use('/formas-farmaceuticas', formaFarmaceuticaRoutes(formaFarmaceuticaController));
 app.use('/presentacion-droga', presentacionDrogaRoutes(presentacionDrogaController));
 app.use('/presentacion-droga-via', presentacionDrogaViaRoutes(presentacionDrogaViaController));

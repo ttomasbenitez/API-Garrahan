@@ -115,7 +115,7 @@ async function createViasAdministracion(cookie) {
     { nombre: 'Oral', codigo: 'VO' },
   ];
 
-  const res = await fetch('http://api-garrahan-app-1:3000/via-administracion', {
+  const res = await fetch('http://api-garrahan-app-1:3000/vias-administracion', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Cookie': cookie },
     body: JSON.stringify(vias),

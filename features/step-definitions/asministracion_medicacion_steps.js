@@ -38,7 +38,7 @@ Given('existe la droga con id {string} y con los datos:', function (string, data
 Given('existe la vía de administración con id {string} y con los datos:', function (string, dataTable) {
   const via = dataTable.rowsHash();
   return request(app)
-    .post('/via-administracion')
+    .post('/vias-administracion')
     .send(via)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
