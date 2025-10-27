@@ -82,7 +82,7 @@ async function createPresentacionesDroga(cookie) {
   //  { droga_id: 3, forma_farmaceutica_id: 1, estado: null, fuerza_valor: null, fuerza_unidad: null },
   //];
 
-  const res = await fetch('http://api-garrahan-app-1:3000/presentacion-droga', {
+  const res = await fetch('http://api-garrahan-app-1:3000/presentaciones-droga', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Cookie': cookie },
     body: JSON.stringify(presentaciones_droga),
@@ -124,7 +124,7 @@ async function createViasAdministracion(cookie) {
 }
 
 async function createPresentacionDrogaVia(cookie) {
-  const res = await fetch('http://api-garrahan-app-1:3000/presentacion-droga-via', {
+  const res = await fetch('http://api-garrahan-app-1:3000/presentaciones-droga-via', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Cookie': cookie },
     body: JSON.stringify(presentaciones_droga_via),

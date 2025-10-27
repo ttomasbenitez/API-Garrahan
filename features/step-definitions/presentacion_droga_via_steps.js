@@ -46,7 +46,7 @@ Given(/^que existe una presentacion de droga con los siguientes datos:$/, async 
   };
 
   const createResponse = await request(app)
-    .post('/presentacion-droga')
+    .post('/presentaciones-droga')
     .send([presentacion])
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
@@ -90,7 +90,7 @@ Given(/^que existe una presentacion droga via asociada$/, async function () {
   };
 
   response = await request(app)
-    .post('/presentacion-droga-via')
+    .post('/presentaciones-droga-via')
     .send(data)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
@@ -104,7 +104,7 @@ Given(/^que existen las siguientes presentaciones droga via asociadas$/, async f
   }));
 
   response = await request(app)
-    .post('/presentacion-droga-via')
+    .post('/presentaciones-droga-via')
     .send(presentacionesVia)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
@@ -126,7 +126,7 @@ When(/^publico en la API "(.*)" los datos de la presentacion droga via con es_de
 
 When(/^consulto en la API de presentacion droga via por sus IDs$/, async function () {
   response = await request(app)
-    .get(`/presentacion-droga-via/${createdViaId}/${createdPresentacionId}`)
+    .get(`/presentaciones-droga-via/${createdViaId}/${createdPresentacionId}`)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
 });
@@ -141,7 +141,7 @@ When(/^consulto en la API "(.*)" las vias de la presentacion$/, async function (
 
 When(/^elimino la presentacion droga via en la API$/, async function () {
   response = await request(app)
-    .delete(`/presentacion-droga-via/${createdViaId}/${createdPresentacionId}`)
+    .delete(`/presentaciones-droga-via/${createdViaId}/${createdPresentacionId}`)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
 });

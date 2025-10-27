@@ -20,7 +20,7 @@ Feature: Gestión de Presentación Droga Vía
     And que existe una via de administracion con los siguientes datos:
       | nombre | Intravenosa |
       | codigo | IV          |
-    When publico en la API "/presentacion-droga-via" los datos de la presentacion droga via con es_default "1"
+    When publico en la API "/presentaciones-droga-via" los datos de la presentacion droga via con es_default "1"
     Then se crea correctamente la presentacion droga via
 
   Scenario: US-09.2 Obtener una presentación droga vía por sus IDs
@@ -65,7 +65,7 @@ Feature: Gestión de Presentación Droga Vía
       | Intramuscular| IM     |
       | Subcutánea   | SC     |
     And que existen las siguientes presentaciones droga via asociadas
-    When consulto en la API "/presentacion-droga-via/presentacion/:presentacion_id" las vias de la presentacion
+    When consulto en la API "/presentaciones-droga-via/presentacion/:presentacion_id" las vias de la presentacion
     Then el sistema me devuelve una lista con 3 vias
     And se obtiene correctamente las presentaciones droga via
 

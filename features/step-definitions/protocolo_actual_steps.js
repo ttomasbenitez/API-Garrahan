@@ -64,7 +64,7 @@ Given(/^existe una PresentacionDroga con presentacion_id (\d+), droga_id (\d+), 
   };
 
   const createResponse = await request(app)
-    .post('/presentacion-droga')
+    .post('/presentaciones-droga')
     .send([data])
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
@@ -84,7 +84,7 @@ Given(/^existe una PresentacionDrogaVia para la via_id (\d+) y presentacion_id (
   };
 
   response = await request(app)
-    .post('/presentacion-droga-via')
+    .post('/presentaciones-droga-via')
     .send(data)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
