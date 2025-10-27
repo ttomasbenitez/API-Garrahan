@@ -7,7 +7,7 @@ Feature: Gestión de Formas Farmacéuticas
     Given que tengo los siguientes datos de la forma farmacéutica:
       | nombre | Comprimido |
       | codigo | TAB        |
-    When publico en la API de forma farmaceutica "/forma-farmaceutica" con los datos de la forma
+    When publico en la API de forma farmaceutica "/formas-farmaceuticas" con los datos de la forma
     Then el campo "nombre" de la forma farmaceutica es "Comprimido"
     And el campo "codigo" de la forma farmaceutica es "TAB"
     And se crea correctamente la forma farmaceutica
@@ -19,7 +19,7 @@ Feature: Gestión de Formas Farmacéuticas
     And que tengo los siguientes datos de la forma farmacéutica:
       | nombre | Solución inyectable |
       | codigo | SOL-INY             |
-    When publico en la API de forma farmaceutica "/forma-farmaceutica" con los datos de las formas
+    When publico en la API de forma farmaceutica "/formas-farmaceuticas" con los datos de las formas
     Then obtengo los datos de las formas con el id "1" y "2"
     And se crea correctamente la forma farmaceutica
 
@@ -27,7 +27,7 @@ Feature: Gestión de Formas Farmacéuticas
     Given existe en la base de datos una forma farmacéutica con id "1" y con los datos:
       | nombre | Comprimido |
       | codigo | TAB        |
-    When consulto en la API de forma farmaceutica "/forma-farmaceutica/1" por su id
+    When consulto en la API de forma farmaceutica "/formas-farmaceuticas/1" por su id
     Then el sistema me devuelve la forma farmacéutica con id "1"
     And el campo "nombre" es "Comprimido" en la forma farmaceutica
     And el campo "codigo" es "TAB" en la forma farmaceutica
@@ -40,7 +40,7 @@ Feature: Gestión de Formas Farmacéuticas
     And existe en la base de datos una forma farmacéutica con id "2" y con los datos:
       | nombre | Solución inyectable |
       | codigo | SOL-INY             |
-    When consulto en la API de forma farmaceutica "/forma-farmaceutica"
+    When consulto en la API de forma farmaceutica "/formas-farmaceuticas"
     Then el sistema me devuelve una lista con 2 formas farmacéuticas en la consulta
     And el primer registro de forma farmaceutica tiene "nombre" = "Comprimido" y "codigo" = "TAB"
     And el segundo registro de forma farmaceutica tiene "nombre" = "Solución inyectable" y "codigo" = "SOL-INY"
@@ -50,7 +50,7 @@ Feature: Gestión de Formas Farmacéuticas
     Given existe en la base de datos una forma farmacéutica con id "1" y con los datos:
       | nombre | Solución inyectable |
       | codigo | SOL-INY             |
-    When publico en la API de forma farmaceutica "/forma-farmaceutica/1" con los siguientes datos:
+    When publico en la API de forma farmaceutica "/formas-farmaceuticas/1" con los siguientes datos:
       | nombre | Solución inyectable estéril |
       | codigo | SOL-INY-EST                 |
   Then el campo "nombre" es "Solución inyectable estéril" en la respuesta de forma farmaceutica
@@ -62,6 +62,6 @@ Scenario: US-07.6 Eliminar una forma farmacéutica sin uso
     | nombre | Jarabe |
     | codigo | JAR    |
   And la forma farmacéutica no está asociada a ninguna presentación de droga
-  When elimino la forma en la API "/forma-farmaceutica/3"
+  When elimino la forma en la API "/formas-farmaceuticas/3"
   Then el sistema elimina la forma farmacéutica con id "3"
   And se obtiene correctamente la forma farmaceutica

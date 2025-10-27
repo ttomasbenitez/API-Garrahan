@@ -65,7 +65,7 @@ async function createFormasFarmaceuticas(cookie) {
     { nombre: 'JERINGA PRELLENADA' }
   ];
 
-  const res = await fetch('http://api-garrahan-app-1:3000/forma-farmaceutica', {
+  const res = await fetch('http://api-garrahan-app-1:3000/formas-farmaceuticas', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Cookie': cookie },
     body: JSON.stringify(formas),

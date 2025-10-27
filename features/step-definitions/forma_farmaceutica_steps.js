@@ -52,7 +52,7 @@ Given(/^existe en la base de datos una forma farmacéutica con id "(.*)" y con l
   const data = dataTable.rowsHash();
   formas.push(data);
   const createResponse = await request(app)
-    .post('/forma-farmaceutica')
+    .post('/formas-farmaceuticas')
     .send(data)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);

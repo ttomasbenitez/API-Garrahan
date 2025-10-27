@@ -25,7 +25,7 @@ Given(/^que existe una droga con los siguientes datos:$/, async function (dataTa
 Given(/^que existe una forma farmaceutica con los siguientes datos:$/, async function (dataTable) {
   const data = dataTable.rowsHash();
   const createResponse = await request(app)
-    .post('/forma-farmaceutica')
+    .post('/formas-farmaceuticas')
     .send(data)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);

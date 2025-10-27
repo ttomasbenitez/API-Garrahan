@@ -32,7 +32,7 @@ Given(/^existe una Droga con nombre "(.*)" y droga_id (\d+)$/, async function (n
 Given(/^existe una FormaFarmaceutica con nombre "(.*)", código "(.*)" y forma_farmaceutica_id (\d+)$/, async function (nombre, codigo, _id) {
   const data = { nombre: nombre, codigo: codigo };
   await request(app)
-    .post('/forma-farmaceutica')
+    .post('/formas-farmaceuticas')
     .send(data)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);

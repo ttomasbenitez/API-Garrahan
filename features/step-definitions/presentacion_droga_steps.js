@@ -32,7 +32,7 @@ Given(/^que existen las siguientes formas farmaceuticas:$/, async function (data
   const rows = dataTable.hashes();
   formas = rows;
   response = await request(app)
-    .post('/forma-farmaceutica')
+    .post('/formas-farmaceuticas')
     .send(formas)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
