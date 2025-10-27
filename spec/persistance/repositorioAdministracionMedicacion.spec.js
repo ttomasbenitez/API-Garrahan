@@ -68,4 +68,29 @@ describe(RepositorioAdminisitracionMedicacion, () => {
     expect(opts).toMatchObject({ autoCommit: true });
   });
 
+  test('getById devuelve la administración si existe', async () => {
+    const row = {
+      ADMIN_ID: 1,
+      FUERZA_VALOR: 500,
+      FUERZA_UNIDAD: 'mg',
+      CANTIDAD_DIAS: 2,
+      FRECUENCIA_DIARIA: 1
+    };
+    db.withConnection.mockImplementation(async (fn) => {
+      return await fn({ execute: jest.fn().mockResolvedValue({ rows: [row] }) });
+    });
+    const admin = await repo.getById(1);
+    expect(admin).toBeTruthy();
+    expect(admin).toHaveProperty('ADMIN_ID', 1);
+    expect(admin).toHaveProperty('FUERZA_VALOR', 500);
+  });
+
+  test('getById devuelve null si no existe', async () => {
+    db.withConnection.mockImplementation(async (fn) => {
+      return await fn({ execute: jest.fn().mockResolvedValue({ rows: [] }) });
+    });
+    const admin = await repo.getById(999999);
+    expect(admin).toBeNull();
+  });
+
 });

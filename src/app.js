@@ -54,6 +54,9 @@ import { RepositorioProtocoloActual } from './persistance/repositorioProtocoloAc
 import { ProtocoloActualService } from './services/ProtocoloActualService.js';
 import { makeProtocoloActualController } from './controllers/protocoloActualController.js';
 import protocoloActualRoutes from './routes/protocoloActual.js';
+import { AdministracionMedicacionService } from './services/AdministracionMedicacionService.js';
+import { makeAdministracionMedicacionController } from './controllers/administracionMedicacionController.js';
+import administracionMedicacionRoutes from './routes/administracionMedicacion.js';
 
 const app = express();
 
@@ -111,6 +114,9 @@ const recetaController = makeRecetaController(recetaService);
 const repositorioProtocoloActual = new RepositorioProtocoloActual(oracleDBInstance);
 const protocoloActualService = new ProtocoloActualService(repositorioProtocoloActual);
 const protocoloActualController = makeProtocoloActualController(protocoloActualService);
+// administracion medicacion
+const administracionMedicacionService = new AdministracionMedicacionService(repositorioAdministracionMedicacion);
+const administracionMedicacionController = makeAdministracionMedicacionController(administracionMedicacionService);
 
 app.use(express.json());
 app.use(cors({
@@ -134,5 +140,6 @@ app.use('/formas-farmaceuticas', formaFarmaceuticaRoutes(formaFarmaceuticaContro
 app.use('/drogas', presentacionDrogaRoutes(presentacionDrogaController));
 app.use('/presentaciones-droga-via', presentacionDrogaViaRoutes(presentacionDrogaViaController));
 app.use('/recetas', buildRecetasRouter(recetaController));
+app.use('/administraciones', administracionMedicacionRoutes(administracionMedicacionController));
 
 export default app;
