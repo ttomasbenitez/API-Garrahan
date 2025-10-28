@@ -128,7 +128,6 @@ BeforeAll({ timeout: 200_000 }, async function () {
   const port = container.getMappedPort(config.oracle.port);
   config.oracle.connectString = `${host}:${port}/${config.oracle.service}`;
 
-  // Conexión SYS para crear app_user
   const sysConn = await oracledb.getConnection({
     user: config.oracle.admin,
     password: config.oracle.adminPassword,

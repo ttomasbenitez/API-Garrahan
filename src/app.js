@@ -48,7 +48,7 @@ import apiHospitalConector from './connectors/hospital_api.js';
 import { RepositorioAdminisitracionMedicacion } from './persistance/repositorioAdministracionMedicacion.js';
 import { RepositorioRecetaPaciente } from './persistance/repositorioRecetaPaciente.js';
 import { RecetaService } from './services/RecetaService.js';
-import buildRecetasRouter from './routes/receta.js';
+import buildRecetasRouter from './routes/recetas.js';
 import { makeRecetaController } from './controllers/recetaController.js';
 import { RepositorioProtocoloActual } from './persistance/repositorioProtocoloActual.js';
 import { ProtocoloActualService } from './services/ProtocoloActualService.js';

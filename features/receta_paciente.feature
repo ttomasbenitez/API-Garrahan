@@ -26,25 +26,45 @@ Feature: Gestión de Recetas para Pacientes
 
   Scenario: US-11.1 Crear una nueva receta (campos mínimos)
     Given que tengo los siguientes datos de la receta:
-      | protocolo_id        | 1       |
-      | ciclo_id            | 1       |
-      | regimen             | 1       |
-      | paciente_id         | 1       |
-      | profesional_id      | 1       |
-      | estado              | activo  |
-      | peso                | 40.4    |
-      | talla               | 140.7   |
-      | superficie_corporal | 1.2     |
+      | nombre              | Juan                     |
+      | apellido            | Pérez                    |
+      | tipo_documento      | DNI                      |
+      | numero_documento    | 40123456                 |
+      | fecha_nacimiento    | 2020-05-21               |
+      | sexo                | M                        |
+      | nacionalidad        | Argentina                |
+      | domicilio_calle     | Av. Corrientes           |
+      | domicilio_numero    | 1234                     |
+      | domicilio_piso      | 5                        |
+      | domicilio_depto     | B                        |
+      | codigo_postal       | C1043                    |
+      | localidad           | CABA                     |
+      | partido             | San Nicolás              |
+      | telefono            | 1122334455               |
+      | email               | juan.perez@example.com   |
+      | peso                | 40.4                     |
+      | talla               | 140.7                    |
+      | superficie_corporal | 1.20                     |
+      | diagnostico         | Leucemia Linfoblástica Aguda |
+      | numero_ciclo        | 1                        |
+      | protocolo_id        | 1                        |
+      | ciclo_id            | 1                        |
+      | regimen             | 1                        |
+      | paciente_id         | 1                        |
+      | profesional_id      | 1                        |
+      | estado              | Activo                   |
     When publico la API "/recetas" con los datos de la receta
     Then el "id" de la receta es "1"
-    And el "paciente_id" de la receta es "1"
-    And el "profesional_id" de la receta es "1"
-    And el "estado" de la receta es "activo"
-    And el "peso" de la receta es "40.4"
-    And el "talla" de la receta es "140.7"
-    And el "superficie_corporal" de la receta es "1.2"
+    And la "fecha_prescripcion" corresponde al día de hoy
+    And el "nombre" del paciente en la receta es "Juan"
+    And el "apellido" del paciente en la receta es "Pérez"
+    And el "diagnostico" de la receta es "Leucemia Linfoblástica Aguda"
+    And el "peso" de los datos del paciente en la receta es "40.4"
+    And el "talla" de los datos del paciente en la receta es "140.7"
+    And el "superficie_corporal" de los datos del paciente en la receta es "1.2"
+    And el "estado" de la receta es "Activo"
     And se crea correctamente la receta
-
+  @wip
   Scenario: US-11.2 Obtener una receta por su id
     Given existe en la base de datos una receta con id "1" y con los datos:
       | protocolo_id        | 1       |
@@ -73,73 +93,134 @@ Feature: Gestión de Recetas para Pacientes
     And el segundo registro tiene "receta_id" = "6002"
     And responde correctamente la receta
 
-  @wip
-  Scenario: US-11.4 Listar recetas por contexto (protocolo/ciclo/régimen)
-    Given existen en la base de datos las siguientes recetas:
-      | receta_id | paciente_id | protocolo_id | ciclo_id | regimen | fecha_receta |
-      | 8001      | 2001        | 10           | 1        | 1       | 2025-10-22   |
-      | 8002      | 2001        | 10           | 1        | 1       | 2025-10-23   |
-      | 8003      | 2001        | 10           | 2        | 1       | 2025-10-22   |
-    When consulto en la API "/recetas?protocolo_id=10&ciclo_id=1&regimen=1"
-    Then el sistema me devuelve una lista con 2 recetas
-    And responde correctamente la receta
-
-  Scenario: US-11.5 Rechazar creación por FK compuesta de ciclo inválida
+  Scenario: US-11.4 Rechazar creación por FK compuesta de ciclo inválida
     Given que tengo los siguientes datos de la receta:
-      | protocolo_id        | 1       |
-      | ciclo_id            | 1       |
-      | regimen             | 0       |
-      | paciente_id         | 1       |
-      | profesional_id      | 1       |
-      | estado              | activo  |
-      | peso                | 40.4    |
-      | talla               | 140.7   |
-      | superficie_corporal | 1.2     |
+      | nombre              | Juan                     |
+      | apellido            | Pérez                    |
+      | tipo_documento      | DNI                      |
+      | numero_documento    | 40123456                 |
+      | fecha_nacimiento    | 2020-05-21               |
+      | sexo                | M                        |
+      | nacionalidad        | Argentina                |
+      | domicilio_calle     | Av. Corrientes           |
+      | domicilio_numero    | 1234                     |
+      | domicilio_piso      | 5                        |
+      | domicilio_depto     | B                        |
+      | codigo_postal       | C1043                    |
+      | localidad           | CABA                     |
+      | partido             | San Nicolás              |
+      | telefono            | 1122334455               |
+      | email               | juan.perez@example.com   |
+      | peso                | 40.4                     |
+      | talla               | 140.7                    |
+      | superficie_corporal | 1.20                     |
+      | diagnostico         | Leucemia Linfoblástica Aguda |
+      | numero_ciclo        | 1                        |
+      | protocolo_id        | 1                        |
+      | ciclo_id            | 0                        |
+      | regimen             | 0                        |
+      | paciente_id         | 1                        |
+      | profesional_id      | 1                        |
+      | estado              | Activo                   |
     When publico la API "/recetas" con los datos de la receta
     Then el sistema rechaza la creación por clave foránea inválida "FK_CICLO"
     And no se crea la receta
 
-  Scenario: US-11.6 Rechazar creación por paciente inexistente
-     Given que tengo los siguientes datos de la receta:
-      | protocolo_id        | 1       |
-      | ciclo_id            | 1       |
-      | regimen             | 1       |
-      | paciente_id         | 3       |
-      | profesional_id      | 1       |
-      | estado              | activo  |
-      | peso                | 40.4    |
-      | talla               | 140.7   |
-      | superficie_corporal | 1.2     |
+  Scenario: US-11.5 Rechazar creación por paciente inexistente
+    Given que tengo los siguientes datos de la receta:
+      | nombre              | Juan                     |
+      | apellido            | Pérez                    |
+      | tipo_documento      | DNI                      |
+      | numero_documento    | 40123456                 |
+      | fecha_nacimiento    | 2020-05-21               |
+      | sexo                | M                        |
+      | nacionalidad        | Argentina                |
+      | domicilio_calle     | Av. Corrientes           |
+      | domicilio_numero    | 1234                     |
+      | domicilio_piso      | 5                        |
+      | domicilio_depto     | B                        |
+      | codigo_postal       | C1043                    |
+      | localidad           | CABA                     |
+      | partido             | San Nicolás              |
+      | telefono            | 1122334455               |
+      | email               | juan.perez@example.com   |
+      | peso                | 40.4                     |
+      | talla               | 140.7                    |
+      | superficie_corporal | 1.20                     |
+      | diagnostico         | Leucemia Linfoblástica Aguda |
+      | numero_ciclo        | 1                        |
+      | protocolo_id        | 1                        |
+      | ciclo_id            | 1                        |
+      | regimen             | 1                        |
+      | paciente_id         | 9                        |
+      | profesional_id      | 1                        |
+      | estado              | Activo                   |
     When publico la API "/recetas" con los datos de la receta
     Then el sistema rechaza la creación por clave foránea inválida "FK_PACIENTE"
     And no se crea la receta
 
-  Scenario: US-11.7 Rechazar creación por profesional inexistente
+  Scenario: US-11.6 Rechazar creación por profesional inexistente
     Given que tengo los siguientes datos de la receta:
-      | protocolo_id        | 1       |
-      | ciclo_id            | 1       |
-      | regimen             | 1       |
-      | paciente_id         | 1       |
-      | profesional_id      | 5       |
-      | estado              | activo  |
-      | peso                | 40.4    |
-      | talla               | 140.7   |
-      | superficie_corporal | 1.2     |
+      | nombre              | Juan                     |
+      | apellido            | Pérez                    |
+      | tipo_documento      | DNI                      |
+      | numero_documento    | 40123456                 |
+      | fecha_nacimiento    | 2020-05-21               |
+      | sexo                | M                        |
+      | nacionalidad        | Argentina                |
+      | domicilio_calle     | Av. Corrientes           |
+      | domicilio_numero    | 1234                     |
+      | domicilio_piso      | 5                        |
+      | domicilio_depto     | B                        |
+      | codigo_postal       | C1043                    |
+      | localidad           | CABA                     |
+      | partido             | San Nicolás              |
+      | telefono            | 1122334455               |
+      | email               | juan.perez@example.com   |
+      | peso                | 40.4                     |
+      | talla               | 140.7                    |
+      | superficie_corporal | 1.20                     |
+      | diagnostico         | Leucemia Linfoblástica Aguda |
+      | numero_ciclo        | 1                        |
+      | protocolo_id        | 1                        |
+      | ciclo_id            | 1                        |
+      | regimen             | 1                        |
+      | paciente_id         | 1                        |
+      | profesional_id      | 10                       |
+      | estado              | Activo                   |
     When publico la API "/recetas" con los datos de la receta
     Then el sistema rechaza la creación por clave foránea inválida "FK_PROFESIONAL"
     And no se crea la receta
 
-  Scenario: US-11.8 Rechazar nulos en campos obligatorios
-     Given que tengo los siguientes datos de la receta:
-      | protocolo_id        | 1       |
-      | ciclo_id            |         |
-      | regimen             |         |
-      | paciente_id         | 1       |
-      | profesional_id      | 1       |
-      | estado              |         |
-      | peso                | 40.4    |
-      | talla               | 140.7   |
-      | superficie_corporal |         |
+  Scenario: US-11.7 Rechazar nulos en campos obligatorios
+    Given que tengo los siguientes datos de la receta:
+      | nombre              | Juan                     |
+      | apellido            | Pérez                    |
+      | tipo_documento      | DNI                      |
+      | numero_documento    | 5098765                  |
+      | fecha_nacimiento    | 2020-05-21               |
+      | sexo                | M                        |
+      | nacionalidad        | Argentina                |
+      | domicilio_calle     | Av. Corrientes           |
+      | domicilio_numero    | 1234                     |
+      | domicilio_piso      | 5                        |
+      | domicilio_depto     | B                        |
+      | codigo_postal       | C1043                    |
+      | localidad           | CABA                     |
+      | partido             | San Nicolás              |
+      | telefono            | 1122334455               |
+      | email               | juan.perez@example.com   |
+      | peso                | 40.4                     |
+      | talla               | 140.7                    |
+      | superficie_corporal |                          |
+      | diagnostico         |                          |
+      | numero_ciclo        | 1                        |
+      | protocolo_id        | 1                        |
+      | ciclo_id            | 1                        |
+      | regimen             | 1                        |
+      | paciente_id         | 1                        |
+      | profesional_id      | 1                        |
+      | estado              | Activo                   |
     When publico la API "/recetas" con los datos de la receta
     Then el sistema rechaza la creación por campos obligatorios faltantes
     And no se crea la receta

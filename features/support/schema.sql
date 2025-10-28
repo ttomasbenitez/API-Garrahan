@@ -105,22 +105,60 @@ CREATE TABLE administracion_medicacion (
 
 -- Receta emitida para un paciente en un ciclo/regimen
 CREATE TABLE receta_paciente (
-  receta_id      NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  ciclo_id       NUMBER NOT NULL,
-  protocolo_id   NUMBER NOT NULL,
-  regimen        NUMBER NOT NULL,
-  paciente_id    NUMBER NOT NULL,
-  profesional_id NUMBER NOT NULL,
-  fecha_receta   DATE DEFAULT SYSDATE NOT NULL,
-  estado         VARCHAR2(100),
-  peso           FLOAT,
-  talla          FLOAT,
-  superficie_corporal FLOAT,
+  receta_id               NUMBER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+  fecha_prescripcion      TIMESTAMP DEFAULT (CURRENT_TIMESTAMP AT TIME ZONE 'America/Argentina/Buenos_Aires') NOT NULL,
+  nombre                  VARCHAR2(100) NOT NULL,
+  apellido                VARCHAR2(100) NOT NULL,
+  tipo_documento          VARCHAR2(50),
+  numero_documento        VARCHAR2(50),
+  fecha_nacimiento        DATE,
+  sexo                    CHAR(1) CHECK (sexo IN ('M','F')),
+  nacionalidad            VARCHAR2(50),
+  domicilio_calle         VARCHAR2(150),  
+  domicilio_numero        VARCHAR2(20),
+  domicilio_piso          VARCHAR2(20),    
+  domicilio_depto         VARCHAR2(20),
+  codigo_postal           VARCHAR2(20),   
+  localidad               VARCHAR2(100),
+  partido                 VARCHAR2(100),
+  telefono                VARCHAR2(50),
+  email                   VARCHAR2(100),  
+  peso                    FLOAT,
+  talla                   FLOAT,
+  superficie_corporal     FLOAT,
+  diagnostico             VARCHAR2(255),
+  numero_ciclo            NUMBER,
+  protocolo_id            NUMBER NOT NULL,
+  ciclo_id                NUMBER NOT NULL,
+  regimen                 NUMBER NOT NULL,
+  paciente_id             NUMBER NOT NULL,
+  profesional_id          NUMBER NOT NULL,
+  estado                  VARCHAR2(100),
   CONSTRAINT fk_receta_paciente    FOREIGN KEY (paciente_id)  REFERENCES paciente(paciente_id),
   CONSTRAINT fk_receta_profesional FOREIGN KEY (profesional_id) REFERENCES profesional(profesional_id),
   CONSTRAINT fk_receta_ciclo       FOREIGN KEY (protocolo_id, ciclo_id, regimen)
     REFERENCES ciclo(protocolo_id, ciclo_id, regimen)
 );
+
+CREATE INDEX idx_receta_paciente_fecha      ON receta_paciente (fecha_prescripcion);
+CREATE INDEX idx_receta_paciente_paciente   ON receta_paciente (paciente_id);
+CREATE INDEX idx_receta_paciente_ctx        ON receta_paciente (protocolo_id, ciclo_id, regimen);
+
+-- Detalle de una receta: qué administración concreta se receta y en qué cantidad
+CREATE TABLE receta_detalle (
+  receta_id        NUMBER NOT NULL,
+  admin_id         NUMBER NOT NULL,
+  via_id           NUMBER NOT NULL,
+  cantidad         NUMBER NOT NULL,
+  dosis_diaria     NUMBER,
+  cantidad_dias    NUMBER,
+  dosis_total      NUMBER,
+  CONSTRAINT pk_receta_detalle PRIMARY KEY (receta_id, admin_id),
+  CONSTRAINT fk_rd_receta  FOREIGN KEY (receta_id) REFERENCES receta_paciente(receta_id),
+  CONSTRAINT fk_rd_admin   FOREIGN KEY (admin_id)  REFERENCES administracion_medicacion(admin_id),
+  CONSTRAINT fk_rd_via     FOREIGN KEY (via_id)    REFERENCES via_administracion(via_id)
+);
+
 
 -- Asignación de un protocolo a un paciente y su ciclo actual
 CREATE TABLE protocolo_paciente (

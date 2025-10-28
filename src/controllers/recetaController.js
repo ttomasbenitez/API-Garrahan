@@ -12,18 +12,7 @@ async function crearRecetaPaciente(req, res, service) {
   try {
     const payload = req.body;
 
-    const recetaPaciente = new RecetaPaciente(
-      payload.protocolo_id,
-      payload.ciclo_id,
-      payload.regimen,
-      payload.paciente_id,
-      payload.profesional_id,
-      payload.estado,
-      payload.peso,
-      payload.talla,
-      payload.superficie_corporal,
-      payload.fecha_receta,
-    );
+    const recetaPaciente = RecetaPaciente.fromBody(payload);
 
     await service.crearRecetaPaciente(recetaPaciente);
     logger.info('Receta Paciente creada con IDs: %o', recetaPaciente.id);

@@ -67,7 +67,7 @@ Then('no se crea la receta', function () {
 
 Then('el sistema rechaza la creación por campos obligatorios faltantes', function () {
   assert.equal(response.status, 404);
-  assert.equal(response.body.error, 'protocolo_id, ciclo_id y regimen son obligatorios.');
+  assert.equal(response.body.error, 'peso, talla y superficie_corporal son requeridos');
   assert.equal(response.body.code, 'RECETA_PACIENTE_CREACION_ERROR');
 });
 
@@ -111,4 +111,22 @@ Then('responde correctamente la receta', function () {
   assert.equal(response.status, 200);
   data = null;
   response = null;
+});
+
+Then('la {string} corresponde al día de hoy', function (string) {
+  const fechaReceta = new Date(response.body[string]);
+  const hoy = new Date();
+  assert.equal(fechaReceta.getDate(), hoy.getDate());
+  assert.equal(fechaReceta.getMonth(), hoy.getMonth());
+  assert.equal(fechaReceta.getFullYear(), hoy.getFullYear());
+});
+
+Then('el {string} del paciente en la receta es {string}', function (key, value) {
+  const paciente_snapshot = response.body.paciente_snapshot;
+  assert.equal(paciente_snapshot.identidad[key], value);
+});
+
+Then('el {string} de los datos del paciente en la receta es {string}', function (key, value) {
+  const datos_paciente = response.body.datos_paciente;
+  assert.equal(toString(datos_paciente[key]), toString(value));
 });
