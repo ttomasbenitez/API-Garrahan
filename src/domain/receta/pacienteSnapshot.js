@@ -3,12 +3,12 @@ import { ERROR_RECETA_PACIENTE_CREACION_CODE } from '../../errors/receta.js';
 
 
 export class Domicilio {
-  constructor({ calle, numero, piso, depto, codigoPostal, localidad, partido }) {
+  constructor({ calle, numero, piso, depto, codigo_postal, localidad, partido }) {
     this.calle = calle ?? null;
     this.numero = numero ?? null;
     this.piso = piso ?? null;
     this.depto = depto ?? null;
-    this.codigoPostal = codigoPostal ?? null;
+    this.codigo_postal = codigo_postal ?? null;
     this.localidad = localidad ?? null;
     this.partido = partido ?? null;
   }
@@ -16,11 +16,8 @@ export class Domicilio {
   validar() {
     if (!this.calle) throw getError('calle es requerida', 'DOMICILIO_CALLE_REQUERIDA');
     if (!this.numero) throw getError('numero es requerido', 'DOMICILIO_NUMERO_REQUERIDO');
-    if (!this.piso) throw getError('piso es requerido', 'DOMICILIO_PISO_REQUERIDO');
-    if (!this.depto) throw getError('depto es requerido', 'DOMICILIO_DEPTO_REQUERIDO');
-    if (!this.codigoPostal) throw getError('codigoPostal es requerido', 'DOMICILIO_CODIGO_POSTAL_REQUERIDO');
+    if (!this.codigo_postal) throw getError('codigo_postal es requerido', 'DOMICILIO_CODIGO_POSTAL_REQUERIDO');
     if (!this.localidad) throw getError('localidad es requerida', 'DOMICILIO_LOCALIDAD_REQUERIDA');
-    if (!this.partido) throw getError('partido es requerido', 'DOMICILIO_PARTIDO_REQUERIDO');
   }
 }
 
@@ -29,19 +26,14 @@ export class Contacto {
     this.telefono = telefono ?? null;
     this.email = email ?? null;
   }
-
-  validar() {
-    if (!this.telefono) throw getError('telefono es requerido', 'CONTACTO_TELEFONO_REQUERIDO');
-    if (!this.email) throw getError('email es requerido', 'CONTACTO_EMAIL_REQUERIDO');
-  }
 }
 
 export class Identidad {
-  constructor({ nombre, apellido, tipo_documento, numeroDocumento, fecha_nacimiento, sexo, nacionalidad }) {
+  constructor({ nombre, apellido, tipo_documento, numero_documento, fecha_nacimiento, sexo, nacionalidad }) {
     this.nombre = nombre;
     this.apellido = apellido;
     this.tipo_documento = tipo_documento;
-    this.numeroDocumento = numeroDocumento;
+    this.numero_documento = numero_documento;
     this.fecha_nacimiento = fecha_nacimiento;
     this.sexo = sexo;
     this.nacionalidad = nacionalidad;
@@ -56,19 +48,6 @@ export class Identidad {
     if (!this.apellido) {
       throw getError('apellido es requerido', 'RECETA_APELLIDO_REQUERIDO');
     }
-
-    if (this.sexo && !['M','F'].includes(this.sexo)) {
-      throw getError('sexo inválido', 'RECETA_SEXO_INVALIDO');
-    }
-
-    if (this.fecha_nacimiento && isNaN(this.fecha_nacimiento.getTime())) {
-      throw getError('fecha de nacimiento inválida', 'RECETA_FECHA_NACIMIENTO_INVALIDA');
-    }
-
-    if (!this.nacionalidad) {
-      throw getError('nacionalidad inválida', 'RECETA_NACIONALIDAD_INVALIDA');
-    }
-
   }
 }
 

@@ -31,13 +31,13 @@ class RecetaPaciente {
   static fromBody(body) {
     const identidad = new Identidad({
       nombre: body.nombre, apellido: body.apellido,
-      tipo_documento: body.tipo_documento, numeroDocumento: body.numero_documento,
+      tipo_documento: body.tipo_documento, numero_documento: body.numero_documento,
       fecha_nacimiento: body.fecha_nacimiento ? new Date(body.fecha_nacimiento) : null,
       sexo: body.sexo, nacionalidad: body.nacionalidad
     });
     const domicilio = new Domicilio({
       calle: body.domicilio_calle, numero: body.domicilio_numero, piso: body.domicilio_piso,
-      depto: body.domicilio_depto, codigoPostal: body.codigo_postal,
+      depto: body.domicilio_depto, codigo_postal: body.codigo_postal,
       localidad: body.localidad, partido: body.partido
     });
     const contacto = new Contacto({
