@@ -2,6 +2,7 @@
   {
     "droga_id": 1,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 50,
     "fuerza_unidad": "mg"
@@ -9,6 +10,7 @@
   {
     "droga_id": 1,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 100,
     "fuerza_unidad": "mg"
@@ -16,6 +18,7 @@
   {
     "droga_id": 1,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 150,
     "fuerza_unidad": "mg"
@@ -23,6 +26,7 @@
   {
     "droga_id": 2,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 250,
     "fuerza_unidad": "mg"
@@ -30,6 +34,7 @@
   {
     "droga_id": 3,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 4,
     "fuerza_unidad": "mg"
@@ -37,6 +42,7 @@
   {
     "droga_id": 4,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 20,
     "fuerza_unidad": "mg"
@@ -44,6 +50,7 @@
   {
     "droga_id": 4,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 30,
     "fuerza_unidad": "mg"
@@ -51,6 +58,7 @@
   {
     "droga_id": 4,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 40,
     "fuerza_unidad": "mg"
@@ -58,6 +66,7 @@
   {
     "droga_id": 5,
     "forma_farmaceutica_id": 2,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 150,
     "fuerza_unidad": "mg"
@@ -65,6 +74,7 @@
   {
     "droga_id": 6,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 100,
     "fuerza_unidad": "mg"
@@ -72,6 +82,7 @@
   {
     "droga_id": 6,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 300,
     "fuerza_unidad": "mg"
@@ -79,6 +90,7 @@
   {
     "droga_id": 7,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 1,
     "fuerza_unidad": "mg"
@@ -86,6 +98,7 @@
   {
     "droga_id": 8,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 1,
     "fuerza_unidad": "mg"
@@ -93,6 +106,7 @@
   {
     "droga_id": 9,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 100,
     "fuerza_unidad": "mg"
@@ -100,6 +114,7 @@
   {
     "droga_id": 10,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 25,
     "fuerza_unidad": "mg"
@@ -107,6 +122,7 @@
   {
     "droga_id": 10,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 100,
     "fuerza_unidad": "mg"
@@ -114,6 +130,7 @@
   {
     "droga_id": 11,
     "forma_farmaceutica_id": 4,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 400,
     "fuerza_unidad": "mg"
@@ -121,6 +138,7 @@
   {
     "droga_id": 11,
     "forma_farmaceutica_id": 4,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 100,
     "fuerza_unidad": "mg"
@@ -128,6 +146,7 @@
   {
     "droga_id": 12,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 50,
     "fuerza_unidad": "mg"
@@ -135,6 +154,7 @@
   {
     "droga_id": 13,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 15,
     "fuerza_unidad": "UI"
@@ -142,6 +162,7 @@
   {
     "droga_id": 14,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 3.5,
     "fuerza_unidad": "mg"
@@ -149,6 +170,7 @@
   {
     "droga_id": 15,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 500,
     "fuerza_unidad": "mg"
@@ -156,6 +178,7 @@
   {
     "droga_id": 16,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 50,
     "fuerza_unidad": "mg"
@@ -163,6 +186,7 @@
   {
     "droga_id": 16,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 150,
     "fuerza_unidad": "mg"
@@ -170,6 +194,7 @@
   {
     "droga_id": 16,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 450,
     "fuerza_unidad": "mg"
@@ -177,6 +202,7 @@
   {
     "droga_id": 17,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 100,
     "fuerza_unidad": "mg"
@@ -184,6 +210,7 @@
   {
     "droga_id": 17,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 500,
     "fuerza_unidad": "mg"
@@ -191,6 +218,7 @@
   {
     "droga_id": 18,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 50,
     "fuerza_unidad": "mg"
@@ -198,6 +226,7 @@
   {
     "droga_id": 18,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 200,
     "fuerza_unidad": "mg"
@@ -205,6 +234,7 @@
   {
     "droga_id": 18,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 1,
     "fuerza_unidad": "gr"
@@ -212,6 +242,7 @@
   {
     "droga_id": 19,
     "forma_farmaceutica_id": 2,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 10,
     "fuerza_unidad": "mg"
@@ -219,6 +250,7 @@
   {
     "droga_id": 19,
     "forma_farmaceutica_id": 2,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 50,
     "fuerza_unidad": "mg"
@@ -226,6 +258,7 @@
   {
     "droga_id": 19,
     "forma_farmaceutica_id": 2,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 100,
     "fuerza_unidad": "mg"
@@ -233,6 +266,7 @@
   {
     "droga_id": 20,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 10,
     "fuerza_unidad": "mg"
@@ -240,6 +274,7 @@
   {
     "droga_id": 20,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 50,
     "fuerza_unidad": "mg"
@@ -247,6 +282,7 @@
   {
     "droga_id": 21,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 100,
     "fuerza_unidad": "mg"
@@ -254,6 +290,7 @@
   {
     "droga_id": 21,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 1,
     "fuerza_unidad": "gr"
@@ -261,6 +298,7 @@
   {
     "droga_id": 22,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 10,
     "fuerza_unidad": "mg"
@@ -268,6 +306,7 @@
   {
     "droga_id": 23,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 20,
     "fuerza_unidad": "mg"
@@ -275,6 +314,7 @@
   {
     "droga_id": 24,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 2,
     "fuerza_unidad": "gr"
@@ -282,6 +322,7 @@
   {
     "droga_id": 25,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 10000,
     "fuerza_unidad": "UI"
@@ -289,6 +330,7 @@
   {
     "droga_id": 26,
     "forma_farmaceutica_id": 2,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 50,
     "fuerza_unidad": "mg"
@@ -296,6 +338,7 @@
   {
     "droga_id": 26,
     "forma_farmaceutica_id": 2,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 75,
     "fuerza_unidad": "mg"
@@ -303,6 +346,7 @@
   {
     "droga_id": 27,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 100,
     "fuerza_unidad": "mg"
@@ -310,6 +354,7 @@
   {
     "droga_id": 27,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 200,
     "fuerza_unidad": "mg"
@@ -317,6 +362,7 @@
   {
     "droga_id": 28,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 0.5,
     "fuerza_unidad": "mg"
@@ -324,6 +370,7 @@
   {
     "droga_id": 29,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 20,
     "fuerza_unidad": "mg"
@@ -331,6 +378,7 @@
   {
     "droga_id": 29,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 70,
     "fuerza_unidad": "mg"
@@ -338,6 +386,7 @@
   {
     "droga_id": 29,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 100,
     "fuerza_unidad": "mg"
@@ -345,6 +394,7 @@
   {
     "droga_id": 30,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 20,
     "fuerza_unidad": "mg"
@@ -352,6 +402,7 @@
   {
     "droga_id": 31,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 125,
     "fuerza_unidad": "mg"
@@ -359,6 +410,7 @@
   {
     "droga_id": 31,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 250,
     "fuerza_unidad": "mg"
@@ -366,6 +418,7 @@
   {
     "droga_id": 31,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 500,
     "fuerza_unidad": "mg"
@@ -373,6 +426,7 @@
   {
     "droga_id": 32,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 4,
     "fuerza_unidad": "mg"
@@ -380,6 +434,7 @@
   {
     "droga_id": 32,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 8,
     "fuerza_unidad": "mg"
@@ -387,6 +442,7 @@
   {
     "droga_id": 33,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 20,
     "fuerza_unidad": "mg"
@@ -394,6 +450,7 @@
   {
     "droga_id": 33,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 80,
     "fuerza_unidad": "mg"
@@ -401,6 +458,7 @@
   {
     "droga_id": 34,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 10,
     "fuerza_unidad": "mg"
@@ -408,6 +466,7 @@
   {
     "droga_id": 34,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 50,
     "fuerza_unidad": "mg"
@@ -415,6 +474,7 @@
   {
     "droga_id": 35,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 20,
     "fuerza_unidad": "mg"
@@ -422,6 +482,7 @@
   {
     "droga_id": 36,
     "forma_farmaceutica_id": 2,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 40,
     "fuerza_unidad": "mg"
@@ -429,6 +490,7 @@
   {
     "droga_id": 36,
     "forma_farmaceutica_id": 2,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 80,
     "fuerza_unidad": "mg"
@@ -436,6 +498,7 @@
   {
     "droga_id": 37,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 50,
     "fuerza_unidad": "mg"
@@ -443,6 +506,7 @@
   {
     "droga_id": 38,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 4000,
     "fuerza_unidad": "UI"
@@ -450,6 +514,7 @@
   {
     "droga_id": 38,
     "forma_farmaceutica_id": 5,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 4000,
     "fuerza_unidad": "UI"
@@ -457,6 +522,7 @@
   {
     "droga_id": 38,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 10000,
     "fuerza_unidad": "UI"
@@ -464,6 +530,7 @@
   {
     "droga_id": 38,
     "forma_farmaceutica_id": 5,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 10000,
     "fuerza_unidad": "UI"
@@ -471,6 +538,7 @@
   {
     "droga_id": 39,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 25,
     "fuerza_unidad": "mg"
@@ -478,6 +546,7 @@
   {
     "droga_id": 39,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 100,
     "fuerza_unidad": "mg"
@@ -485,6 +554,7 @@
   {
     "droga_id": 39,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 150,
     "fuerza_unidad": "mg"
@@ -492,6 +562,7 @@
   {
     "droga_id": 40,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 100,
     "fuerza_unidad": "mg"
@@ -499,6 +570,7 @@
   {
     "droga_id": 41,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 25,
     "fuerza_unidad": "mg"
@@ -506,6 +578,7 @@
   {
     "droga_id": 42,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 300,
     "fuerza_unidad": "mcg"
@@ -513,6 +586,7 @@
   {
     "droga_id": 42,
     "forma_farmaceutica_id": 5,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 300,
     "fuerza_unidad": "mcg"
@@ -520,6 +594,7 @@
   {
     "droga_id": 43,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 10,
     "fuerza_unidad": "mg"
@@ -527,6 +602,7 @@
   {
     "droga_id": 43,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 50,
     "fuerza_unidad": "mg"
@@ -534,6 +610,7 @@
   {
     "droga_id": 44,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 500,
     "fuerza_unidad": "mg"
@@ -541,6 +618,7 @@
   {
     "droga_id": 45,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 250,
     "fuerza_unidad": "mg"
@@ -548,6 +626,7 @@
   {
     "droga_id": 46,
     "forma_farmaceutica_id": 5,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 250,
     "fuerza_unidad": "mg"
@@ -555,6 +634,7 @@
   {
     "droga_id": 46,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 250,
     "fuerza_unidad": "mg"
@@ -562,6 +642,7 @@
   {
     "droga_id": 47,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 250,
     "fuerza_unidad": "mg"
@@ -569,6 +650,7 @@
   {
     "droga_id": 48,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 200,
     "fuerza_unidad": "mg"
@@ -576,6 +658,7 @@
   {
     "droga_id": 48,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 1,
     "fuerza_unidad": "gr"
@@ -583,6 +666,7 @@
   {
     "droga_id": 49,
     "forma_farmaceutica_id": 5,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 3.6,
     "fuerza_unidad": "mg"
@@ -590,6 +674,7 @@
   {
     "droga_id": 50,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 100,
     "fuerza_unidad": "mg"
@@ -597,6 +682,7 @@
   {
     "droga_id": 51,
     "forma_farmaceutica_id": 2,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 500,
     "fuerza_unidad": "mg"
@@ -604,6 +690,7 @@
   {
     "droga_id": 52,
     "forma_farmaceutica_id": 2,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 140,
     "fuerza_unidad": "mg"
@@ -611,6 +698,7 @@
   {
     "droga_id": 53,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 10,
     "fuerza_unidad": "mg"
@@ -618,6 +706,7 @@
   {
     "droga_id": 54,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 1,
     "fuerza_unidad": "gr"
@@ -625,6 +714,7 @@
   {
     "droga_id": 55,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 100,
     "fuerza_unidad": "mg"
@@ -632,6 +722,7 @@
   {
     "droga_id": 55,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 400,
     "fuerza_unidad": "mg"
@@ -639,6 +730,7 @@
   {
     "droga_id": 56,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 25,
     "fuerza_unidad": "mg"
@@ -646,6 +738,7 @@
   {
     "droga_id": 57,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 100,
     "fuerza_unidad": "mg"
@@ -653,6 +746,7 @@
   {
     "droga_id": 58,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 10000,
     "fuerza_unidad": "UI"
@@ -660,6 +754,7 @@
   {
     "droga_id": 59,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 3750,
     "fuerza_unidad": "UI"
@@ -667,6 +762,7 @@
   {
     "droga_id": 60,
     "forma_farmaceutica_id": 2,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 5,
     "fuerza_unidad": "mg"
@@ -674,6 +770,7 @@
   {
     "droga_id": 60,
     "forma_farmaceutica_id": 2,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 10,
     "fuerza_unidad": "mg"
@@ -681,6 +778,7 @@
   {
     "droga_id": 60,
     "forma_farmaceutica_id": 2,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 15,
     "fuerza_unidad": "mg"
@@ -688,6 +786,7 @@
   {
     "droga_id": 60,
     "forma_farmaceutica_id": 2,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 25,
     "fuerza_unidad": "mg"
@@ -695,6 +794,7 @@
   {
     "droga_id": 61,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 2.5,
     "fuerza_unidad": "mg"
@@ -702,6 +802,7 @@
   {
     "droga_id": 62,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 15,
     "fuerza_unidad": "mg"
@@ -709,6 +810,7 @@
   {
     "droga_id": 62,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 50,
     "fuerza_unidad": "mg"
@@ -716,6 +818,7 @@
   {
     "droga_id": 63,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 7.5,
     "fuerza_unidad": "mg"
@@ -723,6 +826,7 @@
   {
     "droga_id": 63,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 22.5,
     "fuerza_unidad": "mg"
@@ -730,6 +834,7 @@
   {
     "droga_id": 64,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 2,
     "fuerza_unidad": "mg"
@@ -737,6 +842,7 @@
   {
     "droga_id": 64,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 50,
     "fuerza_unidad": "mg"
@@ -744,6 +850,7 @@
   {
     "droga_id": 65,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 40,
     "fuerza_unidad": "mg"
@@ -751,6 +858,7 @@
   {
     "droga_id": 66,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 50,
     "fuerza_unidad": "mg"
@@ -758,6 +866,7 @@
   {
     "droga_id": 67,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 200,
     "fuerza_unidad": "mg"
@@ -765,6 +874,7 @@
   {
     "droga_id": 68,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 2.5,
     "fuerza_unidad": "mg"
@@ -772,6 +882,7 @@
   {
     "droga_id": 68,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 7.5,
     "fuerza_unidad": "mg"
@@ -779,6 +890,7 @@
   {
     "droga_id": 68,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 50,
     "fuerza_unidad": "mg"
@@ -786,6 +898,7 @@
   {
     "droga_id": 68,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 500,
     "fuerza_unidad": "mg"
@@ -793,6 +906,7 @@
   {
     "droga_id": 69,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 20,
     "fuerza_unidad": "mg"
@@ -800,6 +914,7 @@
   {
     "droga_id": 70,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 20,
     "fuerza_unidad": "mg"
@@ -807,6 +922,7 @@
   {
     "droga_id": 71,
     "forma_farmaceutica_id": 2,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 150,
     "fuerza_unidad": "mg"
@@ -814,6 +930,7 @@
   {
     "droga_id": 71,
     "forma_farmaceutica_id": 2,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 200,
     "fuerza_unidad": "mg"
@@ -821,6 +938,7 @@
   {
     "droga_id": 72,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 40,
     "fuerza_unidad": "mg"
@@ -828,6 +946,7 @@
   {
     "droga_id": 72,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 100,
     "fuerza_unidad": "mg"
@@ -835,6 +954,7 @@
   {
     "droga_id": 73,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 30,
     "fuerza_unidad": "mg"
@@ -842,6 +962,7 @@
   {
     "droga_id": 74,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 8,
     "fuerza_unidad": "mg"
@@ -849,6 +970,7 @@
   {
     "droga_id": 74,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 8,
     "fuerza_unidad": "mg"
@@ -856,6 +978,7 @@
   {
     "droga_id": 75,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 50,
     "fuerza_unidad": "mg"
@@ -863,6 +986,7 @@
   {
     "droga_id": 75,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 100,
     "fuerza_unidad": "mg"
@@ -870,6 +994,7 @@
   {
     "droga_id": 76,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 30,
     "fuerza_unidad": "mg"
@@ -877,6 +1002,7 @@
   {
     "droga_id": 76,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 100,
     "fuerza_unidad": "mg"
@@ -884,6 +1010,7 @@
   {
     "droga_id": 76,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 300,
     "fuerza_unidad": "mg"
@@ -891,6 +1018,7 @@
   {
     "droga_id": 77,
     "forma_farmaceutica_id": 2,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 75,
     "fuerza_unidad": "mg"
@@ -898,6 +1026,7 @@
   {
     "droga_id": 77,
     "forma_farmaceutica_id": 2,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 100,
     "fuerza_unidad": "mg"
@@ -905,6 +1034,7 @@
   {
     "droga_id": 77,
     "forma_farmaceutica_id": 2,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 125,
     "fuerza_unidad": "mg"
@@ -912,6 +1042,7 @@
   {
     "droga_id": 78,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 90,
     "fuerza_unidad": "mg"
@@ -919,6 +1050,7 @@
   {
     "droga_id": 79,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 20,
     "fuerza_unidad": "mg/ml"
@@ -926,6 +1058,7 @@
   {
     "droga_id": 80,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 200,
     "fuerza_unidad": "mg"
@@ -933,6 +1066,7 @@
   {
     "droga_id": 80,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 400,
     "fuerza_unidad": "mg"
@@ -940,6 +1074,7 @@
   {
     "droga_id": 81,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 100,
     "fuerza_unidad": "mg"
@@ -947,6 +1082,7 @@
   {
     "droga_id": 82,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 500,
     "fuerza_unidad": "mg"
@@ -954,6 +1090,7 @@
   {
     "droga_id": 83,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 420,
     "fuerza_unidad": "mg"
@@ -961,6 +1098,7 @@
   {
     "droga_id": 84,
     "forma_farmaceutica_id": 2,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 4,
     "fuerza_unidad": "mg"
@@ -968,6 +1106,7 @@
   {
     "droga_id": 85,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 5,
     "fuerza_unidad": "mg"
@@ -975,6 +1114,7 @@
   {
     "droga_id": 86,
     "forma_farmaceutica_id": 2,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 50,
     "fuerza_unidad": "mg"
@@ -982,6 +1122,7 @@
   {
     "droga_id": 87,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 1.5,
     "fuerza_unidad": "mg"
@@ -989,6 +1130,7 @@
   {
     "droga_id": 88,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 200,
     "fuerza_unidad": "mg"
@@ -996,6 +1138,7 @@
   {
     "droga_id": 89,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 100,
     "fuerza_unidad": "mg"
@@ -1003,6 +1146,7 @@
   {
     "droga_id": 89,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 500,
     "fuerza_unidad": "mg"
@@ -1010,6 +1154,7 @@
   {
     "droga_id": 90,
     "forma_farmaceutica_id": 2,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 12.5,
     "fuerza_unidad": "mg"
@@ -1017,6 +1162,7 @@
   {
     "droga_id": 90,
     "forma_farmaceutica_id": 2,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 25,
     "fuerza_unidad": "mg"
@@ -1024,6 +1170,7 @@
   {
     "droga_id": 90,
     "forma_farmaceutica_id": 2,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 50,
     "fuerza_unidad": "mg"
@@ -1031,6 +1178,7 @@
   {
     "droga_id": 91,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 50,
     "fuerza_unidad": "mg"
@@ -1038,6 +1186,7 @@
   {
     "droga_id": 91,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 100,
     "fuerza_unidad": "mg"
@@ -1045,6 +1194,7 @@
   {
     "droga_id": 92,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 20,
     "fuerza_unidad": "mg"
@@ -1052,6 +1202,7 @@
   {
     "droga_id": 93,
     "forma_farmaceutica_id": 2,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 20,
     "fuerza_unidad": "mg"
@@ -1059,6 +1210,7 @@
   {
     "droga_id": 93,
     "forma_farmaceutica_id": 2,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 100,
     "fuerza_unidad": "mg"
@@ -1066,6 +1218,7 @@
   {
     "droga_id": 93,
     "forma_farmaceutica_id": 2,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 250,
     "fuerza_unidad": "mg"
@@ -1073,6 +1226,7 @@
   {
     "droga_id": 94,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 40,
     "fuerza_unidad": "mg"
@@ -1080,6 +1234,7 @@
   {
     "droga_id": 95,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 4,
     "fuerza_unidad": "mg"
@@ -1087,6 +1242,7 @@
   {
     "droga_id": 96,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 0.5,
     "fuerza_unidad": "mg"
@@ -1094,6 +1250,7 @@
   {
     "droga_id": 96,
     "forma_farmaceutica_id": 1,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 2,
     "fuerza_unidad": "mg"
@@ -1101,6 +1258,7 @@
   {
     "droga_id": 97,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 420,
     "fuerza_unidad": "mg"
@@ -1108,6 +1266,7 @@
   {
     "droga_id": 97,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 440,
     "fuerza_unidad": "mg"
@@ -1115,6 +1274,7 @@
   {
     "droga_id": 97,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 600,
     "fuerza_unidad": "mg"
@@ -1122,6 +1282,7 @@
   {
     "droga_id": 98,
     "forma_farmaceutica_id": 2,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 10,
     "fuerza_unidad": "mg"
@@ -1129,6 +1290,7 @@
   {
     "droga_id": 99,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 10,
     "fuerza_unidad": "mg"
@@ -1136,6 +1298,7 @@
   {
     "droga_id": 100,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 3.75,
     "fuerza_unidad": null
@@ -1143,6 +1306,7 @@
   {
     "droga_id": 101,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 10,
     "fuerza_unidad": "mg"
@@ -1150,6 +1314,7 @@
   {
     "droga_id": 102,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 1,
     "fuerza_unidad": "mg"
@@ -1157,6 +1322,7 @@
   {
     "droga_id": 103,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 10,
     "fuerza_unidad": "mg"
@@ -1164,6 +1330,7 @@
   {
     "droga_id": 103,
     "forma_farmaceutica_id": 2,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 20,
     "fuerza_unidad": "mg"
@@ -1171,6 +1338,7 @@
   {
     "droga_id": 103,
     "forma_farmaceutica_id": 2,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 30,
     "fuerza_unidad": "mg"
@@ -1178,6 +1346,15 @@
   {
     "droga_id": 103,
     "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
+    "estado": null,
+    "fuerza_valor": 50,
+    "fuerza_unidad": "mg"
+  },
+  {
+    "droga_id": 104,
+    "forma_farmaceutica_id": 3,
+    "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 50,
     "fuerza_unidad": "mg"

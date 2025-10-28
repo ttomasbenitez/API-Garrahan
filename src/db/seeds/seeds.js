@@ -58,11 +58,11 @@ async function createDrogas(cookie) {
 
 async function createFormasFarmaceuticas(cookie) {
   const formas = [
-    { nombre: 'COMPRIMIDO' },
-    { nombre: 'CÁPSULA' },
-    { nombre: 'FRASCO AMPOLLA' },
-    { nombre: 'VIAL' },
-    { nombre: 'JERINGA PRELLENADA' }
+    { nombre: 'COMPRIMIDO', codigo: 'VO' },
+    { nombre: 'CÁPSULA', codigo: 'VO' },
+    { nombre: 'FRASCO AMPOLLA', codigo: 'IV' },
+    { nombre: 'VIAL', codigo: 'IV' },
+    { nombre: 'JERINGA PRELLENADA', codigo: 'IV' }
   ];
 
   const res = await fetch('http://api-garrahan-app-1:3000/formas-farmaceuticas', {
@@ -82,23 +82,37 @@ async function createPresentacionesDroga(cookie) {
   //  { droga_id: 3, forma_farmaceutica_id: 1, estado: null, fuerza_valor: null, fuerza_unidad: null },
   //];
 
-  const res = await fetch('http://api-garrahan-app-1:3000/presentaciones-droga', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Cookie': cookie },
-    body: JSON.stringify(presentaciones_droga),
-  });
-  console.log('Presentaciones de droga creadas:', await res.json());
+  for (const presentacion of presentaciones_droga) {
+    const drogaId = presentacion.droga_id;
+
+    const url = `http://api-garrahan-app-1:3000/drogas/${drogaId}/presentaciones`;
+
+
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Cookie': cookie },
+      body: JSON.stringify(presentacion),
+    });
+
+    console.log('Presentaciones de droga creadas:', await res.json());
+  }
 }
 
 async function createCiclos(cookie, protocoloId) {
   const ciclos = [
-    { ciclo_id: 1, regimen: 1, duracion_semanas: 5, ciclo_final: false, repeticiones: 2 },
-    { ciclo_id: 2, regimen: 1, duracion_semanas: 5, ciclo_final: false, repeticiones: 2 },
-    { ciclo_id: 3, regimen: 1, duracion_semanas: 4, ciclo_final: true,  repeticiones: 2 },
-    { ciclo_id: 1, regimen: 2, duracion_semanas: 5, ciclo_final: false, repeticiones: 2 },
-    { ciclo_id: 2, regimen: 2, duracion_semanas: 5, ciclo_final: false, repeticiones: 2 },
-    { ciclo_id: 3, regimen: 2, duracion_semanas: 4, ciclo_final: false, repeticiones: 2 },
-    { ciclo_id: 4, regimen: 2, duracion_semanas: 1, ciclo_final: true,  repeticiones: 73 },
+    { ciclo_id: 1, regimen: 0, duracion_semanas: 5, ciclo_final: false, repeticiones: 3 },
+    { ciclo_id: 2, regimen: 0, duracion_semanas: 5, ciclo_final: false, repeticiones: 2 },
+    { ciclo_id: 3, regimen: 1, duracion_semanas: 5, ciclo_final: false,  repeticiones: 1 },
+    { ciclo_id: 4, regimen: 1, duracion_semanas: 5, ciclo_final: false,  repeticiones: 0 },
+    { ciclo_id: 5, regimen: 1, duracion_semanas: 4, ciclo_final: false,  repeticiones: 1 },
+    { ciclo_id: 6, regimen: 1, duracion_semanas: 4, ciclo_final: true,  repeticiones: 0 },
+
+    { ciclo_id: 3, regimen: 2, duracion_semanas: 5, ciclo_final: false,  repeticiones: 1 },
+    { ciclo_id: 4, regimen: 2, duracion_semanas: 5, ciclo_final: false,  repeticiones: 0 },
+    { ciclo_id: 5, regimen: 2, duracion_semanas: 4, ciclo_final: false,  repeticiones: 1 },
+    { ciclo_id: 6, regimen: 2, duracion_semanas: 4, ciclo_final: false,  repeticiones: 0 },
+
+    { ciclo_id: 7, regimen: 2, duracion_semanas: 1, ciclo_final: true,  repeticiones: 73 },
   ];
 
   const res = await fetch(`http://api-garrahan-app-1:3000/protocolos/${protocoloId}/ciclos`, {
@@ -135,16 +149,53 @@ async function createPresentacionDrogaVia(cookie) {
 async function createAdministracionesMedicacion(cookie) {
   // REHACER.
   const administraciones = [
-    { protocolo_id: 1, ciclo_id: 1, regimen: 1, droga_id: 20, cantidad_dias: 2, administracion_diaria: 0, frecuencia_diaria: 1, fuerza_valor: 60,   fuerza_unidad: 'mg/m2', via_id: 1 },
-    { protocolo_id: 1, ciclo_id: 1, regimen: 1, droga_id: 34, cantidad_dias: 2, administracion_diaria: 0, frecuencia_diaria: 1, fuerza_valor: 37.5, fuerza_unidad: 'mg/m2', via_id: 1 },
-    { protocolo_id: 1, ciclo_id: 1, regimen: 1, droga_id: 68, cantidad_dias: 2, administracion_diaria: 0, frecuencia_diaria: 1, fuerza_valor: 12,   fuerza_unidad: 'gr/m2',  via_id: 1 },
-    { protocolo_id: 1, ciclo_id: 2, regimen: 1, droga_id: 20, cantidad_dias: 2, administracion_diaria: 0, frecuencia_diaria: 1, fuerza_valor: 60,   fuerza_unidad: 'mg/m2', via_id: 1 },
-    { protocolo_id: 1, ciclo_id: 2, regimen: 1, droga_id: 34, cantidad_dias: 2, administracion_diaria: 0, frecuencia_diaria: 1, fuerza_valor: 37.5, fuerza_unidad: 'mg/m2', via_id: 1 },
-    { protocolo_id: 1, ciclo_id: 2, regimen: 1, droga_id: 68, cantidad_dias: 2, administracion_diaria: 0, frecuencia_diaria: 1, fuerza_valor: 12,   fuerza_unidad: 'gr/m2',  via_id: 1 },
-    { protocolo_id: 1, ciclo_id: 3, regimen: 1, droga_id: 34, cantidad_dias: 2, administracion_diaria: 0, frecuencia_diaria: 1, fuerza_valor: 37.5, fuerza_unidad: 'mg/m2', via_id: 1 },
-    { protocolo_id: 1, ciclo_id: 3, regimen: 1, droga_id: 4, cantidad_dias: 2, administracion_diaria: 0, frecuencia_diaria: 1, fuerza_valor: 375,  fuerza_unidad: 'mg/m2', via_id: 1 },
-    { protocolo_id: 1, ciclo_id: 3, regimen: 1, droga_id: 4, cantidad_dias: 2, administracion_diaria: 0, frecuencia_diaria: 1, fuerza_valor: 375,  fuerza_unidad: 'mg/m2', via_id: 2 },
-    { protocolo_id: 1, ciclo_id: 3, regimen: 1, droga_id: 68, cantidad_dias: 2, administracion_diaria: 0, frecuencia_diaria: 1, fuerza_valor: 12,   fuerza_unidad: 'g/m2',  via_id: 1 }
+
+    // RÉGIMEN 0
+    { protocolo_id: 1, ciclo_id: 1, regimen: 0, droga_id: 20, cantidad_dias: 2, frecuencia_diaria: 1, fuerza_valor: 60, fuerza_unidad: 'mg/m2', via_id: 1 },
+    { protocolo_id: 1, ciclo_id: 1, regimen: 0, droga_id: 34, cantidad_dias: 2, frecuencia_diaria: 1, fuerza_valor: 37.5, fuerza_unidad: 'mg/m2', via_id: 1 },
+    { protocolo_id: 1, ciclo_id: 1, regimen: 0, droga_id: 68, cantidad_dias: 2, frecuencia_diaria: 1, fuerza_valor: 12, fuerza_unidad: 'gr/m2',  via_id: 1 },
+
+    { protocolo_id: 1, ciclo_id: 2, regimen: 0, droga_id: 20, cantidad_dias: 2, frecuencia_diaria: 1, fuerza_valor: 60, fuerza_unidad: 'mg/m2', via_id: 1 },
+    { protocolo_id: 1, ciclo_id: 2, regimen: 0, droga_id: 34, cantidad_dias: 2, frecuencia_diaria: 1, fuerza_valor: 37.5, fuerza_unidad: 'mg/m2', via_id: 1 },
+    { protocolo_id: 1, ciclo_id: 2, regimen: 0, droga_id: 68, cantidad_dias: 2, frecuencia_diaria: 1, fuerza_valor: 12, fuerza_unidad: 'gr/m2',  via_id: 1 },
+
+    // RÉGIMEN 1
+    { protocolo_id: 1, ciclo_id: 3, regimen: 1, droga_id: 20, cantidad_dias: 2, frecuencia_diaria: 1, fuerza_valor: 60, fuerza_unidad: 'mg/m2', via_id: 1 },
+    { protocolo_id: 1, ciclo_id: 3, regimen: 1, droga_id: 34, cantidad_dias: 2, frecuencia_diaria: 1, fuerza_valor: 37.5, fuerza_unidad: 'mg/m2', via_id: 1 },
+    { protocolo_id: 1, ciclo_id: 3, regimen: 1, droga_id: 68, cantidad_dias: 2, frecuencia_diaria: 1, fuerza_valor: 12, fuerza_unidad: 'gr/m2',  via_id: 1 },
+
+    { protocolo_id: 1, ciclo_id: 4, regimen: 1, droga_id: 20, cantidad_dias: 2, frecuencia_diaria: 1, fuerza_valor: 60, fuerza_unidad: 'mg/m2', via_id: 1 },
+    { protocolo_id: 1, ciclo_id: 4, regimen: 1, droga_id: 34, cantidad_dias: 2, frecuencia_diaria: 1, fuerza_valor: 37.5, fuerza_unidad: 'mg/m2', via_id: 1 },
+    { protocolo_id: 1, ciclo_id: 4, regimen: 1, droga_id: 68, cantidad_dias: 2, frecuencia_diaria: 1, fuerza_valor: 12, fuerza_unidad: 'gr/m2',  via_id: 1 },
+
+    { protocolo_id: 1, ciclo_id: 5, regimen: 1, droga_id: 34, cantidad_dias: 2, frecuencia_diaria: 1, fuerza_valor: 37.5, fuerza_unidad: 'mg/m2', via_id: 1 },
+    { protocolo_id: 1, ciclo_id: 5, regimen: 1, droga_id: 68, cantidad_dias: 2, frecuencia_diaria: 1, fuerza_valor: 12, fuerza_unidad: 'gr/m2',  via_id: 1 },
+    { protocolo_id: 1, ciclo_id: 5, regimen: 1, droga_id: 104, cantidad_dias: 2, frecuencia_diaria: 1, fuerza_valor: 375, fuerza_unidad: 'mg/m2', via_id: 1 },
+
+    { protocolo_id: 1, ciclo_id: 6, regimen: 1, droga_id: 34, cantidad_dias: 2, frecuencia_diaria: 1, fuerza_valor: 37.5, fuerza_unidad: 'mg/m2', via_id: 1 },
+    { protocolo_id: 1, ciclo_id: 6, regimen: 1, droga_id: 68, cantidad_dias: 2, frecuencia_diaria: 1, fuerza_valor: 12, fuerza_unidad: 'gr/m2',  via_id: 1 },
+    { protocolo_id: 1, ciclo_id: 6, regimen: 1, droga_id: 104, cantidad_dias: 2, frecuencia_diaria: 1, fuerza_valor: 375, fuerza_unidad: 'mg/m2', via_id: 1 },
+
+    // RÉGIMEN 2
+    { protocolo_id: 1, ciclo_id: 3, regimen: 2, droga_id: 20, cantidad_dias: 2, frecuencia_diaria: 1, fuerza_valor: 60, fuerza_unidad: 'mg/m2', via_id: 1 },
+    { protocolo_id: 1, ciclo_id: 3, regimen: 2, droga_id: 34, cantidad_dias: 2, frecuencia_diaria: 1, fuerza_valor: 37.5, fuerza_unidad: 'mg/m2', via_id: 1 },
+    { protocolo_id: 1, ciclo_id: 3, regimen: 2, droga_id: 68, cantidad_dias: 2, frecuencia_diaria: 1, fuerza_valor: 12, fuerza_unidad: 'gr/m2',  via_id: 1 },
+
+    { protocolo_id: 1, ciclo_id: 4, regimen: 2, droga_id: 20, cantidad_dias: 2, frecuencia_diaria: 1, fuerza_valor: 60, fuerza_unidad: 'mg/m2', via_id: 1 },
+    { protocolo_id: 1, ciclo_id: 4, regimen: 2, droga_id: 34, cantidad_dias: 2, frecuencia_diaria: 1, fuerza_valor: 37.5, fuerza_unidad: 'mg/m2', via_id: 1 },
+    { protocolo_id: 1, ciclo_id: 4, regimen: 2, droga_id: 68, cantidad_dias: 2, frecuencia_diaria: 1, fuerza_valor: 12, fuerza_unidad: 'gr/m2',  via_id: 1 },
+
+    { protocolo_id: 1, ciclo_id: 5, regimen: 2, droga_id: 34, cantidad_dias: 2, frecuencia_diaria: 1, fuerza_valor: 37.5, fuerza_unidad: 'mg/m2', via_id: 1 },
+    { protocolo_id: 1, ciclo_id: 5, regimen: 2, droga_id: 68, cantidad_dias: 2, frecuencia_diaria: 1, fuerza_valor: 12, fuerza_unidad: 'gr/m2',  via_id: 1 },
+    { protocolo_id: 1, ciclo_id: 5, regimen: 2, droga_id: 104, cantidad_dias: 2, frecuencia_diaria: 1, fuerza_valor: 375, fuerza_unidad: 'mg/m2', via_id: 1 },
+
+    { protocolo_id: 1, ciclo_id: 6, regimen: 2, droga_id: 34, cantidad_dias: 2, frecuencia_diaria: 1, fuerza_valor: 37.5, fuerza_unidad: 'mg/m2', via_id: 1 },
+    { protocolo_id: 1, ciclo_id: 6, regimen: 2, droga_id: 68, cantidad_dias: 2, frecuencia_diaria: 1, fuerza_valor: 12, fuerza_unidad: 'gr/m2',  via_id: 1 },
+    { protocolo_id: 1, ciclo_id: 6, regimen: 2, droga_id: 104, cantidad_dias: 2, frecuencia_diaria: 1, fuerza_valor: 375, fuerza_unidad: 'mg/m2', via_id: 1 },
+
+    { protocolo_id: 1, ciclo_id: 7, regimen: 2, droga_id: 18, cantidad_dias: 7, frecuencia_diaria: 1, fuerza_valor: 25, fuerza_unidad: 'mg/m2', via_id: 1 },
+    { protocolo_id: 1, ciclo_id: 7, regimen: 2, droga_id: 68, cantidad_dias: 2, frecuencia_diaria: 2, fuerza_valor: 1.5, fuerza_unidad: 'mg/m2',  via_id: 1 },
+
   ];
   //MISSING DEXRAZOXANE DE SU TABLA DE DROGAS DROGA-ID 4 ACÁ.
   // 2do DEXRAZOXANE solo para dar la opción de VO y IV por lo pronto.
