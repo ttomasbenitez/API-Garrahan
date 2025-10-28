@@ -51,7 +51,6 @@ Feature: Creación paciente
         Then el sistema devuelve el estado "404"
         And el mensaje de error "Paciente no asociado a profesional"
 
-    @wip
     Scenario: US-03.4 Obtener pacientes
       Given existe en la base de datos un paciente con id "1" llamado "Martin Palermo"
       And existe en la base de datos un paciente con id "2" llamado "Leandro Paredes"

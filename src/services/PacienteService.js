@@ -16,6 +16,8 @@ export class PacienteService {
     return this.pacienteRepo.obtener(id);
   }
 
+  async obtenerTodos() { return this.pacienteRepo.obtenerTodos(); }
+
   async obtenerExterno(id) {
     return this.apiHospitalConector.obtenerPaciente(id);
   }

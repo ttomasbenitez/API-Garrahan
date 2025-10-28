@@ -3,6 +3,7 @@ import Paciente from '../domain/paciente.js';
 import { ERROR_PACIENTE_CREACION, ERROR_PACIENTE_NO_ENCONTRADO } from '../errors/paciente.js';
 import { RepositorioPacienteProfesional } from './repositorioPacienteProfesional.js';
 import { toFloat, toStr } from '../utils/formatters.js';
+import Protocolo from '../domain/protocolo/index.js';
 
 export class RepositorioPaciente {
   constructor(connection) {
@@ -66,5 +67,29 @@ export class RepositorioPaciente {
       row.ULTIMA_MODIFICACION,
       row.PACIENTE_ID,
     );
+  }
+
+  async obtenerTodos() {
+    const result = await this.connection.execute(
+      `SELECT paciente_id, nombre, apellido, id_hospitalario, fecha_nacimiento, peso, sexo, ultima_modificacion, obra_social
+           FROM paciente`,
+    );
+
+    const pacientes = [];
+    for (const row of result.rows) {
+      pacientes.push(new Paciente(
+        row.NOMBRE,
+        row.APELLIDO,
+        row.ID_HOSPITALARIO,
+        row.FECHA_NACIMIENTO ? new Date(row.FECHA_NACIMIENTO).toISOString().split('T')[0] : null,
+        row.PESO,
+        row.SEXO,
+        row.OBRA_SOCIAL,
+        row.ULTIMA_MODIFICACION,
+        row.PACIENTE_ID,
+      ));
+    }
+
+    return pacientes;
   }
 }

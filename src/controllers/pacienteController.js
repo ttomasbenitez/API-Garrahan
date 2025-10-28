@@ -5,6 +5,7 @@ import { ERROR_PACIENTE_NO_ASOCIADO } from '../errors/pacienteProfesional.js';
 export const makePacienteController = (pacienteService) => ({
   crear: (req, res) => crearPaciente(req, res, pacienteService),
   obtener: (req, res) => obtenerPaciente(req, res, pacienteService),
+  obtenerTodos: (req, res) => obtenerPacientes(req, res, pacienteService),
   obtenerEquipoTratante: (req, res) => obtenerEquipoTratante(req, res, pacienteService),
   obtenerExterno: (req, res) => obtenerPacienteExterno(req, res, pacienteService),
 });
@@ -45,6 +46,17 @@ async function obtenerPaciente(req, res, service) {
     else {
       res.status(500).json({ error: error.message });
     }
+  }
+}
+
+async function obtenerPacientes(req, res, service) {
+  try {
+    const pacientes = await service.obtenerTodos();
+    logger.info('Pacientes obtenidos');
+    res.status(200).json(pacientes);
+  } catch (error) {
+    logger.error('Error al obtener los pacientes: %o', error);
+    res.status(500).json({ error: error.message });
   }
 }
 
