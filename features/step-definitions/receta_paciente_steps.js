@@ -137,15 +137,6 @@ When('publico en la API {string} con los datos del detalle', async function (end
     });
 });
 
-
-Then('el {string} del detalle es {string}', function (key, value) {
-  assert.equal(String(response.body.detalles[0][key]), String(value));
-});
-
-Then('la {string} del detalle es {string}', function (key, value) {
-  assert.equal(String(response.body.detalles[0][key]), String(value));
-});
-
 Then('se crea correctamente el detalle de receta', function () {
   assert.equal(response.status, 201);
   data = null;
