@@ -1,4 +1,4 @@
-import { Given, When, Then, Before } from '@cucumber/cucumber';
+import {Before, Given, Then, When} from '@cucumber/cucumber';
 import request from 'supertest';
 import oracleDBInstance from '../../src/db/connection_pool.js';
 import app from '../../src/app.js';
@@ -85,6 +85,13 @@ When(/^consulto en la API "(.*)" por su id de paciente$/, async function (endpoi
   this.response = response;
 });
 
+When(/^consulto en la API de "(.*)"$/, async function (endpoint) {
+  this.response = await request(app)
+    .get(endpoint)
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
+});
+
 
 When(/^publico en el endpoint "(.*)" con los datos del paciente$/, async function (endpoint) {
   const response = await request(app)
@@ -156,6 +163,12 @@ Then(/^el sistema me devuelve una lista que contiene los siguientes pacientes:$/
       actual.nombre,
       expected.nombre,
       `El nombre para el paciente id ${idBuscado} no coincide. Esperado: "${expected.nombre}", Recibido: "${actual.nombre}"`
+    );
+
+    assert.strictEqual(
+      actual.apellido,
+      expected.apellido,
+      `El apellido para el paciente id ${idBuscado} no coincide. Esperado: "${expected.apellido}", Recibido: "${actual.apellido}"`
     );
   }
 });

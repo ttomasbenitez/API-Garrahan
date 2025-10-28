@@ -53,15 +53,15 @@ Feature: Creación paciente
 
     @wip
     Scenario: US-03.4 Obtener pacientes
-      Given existe en la base de datos un paciente con id "9" llamado "Martin Palermo"
-      And existe en la base de datos un paciente con id "5" llamado "Leandro Paredes"
-      And existe en la base de datos un paciente con id "16" llamado "Miguel Merentiel"
-      When consulto en la API "/pacientes"
+      Given existe en la base de datos un paciente con id "1" llamado "Martin Palermo"
+      And existe en la base de datos un paciente con id "2" llamado "Leandro Paredes"
+      And existe en la base de datos un paciente con id "3" llamado "Miguel Merentiel"
+      When consulto en la API de "/pacientes"
       Then el sistema me devuelve una lista que contiene los siguientes pacientes:
-        | paciente_id | nombre           |
-        | 9           | Martin Palermo   |
-        | 5           | Leandro Paredes  |
-        | 16          | Miguel Merentiel |
+        | paciente_id | nombre  | apellido  |
+        | 1           | Martin  | Palermo   |
+        | 2           | Leandro | Paredes   |
+        | 3           | Miguel  | Merentiel |
 
     @wip
     Scenario: US-03.5 Obtener paciente de la api del hospital por su id_hospitalario
