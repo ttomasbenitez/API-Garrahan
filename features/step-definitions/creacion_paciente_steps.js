@@ -132,3 +132,30 @@ Then('el sistema devuelve el paciente esperado', function () {
 Then(/^el mensaje de error "(.*)"$/, function (mensajeError) {
   assert.ok(this.response.body.error === mensajeError);
 });
+
+Then(/^el sistema me devuelve una lista que contiene los siguientes pacientes:$/, function (dataTable) {
+  if (!this.response) throw new Error('No se recibió respuesta');
+  if (this.response.status !== 200) throw new Error(`Status esperado 200, recibido ${this.response.status}`);
+
+  const actualPacientes = this.response.body;
+  if (!Array.isArray(actualPacientes)) {
+    throw new Error('La respuesta de la API no es un array, pero el test esperaba una lista.');
+  }
+
+  // Convertimos la tabla Gherkin en un array de objetos
+  const expectedPacientes = dataTable.hashes();
+
+  for (const expected of expectedPacientes) {
+    const idBuscado = parseInt(expected.paciente_id, 10);
+
+    const actual = actualPacientes.find(p => p.paciente_id === idBuscado);
+
+    assert.ok(actual, `No se encontró el paciente con id ${idBuscado} en la respuesta.`);
+
+    assert.strictEqual(
+      actual.nombre,
+      expected.nombre,
+      `El nombre para el paciente id ${idBuscado} no coincide. Esperado: "${expected.nombre}", Recibido: "${actual.nombre}"`
+    );
+  }
+});
