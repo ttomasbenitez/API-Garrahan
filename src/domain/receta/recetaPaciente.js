@@ -31,8 +31,8 @@ class RecetaPaciente {
   static fromBody(body) {
     const identidad = new Identidad({
       nombre: body.nombre, apellido: body.apellido,
-      tipoDocumento: body.tipo_documento, numeroDocumento: body.numero_documento,
-      fechaNacimiento: body.fecha_nacimiento ? new Date(body.fecha_nacimiento) : null,
+      tipo_documento: body.tipo_documento, numeroDocumento: body.numero_documento,
+      fecha_nacimiento: body.fecha_nacimiento ? new Date(body.fecha_nacimiento) : null,
       sexo: body.sexo, nacionalidad: body.nacionalidad
     });
     const domicilio = new Domicilio({
@@ -50,7 +50,7 @@ class RecetaPaciente {
     });
 
     const datos_paciente = new DatosPaciente({
-      peso: body.peso, talla: body.talla, superficieCorporal: body.superficie_corporal
+      peso: body.peso, talla: body.talla, superficie_corporal: body.superficie_corporal
     });
 
     const contexto = new ContextoSnapshot({

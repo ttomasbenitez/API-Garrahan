@@ -64,18 +64,36 @@ Feature: Gestión de Recetas para Pacientes
     And el "superficie_corporal" de los datos del paciente en la receta es "1.2"
     And el "estado" de la receta es "Activo"
     And se crea correctamente la receta
-  @wip
+
   Scenario: US-11.2 Obtener una receta por su id
     Given existe en la base de datos una receta con id "1" y con los datos:
-      | protocolo_id        | 1       |
-      | ciclo_id            | 1       |
-      | regimen             | 1       |
-      | paciente_id         | 1       |
-      | profesional_id      | 1       |
-      | estado              | activo  |
-      | peso                | 40.4    |
-      | talla               | 140.7   |
-      | superficie_corporal | 1.2     |
+      | nombre              | Juan                     |
+      | apellido            | Pérez                    |
+      | tipo_documento      | DNI                      |
+      | numero_documento    | 40123456                 |
+      | fecha_nacimiento    | 2020-05-21               |
+      | sexo                | M                        |
+      | nacionalidad        | Argentina                |
+      | domicilio_calle     | Av. Corrientes           |
+      | domicilio_numero    | 1234                     |
+      | domicilio_piso      | 5                        |
+      | domicilio_depto     | B                        |
+      | codigo_postal       | C1043                    |
+      | localidad           | CABA                     |
+      | partido             | San Nicolás              |
+      | telefono            | 1122334455               |
+      | email               | juan.perez@example.com   |
+      | peso                | 40.4                     |
+      | talla               | 140.7                    |
+      | superficie_corporal | 1.20                     |
+      | diagnostico         | Leucemia Linfoblástica Aguda |
+      | numero_ciclo        | 1                        |
+      | protocolo_id        | 1                        |
+      | ciclo_id            | 1                        |
+      | regimen             | 1                        |
+      | paciente_id         | 1                        |
+      | profesional_id      | 1                        |
+      | estado              | Activo                   |
     When consulto en la API "/recetas/1" por su id de receta
     Then el sistema me devuelve la receta con id "1"
     And responde correctamente la receta

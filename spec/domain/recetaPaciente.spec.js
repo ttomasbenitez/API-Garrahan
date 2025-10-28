@@ -34,9 +34,9 @@ describe('RecetaPaciente', () => {
 
     expect(recetaPaciente.paciente_snapshot.identidad.nombre).toBe('Juan');
     expect(recetaPaciente.paciente_snapshot.identidad.apellido).toBe('Pérez');
-    expect(recetaPaciente.paciente_snapshot.identidad.tipoDocumento).toBe('DNI');
+    expect(recetaPaciente.paciente_snapshot.identidad.tipo_documento).toBe('DNI');
     expect(recetaPaciente.paciente_snapshot.identidad.numeroDocumento).toBe('40123456');
-    expect(recetaPaciente.paciente_snapshot.identidad.fechaNacimiento).toEqual(new Date('2020-05-21'));
+    expect(recetaPaciente.paciente_snapshot.identidad.fecha_nacimiento).toEqual(new Date('2020-05-21'));
     expect(recetaPaciente.paciente_snapshot.identidad.sexo).toBe('M');
     expect(recetaPaciente.paciente_snapshot.identidad.nacionalidad).toBe('Argentina');
     expect(recetaPaciente.paciente_snapshot.domicilio.calle).toBe('Av. Corrientes');
@@ -49,7 +49,7 @@ describe('RecetaPaciente', () => {
     expect(recetaPaciente.contexto.numeroCiclo).toBe(1);
     expect(recetaPaciente.datos_paciente.peso).toBe(70);
     expect(recetaPaciente.datos_paciente.talla).toBe(175);
-    expect(recetaPaciente.datos_paciente.superficieCorporal).toBe(1.8);
+    expect(recetaPaciente.datos_paciente.superficie_corporal).toBe(1.8);
     expect(recetaPaciente.diagnostico).toBe('Leucemia Linfoblástica Aguda');
 
   });

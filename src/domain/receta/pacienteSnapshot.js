@@ -36,12 +36,12 @@ export class Contacto {
 }
 
 export class Identidad {
-  constructor({ nombre, apellido, tipoDocumento, numeroDocumento, fechaNacimiento, sexo, nacionalidad }) {
+  constructor({ nombre, apellido, tipo_documento, numeroDocumento, fecha_nacimiento, sexo, nacionalidad }) {
     this.nombre = nombre;
     this.apellido = apellido;
-    this.tipoDocumento = tipoDocumento;
+    this.tipo_documento = tipo_documento;
     this.numeroDocumento = numeroDocumento;
-    this.fechaNacimiento = fechaNacimiento;
+    this.fecha_nacimiento = fecha_nacimiento;
     this.sexo = sexo;
     this.nacionalidad = nacionalidad;
 
@@ -60,7 +60,7 @@ export class Identidad {
       throw getError('sexo inválido', 'RECETA_SEXO_INVALIDO');
     }
 
-    if (this.fechaNacimiento && isNaN(this.fechaNacimiento.getTime())) {
+    if (this.fecha_nacimiento && isNaN(this.fecha_nacimiento.getTime())) {
       throw getError('fecha de nacimiento inválida', 'RECETA_FECHA_NACIMIENTO_INVALIDA');
     }
 
@@ -72,14 +72,14 @@ export class Identidad {
 }
 
 export class DatosPaciente {
-  constructor({ peso, talla, superficieCorporal }) {
+  constructor({ peso, talla, superficie_corporal }) {
     this.peso = toFloat(peso);
     this.talla = toFloat(talla);
-    this.superficieCorporal = toFloat(superficieCorporal);
+    this.superficie_corporal = toFloat(superficie_corporal);
   }
 
   validar() {
-    if (!this.peso || !this.talla || !this.superficieCorporal) {
+    if (!this.peso || !this.talla || !this.superficie_corporal) {
       throw getError('peso, talla y superficie_corporal son requeridos', 'RECETA_DATOS_PACIENTE_REQUERIDOS');
     }
     if (this.peso !== null && this.peso <= 0) {
@@ -88,7 +88,7 @@ export class DatosPaciente {
     if (this.talla !== null && this.talla <= 0) {
       throw getError('talla inválida', 'RECETA_TALLA_INVALIDA');
     }
-    if (this.superficieCorporal !== null && this.superficieCorporal <= 0) {
+    if (this.superficie_corporal !== null && this.superficie_corporal <= 0) {
       throw getError('superficie corporal inválida', 'RECETA_SUPERFICIE_CORPORAL_INVALIDA');
     }
   }

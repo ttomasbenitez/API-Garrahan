@@ -96,15 +96,15 @@ When('consulto en la API {string} por su id de receta', async function (endpoint
 
 Then('el sistema me devuelve la receta con id {string}', function (id) {
   assert.equal(Number(id), response.body.id);
-  assert.equal(Number(data.protocolo_id), response.body.protocolo_id);
-  assert.equal(Number(data.ciclo_id), response.body.ciclo_id);
-  assert.equal(Number(data.regimen), response.body.regimen);
+  assert.equal(Number(data.protocolo_id), response.body.contexto.protocolo_id);
+  assert.equal(Number(data.ciclo_id), response.body.contexto.ciclo_id);
+  assert.equal(Number(data.regimen), response.body.contexto.regimen);
   assert.equal(Number(data.paciente_id), response.body.paciente_id);
   assert.equal(Number(data.profesional_id), response.body.profesional_id);
   assert.equal(data.estado, response.body.estado);
-  assert.equal(Number(data.peso), response.body.peso);
-  assert.equal(Number(data.talla), response.body.talla);
-  assert.equal(Number(data.superficie_corporal), response.body.superficie_corporal);
+  assert.equal(Number(data.peso), response.body.datos_paciente.peso);
+  assert.equal(Number(data.talla), response.body.datos_paciente.talla);
+  assert.equal(Number(data.superficie_corporal), response.body.datos_paciente.superficie_corporal);
 });
 
 Then('responde correctamente la receta', function () {
