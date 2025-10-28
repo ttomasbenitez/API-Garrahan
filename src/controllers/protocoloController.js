@@ -105,7 +105,6 @@ async function agregarAdministracion(req, res, protocoloService) {
       Number(d.fuerza_valor),
       d.fuerza_unidad,
       Number(d.cantidad_dias),
-      Number(d.administracion_diaria),
       Number(d.frecuencia_diaria),
     ));
 

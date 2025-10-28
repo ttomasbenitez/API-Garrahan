@@ -77,7 +77,6 @@ const compararAdmin = (admin1, admin2) => {
   assert.strictEqual(String(admin1.fuerza_valor), String(admin2.fuerza_valor));
   assert.strictEqual(String(admin1.fuerza_unidad), String(admin2.fuerza_unidad));
   assert.strictEqual(String(admin1.cantidad_dias), String(admin2.cantidad_dias));
-  assert.strictEqual(String(admin1.administracion_diaria), String(admin2.administracion_diaria));
   assert.strictEqual(String(admin1.frecuencia_diaria), String(admin2.frecuencia_diaria));
 };
 

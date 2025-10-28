@@ -13,12 +13,12 @@ export class RepositorioAdminisitracionMedicacion {
           (protocolo_id, ciclo_id, regimen,
            droga_id, via_id,
            fuerza_valor, fuerza_unidad,
-           cantidad_dias, administracion_diaria, frecuencia_diaria)
+           cantidad_dias, frecuencia_diaria)
         VALUES
           (:protocolo_id, :ciclo_id, :regimen,
            :droga_id, :via_id,
            :fuerza_valor, :fuerza_unidad,
-           :cantidad_dias, :administracion_diaria, :frecuencia_diaria)
+           :cantidad_dias, :frecuencia_diaria)
         RETURNING admin_id INTO :id
       `;
 
@@ -31,7 +31,6 @@ export class RepositorioAdminisitracionMedicacion {
           fuerza_valor: toNum(a.fuerza_valor),
           fuerza_unidad: toStr(a.fuerza_unidad),
           cantidad_dias: toNum(a.cantidad_dias),
-          administracion_diaria: toNum(a.administracion_diaria),
           frecuencia_diaria: toNum(a.frecuencia_diaria)
         }));
 
@@ -46,7 +45,6 @@ export class RepositorioAdminisitracionMedicacion {
             fuerza_valor: { type: oracledb.NUMBER },
             fuerza_unidad: { type: oracledb.STRING, maxSize: 20 },
             cantidad_dias: { type: oracledb.NUMBER },
-            administracion_diaria: { type: oracledb.NUMBER },
             frecuencia_diaria: { type: oracledb.NUMBER },
             id: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
           }

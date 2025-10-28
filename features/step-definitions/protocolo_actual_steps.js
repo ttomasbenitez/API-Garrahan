@@ -158,7 +158,6 @@ Given(/^el Ciclo {protocolo_id: (\d+), ciclo_id: (\d+), regimen: (\d+)} tiene un
     fuerza_valor: parseFloat(data.fuerza_valor),
     fuerza_unidad: data.fuerza_unidad,
     cantidad_dias: 1,
-    administracion_diaria: 1,
     frecuencia_diaria: 1
   };
 

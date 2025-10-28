@@ -90,7 +90,6 @@ CREATE TABLE administracion_medicacion (
   fuerza_valor      NUMBER,
   fuerza_unidad     VARCHAR2(20),
   cantidad_dias     NUMBER,
-  administracion_diaria NUMBER,
   frecuencia_diaria NUMBER,
   CONSTRAINT pk_admin PRIMARY KEY (admin_id),
   CONSTRAINT uq_admin_ctx UNIQUE (protocolo_id, ciclo_id, regimen, droga_id, via_id),

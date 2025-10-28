@@ -45,7 +45,6 @@ Feature: Gestión de Administración de Medicación
       | fuerza_valor          | 10   |
       | fuerza_unidad         | mg   |
       | cantidad_dias         |  3   |
-      | administracion_diaria |  1   |
       | frecuencia_diaria     |  5   |
     When publico la API "/protocolos/1/ciclos/1/regimenes/1/administraciones" con los datos de la administración
     Then el "protocolo_id" de la admin es "1"
@@ -56,7 +55,6 @@ Feature: Gestión de Administración de Medicación
     And el "fuerza_valor" de la admin es "10"
     And el "fuerza_unidad" de la admin es "mg"
     And el "cantidad_dias" de la admin es "3"
-    And el "administracion_diaria" de la admin es "1"
     And el "frecuencia_diaria" de la admin es "5"
     And se crea correctamente la administración de medicación
 
@@ -67,7 +65,6 @@ Feature: Gestión de Administración de Medicación
       | fuerza_valor          | 100  |
       | fuerza_unidad         | mg   |
       | cantidad_dias         |  3   |
-      | administracion_diaria |  1   |
       | frecuencia_diaria     |  5   |
     And que tengo los siguientes datos de la administración de medicación:
       | droga_id              | 2    |
@@ -75,7 +72,6 @@ Feature: Gestión de Administración de Medicación
       | fuerza_valor          | 10   |
       | fuerza_unidad         | mg   |
       | cantidad_dias         | 10   |
-      | administracion_diaria | 1    |
       | frecuencia_diaria     | 2    |
     When publico la API "/protocolos/1/ciclos/1/regimenes/1/administraciones" con los datos de la administración
     Then obtengo los datos de las administraciones con el id "1" y "2"
@@ -84,10 +80,10 @@ Feature: Gestión de Administración de Medicación
   @wip
   Scenario: US-10.3 Listar administraciones por contexto (protocolo/ciclo/régimen)
     Given existen en la base de datos las siguientes administraciones de medicación:
-      | id | protocolo_id | ciclo_id | regimen | droga_id | via_id | fuerza_valor | fuerza_unidad | cantidad_dias | administracion_diaria | frecuencia_diaria |
-      | 1  | 1            | 1        | 1       | 1        | 1      | 50           | mg            | 5             | 1                     | 3                 |
-      | 2  | 1            | 1        | 1       | 2        | 1      | 100          | mg            | 3             | 1                     | 2                 |
-      | 3  | 1            | 2        | 1       | 2        | 2      | 80           | mg            | 4             | 1                     | 4                 |
+      | id | protocolo_id | ciclo_id | regimen | droga_id | via_id | fuerza_valor | fuerza_unidad | cantidad_dias | frecuencia_diaria |
+      | 1  | 1            | 1        | 1       | 1        | 1      | 50           | mg            | 5             | 3                 |
+      | 2  | 1            | 1        | 1       | 2        | 1      | 100          | mg            | 3             | 2                 |
+      | 3  | 1            | 2        | 1       | 2        | 2      | 80           | mg            | 4             | 4                 |
     When consulto en la API "/protocolos/1/ciclos/1/regimenes/1/administraciones"
     Then el sistema me devuelve una lista con "2" administración de medicación
     And el "1" registro tiene "droga_id" = "1" y "via_id" = "1"
@@ -163,13 +159,10 @@ Feature: Gestión de Administración de Medicación
       | via_id               | 7   |
       | fuerza_valor         | 100 |
       | fuerza_unidad        | mg  |
-      | administracion_diaria| 1   |
       | frecuencia_diaria    | 2   |
     When publico en la API "/administraciones/2" con los siguientes datos:
       | fuerza_valor         | 120 |
-      | administracion_diaria| 2   |
     Then el "fuerza_valor" es "120"
-    And el "administracion_diaria" es "2"
     And se actualiza correctamente
 
   @wip

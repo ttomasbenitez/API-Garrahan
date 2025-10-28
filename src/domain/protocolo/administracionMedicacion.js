@@ -1,6 +1,6 @@
 class AdministracionMedicacion {
 
-  constructor(protocolo_id, ciclo_id, regimen, droga_id, via_id, fuerza_valor, fuerza_unidad, cantidad_dias, administracion_diaria, frecuencia_diaria, id_admin = null) {
+  constructor(protocolo_id, ciclo_id, regimen, droga_id, via_id, fuerza_valor, fuerza_unidad, cantidad_dias, frecuencia_diaria, id_admin = null) {
     // contexto (no debería cambiar en updates)
     this.protocolo_id = Number(protocolo_id);
     this.ciclo_id = Number(ciclo_id);
@@ -14,7 +14,6 @@ class AdministracionMedicacion {
     this.fuerza_valor = fuerza_valor ?? null;
     this.fuerza_unidad = fuerza_unidad ?? null;
     this.cantidad_dias = cantidad_dias ?? null;
-    this.administracion_diaria = administracion_diaria ?? null;
     this.frecuencia_diaria = frecuencia_diaria ?? null;
     this.id = id_admin ?? null;
   }

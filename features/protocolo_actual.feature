@@ -17,7 +17,6 @@ Feature: Obtención del Tratamiento Activo de un Paciente
       | fuerza_valor          | 50   |
       | fuerza_unidad         | mg   |
       | cantidad_dias         |  3   |
-      | administracion_diaria |  1   |
       | frecuencia_diaria     |  5   |
     And estoy logueado como médico con id "2"
     And existe un Paciente con paciente_id 1 y nombre "Martina"
