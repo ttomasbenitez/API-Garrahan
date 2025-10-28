@@ -55,14 +55,6 @@ Feature: Gestión de Recetas para Pacientes
       | estado              | Activo                   |
     When publico la API "/recetas" con los datos de la receta
     Then el "id" de la receta es "1"
-    And la "fecha_prescripcion" corresponde al día de hoy
-    And el "nombre" del paciente en la receta es "Juan"
-    And el "apellido" del paciente en la receta es "Pérez"
-    And el "diagnostico" de la receta es "Leucemia Linfoblástica Aguda"
-    And el "peso" de los datos del paciente en la receta es "40.4"
-    And el "talla" de los datos del paciente en la receta es "140.7"
-    And el "superficie_corporal" de los datos del paciente en la receta es "1.2"
-    And el "estado" de la receta es "Activo"
     And se crea correctamente la receta
 
   Scenario: US-11.2 Obtener una receta por su id

@@ -1,4 +1,3 @@
-import e from 'express';
 import RecetaPaciente from '../domain/receta/recetaPaciente.js';
 import { ERROR_RECETA_PACIENTE_CREACION, ERROR_RECETA_PACIENTE_CREACION_CODE, ERROR_RECETA_PACIENTE_INEXITENTE_CODE, ERROR_RECETA_PACIENTE_NO_ENCONTRADA } from '../errors/receta.js';
 import logger from '../utils/logger.js';
@@ -12,9 +11,9 @@ async function crearRecetaPaciente(req, res, service) {
   try {
     const payload = req.body;
     const recetaPaciente = RecetaPaciente.fromBody(payload);
-    await service.crearRecetaPaciente(recetaPaciente);
+    const id = await service.crearRecetaPaciente(recetaPaciente);
     logger.info('Receta Paciente creada con IDs: %o', recetaPaciente.id);
-    res.status(201).json(recetaPaciente);
+    res.status(201).json({id});
   } catch (error) {
     logger.error('Error al crear la receta del paciente: %o', error);
     res.status(error.status || 500).json({ error: error.message || ERROR_RECETA_PACIENTE_CREACION, code: error.code || ERROR_RECETA_PACIENTE_CREACION_CODE });

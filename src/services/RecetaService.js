@@ -1,4 +1,3 @@
-
 export class RecetaService {
 
   constructor(recetaPacienteRepo) {

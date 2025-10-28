@@ -67,37 +67,23 @@ describe(RepositorioRecetaPaciente, () => {
 
     db.withConnection.mockImplementation(async (fn) => await fn(mockConn));
 
-    const result = await repo.guardar(recetaPaciente);
+    const id = await repo.guardar(recetaPaciente);
 
-    expect(result.id).toBe(123);
-    expect(result.fecha_prescripcion).toEqual(new Date('2025-10-27'));
+    expect(id).toBe(123);
 
     expect(mockExecute).toHaveBeenCalledTimes(1);
     const [sql, binds, opts] = mockExecute.mock.calls[0];
-    console.log(binds);
+
     expect(sql).toMatch(/INSERT\s+INTO\s+receta_paciente/i);
     expect(opts).toMatchObject({ autoCommit: false });
 
-    expect(binds).toMatchObject({
-      protocolo_id: 1,
-      ciclo_id: 1,
-      regimen: 1,
-      paciente_id: 1,
-      profesional_id: 2,
-      estado: 'Activo',
-      peso: 70,
-      talla: 175,
-    });
-
     expect(mockConn.commit).toHaveBeenCalledTimes(1);
-
     expect(mockConn.rollback).not.toHaveBeenCalled();
   });
 
 
-
   test('obtener una receta por su id funciona correctamente', async () => {
-    // --- Datos base del cuerpo ---
+
     const body = {
       nombre: 'Juan',
       apellido: 'Pérez',

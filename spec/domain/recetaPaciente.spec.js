@@ -3,7 +3,8 @@
 import RecetaPaciente from '../../src/domain/receta/recetaPaciente.js';
 
 describe('RecetaPaciente', () => {
-  test('debería crear correctamente una receta para cierto paciente con los campos obligatorios', () => {
+
+  const crearRecetaPaciente = () => {
     const body = {
       nombre: 'Juan',
       apellido: 'Pérez',
@@ -31,6 +32,11 @@ describe('RecetaPaciente', () => {
     };
 
     const recetaPaciente = RecetaPaciente.fromBody(body);
+    return recetaPaciente;
+  };
+  test('debería crear correctamente una receta para cierto paciente con los campos obligatorios', () => {
+
+    const recetaPaciente = crearRecetaPaciente();
 
     expect(recetaPaciente.paciente_snapshot.identidad.nombre).toBe('Juan');
     expect(recetaPaciente.paciente_snapshot.identidad.apellido).toBe('Pérez');

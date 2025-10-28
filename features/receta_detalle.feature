@@ -73,13 +73,7 @@ Feature: Gestión del Detalle de Recetas
       | numero_dias        | 5               |
       | dosis_total        | 250             |
     When publico en la API "/recetas" con los datos del detalle
-    Then el "receta_id" del detalle es "1"
-    And el "nombre_generico" del detalle es "CISPLATINO"
-    And la "presentacion" del detalle es "Ampolla"
-    And la "concentracion" del detalle es "1 mg/ml"
-    And la "via_administracion" del detalle es "Intravenosa"
-    And la "cantidad" del detalle es "3"
-    And la "dosis_total" del detalle es "250"
+    Then el "id" de la receta es "1"
     And se crea correctamente el detalle de receta
 
   @wip

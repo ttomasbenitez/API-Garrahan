@@ -20,7 +20,6 @@ export class RepositorioRecetaPaciente {
         const contacto  = rp.paciente_snapshot.contacto;
         const datos_paciente   = rp.datos_paciente;
         const contexto  = rp.contexto;
-        console.log(datos_paciente, 'los datos del paciente');
 
         const result = await conn.execute(
           `INSERT INTO receta_paciente (
@@ -136,7 +135,7 @@ export class RepositorioRecetaPaciente {
         }
 
         await conn.commit();
-        return rp;
+        return rp.id;
 
       } catch (err) {
         try {

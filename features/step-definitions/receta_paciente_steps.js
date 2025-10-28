@@ -113,22 +113,9 @@ Then('responde correctamente la receta', function () {
   response = null;
 });
 
-Then('la {string} corresponde al día de hoy', function (string) {
-  const fechaReceta = new Date(response.body[string]);
-  const hoy = new Date();
-  assert.equal(fechaReceta.getDate(), hoy.getDate());
-  assert.equal(fechaReceta.getMonth(), hoy.getMonth());
-  assert.equal(fechaReceta.getFullYear(), hoy.getFullYear());
-});
-
 Then('el {string} del paciente en la receta es {string}', function (key, value) {
   const paciente_snapshot = response.body.paciente_snapshot;
   assert.equal(paciente_snapshot.identidad[key], value);
-});
-
-Then('el {string} de los datos del paciente en la receta es {string}', function (key, value) {
-  const datos_paciente = response.body.datos_paciente;
-  assert.equal(toString(datos_paciente[key]), toString(value));
 });
 
 Given('existe una receta del paciente con id {string} y con los datos:', async function (string, dataTable) {
