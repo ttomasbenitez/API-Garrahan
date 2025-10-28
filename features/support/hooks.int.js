@@ -59,6 +59,7 @@ async function truncateTables(conn) {
   const tables = [
     'ADMINISTRACION_MEDICACION',
     'RECETA_PACIENTE',
+    'RECETA_DETALLE',
     'CICLO',
     'PROTOCOLO',
     'PRESENTACION_DROGA_VIA',

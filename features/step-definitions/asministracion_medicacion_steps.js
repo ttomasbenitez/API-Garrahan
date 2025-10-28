@@ -89,14 +89,22 @@ Then('obtengo los datos de las administraciones con el id {string} y {string}', 
   compararAdmin(admin[1], data[1]);
 });
 
-Given('existen en la base de datos las siguientes administraciones de medicación:', function (dataTable) {
+Given('existen en la base de datos las siguientes administraciones de medicación:', async function (dataTable) {
   const admins = dataTable.hashes();
-  const promises = admins.map((admin) => {
-    return request(app)
-      .post(`protocolos/${admin.protocolo_id}/ciclos/${admin.ciclo_id}/regimenes/${admin.regimen}/administraciones`)
-      .send(admin)
-      .set('Accept', 'application/json')
-      .set('Cookie', this.sessionCookie);
+
+  const promises = admins.map(async (admin) => {
+    try {
+
+      return await request(app)
+        .post(`/protocolos/${admin.protocolo_id}/ciclos/${admin.ciclo_id}/regimenes/${admin.regimen}/administraciones`)
+        .send([admin])
+        .set('Accept', 'application/json')
+        .set('Cookie', this.sessionCookie);
+    } catch (error) {
+      console.error(`Error al insertar la administración: ${JSON.stringify(admin)}`, error);
+      throw error; // Relanza el error para que la prueba falle
+    }
   });
-  return Promise.all(promises);
+
+  await Promise.all(promises);
 });

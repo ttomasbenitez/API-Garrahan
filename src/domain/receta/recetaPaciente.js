@@ -1,6 +1,7 @@
 import { ERROR_RECETA_PACIENTE_CREACION_CODE } from '../../errors/receta.js';
 import { getError, toNum, toStr } from '../../utils/formatters.js';
 import { ContextoSnapshot, Contacto, DatosPaciente, Domicilio, Identidad, PacienteSnapshot } from './pacienteSnapshot.js';
+import { RecetaDetalle } from './recetaDetalle.js';
 
 class RecetaPaciente {
   constructor({
@@ -13,6 +14,7 @@ class RecetaPaciente {
     estado,
     fecha_prescripcion,
     detalles,
+    id,
   }) {
 
     this.paciente_snapshot = paciente_snapshot;
@@ -24,6 +26,7 @@ class RecetaPaciente {
     this.estado = toStr(estado);
     this.fecha_prescripcion = fecha_prescripcion ?? new Date();
     this.detalles = detalles ?? [];
+    this.id = id;
 
     this.validar();
   }
@@ -54,8 +57,13 @@ class RecetaPaciente {
     });
 
     const contexto = new ContextoSnapshot({
-      protocolo_id: body.protocolo_id, ciclo_id: body.ciclo_id, regimen: body.regimen, numeroCiclo: body.numero_ciclo
+      protocolo_id: body.protocolo_id, ciclo_id: body.ciclo_id, regimen: body.regimen, numero_ciclo: body.numero_ciclo
     });
+
+    const detalles = body.detalles ? body.detalles.map((d) =>
+      new RecetaDetalle({admin_id: d.admin_id, nombre_generico: d.nombre_generico, presentacion: d.presentacion,
+        concentracion: d.concentracion, cantidad: d.cantidad, dosis_diaria: d.dosis_diaria, numero_dias: d.numero_dias,
+        dosis_total: d.dosis_total, via_administracion: d.via_administracion, receta_id: body.id ?? null})) : [];
 
     return new RecetaPaciente({
       paciente_snapshot,
@@ -66,7 +74,8 @@ class RecetaPaciente {
       profesional_id: body.profesional_id,
       estado: body.estado,
       fecha_prescripcion: body.fecha_prescripcion ?? null,
-      detalles: body.detalles ?? []
+      detalles,
+      id: body.id ?? null,
     });
   }
 

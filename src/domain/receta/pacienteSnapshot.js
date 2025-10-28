@@ -75,11 +75,11 @@ export class DatosPaciente {
 }
 
 export class ContextoSnapshot {
-  constructor({ protocolo_id, ciclo_id, regimen, numeroCiclo }) {
+  constructor({ protocolo_id, ciclo_id, regimen, numero_ciclo }) {
     this.protocolo_id = toNum(protocolo_id);
     this.ciclo_id = toNum(ciclo_id);
     this.regimen = toNum(regimen);
-    this.numeroCiclo = toNum(numeroCiclo);
+    this.numero_ciclo = toNum(numero_ciclo);
   }
 
   validar() {
@@ -92,7 +92,7 @@ export class ContextoSnapshot {
     if (this.regimen === null) {
       throw getError('regimen es obligatorio', 'RECETA_REGIMEN_REQUERIDO');
     }
-    if (this.numeroCiclo === null) {
+    if (this.numero_ciclo === null) {
       throw getError('numero_ciclo es obligatorio', 'RECETA_NUMERO_CICLO_REQUERIDO');
     }
   }

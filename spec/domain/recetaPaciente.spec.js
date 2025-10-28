@@ -46,7 +46,7 @@ describe('RecetaPaciente', () => {
     expect(recetaPaciente.contexto.protocolo_id).toBe(1);
     expect(recetaPaciente.contexto.ciclo_id).toBe(1);
     expect(recetaPaciente.contexto.regimen).toBe(1);
-    expect(recetaPaciente.contexto.numeroCiclo).toBe(1);
+    expect(recetaPaciente.contexto.numero_ciclo).toBe(1);
     expect(recetaPaciente.datos_paciente.peso).toBe(70);
     expect(recetaPaciente.datos_paciente.talla).toBe(175);
     expect(recetaPaciente.datos_paciente.superficie_corporal).toBe(1.8);

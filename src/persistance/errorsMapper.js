@@ -9,6 +9,7 @@ import {
   ERROR_FK_RECETA_PROFESIONAL,
   ERROR_FK_RECETA_CICLO,
 } from '../errors/receta.js';
+import { getError } from '../utils/formatters.js';
 
 export function mapRecetaPacienteInsertError(err) {
   if (!err || err.errorNum !== FK_NOT_EXISTENT_CODE) return null;
@@ -32,4 +33,21 @@ export function mapRecetaPacienteInsertError(err) {
   }
 
   return null;
+}
+
+
+export function mapRecetaDetalleInsertError(err) {
+  const msg = (err.message || '').toUpperCase();
+  if (msg.includes('FK_RD_ADMIN')) {
+    return getError('No existe la administración de medicación indicada.', 'RECETA_DETALLE_ADMIN_INEXISTENTE');
+  }
+  if (msg.includes('FK_RD_RECETA')) {
+    return getError('No existe la receta indicada.', 'RECETA_DETALLE_RECETA_INEXISTENTE');
+  }
+  if (msg.includes('PK_RECETA_DETALLE') || msg.includes('ORA-00001')) {
+    return getError('Ya existe un detalle para ese (receta_id, admin_id).', 'RECETA_DETALLE_DUPLICADA');
+  }
+  const e = new Error('RECETA_DETALLE_CREACION_FALLO');
+  e.status = 400; e.code = 'RECETA_DETALLE_CREACION_FALLO'; e.message = 'No se pudo crear el detalle de receta.';
+  return e;
 }

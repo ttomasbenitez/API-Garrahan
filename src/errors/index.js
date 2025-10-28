@@ -14,7 +14,10 @@ export const MSG_NUM_POS = (f) => `${f} debe ser > 0`;
 export const MSG_INT_MIN0 = (f) => `${f} debe ser un entero ≥ 0`;
 export const MSG_UNIDAD = (permitidas) => `dosis_unidad inválida (permitidas: ${permitidas})`;
 export const MSG_FRECUENCIA = 'frecuencia debe ser una lista de días separada por coma, ej: "1,2,5"';
+
+// Códigos de error de BD
 export const FK_NOT_EXISTENT_CODE = 2291;
+export const UNIQUE_VIOLATION_CODE = 1;
 
 // Normalización de unidades (alias → forma canónica)
 export const UNIT_NORMALIZATION_MAP = Object.freeze({

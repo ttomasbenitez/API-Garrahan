@@ -11,9 +11,7 @@ export const makeRecetaController = (recetaPacienteService) => ({
 async function crearRecetaPaciente(req, res, service) {
   try {
     const payload = req.body;
-
     const recetaPaciente = RecetaPaciente.fromBody(payload);
-
     await service.crearRecetaPaciente(recetaPaciente);
     logger.info('Receta Paciente creada con IDs: %o', recetaPaciente.id);
     res.status(201).json(recetaPaciente);

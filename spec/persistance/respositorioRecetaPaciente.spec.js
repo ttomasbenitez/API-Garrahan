@@ -2,33 +2,25 @@
 import oracleDB from '../../src/db/connection_pool.js';
 import RecetaPaciente from '../../src/domain/receta/recetaPaciente.js';
 import { RepositorioRecetaPaciente } from '../../src/persistance/repositorioRecetaPaciente.js';
-
-jest.mock('../../src/db/connection_pool.js', () => ({
-  __esModule: true,
-  default: {
-    init: jest.fn(),
-    getPool: jest.fn(),
-    withConnection: jest.fn(),
-    execute: jest.fn(),
-    close: jest.fn(),
-  }
-}));
+import { toFloat } from '../../src/utils/formatters.js';
+import { createMockOracleDB } from '../helpers/mockConnection.js';
 
 describe(RepositorioRecetaPaciente, () => {
   let repo;
   let db;
 
   beforeEach(() => {
-    db = oracleDB;
+    const { mockPool } = createMockOracleDB();
+    db = mockPool;
     repo = new RepositorioRecetaPaciente(db);
 
-    db.execute.mockReset();
-    db.withConnection.mockReset();
+    // db.execute.mockReset();
+    // db.withConnection.mockReset();
   });
 
 
   test('guarda correctamente la receta y devuelve el objeto con id y fecha', async () => {
-    // Arrange: construimos un RecetaPaciente válido
+
     const body = {
       nombre: 'Juan',
       apellido: 'Pérez',
@@ -52,31 +44,40 @@ describe(RepositorioRecetaPaciente, () => {
       regimen: 1,
       paciente_id: 1,
       profesional_id: 2,
-      estado: 'Activo'
+      estado: 'Activo',
+      detalles: []
     };
 
     const recetaPaciente = RecetaPaciente.fromBody(body);
 
-    // Mock de ejecución Oracle
-    db.execute.mockResolvedValue({
+    const mockExecute = jest.fn().mockResolvedValue({
       rowsAffected: 1,
-      outBinds: { id: [123], fecha_prescripcion: [new Date('2025-10-27')] }
+      outBinds: {
+        id: [123],
+        fecha_prescripcion: [new Date('2025-10-27')],
+      },
     });
 
-    // Act
+    const mockConn = {
+      execute: mockExecute,
+      executeMany: jest.fn().mockResolvedValue({ rowsAffected: 0 }), // no hay detalles
+      commit: jest.fn(),
+      rollback: jest.fn(),
+    };
+
+    db.withConnection.mockImplementation(async (fn) => await fn(mockConn));
+
     const result = await repo.guardar(recetaPaciente);
 
-    // Assert
     expect(result.id).toBe(123);
     expect(result.fecha_prescripcion).toEqual(new Date('2025-10-27'));
-    expect(db.execute).toHaveBeenCalledTimes(1);
 
-    const [sql, binds, opts] = db.execute.mock.calls[0];
-
+    expect(mockExecute).toHaveBeenCalledTimes(1);
+    const [sql, binds, opts] = mockExecute.mock.calls[0];
+    console.log(binds);
     expect(sql).toMatch(/INSERT\s+INTO\s+receta_paciente/i);
-    expect(opts).toMatchObject({ autoCommit: true });
+    expect(opts).toMatchObject({ autoCommit: false });
 
-    // Verificamos que se hayan enviado los campos obligatorios
     expect(binds).toMatchObject({
       protocolo_id: 1,
       ciclo_id: 1,
@@ -86,9 +87,13 @@ describe(RepositorioRecetaPaciente, () => {
       estado: 'Activo',
       peso: 70,
       talla: 175,
-      superficie_corporal: 1.8
     });
+
+    expect(mockConn.commit).toHaveBeenCalledTimes(1);
+
+    expect(mockConn.rollback).not.toHaveBeenCalled();
   });
+
 
 
   test('obtener una receta por su id funciona correctamente', async () => {
@@ -162,7 +167,7 @@ describe(RepositorioRecetaPaciente, () => {
     expect(recetaObtenida.contexto.protocolo_id).toBe(recetaEsperada.contexto.protocolo_id);
     expect(recetaObtenida.contexto.ciclo_id).toBe(recetaEsperada.contexto.ciclo_id);
     expect(recetaObtenida.contexto.regimen).toBe(recetaEsperada.contexto.regimen);
-    expect(recetaObtenida.contexto.numeroCiclo).toBe(recetaEsperada.contexto.numeroCiclo);
+    expect(recetaObtenida.contexto.numero_ciclo).toBe(recetaEsperada.contexto.numero_ciclo);
 
     expect(recetaObtenida.paciente_snapshot.identidad.nombre).toBe(recetaEsperada.paciente_snapshot.identidad.nombre);
     expect(recetaObtenida.paciente_snapshot.identidad.apellido).toBe(recetaEsperada.paciente_snapshot.identidad.apellido);

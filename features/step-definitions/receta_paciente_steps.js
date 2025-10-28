@@ -130,3 +130,37 @@ Then('el {string} de los datos del paciente en la receta es {string}', function 
   const datos_paciente = response.body.datos_paciente;
   assert.equal(toString(datos_paciente[key]), toString(value));
 });
+
+Given('existe una receta del paciente con id {string} y con los datos:', async function (string, dataTable) {
+  data = dataTable.rowsHash();
+});
+
+Given('que tengo los siguientes datos del detalle de receta:', function (dataTable) {
+  data.detalles = [dataTable.rowsHash()];
+});
+
+When('publico en la API {string} con los datos del detalle', async function (endpoint) {
+  await request(app)
+    .post(endpoint)
+    .send(data)
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie)
+    .then(function (res) {
+      response = res;
+    });
+});
+
+
+Then('el {string} del detalle es {string}', function (key, value) {
+  assert.equal(String(response.body.detalles[0][key]), String(value));
+});
+
+Then('la {string} del detalle es {string}', function (key, value) {
+  assert.equal(String(response.body.detalles[0][key]), String(value));
+});
+
+Then('se crea correctamente el detalle de receta', function () {
+  assert.equal(response.status, 201);
+  data = null;
+  response = null;
+});

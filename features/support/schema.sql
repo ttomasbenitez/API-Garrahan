@@ -145,19 +145,20 @@ CREATE INDEX idx_receta_paciente_ctx        ON receta_paciente (protocolo_id, ci
 
 -- Detalle de una receta: qué administración concreta se receta y en qué cantidad
 CREATE TABLE receta_detalle (
-  receta_id        NUMBER NOT NULL,
-  admin_id         NUMBER NOT NULL,
-  via_id           NUMBER NOT NULL,
-  cantidad         NUMBER NOT NULL,
-  dosis_diaria     NUMBER,
-  cantidad_dias    NUMBER,
-  dosis_total      NUMBER,
+  receta_id          NUMBER NOT NULL,
+  admin_id           NUMBER NOT NULL,
+  nombre_generico    VARCHAR2(100) NOT NULL,
+  presentacion       VARCHAR2(100) NOT NULL,
+  concentracion      VARCHAR2(50),
+  cantidad           NUMBER NOT NULL,
+  dosis_diaria       NUMBER,
+  numero_dias        NUMBER,
+  dosis_total        NUMBER,
+  via_administracion VARCHAR2(100) NOT NULL,
   CONSTRAINT pk_receta_detalle PRIMARY KEY (receta_id, admin_id),
   CONSTRAINT fk_rd_receta  FOREIGN KEY (receta_id) REFERENCES receta_paciente(receta_id),
-  CONSTRAINT fk_rd_admin   FOREIGN KEY (admin_id)  REFERENCES administracion_medicacion(admin_id),
-  CONSTRAINT fk_rd_via     FOREIGN KEY (via_id)    REFERENCES via_administracion(via_id)
+  CONSTRAINT fk_rd_admin   FOREIGN KEY (admin_id)  REFERENCES administracion_medicacion(admin_id)
 );
-
 
 -- Asignación de un protocolo a un paciente y su ciclo actual
 CREATE TABLE protocolo_paciente (
