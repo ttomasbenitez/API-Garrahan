@@ -57,7 +57,8 @@ async function agregarCiclo(req, res, service) {
     const errors = [];
 
     const ciclos = payload.map((c) => {
-      if (!c.ciclo_id || !c.regimen || !c.duracion_semanas || c.ciclo_final === undefined || !c.repeticiones) {
+      if (!c.ciclo_id || c.regimen === undefined || !c.duracion_semanas ||
+        c.ciclo_final === undefined || c.repeticiones === undefined) {
         errors.push('validation_error');
         return;
       }
