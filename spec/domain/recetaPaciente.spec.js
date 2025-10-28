@@ -35,7 +35,7 @@ describe('RecetaPaciente', () => {
     expect(recetaPaciente.paciente_snapshot.identidad.nombre).toBe('Juan');
     expect(recetaPaciente.paciente_snapshot.identidad.apellido).toBe('Pérez');
     expect(recetaPaciente.paciente_snapshot.identidad.tipo_documento).toBe('DNI');
-    expect(recetaPaciente.paciente_snapshot.identidad.numeroDocumento).toBe('40123456');
+    expect(recetaPaciente.paciente_snapshot.identidad.numero_documento).toBe('40123456');
     expect(recetaPaciente.paciente_snapshot.identidad.fecha_nacimiento).toEqual(new Date('2020-05-21'));
     expect(recetaPaciente.paciente_snapshot.identidad.sexo).toBe('M');
     expect(recetaPaciente.paciente_snapshot.identidad.nacionalidad).toBe('Argentina');
