@@ -57,6 +57,9 @@ import protocoloActualRoutes from './routes/protocoloActual.js';
 import { AdministracionMedicacionService } from './services/AdministracionMedicacionService.js';
 import { makeAdministracionMedicacionController } from './controllers/administracionMedicacionController.js';
 import administracionMedicacionRoutes from './routes/administracionMedicacion.js';
+import { CalculoDrogaService } from './services/CalculoDrogaService.js';
+import { makeCalculoDrogaController } from './controllers/calculoDrogaController.js';
+import calculoDrogaRoutes from './routes/calculoDroga.js';
 
 const app = express();
 
@@ -117,6 +120,9 @@ const protocoloActualController = makeProtocoloActualController(protocoloActualS
 // administracion medicacion
 const administracionMedicacionService = new AdministracionMedicacionService(repositorioAdministracionMedicacion);
 const administracionMedicacionController = makeAdministracionMedicacionController(administracionMedicacionService);
+// Calculo Droga
+const calculoDrogaService = new CalculoDrogaService(repositorioAdministracionMedicacion);
+const calculoDrogaController = makeCalculoDrogaController(calculoDrogaService);
 
 app.use(express.json());
 app.use(cors({
@@ -141,5 +147,6 @@ app.use('/drogas', presentacionDrogaRoutes(presentacionDrogaController));
 app.use('/presentaciones-droga-via', presentacionDrogaViaRoutes(presentacionDrogaViaController));
 app.use('/recetas', buildRecetasRouter(recetaController));
 app.use('/administraciones', administracionMedicacionRoutes(administracionMedicacionController));
+app.use('/calculo', calculoDrogaRoutes(calculoDrogaController));
 
 export default app;
