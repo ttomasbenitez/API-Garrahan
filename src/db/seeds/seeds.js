@@ -226,6 +226,28 @@ async function createPacientes(cookie) {
   }
 }
 
+async function createProtocoloPaciente(cookie) {
+  const pacientes = [
+    { nombre: 'María', apellido: 'Pérez', id_hospitalario: 'H001', fecha_nacimiento: '2020-05-12', peso: 30.5, sexo: 'F', profesional_id: 1, obra_social: 'OSDE' },
+    { nombre: 'Juan', apellido: 'Esposito', id_hospitalario: 'H002', fecha_nacimiento: null, peso: null, sexo: 'M', profesional_id: 2, obra_social: null }
+  ];
+
+  const datosProtocoloPaciente = {
+    protocolo_id: 1,
+    regimen: 0,
+    ciclo_actual_id: 1,
+    numero_ciclo: 1,
+    fecha_inicio: new Date().toISOString(),
+    estado: 'Activo',
+    profesional_id_asignador: 2,
+    fecha_asignacion: new Date().toISOString(),
+  };
+
+  console.log('Protocolo asignado a paciente:', await (await fetch('http://api-garrahan-app-1:3000/pacientes/1/protocolos', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Cookie': cookie },
+    body: JSON.stringify(datosProtocoloPaciente) })).json());
+}
 
 async function main() {
   const cookieAdmin = await login('admin');
@@ -240,6 +262,7 @@ async function main() {
   await createAdministracionesMedicacion(cookieAdmin);
   const cookieMedico = await login('medico');
   await createPacientes(cookieMedico);
+  await createProtocoloPaciente(cookieMedico);
 
   console.log('Seeds creadas correctamente');
 }

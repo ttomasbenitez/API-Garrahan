@@ -1,6 +1,7 @@
 export class PresentacionDrogaService {
-  constructor(presentacionDrogaRepo) {
+  constructor(presentacionDrogaRepo, presentacionDrogaConFormaRepo) {
     this.presentacionDrogaRepo = presentacionDrogaRepo;
+    this.presentacionDrogaConFormaRepo = presentacionDrogaConFormaRepo;
   }
 
   async crear(presentaciones) {
@@ -16,7 +17,7 @@ export class PresentacionDrogaService {
   }
 
   async listar(droga_id) {
-    return await this.presentacionDrogaRepo.listar(droga_id);
+    return await this.presentacionDrogaConFormaRepo.listar(droga_id);
   }
 
   async eliminar(id) {

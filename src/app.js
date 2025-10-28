@@ -36,6 +36,7 @@ import { FormaFarmaceuticaService } from './services/FormaFarmaceuticaService.js
 import { makeFormaFarmaceuticaController } from './controllers/formaFarmaceuticaController.js';
 import formaFarmaceuticaRoutes from './routes/formaFarmaceutica.js';
 import { RepositorioPresentacionDroga } from './persistance/repositorioPresentacionDroga.js';
+import { RepositorioPresentacionDrogaConForma } from './persistance/repositorioPresentacionDrogaConForma.js';
 import { PresentacionDrogaService } from './services/PresentacionDrogaService.js';
 import { makePresentacionDrogaController } from './controllers/presentacionDrogaController.js';
 import presentacionDrogaRoutes from './routes/presentacionDroga.js';
@@ -103,7 +104,8 @@ const protocoloPacienteService = new ProtocoloPacienteService(repositorioProtoco
 const protocoloPacienteController = makeProtocoloPacienteController(protocoloPacienteService);
 // presentacion droga
 const repositorioPresentacionDroga = new RepositorioPresentacionDroga(oracleDBInstance);
-const presentacionDrogaService = new PresentacionDrogaService(repositorioPresentacionDroga);
+const repositorioPresentacionDrogaConForma = new RepositorioPresentacionDrogaConForma(oracleDBInstance);
+const presentacionDrogaService = new PresentacionDrogaService(repositorioPresentacionDroga, repositorioPresentacionDrogaConForma);
 const presentacionDrogaController = makePresentacionDrogaController(presentacionDrogaService);
 // presentacion droga via
 const repositorioPresentacionDrogaVia = new RepositorioPresentacionDrogaVia(oracleDBInstance);

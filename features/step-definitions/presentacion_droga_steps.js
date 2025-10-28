@@ -125,14 +125,16 @@ Then(/^el sistema me devuelve una lista con (\d+) presentaciones de droga en la 
   assert.strictEqual(response.body.length, parseInt(cantidad, 10));
 });
 
-Then(/^el primer registro de presentacion tiene "(.*)" = "(.*)" y "(.*)" = "(.*)"$/, function (campo1, valor1, campo2, valor2) {
+Then(/^el primer registro de presentacion tiene "(.*)" = "(.*)", "(.*)" = "(.*)" y "(.*)" = "(.*)"$/, function (campo1, valor1, campo2, valor2, campo3, valor3) {
   assert.strictEqual(String(response.body[0][campo1]), String(valor1));
   assert.strictEqual(String(response.body[0][campo2]), String(valor2));
+  assert.strictEqual(String(response.body[0][campo3]), String(valor3));
 });
 
-Then(/^el segundo registro de presentacion tiene "(.*)" = "(.*)" y "(.*)" = "(.*)"$/, function (campo1, valor1, campo2, valor2) {
+Then(/^el segundo registro de presentacion tiene "(.*)" = "(.*)", "(.*)" = "(.*)" y "(.*)" = "(.*)"$/, function (campo1, valor1, campo2, valor2, campo3, valor3) {
   assert.strictEqual(String(response.body[1][campo1]), String(valor1));
   assert.strictEqual(String(response.body[1][campo2]), String(valor2));
+  assert.strictEqual(String(response.body[1][campo3]), String(valor3));
 });
 
 Then(/^se obtiene correctamente la presentacion$/, function () {

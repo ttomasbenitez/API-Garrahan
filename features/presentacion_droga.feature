@@ -69,8 +69,8 @@ Feature: Gestión de Presentaciones de Droga
       | fuerza_unidad         | mg        |
     When consulto en la API de presentacion droga "/drogas/1/presentaciones"
     Then el sistema me devuelve una lista con 2 presentaciones de droga en la consulta
-    And el primer registro de presentacion tiene "droga_id" = "1" y "forma_farmaceutica_id" = "2"
-    And el segundo registro de presentacion tiene "droga_id" = "1" y "forma_farmaceutica_id" = "3"
+    And el primer registro de presentacion tiene "droga_id" = "1", "forma_farmaceutica_id" = "2" y "forma_farmaceutica_nombre" = "Jarabe"
+    And el segundo registro de presentacion tiene "droga_id" = "1", "forma_farmaceutica_id" = "3" y "forma_farmaceutica_nombre" = "Capsula"
     And se obtiene correctamente la presentacion
 
   Scenario: US-08.4 Eliminar una presentacion de droga
