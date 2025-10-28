@@ -1,4 +1,5 @@
 import { getError, toFloat, toNum } from '../../utils/formatters.js';
+import { ERROR_RECETA_PACIENTE_CREACION_CODE } from '../../errors/receta.js';
 
 
 export class Domicilio {
@@ -80,7 +81,7 @@ export class DatosPaciente {
 
   validar() {
     if (!this.peso || !this.talla || !this.superficie_corporal) {
-      throw getError('peso, talla y superficie_corporal son requeridos', 'RECETA_DATOS_PACIENTE_REQUERIDOS');
+      throw getError('peso, talla y superficie_corporal son requeridos', ERROR_RECETA_PACIENTE_CREACION_CODE);
     }
     if (this.peso !== null && this.peso <= 0) {
       throw getError('peso inválido', 'RECETA_PESO_INVALIDO');
