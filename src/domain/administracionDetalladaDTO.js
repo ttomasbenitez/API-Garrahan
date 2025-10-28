@@ -1,6 +1,7 @@
 class AdministracionDetalladaDTO {
-  constructor(admin_id, nombre_droga, via_administracion, formato_droga, fuerza_valor, fuerza_unidad, cantidad_dias, frecuencia_diaria) {
+  constructor(admin_id, nombre_droga, droga_id, via_administracion, formato_droga, fuerza_valor, fuerza_unidad, cantidad_dias, frecuencia_diaria) {
     this.admin_id = admin_id;
+    this.droga_id = droga_id;
     this.nombre_droga = nombre_droga;
     this.via_administracion = via_administracion;
     this.formato_droga = formato_droga;

@@ -15,6 +15,7 @@ export class RepositorioProtocoloActual {
           PP.regimen,
           P.nombre AS protocolo_nombre,
           AM.admin_id,
+          D.droga_id,
           D.nombre_generico AS nombre_droga,
           VA.nombre AS via_administracion,
           AM.fuerza_valor,
@@ -59,6 +60,7 @@ export class RepositorioProtocoloActual {
       new AdministracionDetalladaDTO(
         row.ADMIN_ID,
         row.NOMBRE_DROGA,
+        row.DROGA_ID,
         row.VIA_ADMINISTRACION,
         row.FORMATO_DROGA,
         row.FUERZA_VALOR,
