@@ -169,7 +169,7 @@ describe(RepositorioRecetaPaciente, () => {
     expect(recetaObtenida.paciente_snapshot.contacto.email).toBe(recetaEsperada.paciente_snapshot.contacto.email);
     expect(recetaObtenida.datos_paciente.peso).toBe(recetaEsperada.datos_paciente.peso);
     expect(recetaObtenida.datos_paciente.talla).toBe(recetaEsperada.datos_paciente.talla);
-    expect(recetaObtenida.datos_paciente.superficieCorporal).toBe(recetaEsperada.datos_paciente.superficieCorporal);
+    expect(recetaObtenida.datos_paciente.superficie_corporal).toBe(recetaEsperada.datos_paciente.superficie_corporal);
     expect(recetaObtenida.estado).toBe(recetaEsperada.estado);
   });
 
