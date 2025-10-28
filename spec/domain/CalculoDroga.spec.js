@@ -1,7 +1,8 @@
+/* global describe, test, expect */
 import CalculoDroga from '../../src/domain/CalculoDroga.js';
 
 describe('CalculoDroga (dominio)', () => {
-  it('calcula correctamente la cantidad base, total y unidades', () => {
+  test('calcula correctamente la cantidad base, total y unidades', () => {
     const calc = new CalculoDroga({
       fuerza_valor: 50,
       cantidad_dias: 4,
@@ -15,7 +16,7 @@ describe('CalculoDroga (dominio)', () => {
     expect(calc.getUnidades()).toBe(8); // 4000/500
   });
 
-  it('devuelve 0 unidades si nueva fuerza valor es 0', () => {
+  test('devuelve 0 unidades si nueva fuerza valor es 0', () => {
     const calc = new CalculoDroga({
       fuerza_valor: 50,
       cantidad_dias: 4,
