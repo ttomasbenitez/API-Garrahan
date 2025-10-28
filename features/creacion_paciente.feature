@@ -52,14 +52,26 @@ Feature: Creación paciente
         And el mensaje de error "Paciente no asociado a profesional"
 
     @wip
-    Scenario: US-03.4 Obtener paciente de la api del hospital por su id_hospitalario
+    Scenario: US-03.4 Obtener pacientes
+      Given existe en la base de datos un paciente con id "9" llamado "Martin Palermo"
+      And existe en la base de datos un paciente con id "5" llamado "Leandro Paredes"
+      And existe en la base de datos un paciente con id "16" llamado "Miguel Merentiel"
+      When consulto en la API "/pacientes"
+      Then el sistema me devuelve una lista que contiene los siguientes pacientes:
+        | paciente_id | nombre           |
+        | 9           | Martin Palermo   |
+        | 5           | Leandro Paredes  |
+        | 16          | Miguel Merentiel |
+
+    @wip
+    Scenario: US-03.5 Obtener paciente de la api del hospital por su id_hospitalario
         Given quiero obtener el paciente con id_hospitalario "2" del sistema del hospital
         And con nombre "Juan" y apellido "Pérez"
         When consulto en la API externa "/pacientes/2/externo" por su id_hospitalario
         Then el sistema devuelve el paciente esperado
 
     @wip
-    Scenario: US-03.4 Crear paciente sin id_hospitalario
+    Scenario: US-03.6 Crear paciente sin id_hospitalario
         Given existe un paciente con los siguientes datos:
             | nombre            | Juan        |
             | apellido          | Pérez       |
