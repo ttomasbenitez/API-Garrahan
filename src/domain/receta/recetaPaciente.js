@@ -79,6 +79,25 @@ class RecetaPaciente {
     });
   }
 
+  nombreCompleto() {
+    return `${this.paciente_snapshot.identidad.nombre} ${this.paciente_snapshot.identidad.apellido}`;
+  }
+
+  dni() {
+    return this.paciente_snapshot.identidad.numero_documento;
+  }
+
+  domicilioCompleto() {
+    const dom = this.paciente_snapshot.domicilio;
+    const domicilio = `${dom.calle} ${dom.numero}, ${dom.localidad}`;
+
+    if (dom.piso && dom.depto) {
+      return `${domicilio}, Piso: ${dom.piso}, Depto: ${dom.depto}`;
+    }
+
+    return domicilio;
+  }
+
 
   validar() {
     this.paciente_snapshot.validar();

@@ -113,7 +113,7 @@ const presentacionDrogaViaService = new PresentacionDrogaViaService(repositorioP
 const presentacionDrogaViaController = makePresentacionDrogaViaController(presentacionDrogaViaService);
 // recetas
 const repositorioRecetaPaciente = new RepositorioRecetaPaciente(oracleDBInstance);
-const recetaService = new RecetaService(repositorioRecetaPaciente);
+const recetaService = new RecetaService(repositorioRecetaPaciente, repositorioProtocolo);
 const recetaController = makeRecetaController(recetaService);
 // protocolo-actual
 const repositorioProtocoloActual = new RepositorioProtocoloActual(oracleDBInstance);

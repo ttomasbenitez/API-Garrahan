@@ -5,6 +5,7 @@ import { toFloat, toNum, toStr } from '../utils/formatters.js';
 import { mapRecetaDetalleInsertError, mapRecetaPacienteInsertError } from './errorsMapper.js';
 import RecetaPaciente from '../domain/receta/recetaPaciente.js';
 import { Contacto, ContextoSnapshot, DatosPaciente, Domicilio, Identidad, PacienteSnapshot } from '../domain/receta/pacienteSnapshot.js';
+import { RecetaDetalle } from '../domain/receta/recetaDetalle.js';
 
 
 export class RepositorioRecetaPaciente {
@@ -162,6 +163,36 @@ export class RepositorioRecetaPaciente {
     });
   }
 
+
+  async obtenerDetalles(recetaId) {
+    const result = await this.connection.execute(
+      `SELECT 
+        receta_id, admin_id, nombre_generico, presentacion, concentracion,
+        cantidad, dosis_diaria, numero_dias, dosis_total, via_administracion
+      FROM receta_detalle
+      WHERE receta_id = :receta_id`,
+      [recetaId],
+      { outFormat: this.connection.OUT_FORMAT_OBJECT }    );
+
+
+    return result.rows.map(row => {
+      const ciclo = new RecetaDetalle({
+        admin_id: toNum(row.ADMIN_ID),
+        nombre_generico: toStr(row.NOMBRE_GENERICO),
+        presentacion: toStr(row.PRESENTACION),
+        concentracion: toStr(row.CONCENTRACION),
+        cantidad: toNum(row.CANTIDAD),
+        dosis_diaria: toNum(row.DOSIS_DIARIA),
+        numero_dias: toNum(row.NUMERO_DIAS),
+        dosis_total: toNum(row.DOSIS_TOTAL),
+        via_administracion: toStr(row.VIA_ADMINISTRACION),
+        receta_id: toNum(row.RECETA_ID),
+      });
+      return ciclo;
+    });
+  }
+
+
   async obtener(id) {
     const result = await this.connection.execute(
       `SELECT
@@ -233,6 +264,8 @@ export class RepositorioRecetaPaciente {
       numero_ciclo: toNum(row.NUMERO_CICLO),
     });
 
+    const detalles = await this.obtenerDetalles(id);
+
     const receta = new RecetaPaciente({
       paciente_snapshot,
       datos_paciente,
@@ -241,7 +274,7 @@ export class RepositorioRecetaPaciente {
       paciente_id: toNum(row.PACIENTE_ID),
       profesional_id: toNum(row.PROFESIONAL_ID),
       estado: toStr(row.ESTADO),
-      detalles: [],
+      detalles,
     });
 
     receta.id = toNum(row.RECETA_ID);

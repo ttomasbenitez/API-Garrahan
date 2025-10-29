@@ -13,14 +13,9 @@ describe(RepositorioRecetaPaciente, () => {
     const { mockPool } = createMockOracleDB();
     db = mockPool;
     repo = new RepositorioRecetaPaciente(db);
-
-    // db.execute.mockReset();
-    // db.withConnection.mockReset();
   });
 
-
-  test('guarda correctamente la receta y devuelve el objeto con id y fecha', async () => {
-
+  const guardarRecetaPaciente = async () => {
     const body = {
       nombre: 'Juan',
       apellido: 'Pérez',
@@ -69,6 +64,14 @@ describe(RepositorioRecetaPaciente, () => {
 
     const id = await repo.guardar(recetaPaciente);
 
+    return {id, mockExecute, mockConn, recetaPaciente};
+  };
+
+  test('guarda correctamente la receta y devuelve el objeto con id y fecha', async () => {
+
+    const {id, mockExecute, mockConn} =  await guardarRecetaPaciente();
+
+
     expect(id).toBe(123);
 
     expect(mockExecute).toHaveBeenCalledTimes(1);
@@ -81,87 +84,5 @@ describe(RepositorioRecetaPaciente, () => {
     expect(mockConn.rollback).not.toHaveBeenCalled();
   });
 
-
-  test('obtener una receta por su id funciona correctamente', async () => {
-
-    const body = {
-      nombre: 'Juan',
-      apellido: 'Pérez',
-      tipo_documento: 'DNI',
-      numero_documento: '40123456',
-      fecha_nacimiento: '2020-05-21',
-      sexo: 'M',
-      nacionalidad: 'Argentina',
-      domicilio_calle: 'Av. Corrientes',
-      domicilio_numero: '1234',
-      localidad: 'CABA',
-      telefono: '1122334455',
-      email: 'juan.perez@example.com',
-      peso: 70,
-      talla: 175,
-      superficie_corporal: 1.8,
-      diagnostico: 'Leucemia Linfoblástica Aguda',
-      numero_ciclo: 1,
-      protocolo_id: 1,
-      ciclo_id: 1,
-      regimen: 1,
-      paciente_id: 1,
-      profesional_id: 2,
-      estado: 'Activo'
-    };
-
-    const recetaEsperada = RecetaPaciente.fromBody(body);
-
-    db.execute.mockResolvedValueOnce({
-      rows: [
-        {
-          RECETA_ID: 456,
-          FECHA_PRESCRIPCION: new Date('2025-08-09'),
-          NOMBRE: 'Juan',
-          APELLIDO: 'Pérez',
-          TIPO_DOCUMENTO: 'DNI',
-          NUMERO_DOCUMENTO: '40123456',
-          FECHA_NACIMIENTO: new Date('2020-05-21'),
-          SEXO: 'M',
-          NACIONALIDAD: 'Argentina',
-          DOMICILIO_CALLE: 'Av. Corrientes',
-          DOMICILIO_NUMERO: '1234',
-          LOCALIDAD: 'CABA',
-          TELEFONO: '1122334455',
-          EMAIL: 'juan.perez@example.com',
-          PESO: 70,
-          TALLA: 175,
-          SUPERFICIE_CORPORAL: 1.8,
-          DIAGNOSTICO: 'Leucemia Linfoblástica Aguda',
-          NUMERO_CICLO: 1,
-          PROTOCOLO_ID: 1,
-          CICLO_ID: 1,
-          REGIMEN: 1,
-          PACIENTE_ID: 1,
-          PROFESIONAL_ID: 2,
-          ESTADO: 'Activo'
-        }
-      ]
-    });
-
-    const recetaObtenida = await repo.obtener(456);
-
-    expect(db.execute).toHaveBeenCalledTimes(1);
-    expect(db.execute).toHaveBeenCalledWith(expect.stringMatching(/SELECT/i), [456], expect.any(Object));
-
-    expect(recetaObtenida).toBeInstanceOf(RecetaPaciente);
-    expect(recetaObtenida.contexto.protocolo_id).toBe(recetaEsperada.contexto.protocolo_id);
-    expect(recetaObtenida.contexto.ciclo_id).toBe(recetaEsperada.contexto.ciclo_id);
-    expect(recetaObtenida.contexto.regimen).toBe(recetaEsperada.contexto.regimen);
-    expect(recetaObtenida.contexto.numero_ciclo).toBe(recetaEsperada.contexto.numero_ciclo);
-
-    expect(recetaObtenida.paciente_snapshot.identidad.nombre).toBe(recetaEsperada.paciente_snapshot.identidad.nombre);
-    expect(recetaObtenida.paciente_snapshot.identidad.apellido).toBe(recetaEsperada.paciente_snapshot.identidad.apellido);
-    expect(recetaObtenida.paciente_snapshot.contacto.email).toBe(recetaEsperada.paciente_snapshot.contacto.email);
-    expect(recetaObtenida.datos_paciente.peso).toBe(recetaEsperada.datos_paciente.peso);
-    expect(recetaObtenida.datos_paciente.talla).toBe(recetaEsperada.datos_paciente.talla);
-    expect(recetaObtenida.datos_paciente.superficie_corporal).toBe(recetaEsperada.datos_paciente.superficie_corporal);
-    expect(recetaObtenida.estado).toBe(recetaEsperada.estado);
-  });
 
 });

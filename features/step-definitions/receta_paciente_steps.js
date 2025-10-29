@@ -122,6 +122,24 @@ Given('existe una receta del paciente con id {string} y con los datos:', async f
   data = dataTable.rowsHash();
 });
 
+
+Given('la receta con id {string} tiene los detalles:', function (string, dataTable) {
+  const detalles = dataTable.rowsHash();
+  data.detalles = data.detalles ? [...data.detalles, detalles] : [detalles];
+});
+
+Given('la receta con id {string} está guardada en el sistema', async function (id) {
+  await request(app)
+    .post('/recetas')
+    .send(data)
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie)
+    .then(function (res) {
+      response = res;
+    });
+});
+
+
 Given('que tengo los siguientes datos del detalle de receta:', function (dataTable) {
   data.detalles = [dataTable.rowsHash()];
 });
