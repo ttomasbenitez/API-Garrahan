@@ -10,7 +10,9 @@ class ProtocoloPaciente {
     estado,
     profesional_id_asignador,
     fecha_asignacion,
-    protocolo_paciente_id
+    protocolo_paciente_id,
+    ciclo_final = false,
+    repeticiones_actuales = 0
   }) {
     if (!paciente_id) throw new Error('paciente_id es obligatorio');
     if (!protocolo_id) throw new Error('protocolo_id es obligatorio');
@@ -28,6 +30,8 @@ class ProtocoloPaciente {
     this.estado = estado ?? null;
     this.profesional_id_asignador = profesional_id_asignador ?? null;
     this.fecha_asignacion = fecha_asignacion ?? null;
+    this.ciclo_final = ciclo_final;
+    this.repeticiones_actuales = repeticiones_actuales;
   }
 }
 

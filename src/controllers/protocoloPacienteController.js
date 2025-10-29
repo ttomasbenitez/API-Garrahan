@@ -7,25 +7,8 @@ export const makeProtocoloPacienteController = (protocoloPacienteService) => ({
   obtenerPorPaciente: (req, res) => obtenerProtocolos(req, res, protocoloPacienteService),
   obtenerEspecifico: (req, res) => obtenerProtocoloEspecifico(req, res, protocoloPacienteService),
   updateRegimen: (req, res) => updateRegimen(req, res, protocoloPacienteService),
+  solicitarMasCiclos: (req, res) => solicitarMasCiclos(req, res, protocoloPacienteService),
 });
-
-async function updateRegimen(req, res, service) {
-  try {
-    const { protocolo_paciente_id } = req.params;
-    const { regimen } = req.body;
-    if (!protocolo_paciente_id || regimen === undefined) {
-      return res.status(400).json({ error: 'protocolo_paciente_id y regimen son requeridos' });
-    }
-    const ok = await service.updateRegimen(protocolo_paciente_id, regimen);
-    if (!ok) {
-      return res.status(404).json({ error: 'Protocolo paciente no encontrado' });
-    }
-    res.status(200).json({ actualizado: true, protocolo_paciente_id, regimen });
-  } catch (error) {
-    logger.error('Error al actualizar regimen de protocolo paciente: %o', error);
-    res.status(500).json({ error: error.message });
-  }
-}
 
 async function crearProtocolo(req, res, service) {
   try {
@@ -85,6 +68,42 @@ async function obtenerProtocoloEspecifico(req, res, service) {
     res.status(200).json(protocolos[0] || null);
   } catch (error) {
     logger.error('Error al obtener protocolo específico: %o', error);
+    res.status(500).json({ error: error.message });
+  }
+}
+
+async function solicitarMasCiclos(req, res, service) {
+  try {
+    const { protocolo_paciente_id } = req.params;
+    const { ciclos_solicitados } = req.body;
+    if (!protocolo_paciente_id || ciclos_solicitados === undefined) {
+      return res.status(400).json({ error: 'protocolo_paciente_id y ciclos_solicitados son requeridos' });
+    }
+    const result = await service.solicitarMasCiclos(protocolo_paciente_id, ciclos_solicitados);
+    if (!result) {
+      return res.status(404).json({ error: 'Protocolo paciente no encontrado' });
+    }
+    res.status(200).json({ actualizado: true, protocolo_paciente_id, ciclos_solicitados });
+  } catch (error) {
+    logger.error('Error al solicitar más ciclos: %o', error);
+    res.status(500).json({ error: error.message });
+  }
+}
+
+async function updateRegimen(req, res, service) {
+  try {
+    const { protocolo_paciente_id } = req.params;
+    const { regimen } = req.body;
+    if (!protocolo_paciente_id || regimen === undefined) {
+      return res.status(400).json({ error: 'protocolo_paciente_id y regimen son requeridos' });
+    }
+    const ok = await service.updateRegimen(protocolo_paciente_id, regimen);
+    if (!ok) {
+      return res.status(404).json({ error: 'Protocolo paciente no encontrado' });
+    }
+    res.status(200).json({ actualizado: true, protocolo_paciente_id, regimen });
+  } catch (error) {
+    logger.error('Error al actualizar regimen de protocolo paciente: %o', error);
     res.status(500).json({ error: error.message });
   }
 }

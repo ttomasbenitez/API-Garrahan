@@ -101,4 +101,24 @@ export class RepositorioProtocoloPaciente {
     );
     return result.rowsAffected > 0;
   }
+
+  // Actualizar ciclo_actual_id
+  async updateCicloActualId(protocolo_paciente_id, nuevo_ciclo_actual_id) {
+    const result = await this.connection.execute(
+      'UPDATE protocolo_paciente SET ciclo_actual_id = :nuevo_ciclo_actual_id WHERE protocolo_paciente_id = :protocolo_paciente_id',
+      { nuevo_ciclo_actual_id: toNum(nuevo_ciclo_actual_id), protocolo_paciente_id: toNum(protocolo_paciente_id) },
+      { autoCommit: true }
+    );
+    return result.rowsAffected > 0;
+  }
+
+  // Actualizar repeticiones_actuales
+  async updateRepeticionesActuales(protocolo_paciente_id, nuevas_repeticiones) {
+    const result = await this.connection.execute(
+      'UPDATE protocolo_paciente SET repeticiones_actuales = :nuevas_repeticiones WHERE protocolo_paciente_id = :protocolo_paciente_id',
+      { nuevas_repeticiones: toNum(nuevas_repeticiones), protocolo_paciente_id: toNum(protocolo_paciente_id) },
+      { autoCommit: true }
+    );
+    return result.rowsAffected > 0;
+  }
 }
