@@ -283,4 +283,96 @@ export class RepositorioRecetaPaciente {
     return receta;
   }
 
+  async obtenerTodasPorIdPaciente(idPaciente) {
+    const result = await this.connection.execute(
+      `SELECT
+          receta_id,
+          fecha_prescripcion,
+          nombre, apellido, tipo_documento, numero_documento,
+          fecha_nacimiento, sexo, nacionalidad,
+          domicilio_calle, domicilio_numero, domicilio_piso,
+          domicilio_depto, codigo_postal, localidad, partido,
+          telefono, email,
+          peso, talla, superficie_corporal,
+          diagnostico, numero_ciclo,
+          protocolo_id, ciclo_id, regimen,
+          paciente_id, profesional_id, estado
+       FROM receta_paciente
+       WHERE paciente_id = :idPaciente`,
+      [idPaciente],
+      { outFormat: this.connection.OUT_FORMAT_OBJECT }
+    );
+
+    if (!result?.rows || result.rows.length === 0) {
+      return null;
+    }
+
+    const recetas = await Promise.all(
+      result.rows.map(async (row) => {
+        const identidad = new Identidad({
+          nombre: toStr(row.NOMBRE),
+          apellido: toStr(row.APELLIDO),
+          tipo_documento: toStr(row.TIPO_DOCUMENTO),
+          numero_documento: toStr(row.NUMERO_DOCUMENTO),
+          fecha_nacimiento: row.FECHA_NACIMIENTO ? new Date(row.FECHA_NACIMIENTO) : null,
+          sexo: toStr(row.SEXO),
+          nacionalidad: toStr(row.NACIONALIDAD),
+        });
+
+        const domicilio = new Domicilio({
+          calle: toStr(row.DOMICILIO_CALLE),
+          numero: toStr(row.DOMICILIO_NUMERO),
+          piso: toStr(row.DOMICILIO_PISO),
+          depto: toStr(row.DOMICILIO_DEPTO),
+          codigo_postal: toStr(row.CODIGO_POSTAL),
+          localidad: toStr(row.LOCALIDAD),
+          partido: toStr(row.PARTIDO),
+        });
+
+        const contacto = new Contacto({
+          telefono: toStr(row.TELEFONO),
+          email: toStr(row.EMAIL),
+        });
+
+        const paciente_snapshot = new PacienteSnapshot({
+          identidad,
+          domicilio,
+          contacto,
+        });
+
+        const datos_paciente = new DatosPaciente({
+          peso: toFloat(row.PESO),
+          talla: toFloat(row.TALLA),
+          superficie_corporal: toFloat(row.SUPERFICIE_CORPORAL),
+        });
+
+        const contexto = new ContextoSnapshot({
+          protocolo_id: toNum(row.PROTOCOLO_ID),
+          ciclo_id: toNum(row.CICLO_ID),
+          regimen: toNum(row.REGIMEN),
+          numero_ciclo: toNum(row.NUMERO_CICLO),
+        });
+
+        const detalles = await this.obtenerDetalles(row.RECETA_ID);
+
+        const receta = new RecetaPaciente({
+          paciente_snapshot,
+          datos_paciente,
+          diagnostico: toStr(row.DIAGNOSTICO),
+          contexto,
+          paciente_id: toNum(row.PACIENTE_ID),
+          profesional_id: toNum(row.PROFESIONAL_ID),
+          estado: toStr(row.ESTADO),
+          detalles,
+        });
+
+        receta.id = toNum(row.RECETA_ID);
+        receta.fecha_prescripcion = row.FECHA_PRESCRIPCION ? new Date(row.FECHA_PRESCRIPCION) : null;
+
+        return receta;
+      })
+    );
+
+    return recetas;
+  }
 }

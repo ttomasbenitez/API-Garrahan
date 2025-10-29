@@ -16,6 +16,10 @@ export class RecetaService {
     return await this.recetaPacienteRepo.obtener(id);
   }
 
+  async obtenerTodas(idPaciente) {
+    return await this.recetaPacienteRepo.obtenerTodasPorIdPaciente(idPaciente);
+  }
+
   async exportar(id, tipo) {
     const receta = await this.obtener(id);
     const protocolo = await this.repositorioProtocolo.obtener(receta.contexto.protocolo_id);

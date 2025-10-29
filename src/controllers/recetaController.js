@@ -6,6 +6,7 @@ import logger from '../utils/logger.js';
 export const makeRecetaController = (recetaPacienteService) => ({
   crear: (req, res) => crearRecetaPaciente(req, res, recetaPacienteService),
   obtener: (req, res) => obtenerRecetaPaciente(req, res, recetaPacienteService),
+  obtenerTodas: (req, res) => obtenerRecetasPaciente(req, res, recetaPacienteService),
   exportar: (req, res) => exportarRecetaPaciente(req, res, recetaPacienteService),
 });
 
@@ -48,5 +49,17 @@ async function exportarRecetaPaciente(req, res, service) {
   } catch (error) {
     logger.error('Error al exportar la receta del paciente: %o', error);
     res.status(error.status || 500).json({ error: error.message || 'Error al exportar la receta del paciente', code: error.code || 'RECETA_PACIENTE_EXPORTACION_ERROR' });
+  }
+}
+
+async function obtenerRecetasPaciente(req, res, service) {
+  try {
+    const paciente_id = req.query.paciente_id;
+    const recetas = await service.obtenerTodas(paciente_id);
+    logger.info('Recetas obtenidas para el paciente con ID: %d', paciente_id);
+    res.status(200).json(recetas);
+  } catch (error) {
+    logger.error('Error al obtener la receta del paciente: %o', error);
+    res.status(error.status || 500).json({ error: error.message || ERROR_RECETA_PACIENTE_NO_ENCONTRADA, code: error.code || ERROR_RECETA_PACIENTE_INEXITENTE_CODE });
   }
 }
