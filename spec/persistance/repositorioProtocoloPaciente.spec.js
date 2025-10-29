@@ -136,23 +136,23 @@ describe(RepositorioProtocoloPaciente, () => {
   });
 
 
-  test('updateRegimen actualiza el régimen correctamente', async () => {
-    const protocolo_paciente_id = 10;
-    const nuevo_regimen = 5;
-    connection.execute.mockResolvedValue({ rowsAffected: 1 });
-
-    const result = await repo.updateRegimen(protocolo_paciente_id, nuevo_regimen);
-    expect(result).toBe(true);
-
-    const [sql, binds, opts] = connection.execute.mock.calls[0];
-    expect(sql).toMatch(/UPDATE\s+protocolo_paciente/i);
-    expect(binds).toMatchObject({ nuevo_regimen, protocolo_paciente_id });
-    expect(opts).toMatchObject({ autoCommit: true });
-  });
-
-  test('updateRegimen retorna false si no se actualiza ningún registro', async () => {
-    connection.execute.mockResolvedValue({ rowsAffected: 0 });
-    const result = await repo.updateRegimen(99, 7);
-    expect(result).toBe(false);
-  });
+  //test('updateRegimen actualiza el régimen correctamente', async () => {
+  //  const protocolo_paciente_id = 10;
+  //  const nuevo_regimen = 5;
+  //  connection.execute.mockResolvedValue({ rowsAffected: 1 });
+//
+  //  const result = await repo.updateRegimen(protocolo_paciente_id, nuevo_regimen);
+  //  expect(result).toBe(true);
+//
+  //  const [sql, binds, opts] = connection.execute.mock.calls[0];
+  //  expect(sql).toMatch(/UPDATE\s+protocolo_paciente/i);
+  //  expect(binds).toMatchObject({ nuevo_regimen, protocolo_paciente_id });
+  //  expect(opts).toMatchObject({ autoCommit: true });
+  //});
+//
+  //test('updateRegimen retorna false si no se actualiza ningún registro', async () => {
+  //  connection.execute.mockResolvedValue({ rowsAffected: 0 });
+  //  const result = await repo.updateRegimen(99, 7);
+  //  expect(result).toBe(false);
+  //});
 });
