@@ -12,6 +12,14 @@ Feature: Gestión de Recetas para Pacientes
       | peso              | 40          |
       | sexo              | M           |
       | obra_social       | OSDE        |
+    And existe en la base de datos el paciente con id "2" y con los datos:
+      | nombre            | Martin      |
+      | apellido          | Palermo     |
+      | id_hospitalario   | P99999      |
+      | fecha_nacimiento  | 2012-12-12  |
+      | peso              | 77          |
+      | sexo              | M           |
+      | obra_social       | OSDE        |
     And existe en la base de datos el protocolo con id "1" y con los datos:
       | nombre      | LLA Pediátrica |
       | enfermedad  | LLA            |
@@ -94,13 +102,13 @@ Feature: Gestión de Recetas para Pacientes
   Scenario: US-11.3 Listar recetas de un paciente
     Given existen en la base de datos las siguientes recetas:
       | receta_id | paciente_id | protocolo_id | ciclo_id | regimen | fecha_receta |
-      | 6001      | 2001        | 10           | 1        | 1       | 2025-10-22   |
-      | 6002      | 2001        | 10           | 1        | 1       | 2025-10-23   |
-      | 7001      | 2002        | 10           | 1        | 1       | 2025-10-22   |
-    When consulto en la API "/recetas?paciente_id=2001"
+      | 6001      | 1           | 1            | 1        | 1       | 2025-10-22   |
+      | 6002      | 1           | 1            | 1        | 1       | 2025-10-23   |
+      | 7001      | 2           | 1            | 1        | 1       | 2025-10-22   |
+    When consulto en la API "/recetas?paciente_id=1"
     Then el sistema me devuelve una lista con 2 recetas
-    And el primer registro tiene "receta_id" = "6001"
-    And el segundo registro tiene "receta_id" = "6002"
+    And el primer registro tiene receta_id = 6001
+    And el segundo registro tiene receta_id = 6002
     And responde correctamente la receta
 
   Scenario: US-11.4 Rechazar creación por FK compuesta de ciclo inválida

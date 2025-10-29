@@ -83,6 +83,54 @@ Given('existe en la base de datos una receta con id {string} y con los datos:', 
     });
 });
 
+Given(/^existen en la base de datos las siguientes recetas:$/, async function (dataTable) {
+  // Convertimos la tabla Gherkin en un array de objetos
+  const recetas = dataTable.hashes();
+
+  for (const receta of recetas) {
+    const body = {
+      nombre: 'Juan',
+      apellido: 'Pérez',
+      tipo_documento: 'DNI',
+      numero_documento: '40123456',
+      fecha_nacimiento: '2020-05-21',
+      sexo: 'M',
+      nacionalidad: 'Argentina',
+      domicilio_calle: 'Av. Corrientes',
+      domicilio_numero: '1234',
+      domicilio_piso: '5',
+      domicilio_depto: 'B',
+      codigo_postal: 'C1043',
+      localidad: 'CABA',
+      partido: 'San Nicolás',
+      telefono: '1122334455',
+      email: 'juan.perez@example.com',
+      peso: 40.4,
+      talla: 140.7,
+      superficie_corporal: 1.2,
+      diagnostico: 'Leucemia Linfoblástica Aguda',
+      numero_ciclo: receta.ciclo_id,
+      protocolo_id: receta.protocolo_id,
+      ciclo_id: receta.ciclo_id,
+      regimen: receta.regimen,
+      paciente_id: receta.paciente_id,
+      profesional_id: 1,
+      estado: 'Activo',
+      fecha_receta: receta.fecha_receta,
+      receta_id: receta.receta_id,
+    };
+
+    const res = await request(app)
+      .post('/recetas')
+      .send(body)
+      .set('Accept', 'application/json')
+      .set('Cookie', this.sessionCookie);
+
+    assert.strictEqual(res.status, 201, `Error creando receta ${receta.receta_id}`);
+    assert.ok(res.body, 'Respuesta vacía del backend al crear receta');
+  }
+});
+
 When('consulto en la API {string} por su id de receta', async function (endpoint) {
   await request(app)
     .get(endpoint)
@@ -159,4 +207,17 @@ Then('se crea correctamente el detalle de receta', function () {
   assert.equal(response.status, 201);
   data = null;
   response = null;
+});
+
+Then('el sistema me devuelve una lista con {int} recetas', function (cantidadRecetas) {
+  assert.equal(Array.isArray(response.body), true, 'La respuesta no es un array');
+  assert.equal(response.body.length, cantidadRecetas, `Se esperaban ${cantidadRecetas} recetas pero se obtuvieron ${response.body.length}`);
+});
+
+Then('el primer registro tiene receta_id = {int}', function (recetaId) {
+  assert.equal(response.body[0].receta_id, recetaId);
+});
+
+Then('el segundo registro tiene receta_id = {int}', function (recetaId) {
+  assert.equal(response.body[1].receta_id, recetaId);
 });
