@@ -1,10 +1,11 @@
 // features/support/hooks.db.ts
-import { BeforeAll, AfterAll, Before, After, setDefaultTimeout } from '@cucumber/cucumber';
+import { BeforeAll, AfterAll, Before, setDefaultTimeout } from '@cucumber/cucumber';
 import { GenericContainer, Wait } from 'testcontainers';
 import oracledb from 'oracledb';
 import fs from 'node:fs/promises';
 import path from 'node:path';
-
+import request from 'supertest';
+import app from '../../src/app.js';
 import oracleDBInstance from '../../src/db/connection_pool.js';
 import config from '../../config.js';
 
@@ -56,14 +57,20 @@ async function enableFks(conn) {
 /** Trunca tablas. Ajustá el orden si no deshabilitás FKs. */
 async function truncateTables(conn) {
   const tables = [
-    'TRATAMIENTO_PACIENTE',        // si la tenés
     'ADMINISTRACION_MEDICACION',
-    'PRESENTACION',                // si la tenés
+    'RECETA_PACIENTE',
+    'RECETA_DETALLE',
     'CICLO',
     'PROTOCOLO',
+    'PRESENTACION_DROGA_VIA',
+    'PRESENTACION_DROGA',
     'DROGA',
+    'PACIENTE_PROFESIONAL',
     'PACIENTE',
-    'PROFESIONAL'
+    'PROFESIONAL',
+    'VIA_ADMINISTRACION',
+    'FORMA_FARMACEUTICA',
+    'PROTOCOLO_PACIENTE'
   ];
   for (const t of tables) {
     try {
@@ -100,18 +107,6 @@ async function resetIdentityColumns(conn) {
   await conn.commit();
 }
 
-/** Opcional: semillas mínimas determinísticas (IDs fijos para estabilidad de tests) */
-async function seedMinimal(conn) {
-  // Ejemplos (adaptá a tus tablas reales):
-  // Usamos IDs fijos porque dejamos las identidades en BY DEFAULT.
-  await conn.execute(
-    'INSERT INTO PROFESIONAL (PROFESIONAL_ID, NOMBRE) VALUES (1001, \'Dra. Test\')'
-  ).catch(() => {});
-  await conn.execute(
-    'INSERT INTO PACIENTE (PACIENTE_ID, NOMBRE, FECHA_NAC) VALUES (2001, \'Paciente Demo\', DATE \'2015-05-01\')'
-  ).catch(() => {});
-}
-
 /** Limpieza dura: FK off → TRUNCATE → reset IDENTITY → FK on */
 async function hardClean(conn) {
   await disableFks(conn);
@@ -134,7 +129,6 @@ BeforeAll({ timeout: 200_000 }, async function () {
   const port = container.getMappedPort(config.oracle.port);
   config.oracle.connectString = `${host}:${port}/${config.oracle.service}`;
 
-  // Conexión SYS para crear app_user
   const sysConn = await oracledb.getConnection({
     user: config.oracle.admin,
     password: config.oracle.adminPassword,
@@ -169,12 +163,21 @@ BeforeAll({ timeout: 200_000 }, async function () {
   await conn.close();
 });
 
+Before(async function () {
+  const res = await request(app)
+    .post('/auth/login-test')
+    .send({ id: '2', name: 'Dr. Juan', role: 'admin' })
+    .set('Accept', 'application/json');
+
+  this.sessionCookie = res.headers['set-cookie'];
+});
+
 Before({ timeout: 60_000 }, async function () {
   const pool = oracleDBInstance.getPool();
   const conn = await pool.getConnection();
   try {
     await hardClean(conn);
-    await seedMinimal(conn); // opcional
+    //await seedMinimal(conn); // opcional
   } finally {
     await conn.close();
   }

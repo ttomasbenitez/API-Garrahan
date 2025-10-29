@@ -1,6 +1,7 @@
 import { Given, When, Then, Before } from '@cucumber/cucumber';
 import request from 'supertest';
 import app from '../../src/app.js';
+import assert from 'node:assert/strict';
 
 Before(function () {
   this.profesional = {};
@@ -36,7 +37,8 @@ When(/^publico en el endpoint de profesionales "(.*)" con los datos$/, async fun
   const response = await request(app)
     .post(endpoint)
     .send(this.profesional)
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
   this.response = response;
 });
 
@@ -44,7 +46,7 @@ Then('el profesional se crea correctamente', function () {
   const response = this.response;
   if (!response) throw new Error('No se recibió respuesta');
   if (response.status !== 201) throw new Error(`Status esperado 201, recibido ${response.status}`);
-  if (!response.body.id) throw new Error('No se recibió id del profesional');
+  if (!response.body.profesional_id) throw new Error('No se recibió id del profesional');
 });
 
 Then(/^obtengo el error "(.*)"$/, function (mensajeEsperado) {
@@ -60,55 +62,29 @@ Given(
   /^existe un profesional con nombre "(.*)", apellido "(.*)", dni "(.*)", matricula "(.*)", especialidad "(.*)"$/,
   async function (nombre, apellido, dni, matricula, especialidad) {
     const res = await request(app)
-      .post('/profesional')
+      .post('/profesionales')
       .send({ nombre, apellido, dni, matricula, especialidad })
-      .set('Accept', 'application/json');
+      .set('Accept', 'application/json')
+      .set('Cookie', this.sessionCookie);
     if (res.status !== 201) throw new Error(`No se pudo crear el profesional: ${res.status}`);
 
     this.id_esperado = res.body.id;
   }
 );
 
-When(/^consulto en la API de profesionales$/, async function () {
-  this.response = await request(app).get(`/profesional/${this.id_esperado}`).set('Accept', 'application/json');
+When(/^consulto en la API "(.*)" por su id de profesional$/, async function (endpoint) {
+  this.response = await request(app)
+    .get(endpoint)
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 });
 
 Then(/^el sistema me devuelve el profesional con id correspondiente$/, function () {
   if (!this.response) throw new Error('No hay respuesta');
   if (this.response.status !== 200) throw new Error(`Status esperado 200, recibido ${this.response.status}`);
-  this.response = JSON.parse(this.response.body);
-  if (this.response.id.toString() !== this.id_esperado.toString()) {
-    throw new Error(`ID esperado ${this.id_esperado}, recibido ${this.response.id}`);
-  }
+  this.body = this.response.body;
 });
 
-Then(/^el nombre del profesional es "(.*)"$/, function (nombre) {
-  if (this.response.nombre !== nombre) {
-    throw new Error(`Nombre esperado ${nombre}, recibido ${this.response.nombre}`);
-  }
+Then(/^"(.*)" del profesional es "(.*)"$/, function (key, value) {
+  assert(this.body[key].toString() === value, `Se esperaba ${value} pero se obtuvo ${this.body[key]}`);
 });
-
-Then(/^apellido del profesional es "(.*)"$/, function (apellido) {
-  if (this.response.apellido !== apellido) {
-    throw new Error(`Apellido esperado ${apellido}, recibido ${this.response.apellido}`);
-  }
-});
-
-Then(/^dni del profesional es "(.*)"$/, function (dni) {
-  if (this.response.dni.toString() !== dni) {
-    throw new Error(`DNI esperado ${dni}, recibido ${this.response.dni}`);
-  }
-});
-
-Then(/^matricula del profesional es "(.*)"$/, function (matricula) {
-  if (this.response.matricula !== matricula) {
-    throw new Error(`Matrícula esperada ${matricula}, recibida ${this.response.matricula}`);
-  }
-});
-
-Then(/^especialidad del profesional es "(.*)"$/, function (especialidad) {
-  if (this.response.especialidad !== especialidad) {
-    throw new Error(`Especialidad esperada ${especialidad}, recibida ${this.response.especialidad}`);
-  }
-});
-

@@ -20,6 +20,9 @@ export default {
   },
   app: {
     port: process.env.APP_PORT || 3000,
-    node_env: process.env.NODE_ENV || 'test'
+    node_env: process.env.NODE_ENV || 'test',
+    jwtSecret: process.env.JWT_SECRET || 'super-secret-key',
+    apiHospitalUrl: process.env.API_HOSPITAL_URL,
+    apiHospitalPort: process.env.API_HOSPITAL_PORT || 4000
   }
 };

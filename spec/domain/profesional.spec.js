@@ -4,7 +4,7 @@ import Profesional from '../../src/domain/profesional';
 describe('Profesional', () => {
   test('deberia crear un profesional con todos los campos obligatorios', () => {
     const profesional = new Profesional('Walter', 'Perez', 20981812, 'MP12345', 'Oncología', 101);
-    expect(profesional.id).toBe(101);
+    expect(profesional.profesional_id).toBe(101);
     expect(profesional.dni).toBe(20981812);
     expect(profesional.nombre).toBe('Walter');
     expect(profesional.apellido).toBe('Perez');

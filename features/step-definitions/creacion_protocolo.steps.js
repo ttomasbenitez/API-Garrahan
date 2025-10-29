@@ -22,7 +22,8 @@ When(/^publico en la API "(.*)" con los datos$/, async function (endpoint) {
   response = await request(app)
     .post(endpoint)
     .send(data)
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 });
 
 Then('el protocolo se crea correctamente', function () {
@@ -45,20 +46,49 @@ Then('el sistema responde correctamente', function () {
 Given(/^existe en la base de datos un protocolo con el nombre de "(.*)" con id "(.*)"$/, async function (nombreProtocolo, _idProtocolo) {
   data = { nombre: nombreProtocolo, enfermedad: 'Osteosarcoma', linea: 'primera linea' };
   await request(app)
-    .post('/protocolo')
+    .post('/protocolos')
     .send(data)
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 });
 
 When(/^consulto en la API "(.*)"$/, async function (endpoint) {
   response = await request(app)
     .get(endpoint)
-    .set('Accept', 'application/json');
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
+});
+
+Then(/^el sistema me devuelve una lista que contiene los siguientes protocolos:$/, function (dataTable) {
+  if (!response) throw new Error('No se recibió respuesta');
+  if (response.status !== 200) throw new Error(`Status esperado 200, recibido ${response.status}`);
+
+  const actualProtocolos = response.body;
+  if (!Array.isArray(actualProtocolos)) {
+    throw new Error('La respuesta de la API no es un array, pero el test esperaba una lista.');
+  }
+
+  // Convertimos la tabla Gherkin en un array de objetos
+  const expectedProtocolos = dataTable.hashes();
+
+  for (const expected of expectedProtocolos) {
+    const idBuscado = parseInt(expected.protocolo_id, 10);
+
+    const actual = actualProtocolos.find(p => p.protocolo_id === idBuscado);
+
+    assert.ok(actual, `No se encontró el protocolo con id ${idBuscado} en la respuesta.`);
+
+    assert.strictEqual(
+      actual.nombre,
+      expected.nombre,
+      `El nombre para el protocolo id ${idBuscado} no coincide. Esperado: "${expected.nombre}", Recibido: "${actual.nombre}"`
+    );
+  }
 });
 
 Then(/^el sistema me devuelve el protocolo con id "(.*)"$/, function (id) {
   if (response.status !== 200) throw new Error(`Status esperado 200, recibido ${response.status}`);
-  response = JSON.parse(response.body);
+  response = response.body;
   assert.strictEqual(response.protocolo_id, parseInt(id, 10));
 });
 
@@ -84,12 +114,12 @@ Given(/^quiero agregar al protocolo con id "(.*)" un ciclo de tratamiento con lo
 });
 
 const compareCicle = (idProtocolo, idCiclo) => {
-  const index = response.ciclos.findIndex(c => c.id === parseInt(idCiclo, 10));
+  const index = response.ciclos.findIndex(c => c.ciclo_id === parseInt(idCiclo, 10));
   if (index === -1) throw new Error(`No se encontró el ciclo con id ${idCiclo} en el protocolo ${idProtocolo}`);
   const ciclo = response.ciclos[index];
   const esperado = data.find(d => d.ciclo_id === idCiclo);
   assert.ok(esperado, `No se encontraron datos esperados para el ciclo con id ${idCiclo}`);
-  assert.strictEqual(ciclo.id, parseInt(esperado.ciclo_id, 10));
+  assert.strictEqual(ciclo.ciclo_id, parseInt(esperado.ciclo_id, 10));
   assert.strictEqual(ciclo.protocolo_id, parseInt(esperado.protocolo_id, 10));
   assert.strictEqual(ciclo.regimen, parseInt(esperado.regimen, 10));
   assert.strictEqual(ciclo.duracion_semanas, parseInt(esperado.duracion_semanas, 10));
@@ -98,12 +128,13 @@ const compareCicle = (idProtocolo, idCiclo) => {
 
 Then(/^el ciclo de tratamiento se agrega correctamente al protocolo "(.*)" con id "(.*)"$/,  async function (idProtocolo, idCiclo) {
   response = await request(app)
-    .get('/protocolo/' + idProtocolo)
-    .set('Accept', 'application/json');
+    .get('/protocolos/' + idProtocolo)
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 
   if (!response) throw new Error('No se recibió respuesta');
   if (response.status !== 200) throw new Error(`Status esperado 200, recibido ${response.status}`);
-  response = JSON.parse(response.body);
+  response = response.body;
   assert.strictEqual(response.protocolo_id, parseInt(idProtocolo, 10));
   assert.ok(response.ciclos);
   compareCicle(idProtocolo, idCiclo);
@@ -112,12 +143,13 @@ Then(/^el ciclo de tratamiento se agrega correctamente al protocolo "(.*)" con i
 
 Then(/^el ciclo de tratamiento se agrega correctamente al protocolo "(.*)" con los ids "(.*)","(.*)"$/,  async function (idProtocolo, idCiclo1, idCiclo2) {
   response = await request(app)
-    .get('/protocolo/' + idProtocolo)
-    .set('Accept', 'application/json');
+    .get('/protocolos/' + idProtocolo)
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
 
   if (!response) throw new Error('No se recibió respuesta');
   if (response.status !== 200) throw new Error(`Status esperado 200, recibido ${response.status}`);
-  response = JSON.parse(response.body);
+  response = response.body;
   assert.strictEqual(response.protocolo_id, parseInt(idProtocolo, 10));
   assert.ok(response.ciclos);
   compareCicle(idProtocolo, idCiclo1);

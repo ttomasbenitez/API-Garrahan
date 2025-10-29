@@ -5,7 +5,7 @@ export class ProfesionalService {
 
   async crear(profesional) {
     const id = await this.profesionalRepo.guardar(profesional);
-    profesional.id = id;
+    profesional.profesional_id = id;
     return id;
   }
 

@@ -1,3 +1,4 @@
+import AdministracionMedicacion from '../domain/protocolo/administracionMedicacion.js';
 import Ciclo from '../domain/protocolo/ciclo.js';
 import Protocolo from '../domain/protocolo/index.js';
 import { ERROR_CAMPOS_REQUERIDOS } from '../errors/index.js';
@@ -6,6 +7,7 @@ import logger from '../utils/logger.js';
 export const makeProtocoloController = (protocoloService, drogaService) => ({
   crear: (req, res) => crearProtocolo(req, res, protocoloService),
   obtener: (req, res) => obtenerProtocolo(req, res, protocoloService),
+  obtenerTodos: (req, res) => obtenerProtocolos(req, res, protocoloService),
   agregarCiclo: (req, res) => agregarCiclo(req, res, protocoloService),
   agregarAdministracion: (req, res) => agregarAdministracion(req, res, protocoloService, drogaService),
 });
@@ -29,7 +31,19 @@ async function obtenerProtocolo(req, res, service) {
     const { id } = req.params;
     const protocolo = await service.obtener(id);
     logger.info('Protocolo obtenido con ID: %d', protocolo.protocolo_id);
-    res.status(200).json(JSON.stringify(protocolo));
+    res.status(200).json(protocolo);
+  } catch (error) {
+    logger.error('Error al obtener protocolo: %o', error);
+    res.status(500).json({ error: error.message });
+  }
+}
+
+async function obtenerProtocolos(req, res, service) {
+  try {
+    const { id } = req.params;
+    const protocolos = await service.obtenerTodos(id);
+    logger.info('Protocolos obtenidos');
+    res.status(200).json(protocolos);
   } catch (error) {
     logger.error('Error al obtener protocolo: %o', error);
     res.status(500).json({ error: error.message });
@@ -43,7 +57,8 @@ async function agregarCiclo(req, res, service) {
     const errors = [];
 
     const ciclos = payload.map((c) => {
-      if (!c.ciclo_id || !c.regimen || !c.duracion_semanas || c.ciclo_final === undefined || !c.repeticiones) {
+      if (!c.ciclo_id || c.regimen === undefined || !c.duracion_semanas ||
+        c.ciclo_final === undefined || c.repeticiones === undefined) {
         errors.push('validation_error');
         return;
       }
@@ -71,7 +86,7 @@ async function agregarCiclo(req, res, service) {
   }
 }
 
-async function agregarAdministracion(req, res, protocoloService, drogaService) {
+async function agregarAdministracion(req, res, protocoloService) {
   try {
     const protocoloId = Number(req.params.id);
     const cicloId = Number(req.params.id_ciclo);
@@ -79,19 +94,33 @@ async function agregarAdministracion(req, res, protocoloService, drogaService) {
 
     const payload = Array.isArray(req.body) ? req.body : [req.body];
 
-    const administracion_medicaciones = await protocoloService.validarAdministraciones(payload, drogaService);
-
     const protocolo = await protocoloService.obtener(protocoloId);
     const ciclo = protocolo.validarCicloEnRegimen(cicloId, regimen);
+
+    const administracion_medicacion = payload.map(d => new AdministracionMedicacion(
+      protocoloId,
+      cicloId,
+      regimen,
+      Number(d.droga_id),
+      Number(d.via_id),
+      Number(d.fuerza_valor),
+      d.fuerza_unidad,
+      Number(d.cantidad_dias),
+      Number(d.frecuencia_diaria),
+    ));
 
     const protocoloConAdmin = await protocoloService.agregarAdministracion(
       protocolo,
       ciclo,
-      administracion_medicaciones,
+      administracion_medicacion,
     );
+    const protocoloFiltrado = {
+      ...protocoloConAdmin,
+      ciclos: protocoloConAdmin.ciclos.filter(c => c.ciclo_id === cicloId && c.regimen === regimen)
+    };
 
     logger.info('Administración agregada al ciclo ID: %d del protocolo ID: %d', cicloId, protocoloId);
-    res.status(201).json(protocoloConAdmin);
+    res.status(201).json(protocoloFiltrado);
   }
 
   catch (error) {

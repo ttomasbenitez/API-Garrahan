@@ -1,6 +1,9 @@
 import oracledb from 'oracledb';
 import config from '../../config.js';
 
+// Configuración global
+oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
+
 class oracleBD {
   pool = null;
 
@@ -23,7 +26,16 @@ class oracleBD {
   async withConnection(fn) {
     const pool = this.getPool();
     const conn = await pool.getConnection();
-    try { return await fn(conn); } finally { await conn.close(); }
+
+    try {
+      // 🔥 Seteamos la zona horaria local de Argentina en la sesión
+      await conn.execute('ALTER SESSION SET TIME_ZONE = \'America/Argentina/Buenos_Aires\'');
+
+      // Ejecutamos la función del usuario con esta sesión ya configurada
+      return await fn(conn);
+    } finally {
+      await conn.close();
+    }
   }
 
   async execute(...args) {

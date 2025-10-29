@@ -1,6 +1,7 @@
 import oracledb from 'oracledb';
 import { ERROR_DROGRA_CREACION } from '../errors/droga.js';
 import Droga from '../domain/droga/index.js';
+import { toStr } from '../utils/formatters.js';
 
 export class RepositorioDroga {
   constructor(db) {
@@ -11,31 +12,19 @@ export class RepositorioDroga {
     try {
       const result = await this.db.withConnection(async (conn) => {
         const sql = `
-        INSERT INTO droga (medicamento, presentacion, dosis, dosis_unidad, dosis_maxima, dosis_maxima_unidad)
-        VALUES (:medicamento, :presentacion, :dosis, :dosis_unidad, :dosis_maxima, :dosis_maxima_unidad)
-        RETURNING id_droga INTO :id
+        INSERT INTO droga (nombre_generico)
+        VALUES (:nombre_generico)
+        RETURNING droga_id INTO :id
       `;
-        const toNum = (v) => (v === undefined || v === null || v === '' ? null : Number(v));
-        const toStr = (v) => (v === undefined || v === null ? null : String(v));
 
         const binds = drogas.map(d => ({
-          medicamento: toStr(d.medicamento),
-          presentacion: toStr(d.presentacion),
-          dosis: toNum(d.dosis),
-          dosis_unidad: toStr(d.dosis_unidad),
-          dosis_maxima: toNum(d.dosis_maxima),
-          dosis_maxima_unidad: toStr(d.dosis_maxima_unidad),
+          nombre_generico: toStr(d.nombre_generico),
         }));
 
         const opts = {
           autoCommit: true,
           bindDefs: {
-            medicamento: { type: oracledb.STRING, maxSize: 100 },
-            presentacion: { type: oracledb.STRING, maxSize: 100 },
-            dosis: { type: oracledb.NUMBER },
-            dosis_unidad: { type: oracledb.STRING, maxSize: 20 },
-            dosis_maxima: { type: oracledb.NUMBER },
-            dosis_maxima_unidad: { type: oracledb.STRING, maxSize: 20 },
+            nombre_generico: { type: oracledb.STRING, maxSize: 100 },
             id: { type: oracledb.NUMBER, dir: oracledb.BIND_OUT }
           }
         };
@@ -54,7 +43,7 @@ export class RepositorioDroga {
 
   async obtener(id) {
     const result = await this.db.execute(
-      'SELECT medicamento, presentacion, dosis, dosis_unidad, dosis_maxima, dosis_maxima_unidad, id_droga FROM droga WHERE id_droga = :id',
+      'SELECT nombre_generico, droga_id FROM droga WHERE droga_id = :id',
       [id]
     );
 
@@ -62,6 +51,7 @@ export class RepositorioDroga {
       return null;
     }
 
-    return new Droga(...result.rows[0]);
+    const row = result.rows[0];
+    return new Droga(row.NOMBRE_GENERICO, row.DROGA_ID);
   }
 }
