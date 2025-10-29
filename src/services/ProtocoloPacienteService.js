@@ -16,9 +16,10 @@ export class ProtocoloPacienteService {
     return this.protocoloPacienteRepo.obtenerPorPaciente(paciente_id, protocolo_id);
   }
 
-  // Actualizar el régimen de un protocolo_paciente
-  async updateRegimen(protocolo_paciente_id, nuevo_regimen) {
-    return this.protocoloPacienteRepo.updateRegimen(protocolo_paciente_id, nuevo_regimen);
+
+  // Actualización parcial de protocolo_paciente
+  async updateParcial(protocolo_paciente_id, campos) {
+    return this.protocoloPacienteRepo.actualizarParcialmente(protocolo_paciente_id, campos);
   }
 
   // Solicitar más ciclos para un paciente

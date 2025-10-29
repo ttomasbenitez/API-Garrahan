@@ -92,33 +92,51 @@ export class RepositorioProtocoloPaciente {
     }));
   }
 
-  // Actualizar el régimen de un protocolo_paciente
-  async updateRegimen(protocolo_paciente_id, nuevo_regimen) {
-    const result = await this.connection.execute(
-      'UPDATE protocolo_paciente SET regimen = :nuevo_regimen WHERE protocolo_paciente_id = :protocolo_paciente_id',
-      { nuevo_regimen: toNum(nuevo_regimen), protocolo_paciente_id: toNum(protocolo_paciente_id) },
-      { autoCommit: true }
-    );
-    return result.rowsAffected > 0;
+  // Actualización parcial de protocolo_paciente
+  async actualizarParcialmente(protocolo_paciente_id, campos) {
+    const keys = Object.keys(campos);
+    if (keys.length === 0) {
+      return protocolo_paciente_id;
+    }
+
+    const setStatements = [];
+    const bindParams = {};
+
+    // Formatear campos según tipo
+    const formattedFields = {
+      regimen: campos.regimen !== undefined ? toNum(campos.regimen) : undefined,
+      ciclo_actual_id: campos.ciclo_actual_id !== undefined ? toNum(campos.ciclo_actual_id) : undefined,
+      numero_ciclo: campos.numero_ciclo !== undefined ? toNum(campos.numero_ciclo) : undefined,
+      fecha_inicio: campos.fecha_inicio,
+      fecha_fin: campos.fecha_fin,
+      estado: campos.estado,
+      profesional_id_asignador: campos.profesional_id_asignador !== undefined ? toNum(campos.profesional_id_asignador) : undefined,
+      fecha_asignacion: campos.fecha_asignacion,
+      ciclo_final: campos.ciclo_final !== undefined ? (campos.ciclo_final ? 1 : 0) : undefined,
+      repeticiones_actuales: campos.repeticiones_actuales !== undefined ? toNum(campos.repeticiones_actuales) : undefined
+    };
+
+    for (const key of keys) {
+      if (formattedFields[key] !== undefined) {
+        setStatements.push(`${key} = :${key}`);
+        bindParams[key] = formattedFields[key];
+      }
+    }
+    setStatements.push('ultima_modificacion = SYSDATE');
+    const setClause = setStatements.join(', ');
+    bindParams.protocolo_paciente_id = toNum(protocolo_paciente_id);
+
+    const sql = `
+      UPDATE protocolo_paciente
+      SET ${setClause}
+      WHERE protocolo_paciente_id = :protocolo_paciente_id
+    `;
+
+    const result = await this.connection.execute(sql, bindParams, { autoCommit: true });
+    if (result.rowsAffected === 0) {
+      throw new Error('Protocolo paciente no encontrado');
+    }
+    return protocolo_paciente_id;
   }
 
-  // Actualizar ciclo_actual_id
-  async updateCicloActualId(protocolo_paciente_id, nuevo_ciclo_actual_id) {
-    const result = await this.connection.execute(
-      'UPDATE protocolo_paciente SET ciclo_actual_id = :nuevo_ciclo_actual_id WHERE protocolo_paciente_id = :protocolo_paciente_id',
-      { nuevo_ciclo_actual_id: toNum(nuevo_ciclo_actual_id), protocolo_paciente_id: toNum(protocolo_paciente_id) },
-      { autoCommit: true }
-    );
-    return result.rowsAffected > 0;
-  }
-
-  // Actualizar repeticiones_actuales
-  async updateRepeticionesActuales(protocolo_paciente_id, nuevas_repeticiones) {
-    const result = await this.connection.execute(
-      'UPDATE protocolo_paciente SET repeticiones_actuales = :nuevas_repeticiones WHERE protocolo_paciente_id = :protocolo_paciente_id',
-      { nuevas_repeticiones: toNum(nuevas_repeticiones), protocolo_paciente_id: toNum(protocolo_paciente_id) },
-      { autoCommit: true }
-    );
-    return result.rowsAffected > 0;
-  }
 }
