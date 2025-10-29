@@ -92,10 +92,10 @@ When(/^consulto en la API de "(.*)"$/, async function (endpoint) {
     .set('Cookie', this.sessionCookie);
 });
 
-When(/^modifico en la API "(.*)" por el peso "(.*)" y obra_social "(.*)"$/, async function (endpoint, peso, obra_social) {
+When(/^modifico en la API "(.*)" por el peso "(.*)", altura "(.*)" y obra_social "(.*)"$/, async function (endpoint, peso, altura, obra_social) {
   const response = await request(app)
     .patch(endpoint)
-    .send({'peso': Number(peso), 'obra_social': obra_social})
+    .send({'peso': Number(peso), 'altura': Number(altura), 'obra_social': obra_social})
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
   this.response = response;
@@ -110,9 +110,9 @@ When(/^publico en el endpoint "(.*)" con los datos del paciente$/, async functio
   this.response = response;
 });
 
-Then('el paciente {int} ahora tiene peso {int} y obra_social {string}', async function (idPaciente, nuevo_peso, nueva_obra_social) {
+Then('el paciente {int} ahora tiene peso {int}, altura {int} y obra_social {string}', async function (idPaciente, nuevo_peso, nueva_altura, nueva_obra_social) {
   const result = await oracleDBInstance.execute(
-    `SELECT peso, obra_social
+    `SELECT peso, altura, obra_social
      FROM paciente
      WHERE paciente_id = :id`,
     { id: idPaciente }
@@ -121,7 +121,7 @@ Then('el paciente {int} ahora tiene peso {int} y obra_social {string}', async fu
   const row = result.rows[0];
   const pesoEnBDD = Number(row.PESO);
   assert.strictEqual(pesoEnBDD, Number(nuevo_peso));
-
+  assert.strictEqual(Number(row.ALTURA), Number(nueva_altura));
   const obraSocialEnBDD = row.OBRA_SOCIAL;
   assert.strictEqual(obraSocialEnBDD, nueva_obra_social);
 });

@@ -109,6 +109,7 @@ export class RepositorioPaciente {
 
     const formattedFields = {
       peso: toFloat(campos.peso),
+      altura: Number(campos.altura),
       obra_social: toStr(campos.obra_social)
     };
 

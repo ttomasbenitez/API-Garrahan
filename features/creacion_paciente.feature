@@ -65,9 +65,9 @@ Feature: Creación paciente
             | altura            | 70          |
             | sexo              | M           |
             | obra_social       | OSDE        |
-        When modifico en la API "/pacientes/1" por el peso "42" y obra_social "OCA"
+        When modifico en la API "/pacientes/1" por el peso "42", altura "100" y obra_social "OCA"
         Then el sistema devuelve el estado "200"
-        And el paciente 1 ahora tiene peso 42 y obra_social "OCA"
+        And el paciente 1 ahora tiene peso 42, altura 100 y obra_social "OCA"
 
     Scenario: US-03.4 Obtener pacientes
       Given existe en la base de datos un paciente con id "1" llamado "Martin Palermo"
