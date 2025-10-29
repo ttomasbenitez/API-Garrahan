@@ -98,17 +98,16 @@ Feature: Gestión de Recetas para Pacientes
     Then el sistema me devuelve la receta con id "1"
     And responde correctamente la receta
 
-  @wip
   Scenario: US-11.3 Listar recetas de un paciente
     Given existen en la base de datos las siguientes recetas:
       | receta_id | paciente_id | protocolo_id | ciclo_id | regimen | fecha_receta |
-      | 6001      | 1           | 1            | 1        | 1       | 2025-10-22   |
-      | 6002      | 1           | 1            | 1        | 1       | 2025-10-23   |
-      | 7001      | 2           | 1            | 1        | 1       | 2025-10-22   |
-    When consulto en la API "/recetas?paciente_id=1"
+      | 1         | 1           | 1            | 1        | 1       | 2025-10-22   |
+      | 2         | 1           | 1            | 1        | 1       | 2025-10-23   |
+      | 3         | 2           | 1            | 1        | 1       | 2025-10-22   |
+    When consulto la API de "/recetas?paciente_id=1"
     Then el sistema me devuelve una lista con 2 recetas
-    And el primer registro tiene receta_id = 6001
-    And el segundo registro tiene receta_id = 6002
+    And el primer registro tiene receta_id = 1
+    And el segundo registro tiene receta_id = 2
     And responde correctamente la receta
 
   Scenario: US-11.4 Rechazar creación por FK compuesta de ciclo inválida

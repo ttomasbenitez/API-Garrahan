@@ -203,6 +203,13 @@ When('publico en la API {string} con los datos del detalle', async function (end
     });
 });
 
+When(/^consulto la API de "(.*)"$/, async function (endpoint) {
+  response = await request(app)
+    .get(endpoint)
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
+});
+
 Then('se crea correctamente el detalle de receta', function () {
   assert.equal(response.status, 201);
   data = null;
@@ -215,9 +222,9 @@ Then('el sistema me devuelve una lista con {int} recetas', function (cantidadRec
 });
 
 Then('el primer registro tiene receta_id = {int}', function (recetaId) {
-  assert.equal(response.body[0].receta_id, recetaId);
+  assert.equal(response.body[0].id, recetaId);
 });
 
 Then('el segundo registro tiene receta_id = {int}', function (recetaId) {
-  assert.equal(response.body[1].receta_id, recetaId);
+  assert.equal(response.body[1].id, recetaId);
 });
