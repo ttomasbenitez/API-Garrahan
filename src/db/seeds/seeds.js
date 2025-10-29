@@ -228,8 +228,8 @@ async function createPacientes(cookie) {
 
 async function createProtocoloPaciente(cookie) {
   const pacientes = [
-    { nombre: 'María', apellido: 'Pérez', id_hospitalario: 'H001', fecha_nacimiento: '2020-05-12', peso: 30.5, sexo: 'F', profesional_id: 1, obra_social: 'OSDE' },
-    { nombre: 'Juan', apellido: 'Esposito', id_hospitalario: 'H002', fecha_nacimiento: null, peso: null, sexo: 'M', profesional_id: 2, obra_social: null }
+    { nombre: 'María', apellido: 'Pérez', id_hospitalario: 'H001', fecha_nacimiento: '2020-05-12', peso: 30.5, altura: 90, sexo: 'F', profesional_id: 1, obra_social: 'OSDE' },
+    { nombre: 'Juan', apellido: 'Esposito', id_hospitalario: 'H002', fecha_nacimiento: null, peso: null,  altura: null, sexo: 'M', profesional_id: 2, obra_social: null }
   ];
 
   const datosProtocoloPaciente = {
