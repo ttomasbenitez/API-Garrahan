@@ -179,6 +179,7 @@ Given('existe un profesional con pacientes asignados', async function () {
       id_hospitalario: `P-${Date.now()}`,
       fecha_nacimiento: '2010-01-01',
       peso: 25,
+      altura: 70,
       sexo: 'M',
       obra_social: 'OSDE',
       profesional_id: this.profesionalLogueadoId
@@ -234,6 +235,7 @@ Given('existe un paciente con profesional principal', async function () {
       id_hospitalario: `P-${Date.now()}`,
       fecha_nacimiento: '2010-01-01',
       peso: 25,
+      altura: 70,
       sexo: 'M',
       obra_social: 'OSDE',
       profesional_id: this.profesionalPrincipal.profesional_id
@@ -351,6 +353,7 @@ Given('que existe un paciente con nombre {string} y apellido {string}', async fu
     id_hospitalario: `P-${Date.now()}`,
     fecha_nacimiento: '2010-01-01',
     peso: 25,
+    altura: 70,
     sexo: 'M',
     obra_social: 'OSDE',
     profesional_id: this.profesionalLogueadoId

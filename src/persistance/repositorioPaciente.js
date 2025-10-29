@@ -15,9 +15,9 @@ export class RepositorioPaciente {
 
     const result = await this.connection.execute(
       `INSERT INTO paciente (
-            nombre, apellido, id_hospitalario, fecha_nacimiento, peso, sexo, ultima_modificacion, obra_social
+            nombre, apellido, id_hospitalario, fecha_nacimiento, peso, altura, sexo, ultima_modificacion, obra_social
           ) VALUES (
-            :nombre, :apellido, :id_hospitalario, :fecha_nacimiento, :peso, :sexo, SYSDATE, :obra_social
+            :nombre, :apellido, :id_hospitalario, :fecha_nacimiento, :peso, :altura, :sexo, SYSDATE, :obra_social
           )
           RETURNING paciente_id INTO :id`,
       {
@@ -26,6 +26,7 @@ export class RepositorioPaciente {
         id_hospitalario: toStr(paciente.id_hospitalario),
         fecha_nacimiento: paciente.fecha_nacimiento,
         peso: toFloat(paciente.peso),
+        altura: Number(paciente.altura),
         sexo: toStr(paciente.sexo),
         obra_social: toStr(paciente.obra_social),
         id: { dir: oracledb.BIND_OUT, type: oracledb.NUMBER },
@@ -45,7 +46,7 @@ export class RepositorioPaciente {
   async obtener(id) {
 
     const result = await this.connection.execute(
-      `SELECT paciente_id, nombre, apellido, id_hospitalario, fecha_nacimiento, peso, sexo, ultima_modificacion, obra_social
+      `SELECT paciente_id, nombre, apellido, id_hospitalario, fecha_nacimiento, peso, altura, sexo, ultima_modificacion, obra_social
            FROM paciente
            WHERE paciente_id = :id`,
       [id]
@@ -62,6 +63,7 @@ export class RepositorioPaciente {
       row.ID_HOSPITALARIO,
       row.FECHA_NACIMIENTO ? new Date(row.FECHA_NACIMIENTO).toISOString().split('T')[0] : null,
       row.PESO,
+      row.ALTURA,
       row.SEXO,
       row.OBRA_SOCIAL,
       row.ULTIMA_MODIFICACION,
@@ -71,7 +73,7 @@ export class RepositorioPaciente {
 
   async obtenerTodos() {
     const result = await this.connection.execute(
-      `SELECT paciente_id, nombre, apellido, id_hospitalario, fecha_nacimiento, peso, sexo, ultima_modificacion, obra_social
+      `SELECT paciente_id, nombre, apellido, id_hospitalario, fecha_nacimiento, peso, altura, sexo, ultima_modificacion, obra_social
            FROM paciente`,
     );
 
@@ -83,6 +85,7 @@ export class RepositorioPaciente {
         row.ID_HOSPITALARIO,
         row.FECHA_NACIMIENTO ? new Date(row.FECHA_NACIMIENTO).toISOString().split('T')[0] : null,
         row.PESO,
+        row.ALTURA,
         row.SEXO,
         row.OBRA_SOCIAL,
         row.ULTIMA_MODIFICACION,

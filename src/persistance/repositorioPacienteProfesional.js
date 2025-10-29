@@ -98,7 +98,7 @@ export class RepositorioPacienteProfesional {
     const result = await this.connection.execute(
       `SELECT pp.profesional_id, pp.paciente_id, pp.rol,
               pac.nombre, pac.apellido, pac.id_hospitalario, pac.fecha_nacimiento, pac.peso,
-              pac.ultima_modificacion, pac.sexo, pac.obra_social
+              pac.altura, pac.ultima_modificacion, pac.sexo, pac.obra_social
        FROM paciente_profesional pp
        JOIN paciente pac ON pp.paciente_id = pac.paciente_id  
        WHERE pp.profesional_id = :profesional_id
@@ -117,6 +117,7 @@ export class RepositorioPacienteProfesional {
       row.ID_HOSPITALARIO,
       row.FECHA_NACIMIENTO ? new Date(row.FECHA_NACIMIENTO).toISOString().split('T')[0] : null,
       row.PESO,
+      row.ALTURA,
       row.SEXO,
       row.OBRA_SOCIAL,
       row.ULTIMA_MODIFICACION,

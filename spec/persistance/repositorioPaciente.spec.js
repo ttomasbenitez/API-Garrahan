@@ -23,7 +23,7 @@ describe(RepositorioPaciente, () => {
 
   test('guardar paciente funciona correctamente devolviendo el id de la creación', async () => {
     const paciente = new Paciente(
-      'Juan', 'Pérez', 'P12345', '2020-05-21', 30, 'M', 'OSDE'
+      'Juan', 'Pérez', 'P12345', '2020-05-21', 30, 70, 'M', 'OSDE'
     );
 
     connection.execute.mockResolvedValue({
@@ -54,7 +54,7 @@ describe(RepositorioPaciente, () => {
 
   test('guardar paciente lanza error si no se crea', async () => {
     const paciente = new Paciente(
-      'Lucía', 'Gómez', 'P67890', '2011-11-10', 55, 'F', null
+      'Lucía', 'Gómez', 'P67890', '2011-11-10', 55, 60, 'F', null
     );
 
     connection.execute.mockResolvedValue({
@@ -72,6 +72,7 @@ describe(RepositorioPaciente, () => {
       ID_HOSPITALARIO: 'P12345',
       FECHA_NACIMIENTO: '2020-05-21',
       PESO: 30,
+      ALTURA: 70,
       SEXO: 'M',
       PACIENTE_ID: 123,
       ULTIMA_MODIFICACION: null,
@@ -91,6 +92,7 @@ describe(RepositorioPaciente, () => {
       id_hospitalario: row.ID_HOSPITALARIO,
       fecha_nacimiento: row.FECHA_NACIMIENTO,
       peso: row.PESO,
+      altura: row.ALTURA,
       sexo: row.SEXO,
       paciente_id: row.PACIENTE_ID,
       ultima_modificacion: row.ULTIMA_MODIFICACION,

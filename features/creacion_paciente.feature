@@ -14,6 +14,7 @@ Feature: Creación paciente
             | id_hospitalario   | P12345      |
             | fecha_nacimiento  | 2020-05-21  |
             | peso              | 30          |
+            | altura            | 60          |
             | sexo              | M           |
             | obra_social       | OSDE        |
         When publico en el endpoint "/pacientes" con los datos del paciente
@@ -26,6 +27,7 @@ Feature: Creación paciente
             | id_hospitalario   | P12345      |
             | fecha_nacimiento  | 2020-05-21  |
             | peso              | 40          |
+            | altura            | 70          |
             | sexo              | M           |
             | obra_social       | OSDE        |
         When consulto en la API "/pacientes/1" por su id de paciente
@@ -35,6 +37,7 @@ Feature: Creación paciente
         And "id_hospitalario" del paciente esperado es "P12345"
         And "fecha_nacimiento" del paciente esperada es "2020-05-21"
         And "peso" del paciente esperado es "40"
+        And "altura" del paciente esperado es "70"
         And "sexo" del paciente esperado es "M"
         And "obra_social" del paciente esperado es "OSDE"
 
@@ -45,6 +48,7 @@ Feature: Creación paciente
             | id_hospitalario   | P12345      |
             | fecha_nacimiento  | 2020-05-21  |
             | peso              | 40          |
+            | altura            | 70          |
             | sexo              | M           |
             | obra_social       | OSDE        |
         When consulto en la API "/pacientes/1" por su id de paciente
@@ -58,6 +62,7 @@ Feature: Creación paciente
             | id_hospitalario   | P12345      |
             | fecha_nacimiento  | 2020-05-21  |
             | peso              | 40          |
+            | altura            | 70          |
             | sexo              | M           |
             | obra_social       | OSDE        |
         When modifico en la API "/pacientes/1" por el peso "42" y obra_social "OCA"
