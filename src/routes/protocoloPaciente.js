@@ -6,6 +6,7 @@ export default function buildProtocoloPacienteRouter(controller) {
   r.post('/:paciente_id/protocolos', authMiddleware, requireRole('admin', 'medico'), controller.crear);
   r.get('/:paciente_id/protocolos', authMiddleware, requireRole('admin', 'medico'), controller.obtenerPorPaciente);
   r.get('/:paciente_id/protocolos/:protocolo_id', authMiddleware, requireRole('admin', 'medico'), controller.obtenerEspecifico);
+  r.patch('/protocolo-paciente/:protocolo_paciente_id/regimen', authMiddleware, requireRole('admin', 'medico'), controller.updateRegimen);
 
   return r;
 }

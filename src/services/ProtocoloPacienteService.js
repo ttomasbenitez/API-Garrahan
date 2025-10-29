@@ -14,4 +14,9 @@ export class ProtocoloPacienteService {
   async obtenerPorPaciente(paciente_id, protocolo_id = null) {
     return this.protocoloPacienteRepo.obtenerPorPaciente(paciente_id, protocolo_id);
   }
+
+  // Actualizar el régimen de un protocolo_paciente
+  async updateRegimen(protocolo_paciente_id, nuevo_regimen) {
+    return this.protocoloPacienteRepo.updateRegimen(protocolo_paciente_id, nuevo_regimen);
+  }
 }

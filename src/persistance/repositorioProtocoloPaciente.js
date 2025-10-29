@@ -91,4 +91,14 @@ export class RepositorioProtocoloPaciente {
       fecha_asignacion: row.FECHA_ASIGNACION
     }));
   }
+
+  // Actualizar el régimen de un protocolo_paciente
+  async updateRegimen(protocolo_paciente_id, nuevo_regimen) {
+    const result = await this.connection.execute(
+      'UPDATE protocolo_paciente SET regimen = :nuevo_regimen WHERE protocolo_paciente_id = :protocolo_paciente_id',
+      { nuevo_regimen: toNum(nuevo_regimen), protocolo_paciente_id: toNum(protocolo_paciente_id) },
+      { autoCommit: true }
+    );
+    return result.rowsAffected > 0;
+  }
 }
