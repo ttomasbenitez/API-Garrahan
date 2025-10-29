@@ -51,6 +51,19 @@ Feature: Creación paciente
         Then el sistema devuelve el estado "404"
         And el mensaje de error "Paciente no asociado a profesional"
 
+    Scenario: US-03.4 Modificar campos en paciente existente
+        Given existe un paciente con los siguientes datos asociado al médico con id "2":
+            | nombre            | Juan        |
+            | apellido          | Pérez       |
+            | id_hospitalario   | P12345      |
+            | fecha_nacimiento  | 2020-05-21  |
+            | peso              | 40          |
+            | sexo              | M           |
+            | obra_social       | OSDE        |
+        When modifico en la API "/pacientes/1" por el peso "42" y obra_social "OCA"
+        Then el sistema devuelve el estado "200"
+        And el paciente 1 ahora tiene peso 42 y obra_social "OCA"
+
     Scenario: US-03.4 Obtener pacientes
       Given existe en la base de datos un paciente con id "1" llamado "Martin Palermo"
       And existe en la base de datos un paciente con id "2" llamado "Leandro Paredes"

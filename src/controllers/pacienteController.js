@@ -8,6 +8,7 @@ export const makePacienteController = (pacienteService) => ({
   obtenerTodos: (req, res) => obtenerPacientes(req, res, pacienteService),
   obtenerEquipoTratante: (req, res) => obtenerEquipoTratante(req, res, pacienteService),
   obtenerExterno: (req, res) => obtenerPacienteExterno(req, res, pacienteService),
+  actualizarParcialmente: (req, res) => actualizarParcialmente(req, res, pacienteService),
 });
 
 async function crearPaciente(req, res, service) {
@@ -74,6 +75,19 @@ async function obtenerPacienteExterno(req, res, service) {
     else {
       res.status(500).json({ error: error.message });
     }
+  }
+}
+
+async function actualizarParcialmente(req, res, service) {
+  try {
+    const { id } = req.params;
+
+    await service.actualizarParcialmente(id, req.body);
+    logger.info('Paciente actualizado con ID: %d', id);
+    res.status(200).json(id);
+  } catch (error) {
+    logger.error('Error al actualizar paciente: %o', error);
+    res.status(500).json({ error: error.message });
   }
 }
 

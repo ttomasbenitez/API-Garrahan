@@ -8,6 +8,7 @@ export default function buildPacientesRouter(controller) {
   r.get('/:id', authMiddleware, requireRole('admin', 'medico'), controller.obtener);
   r.get('/:id/equipo-tratante', controller.obtenerEquipoTratante);
   r.get('/:id/externo', authMiddleware, requireRole('admin', 'medico'), controller.obtenerExterno);
+  r.patch('/:id', authMiddleware, requireRole('admin', 'medico'), controller.actualizarParcialmente);
 
   return r;
 }

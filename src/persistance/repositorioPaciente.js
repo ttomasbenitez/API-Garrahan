@@ -92,4 +92,57 @@ export class RepositorioPaciente {
 
     return pacientes;
   }
+
+  async actualizarParcialmente(id, campos) {
+    const keys = Object.keys(campos);
+
+    if (keys.length === 0) {
+      return id;
+    }
+
+    // 1. Preparar la cláusula SET y los bind variables
+    const setStatements = [];
+    const bindParams = {};
+
+    const formattedFields = {
+      peso: toFloat(campos.peso),
+      obra_social: toStr(campos.obra_social)
+    };
+
+    // 2. Construir la cláusula SET con bind variables de Oracle (:campo)
+    for (const key of keys) {
+      // Ignorar claves que no existen o son null/undefined en el objeto formateado si no se deben actualizar
+      if (formattedFields[key] !== undefined) {
+        setStatements.push(`${key} = :${key}`);
+        bindParams[key] = formattedFields[key];
+      }
+    }
+
+    // Agregar el campo de auditoría: siempre se actualiza
+    setStatements.push('ultima_modificacion = SYSDATE');
+
+    const setClause = setStatements.join(', ');
+
+    // 3. Agregar el ID y el autoCommit para la ejecución
+    bindParams.id = id;
+
+    const sql = `
+        UPDATE paciente
+        SET ${setClause}
+        WHERE paciente_id = :id
+    `;
+
+    const result = await this.connection.execute(
+      sql,
+      bindParams,
+      { autoCommit: true }
+    );
+
+    if (result.rowsAffected === 0) {
+      // Si no actualizó nada, probablemente el ID no existe
+      throw new Error(ERROR_PACIENTE_NO_ENCONTRADO);
+    }
+
+    return id;
+  }
 }

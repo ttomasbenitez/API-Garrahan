@@ -92,6 +92,14 @@ When(/^consulto en la API de "(.*)"$/, async function (endpoint) {
     .set('Cookie', this.sessionCookie);
 });
 
+When(/^modifico en la API "(.*)" por el peso "(.*)" y obra_social "(.*)"$/, async function (endpoint, peso, obra_social) {
+  const response = await request(app)
+    .patch(endpoint)
+    .send({'peso': Number(peso), 'obra_social': obra_social})
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
+  this.response = response;
+});
 
 When(/^publico en el endpoint "(.*)" con los datos del paciente$/, async function (endpoint) {
   const response = await request(app)
@@ -100,6 +108,22 @@ When(/^publico en el endpoint "(.*)" con los datos del paciente$/, async functio
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
   this.response = response;
+});
+
+Then('el paciente {int} ahora tiene peso {int} y obra_social {string}', async function (idPaciente, nuevo_peso, nueva_obra_social) {
+  const result = await oracleDBInstance.execute(
+    `SELECT peso, obra_social
+     FROM paciente
+     WHERE paciente_id = :id`,
+    { id: idPaciente }
+  );
+
+  const row = result.rows[0];
+  const pesoEnBDD = Number(row.PESO);
+  assert.strictEqual(pesoEnBDD, Number(nuevo_peso));
+
+  const obraSocialEnBDD = row.OBRA_SOCIAL;
+  assert.strictEqual(obraSocialEnBDD, nueva_obra_social);
 });
 
 Then('el paciente se crea correctamente', function () {

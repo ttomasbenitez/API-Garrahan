@@ -18,6 +18,10 @@ export class PacienteService {
 
   async obtenerTodos() { return this.pacienteRepo.obtenerTodos(); }
 
+  async actualizarParcialmente(paciente_id, campos) {
+    return this.pacienteRepo.actualizarParcialmente(paciente_id, campos);
+  }
+
   async obtenerExterno(id) {
     return this.apiHospitalConector.obtenerPaciente(id);
   }
