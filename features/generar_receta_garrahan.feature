@@ -14,9 +14,10 @@ Feature: Generacion recetas
       | obra_social       | OSDE        |
       | dni               | 40123456    |
     And existe en la base de datos el protocolo con id "1" y con los datos:
-      | nombre      | LLA Pediátrica |
-      | enfermedad  | LLA            |
-      | linea       | 1              |
+      | nombre             | LLA Pediátrica |
+      | enfermedad         | LLA            |
+      | linea              | 1              |
+      | cantidad_regimenes | 2              |
     And existe el ciclo del protocolo "1" con:
       | ciclo_id         | 1 |
       | regimen          | 1 |

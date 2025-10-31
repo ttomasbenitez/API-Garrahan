@@ -171,12 +171,12 @@ Given('existe una receta del paciente con id {string} y con los datos:', async f
 });
 
 
-Given('la receta con id {string} tiene los detalles:', function (string, dataTable) {
+Given('la receta con id {string} tiene los detalles:', function (_string, dataTable) {
   const detalles = dataTable.rowsHash();
   data.detalles = data.detalles ? [...data.detalles, detalles] : [detalles];
 });
 
-Given('la receta con id {string} está guardada en el sistema', async function (id) {
+Given('la receta con id {string} está guardada en el sistema', async function (_id) {
   await request(app)
     .post('/recetas')
     .send(data)

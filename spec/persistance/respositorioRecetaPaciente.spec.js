@@ -1,8 +1,6 @@
 /* global describe, test, expect, jest, beforeEach */
-import oracleDB from '../../src/db/connection_pool.js';
 import RecetaPaciente from '../../src/domain/receta/recetaPaciente.js';
 import { RepositorioRecetaPaciente } from '../../src/persistance/repositorioRecetaPaciente.js';
-import { toFloat } from '../../src/utils/formatters.js';
 import { createMockOracleDB } from '../helpers/mockConnection.js';
 
 describe(RepositorioRecetaPaciente, () => {

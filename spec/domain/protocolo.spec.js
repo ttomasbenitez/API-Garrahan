@@ -23,7 +23,7 @@ describe('Protocolo', () => {
   let connExecuteMock;
 
   const agregarProtocolo = async () => {
-    protocolo = new Protocolo('Osteosarcoma GBTO 2006 - No metastásico', 'Osteosarcoma', 'primera linea', 1);
+    protocolo = new Protocolo('Osteosarcoma GBTO 2006 - No metastásico', 'Osteosarcoma', 'primera linea', 2, 1);
 
     // Creamos el mock de la conexión y su método execute
     connExecuteMock = jest.fn().mockResolvedValue({
@@ -68,10 +68,11 @@ describe('Protocolo', () => {
   });
 
   test('deberia crear un protocolo con todos los campos obligatorios', () => {
-    const protocol = new Protocolo('Osteosarcoma GBTO 2006 - No metastásico', 'Osteosarcoma', 'primera linea', 1);
+    const protocol = new Protocolo('Osteosarcoma GBTO 2006 - No metastásico', 'Osteosarcoma', 'primera linea', 2, 1);
     expect(protocol.nombre).toBe('Osteosarcoma GBTO 2006 - No metastásico');
     expect(protocol.enfermedad).toBe('Osteosarcoma');
     expect(protocol.linea).toBe('primera linea');
+    expect(protocol.cantidad_regimenes).toBe(2);
   });
 
   test('deberia poder agregar ciclos asociados al protocolo', async () => {

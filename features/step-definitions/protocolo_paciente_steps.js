@@ -31,8 +31,8 @@ Given(/^existe en la base de datos un paciente con id "(.*)" llamado "(.*)"$/, a
 
 Given(/^existe en la base de datos un protocolo con id "(.*)" llamado "(.*)"$/, async function (idProtocolo, nombreProtocolo) {
   await oracleDBInstance.execute(
-    `INSERT INTO protocolo (protocolo_id, nombre, enfermedad, linea) 
-     VALUES (:id, :nombre, 'Test', '1ra')`,
+    `INSERT INTO protocolo (protocolo_id, nombre, enfermedad, linea, cantidad_regimenes) 
+     VALUES (:id, :nombre, 'Test', '1ra', 2)`,
     { id: Number(idProtocolo), nombre: nombreProtocolo },
     { autoCommit: true }
   );

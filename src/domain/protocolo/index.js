@@ -1,9 +1,10 @@
 class Protocolo {
 
-  constructor(nombre, enfermedad, linea, protocolo_id = null, ciclos = []) {
+  constructor(nombre, enfermedad, linea, cantidad_regimenes, protocolo_id = null, ciclos = []) {
     this.nombre = nombre;
     this.enfermedad = enfermedad;
     this.linea = linea;
+    this.cantidad_regimenes = cantidad_regimenes;
     this.protocolo_id = protocolo_id;
     this.ciclos = ciclos;
   }

@@ -161,7 +161,7 @@ describe(RepositorioProtocolo, () => {
 
     expect(db.execute).toHaveBeenCalledTimes(2); // TODO: cambiar a 3 cuando se agregue la administración de medicación
     const [sql, binds] = db.execute.mock.calls[0];
-    expect(sql).toMatch(/SELECT\s+protocolo_id,\s+nombre,\s+enfermedad,\s+linea\s+FROM\s+protocolo/i);
+    expect(sql).toMatch(/SELECT\s+protocolo_id,\s+nombre,\s+enfermedad,\s+linea,\s+cantidad_regimenes\s+FROM\s+protocolo/i);
     expect(binds).toEqual([123]);
   });
 

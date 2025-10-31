@@ -89,7 +89,6 @@ async function solicitarMasCiclos(req, res, service) {
   }
 }
 
-
 // PATCH genérico para protocolo paciente
 async function patchProtocoloPaciente(req, res, service) {
   try {
