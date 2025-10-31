@@ -350,6 +350,7 @@ Given('que existe un paciente con nombre {string} y apellido {string}', async fu
   const pacientePayload = {
     nombre,
     apellido,
+    dni: '12345678',
     id_hospitalario: `P-${Date.now()}`,
     fecha_nacimiento: '2010-01-01',
     peso: 25,

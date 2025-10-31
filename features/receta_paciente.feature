@@ -12,6 +12,7 @@ Feature: Gestión de Recetas para Pacientes
       | peso              | 40          |
       | sexo              | M           |
       | obra_social       | OSDE        |
+      | dni               | 40123456    |
     And existe en la base de datos el paciente con id "2" y con los datos:
       | nombre            | Martin      |
       | apellido          | Palermo     |
@@ -20,6 +21,7 @@ Feature: Gestión de Recetas para Pacientes
       | peso              | 77          |
       | sexo              | M           |
       | obra_social       | OSDE        |
+      | dni               | 30987654    |
     And existe en la base de datos el protocolo con id "1" y con los datos:
       | nombre      | LLA Pediátrica |
       | enfermedad  | LLA            |

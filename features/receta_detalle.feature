@@ -12,6 +12,7 @@ Feature: Gestión del Detalle de Recetas
       | peso              | 40          |
       | sexo              | M           |
       | obra_social       | OSDE        |
+      | dni               | 40123456    |
     And existe en la base de datos el protocolo con id "1" y con los datos:
       | nombre      | LLA Pediátrica |
       | enfermedad  | LLA            |

@@ -17,6 +17,7 @@ Feature: Creación paciente
             | altura            | 60          |
             | sexo              | M           |
             | obra_social       | OSDE        |
+            | dni               | 12345678    |
         When publico en el endpoint "/pacientes" con los datos del paciente
         Then el paciente se crea correctamente
 
@@ -30,6 +31,7 @@ Feature: Creación paciente
             | altura            | 70          |
             | sexo              | M           |
             | obra_social       | OSDE        |
+            | dni               | 12345678    |
         When consulto en la API "/pacientes/1" por su id de paciente
         Then el sistema me devuelve el paciente correspondiente
         And "nombre" del paciente esperado es "Juan"
@@ -39,6 +41,7 @@ Feature: Creación paciente
         And "peso" del paciente esperado es "40"
         And "altura" del paciente esperado es "70"
         And "sexo" del paciente esperado es "M"
+        And "dni" del paciente esperado es "12345678"
         And "obra_social" del paciente esperado es "OSDE"
 
     Scenario: US-03.3 Intentar obtener un paciente no asignado al médico por su id
@@ -51,6 +54,7 @@ Feature: Creación paciente
             | altura            | 70          |
             | sexo              | M           |
             | obra_social       | OSDE        |
+            | dni               | 12345678    |
         When consulto en la API "/pacientes/1" por su id de paciente
         Then el sistema devuelve el estado "404"
         And el mensaje de error "Paciente no asociado a profesional"

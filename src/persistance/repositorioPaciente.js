@@ -3,7 +3,6 @@ import Paciente from '../domain/paciente.js';
 import { ERROR_PACIENTE_CREACION, ERROR_PACIENTE_NO_ENCONTRADO } from '../errors/paciente.js';
 import { RepositorioPacienteProfesional } from './repositorioPacienteProfesional.js';
 import { toFloat, toStr } from '../utils/formatters.js';
-import Protocolo from '../domain/protocolo/index.js';
 
 export class RepositorioPaciente {
   constructor(connection) {
@@ -15,9 +14,9 @@ export class RepositorioPaciente {
 
     const result = await this.connection.execute(
       `INSERT INTO paciente (
-            nombre, apellido, id_hospitalario, fecha_nacimiento, peso, altura, sexo, ultima_modificacion, obra_social
+            nombre, apellido, id_hospitalario, fecha_nacimiento, peso, altura, sexo, ultima_modificacion, obra_social, dni
           ) VALUES (
-            :nombre, :apellido, :id_hospitalario, :fecha_nacimiento, :peso, :altura, :sexo, SYSDATE, :obra_social
+            :nombre, :apellido, :id_hospitalario, :fecha_nacimiento, :peso, :altura, :sexo, SYSDATE, :obra_social, :dni
           )
           RETURNING paciente_id INTO :id`,
       {
@@ -29,6 +28,7 @@ export class RepositorioPaciente {
         altura: Number(paciente.altura),
         sexo: toStr(paciente.sexo),
         obra_social: toStr(paciente.obra_social),
+        dni: toStr(paciente.dni),
         id: { dir: oracledb.BIND_OUT, type: oracledb.NUMBER },
       },
       { autoCommit: true }
@@ -46,7 +46,7 @@ export class RepositorioPaciente {
   async obtener(id) {
 
     const result = await this.connection.execute(
-      `SELECT paciente_id, nombre, apellido, id_hospitalario, fecha_nacimiento, peso, altura, sexo, ultima_modificacion, obra_social
+      `SELECT paciente_id, nombre, apellido, id_hospitalario, fecha_nacimiento, peso, altura, sexo, ultima_modificacion, obra_social, dni
            FROM paciente
            WHERE paciente_id = :id`,
       [id]
@@ -66,6 +66,7 @@ export class RepositorioPaciente {
       row.ALTURA,
       row.SEXO,
       row.OBRA_SOCIAL,
+      row.DNI,
       row.ULTIMA_MODIFICACION,
       row.PACIENTE_ID,
     );
@@ -73,7 +74,7 @@ export class RepositorioPaciente {
 
   async obtenerTodos() {
     const result = await this.connection.execute(
-      `SELECT paciente_id, nombre, apellido, id_hospitalario, fecha_nacimiento, peso, altura, sexo, ultima_modificacion, obra_social
+      `SELECT paciente_id, nombre, apellido, id_hospitalario, fecha_nacimiento, peso, altura, sexo, ultima_modificacion, obra_social, dni
            FROM paciente`,
     );
 
@@ -88,6 +89,7 @@ export class RepositorioPaciente {
         row.ALTURA,
         row.SEXO,
         row.OBRA_SOCIAL,
+        row.DNI,
         row.ULTIMA_MODIFICACION,
         row.PACIENTE_ID,
       ));

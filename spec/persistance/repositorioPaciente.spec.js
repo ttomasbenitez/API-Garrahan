@@ -23,7 +23,7 @@ describe(RepositorioPaciente, () => {
 
   test('guardar paciente funciona correctamente devolviendo el id de la creación', async () => {
     const paciente = new Paciente(
-      'Juan', 'Pérez', 'P12345', '2020-05-21', 30, 70, 'M', 'OSDE'
+      'Juan', 'Pérez', 'P12345', '2020-05-21', 30, 70, 'M', 'OSDE', '12345678'
     );
 
     connection.execute.mockResolvedValue({
@@ -42,6 +42,7 @@ describe(RepositorioPaciente, () => {
     expect(binds1).toMatchObject({
       nombre: paciente.nombre,
       apellido: paciente.apellido,
+      dni: paciente.dni,
       id_hospitalario: paciente.id_hospitalario,
       fecha_nacimiento: paciente.fecha_nacimiento,
       peso: paciente.peso,
@@ -54,7 +55,7 @@ describe(RepositorioPaciente, () => {
 
   test('guardar paciente lanza error si no se crea', async () => {
     const paciente = new Paciente(
-      'Lucía', 'Gómez', 'P67890', '2011-11-10', 55, 60, 'F', null
+      'Lucía', 'Gómez', 'P67890', '2011-11-10', 55, 60, 'F', null, '87654321'
     );
 
     connection.execute.mockResolvedValue({
@@ -76,7 +77,8 @@ describe(RepositorioPaciente, () => {
       SEXO: 'M',
       PACIENTE_ID: 123,
       ULTIMA_MODIFICACION: null,
-      OBRA_SOCIAL: 'OSDE'
+      OBRA_SOCIAL: 'OSDE',
+      DNI: '12345678'
     };
 
     connection.execute.mockResolvedValue({
@@ -96,7 +98,8 @@ describe(RepositorioPaciente, () => {
       sexo: row.SEXO,
       paciente_id: row.PACIENTE_ID,
       ultima_modificacion: row.ULTIMA_MODIFICACION,
-      obra_social: row.OBRA_SOCIAL
+      obra_social: row.OBRA_SOCIAL,
+      dni: row.DNI
     });
 
     expect(connection.execute).toHaveBeenCalledTimes(1);
