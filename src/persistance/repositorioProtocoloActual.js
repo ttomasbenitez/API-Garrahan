@@ -20,6 +20,8 @@ export class RepositorioProtocoloActual {
           VA.nombre AS via_administracion,
           AM.fuerza_valor,
           AM.fuerza_unidad,
+          AM.cantidad_dias,
+          AM.frecuencia_diaria,
           FF.nombre AS formato_droga
       FROM
           protocolo_paciente PP
@@ -65,6 +67,8 @@ export class RepositorioProtocoloActual {
         row.FORMATO_DROGA,
         row.FUERZA_VALOR,
         row.FUERZA_UNIDAD,
+        row.CANTIDAD_DIAS,
+        row.FRECUENCIA_DIARIA
       )
     );
 

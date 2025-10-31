@@ -98,6 +98,26 @@ class RecetaPaciente {
     return domicilio;
   }
 
+  edad() {
+    const hoy = new Date();
+    const nacimiento = new Date(this.paciente_snapshot.identidad.fecha_nacimiento);
+
+    let anos = hoy.getFullYear() - nacimiento.getFullYear();
+    const m = hoy.getMonth() - nacimiento.getMonth();
+    if (m < 0 || (m === 0 && hoy.getDate() < nacimiento.getDate())) {
+      anos--;
+    }
+
+    const ultimoCumpleanos = new Date(hoy.getFullYear(), nacimiento.getMonth(), nacimiento.getDate());
+    if (hoy < ultimoCumpleanos) {
+      ultimoCumpleanos.setFullYear(hoy.getFullYear() - 1);
+    }
+    const diferenciaEnMilisegundos = hoy - ultimoCumpleanos;
+    const dias = Math.floor(diferenciaEnMilisegundos / (1000 * 60 * 60 * 24));
+
+    return `${anos} años y ${dias} días`;
+  }
+
 
   validar() {
     this.paciente_snapshot.validar();

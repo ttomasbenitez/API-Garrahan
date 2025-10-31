@@ -40,12 +40,14 @@ async function exportarRecetaPaciente(req, res, service) {
   try {
     const { id } = req.params;
     const tipo = req.query.tipo || RECETA_TIPO_HOSPITALARIA;
+    logger.info('Exportando receta del paciente con ID: %d y tipo: %s', id, tipo);
     const recetaExportada = await service.exportar(id, tipo);
     logger.info('Receta del paciente exportada con ID: %d', id);
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename=receta_${req.params.id}.pdf`);
     res.send(recetaExportada);
     res.status(200);
+    logger.info('Receta del paciente exportada con ID: %d', id);
   } catch (error) {
     logger.error('Error al exportar la receta del paciente: %o', error);
     res.status(error.status || 500).json({ error: error.message || 'Error al exportar la receta del paciente', code: error.code || 'RECETA_PACIENTE_EXPORTACION_ERROR' });
