@@ -21,7 +21,7 @@ Feature: Gestión del Detalle de Recetas
       | regimen          | 1 |
       | duracion_semanas | 4 |
       | ciclo_final      | 0 |
-      | repeticiones     | 1 |
+      | repeticiones     | 0 |
     And existe la droga con id "1" y con los datos:
       | nombre_generico | CISPLATINO |
     And existe la vía de administración con id "1" y con los datos:

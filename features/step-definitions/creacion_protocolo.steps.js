@@ -123,7 +123,7 @@ const compareCicle = (idProtocolo, idCiclo) => {
   assert.strictEqual(ciclo.protocolo_id, parseInt(esperado.protocolo_id, 10));
   assert.strictEqual(ciclo.regimen, parseInt(esperado.regimen, 10));
   assert.strictEqual(ciclo.duracion_semanas, parseInt(esperado.duracion_semanas, 10));
-  assert.strictEqual(ciclo.repeticiones, parseInt(esperado.repeticiones, 10));
+  assert.strictEqual(ciclo.repeticiones, parseInt(esperado.repeticiones, 0));
 };
 
 Then(/^el ciclo de tratamiento se agrega correctamente al protocolo "(.*)" con id "(.*)"$/,  async function (idProtocolo, idCiclo) {

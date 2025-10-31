@@ -29,7 +29,7 @@ Feature: Gestión de Recetas para Pacientes
       | regimen          | 1 |
       | duracion_semanas | 4 |
       | ciclo_final      | 0 |
-      | repeticiones     | 1 |
+      | repeticiones     | 0 |
     And estoy logueado como médico con id "1"
 
   Scenario: US-11.1 Crear una nueva receta (campos mínimos)

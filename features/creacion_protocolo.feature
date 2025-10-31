@@ -38,7 +38,7 @@ Feature: Crear un protocolo
             | regimen          | 0               |
             | duracion_semanas | 5               |
             | ciclo_final      | false           |
-            | repeticiones     | 1               |
+            | repeticiones     | 0               |
         When publico en la API "/protocolos/1/ciclos" con los datos
         Then el ciclo de tratamiento se agrega correctamente al protocolo "1" con id "2"
         And el sistema responde correctamente
@@ -51,7 +51,7 @@ Feature: Crear un protocolo
             | regimen          | 0               |
             | duracion_semanas | 5               |
             | ciclo_final      | false           |
-            | repeticiones     | 1               |
+            | repeticiones     | 0               |
         Given quiero agregar al protocolo con id "1" un ciclo de tratamiento con los siguientes datos
             | protocolo_id     | 1               |
             | ciclo_id         | 4               |

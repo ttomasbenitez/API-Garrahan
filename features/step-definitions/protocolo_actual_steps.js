@@ -136,7 +136,7 @@ Given(/^el Protocolo (\d+) incluye un Ciclo {ciclo_id: (\d+), regimen: (\d+), du
     regimen: parseInt(rId, 10),
     duracion_semanas: parseInt(duracion, 10),
     ciclo_final: '0',
-    repeticiones: 6
+    repeticiones: 0
   };
 
   response = await request(app)
