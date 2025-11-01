@@ -26,6 +26,7 @@ async function createProtocolo(cookie) {
       nombre: 'Osteosarcoma GBTO 2006 - No metastásico',
       enfermedad: 'Osteosarcoma',
       linea: '1',
+      cantidad_regimenes: 3
     }),
   });
   return res.json();
