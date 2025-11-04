@@ -183,6 +183,7 @@ CREATE TABLE protocolo_paciente (
   estado                  VARCHAR2(50),
   profesional_id_asignador NUMBER,
   fecha_asignacion        TIMESTAMP,
+  cambiar_regimen         CHAR(1) CHECK (cambiar_regimen IN ('0','1')),
   -- Índice único útil para evitar duplicados del mismo protocolo/regimen por paciente; incluye el ciclo actual
   CONSTRAINT uq_ppaciente UNIQUE (paciente_id, protocolo_id, regimen),
   -- Atención al orden: debe coincidir con el PK (protocolo_id, ciclo_id, regimen)
