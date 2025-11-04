@@ -88,7 +88,7 @@ Feature: Asignar y consultar protocolos de un paciente
       | profesional_id_asignador | 1          |
     When modifico en el endpoint "/pacientes/1/protocolos/1/ciclo-actual"
     Then el sistema responde con estado "200"
-    And el protocolo paciente con id 1 tiene ahora ciclo_actual_id 2, regimen 0 y cambiar_regimen "0"
+    And el protocolo paciente con id 1 tiene ahora ciclo_actual_id 2, regimen 0, repeticiones actuales 0 y cambiar_regimen "0"
 
   Scenario: US-11.8 Modificar ciclo y nuevo regimen requerido
     Given existe en la base de datos un protocolo asignado al paciente con id "1" con los siguientes datos
@@ -101,7 +101,21 @@ Feature: Asignar y consultar protocolos de un paciente
       | profesional_id_asignador | 1          |
     When modifico en el endpoint "/pacientes/1/protocolos/1/ciclo-actual"
     Then el sistema responde con estado "200"
-    And el protocolo paciente con id 1 tiene ahora ciclo_actual_id 3, regimen 1 y cambiar_regimen "1" 
+    And el protocolo paciente con id 1 tiene ahora ciclo_actual_id 3, regimen 1, repeticiones actuales 0 y cambiar_regimen "1" 
+
+  Scenario: US-11.9 Modificar ciclo final modifica repeticiones actuales
+    Given existe en la base de datos un protocolo asignado al paciente con id "1" con los siguientes datos
+      | protocolo_id             | 1          |
+      | regimen                  | 0          |
+      | ciclo_actual_id          | 2          |
+      | numero_ciclo             | 1          |
+      | fecha_inicio             | 2025-10-07 |
+      | estado                   | ACTIVO     |
+      | profesional_id_asignador | 1          |
+    When modifico en el endpoint "/pacientes/1/protocolos/1/ciclo-actual"
+    And modifico en el endpoint "/pacientes/1/protocolos/1/ciclo-actual"
+    Then el sistema responde con estado "200"
+    And el protocolo paciente con id 1 tiene ahora ciclo_actual_id 3, regimen 1, repeticiones actuales 1 y cambiar_regimen "1"
 
   @wip
   Scenario: US-11.6 Conflicto por duplicado (mismo protocolo/regimen ya asignado)
