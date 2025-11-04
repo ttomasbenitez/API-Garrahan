@@ -108,12 +108,12 @@ async function patchProtocoloPaciente(req, res, service) {
 
 async function actualizarCicloActual(req, res, service) {
   try {
-    const { paciente_id, protocolo_paciente_id } = req.params;
-    if (!protocolo_paciente_id) {
-      return res.status(400).json({ error: 'protocolo_paciente_id es requerido' });
+    const { paciente_id } = req.params;
+    if (!paciente_id) {
+      return res.status(400).json({ error: 'paciente_id es requerido' });
     }
-    const id = await service.actualizarCicloActual(paciente_id, protocolo_paciente_id);
-    res.status(200).json({ actualizado: true, protocolo_paciente_id: id });
+    const id = await service.actualizarCicloActual(paciente_id);
+    res.status(200).json({ actualizado: true, paciente_id: id });
   } catch (error) {
     logger.error('Error al actualizar ciclo actual de protocolo paciente: %o', error);
     res.status(500).json({ error: error.message });

@@ -86,7 +86,7 @@ Feature: Asignar y consultar protocolos de un paciente
       | fecha_inicio             | 2025-10-07 |
       | estado                   | ACTIVO     |
       | profesional_id_asignador | 1          |
-    When modifico en el endpoint "/pacientes/1/protocolos/1/ciclo-actual"
+    When modifico en el endpoint "/pacientes/1/protocolos"
     Then el sistema responde con estado "200"
     And el protocolo paciente con id 1 tiene ahora ciclo_actual_id 2, regimen 0, repeticiones actuales 0 y cambiar_regimen "0"
 
@@ -99,7 +99,7 @@ Feature: Asignar y consultar protocolos de un paciente
       | fecha_inicio             | 2025-10-07 |
       | estado                   | ACTIVO     |
       | profesional_id_asignador | 1          |
-    When modifico en el endpoint "/pacientes/1/protocolos/1/ciclo-actual"
+    When modifico en el endpoint "/pacientes/1/protocolos"
     Then el sistema responde con estado "200"
     And el protocolo paciente con id 1 tiene ahora ciclo_actual_id 3, regimen 1, repeticiones actuales 0 y cambiar_regimen "1" 
 
@@ -112,8 +112,8 @@ Feature: Asignar y consultar protocolos de un paciente
       | fecha_inicio             | 2025-10-07 |
       | estado                   | ACTIVO     |
       | profesional_id_asignador | 1          |
-    When modifico en el endpoint "/pacientes/1/protocolos/1/ciclo-actual"
-    And modifico en el endpoint "/pacientes/1/protocolos/1/ciclo-actual"
+    When modifico en el endpoint "/pacientes/1/protocolos"
+    And modifico en el endpoint "/pacientes/1/protocolos"
     Then el sistema responde con estado "200"
     And el protocolo paciente con id 1 tiene ahora ciclo_actual_id 3, regimen 1, repeticiones actuales 1 y cambiar_regimen "1"
 

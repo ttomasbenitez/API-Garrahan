@@ -19,8 +19,8 @@ export class ProtocoloPacienteService {
     return this.protocoloPacienteRepo.obtenerPorPaciente(paciente_id, protocolo_id);
   }
 
-  async actualizarCicloActual(pacienteId, protocoloPacienteId) {
-    const protocolos = await this.protocoloPacienteRepo.obtenerPorPaciente(pacienteId, protocoloPacienteId);
+  async actualizarCicloActual(pacienteId) {
+    const protocolos = await this.protocoloPacienteRepo.obtenerPorPaciente(pacienteId);
     const original = protocolos[0];
     const protocoloPaciente = new ProtocoloPaciente({ ...original });
 
@@ -48,10 +48,10 @@ export class ProtocoloPacienteService {
     }
 
     if (Object.keys(cambios).length > 0) {
-      await this.protocoloPacienteRepo.actualizarParcialmente(protocoloPacienteId, cambios);
+      await this.protocoloPacienteRepo.actualizarParcialmente(protocoloPaciente.protocolo_paciente_id, cambios);
     }
 
-    return protocoloPacienteId;
+    return protocoloPaciente.protocolo_paciente_id;
   }
 
   // Actualización parcial de protocolo_paciente
