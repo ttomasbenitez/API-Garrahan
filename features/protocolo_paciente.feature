@@ -6,8 +6,10 @@ Feature: Asignar y consultar protocolos de un paciente
 
   Background:
     Given estoy logueado como médico con id "1"
-    And existe en la base de datos un protocolo con id "1" llamado "Osteosarcoma GBTO 2006"
+    And existe en la base de datos un protocolo con id "1" y cantidadRegimenes "3" llamado "Osteosarcoma GBTO 2006"
     And existe en la base de datos un ciclo con protocolo_id "1", ciclo_id "1" y regimen "0"
+    And existe en la base de datos un ciclo con protocolo_id "1", ciclo_id "2" y regimen "0"
+    And existe en la base de datos un ciclo con protocolo_id "1", ciclo_id "3" y regimen "1"
     And existe en la base de datos un paciente con id "1" llamado "Marcos Pérez"
 
   Scenario: US-11.1 Asignar un protocolo a un paciente
@@ -61,6 +63,45 @@ Feature: Asignar y consultar protocolos de un paciente
     When publico en la API "/pacientes/1/protocolos" con esos datos
     Then el sistema responde con estado "404"
     And el error contiene el texto "Ciclo no encontrado. No se puede asignar el protocolo."
+  
+  Scenario: US-11.6 Obtener un protocolo específico de un paciente
+    Given existe en la base de datos un protocolo asignado al paciente con id "1" con los siguientes datos
+      | protocolo_id            | 1        |
+      | regimen                 | 0        |
+      | ciclo_actual_id         | 1        |
+      | numero_ciclo            | 1        |
+      | fecha_inicio            | 2025-10-07 |
+      | estado                  | ACTIVO   |
+      | profesional_id_asignador | 1        |
+    When consulto la API "/pacientes/1/protocolos/1"
+    Then el sistema devuelve un protocolo con regimen igual a "0"
+    And el estado es "ACTIVO"
+
+  Scenario: US-11.7 Modificar ciclo sin necesidad de modificar regimen
+    Given existe en la base de datos un protocolo asignado al paciente con id "1" con los siguientes datos
+      | protocolo_id             | 1          |
+      | regimen                  | 0          |
+      | ciclo_actual_id          | 1          |
+      | numero_ciclo             | 1          |
+      | fecha_inicio             | 2025-10-07 |
+      | estado                   | ACTIVO     |
+      | profesional_id_asignador | 1          |
+    When modifico en el endpoint "/pacientes/1/protocolos/1/ciclo-actual"
+    Then el sistema responde con estado "200"
+    And el protocolo paciente con id 1 tiene ahora ciclo_actual_id 2, regimen 0 y cambiar_regimen "0"
+
+  Scenario: US-11.8 Modificar ciclo y nuevo regimen requerido
+    Given existe en la base de datos un protocolo asignado al paciente con id "1" con los siguientes datos
+      | protocolo_id             | 1          |
+      | regimen                  | 0          |
+      | ciclo_actual_id          | 2          |
+      | numero_ciclo             | 1          |
+      | fecha_inicio             | 2025-10-07 |
+      | estado                   | ACTIVO     |
+      | profesional_id_asignador | 1          |
+    When modifico en el endpoint "/pacientes/1/protocolos/1/ciclo-actual"
+    Then el sistema responde con estado "200"
+    And el protocolo paciente con id 1 tiene ahora ciclo_actual_id 3, regimen 1 y cambiar_regimen "1" 
 
   @wip
   Scenario: US-11.6 Conflicto por duplicado (mismo protocolo/regimen ya asignado)
@@ -73,15 +114,3 @@ Feature: Asignar y consultar protocolos de un paciente
     Then el sistema responde con estado "409"
     And el error contiene el texto "protocolo ya asignado al paciente"
 
-  Scenario: US-11.7 Obtener un protocolo específico de un paciente
-    Given existe en la base de datos un protocolo asignado al paciente con id "1" con los siguientes datos
-      | protocolo_id            | 1        |
-      | regimen                 | 0        |
-      | ciclo_actual_id         | 1        |
-      | numero_ciclo            | 1        |
-      | fecha_inicio            | 2025-10-07 |
-      | estado                  | ACTIVO   |
-      | profesional_id_asignador | 1        |
-    When consulto la API "/pacientes/1/protocolos/1"
-    Then el sistema devuelve un protocolo con regimen igual a "0"
-    And el estado es "ACTIVO"
