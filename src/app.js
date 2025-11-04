@@ -100,7 +100,7 @@ const viaAdministracionService = new ViaAdministracionService(respositorioViaAdm
 const viaAdministracionController = makeViaAdministracionController(viaAdministracionService);
 // protocolo_paciente
 const repositorioProtocoloPaciente = new RepositorioProtocoloPaciente(oracleDBInstance);
-const protocoloPacienteService = new ProtocoloPacienteService(repositorioProtocoloPaciente);
+const protocoloPacienteService = new ProtocoloPacienteService(repositorioProtocoloPaciente, repositorioProtocolo);
 const protocoloPacienteController = makeProtocoloPacienteController(protocoloPacienteService);
 // presentacion droga
 const repositorioPresentacionDroga = new RepositorioPresentacionDroga(oracleDBInstance);

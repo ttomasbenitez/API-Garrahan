@@ -35,6 +35,28 @@ class ProtocoloPaciente {
     this.repeticiones_actuales = repeticiones_actuales;
     this.cambiar_regimen = cambiar_regimen;
   }
+
+  esCicloFinal() {
+    return this.ciclo_final;
+  }
+
+  actualizarCicloFinal() {
+    this.ciclo_final = true;
+  }
+
+  actualizarCambiarRegimen() {
+    this.cambiar_regimen = true;
+    this.regimen += 1;
+  }
+
+  actualizarCicloActual() {
+    if(this.ciclo_final) {
+      this.repeticiones_actuales += 1;
+    }
+    else {
+      this.ciclo_actual_id += 1;
+    }
+  }
 }
 
 export default ProtocoloPaciente;

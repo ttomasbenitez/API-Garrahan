@@ -44,6 +44,18 @@ class Protocolo {
     });
     ciclo.agregarAdministracion(administracion_medicaciones);
   }
+
+  // Devuelve false si el ciclo recibido es menor a alguno del protocolo.
+  // Devuelve true si no hay ningún ciclo_id mayor, por lo que es el último.
+  esCicloFinal(ciclo) {
+    const hayMayor = this.ciclos.some(c => c.ciclo_id > ciclo);
+    return !hayMayor;
+  }
+
+  cicloSiguienteTieneRegimenDistinto(ciclo_id, regimen) {
+    const siguientes = this.ciclos.filter(c => c.ciclo_id === ciclo_id + 1);
+    return siguientes.some(c => c.regimen !== regimen);
+  }
 }
 
 export default Protocolo;

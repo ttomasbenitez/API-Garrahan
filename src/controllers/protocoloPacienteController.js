@@ -7,6 +7,7 @@ export const makeProtocoloPacienteController = (protocoloPacienteService) => ({
   obtenerPorPaciente: (req, res) => obtenerProtocolos(req, res, protocoloPacienteService),
   obtenerEspecifico: (req, res) => obtenerProtocoloEspecifico(req, res, protocoloPacienteService),
   patch: (req, res) => patchProtocoloPaciente(req, res, protocoloPacienteService),
+  actualizarCicloActual: (req, res) => actualizarCicloActual(req, res, protocoloPacienteService)
 });
 
 async function crearProtocolo(req, res, service) {
@@ -101,6 +102,20 @@ async function patchProtocoloPaciente(req, res, service) {
     res.status(200).json({ actualizado: true, protocolo_paciente_id: id, campos });
   } catch (error) {
     logger.error('Error al actualizar protocolo paciente: %o', error);
+    res.status(500).json({ error: error.message });
+  }
+}
+
+async function actualizarCicloActual(req, res, service) {
+  try {
+    const { paciente_id, protocolo_paciente_id } = req.params;
+    if (!protocolo_paciente_id) {
+      return res.status(400).json({ error: 'protocolo_paciente_id es requerido' });
+    }
+    const id = await service.actualizarCicloActual(paciente_id, protocolo_paciente_id);
+    res.status(200).json({ actualizado: true, protocolo_paciente_id: id });
+  } catch (error) {
+    logger.error('Error al actualizar ciclo actual de protocolo paciente: %o', error);
     res.status(500).json({ error: error.message });
   }
 }
