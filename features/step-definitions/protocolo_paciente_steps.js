@@ -131,18 +131,18 @@ When(/^modifico en el endpoint "(.*)"$/, async function (endpoint) {
     .set('Cookie', this.sessionCookie);
 });
 
-Then('el protocolo paciente con id {int} tiene ahora ciclo_actual_id {int}, regimen {int} y cambiar_regimen {string}'
-  , async function (idProtocoloPaciente, ciclo_esperado, regimen_esperado, cambiar_regimen_esperado) {
+Then('el protocolo paciente con id {int} tiene ahora ciclo_actual_id {int}, regimen {int}, repeticiones actuales {int} y cambiar_regimen {string}'
+  , async function (idProtocoloPaciente, ciclo_esperado, regimen_esperado, repeticionesEsperadas, cambiar_regimen_esperado) {
 
     const result = await oracleDBInstance.execute(
       'SELECT * FROM protocolo_paciente WHERE protocolo_paciente_id = :protocolo_paciente_id',
       { protocolo_paciente_id: idProtocoloPaciente }
     );
 
-    console.log(result.rows[0]);
     const protocoloPaciente = result.rows[0];
     assert.strictEqual(ciclo_esperado, protocoloPaciente.CICLO_ACTUAL_ID);
     assert.strictEqual(regimen_esperado, protocoloPaciente.REGIMEN);
+    assert.strictEqual(repeticionesEsperadas, protocoloPaciente.REPETICIONES_ACTUALES);
     assert.strictEqual(cambiar_regimen_esperado, protocoloPaciente.CAMBIAR_REGIMEN);
   });
 
