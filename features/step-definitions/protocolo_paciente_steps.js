@@ -29,14 +29,15 @@ Given(/^existe en la base de datos un paciente con id "(.*)" llamado "(.*)"$/, a
   paciente_id = pacResponse.body.paciente_id;
 });
 
-Given(/^existe en la base de datos un protocolo con id "(.*)" llamado "(.*)"$/, async function (idProtocolo, nombreProtocolo) {
-  await oracleDBInstance.execute(
-    `INSERT INTO protocolo (protocolo_id, nombre, enfermedad, linea, cantidad_regimenes) 
-     VALUES (:id, :nombre, 'Test', '1ra', 2)`,
-    { id: Number(idProtocolo), nombre: nombreProtocolo },
-    { autoCommit: true }
-  );
-});
+Given(/^existe en la base de datos un protocolo con id "(.*)" y cantidadRegimenes "(.*)" llamado "(.*)"$/,
+  async function (idProtocolo, cantidadRegimenes, nombreProtocolo) {
+    await oracleDBInstance.execute(
+      `INSERT INTO protocolo (protocolo_id, nombre, enfermedad, linea, cantidad_regimenes) 
+     VALUES (:id, :nombre, 'Test', '1ra', :cantidadRegimenes)`,
+      { id: Number(idProtocolo), nombre: nombreProtocolo, cantidadRegimenes: Number(cantidadRegimenes) },
+      { autoCommit: true }
+    );
+  });
 
 Given(/^existe en la base de datos un ciclo con protocolo_id "(.*)", ciclo_id "(.*)" y regimen "(.*)"$/, async function (idProtocolo, idCiclo, regimen) {
   await oracleDBInstance.execute(
@@ -122,6 +123,28 @@ When(/^publico en la API "(.*)" con esos datos$/, async function (endpoint) {
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
 });
+
+When(/^modifico en el endpoint "(.*)"$/, async function (endpoint) {
+  response = await request(app)
+    .patch(endpoint)
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
+});
+
+Then('el protocolo paciente con id {int} tiene ahora ciclo_actual_id {int}, regimen {int} y cambiar_regimen {string}'
+  , async function (idProtocoloPaciente, ciclo_esperado, regimen_esperado, cambiar_regimen_esperado) {
+
+    const result = await oracleDBInstance.execute(
+      'SELECT * FROM protocolo_paciente WHERE protocolo_paciente_id = :protocolo_paciente_id',
+      { protocolo_paciente_id: idProtocoloPaciente }
+    );
+
+    console.log(result.rows[0]);
+    const protocoloPaciente = result.rows[0];
+    assert.strictEqual(ciclo_esperado, protocoloPaciente.CICLO_ACTUAL_ID);
+    assert.strictEqual(regimen_esperado, protocoloPaciente.REGIMEN);
+    assert.strictEqual(cambiar_regimen_esperado, protocoloPaciente.CAMBIAR_REGIMEN);
+  });
 
 Then(/^la asignación se crea correctamente$/, function () {
   assert.ok(response);
