@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import libre from 'libreoffice-convert';
 import { promisify } from 'util';
+import { PDFParse } from 'pdf-parse';
 
 const libreConvert = promisify(libre.convert);
 
@@ -53,10 +54,8 @@ export class RecetaHospitalariaExportador {
   }
 
   async cargar(body) {
-    const workbook = new ExcelJS.Workbook();
-    await workbook.xlsx.load(body);
-    const sheet = workbook.getWorksheet(1);
-    const text = sheet.getSheetValues().flat().join(' ');
-    return text;
+    const parser = new PDFParse({ data: body });
+    const result = await parser.getText();
+    return result.text;
   }
 }
