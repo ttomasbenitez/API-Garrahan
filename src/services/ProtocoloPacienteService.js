@@ -23,25 +23,21 @@ export class ProtocoloPacienteService {
     const protocolos = await this.protocoloPacienteRepo.obtenerPorPaciente(pacienteId, protocoloPacienteId);
     const original = protocolos[0];
     const protocoloPaciente = new ProtocoloPaciente({ ...original });
-    console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAA');
 
     const protocolo = await this.protocoloRepo.obtener(protocoloPaciente.protocolo_id);
 
 
-    if (!protocoloPaciente.esCicloFinal()) {
-      if (protocolo.cicloSiguienteTieneRegimenDistinto(protocoloPaciente.ciclo_actual_id, protocoloPaciente.regimen)) {
-        protocoloPaciente.actualizarCambiarRegimen();
-      }
-      protocoloPaciente.actualizarCicloActual();
+    if (protocolo.cicloSiguienteTieneRegimenDistinto(protocoloPaciente.ciclo_actual_id, protocoloPaciente.regimen)) {
+      protocoloPaciente.actualizarCambiarRegimen();
+    }
 
+    protocoloPaciente.actualizarCicloActual();
+
+    if (!protocoloPaciente.esCicloFinal()) {
       if (protocolo.esCicloFinal(protocoloPaciente.ciclo_actual_id)) {
         protocoloPaciente.actualizarCicloFinal();
       }
     }
-    console.log('BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB');
-
-    console.log(JSON.stringify(original, null, 2));
-    console.log(JSON.stringify(protocoloPaciente, null, 2));
 
     // Comparar campos modificados
     const cambios = {};
@@ -52,10 +48,8 @@ export class ProtocoloPacienteService {
     }
 
     if (Object.keys(cambios).length > 0) {
-      console.log('ENTRAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
       await this.protocoloPacienteRepo.actualizarParcialmente(protocoloPacienteId, cambios);
     }
-    console.log('CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC');
 
     return protocoloPacienteId;
   }

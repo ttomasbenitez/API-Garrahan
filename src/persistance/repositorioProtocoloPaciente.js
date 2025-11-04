@@ -102,7 +102,6 @@ export class RepositorioProtocoloPaciente {
 
   // Actualización parcial de protocolo_paciente
   async actualizarParcialmente(protocolo_paciente_id, campos) {
-    console.log(`CAMPOSSSSSSSSSSSSSSSSSSSSSSSSS: ${campos}`);
     const keys = Object.keys(campos);
     if (keys.length === 0) {
       return protocolo_paciente_id;
