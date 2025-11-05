@@ -22,7 +22,7 @@ describe('CalculoDrogaService', () => {
     const service = new CalculoDrogaService(mockRepo);
     const result = await service.calcular({
       administracion_id: 1,
-      imc: 10,
+      peso: 10,
       nueva_fuerza_valor: 500,
       nueva_fuerza_unidad: 'mg/m2'
     });
@@ -36,7 +36,7 @@ describe('CalculoDrogaService', () => {
   test('lanza error si no encuentra la administracion', async () => {
     mockRepo.getById.mockResolvedValue(null);
     const service = new CalculoDrogaService(mockRepo);
-    await expect(service.calcular({ administracion_id: 99, imc: 10, nueva_fuerza_valor: 500, nueva_fuerza_unidad: 'mg/m2' }))
+    await expect(service.calcular({ administracion_id: 99, peso: 10, nueva_fuerza_valor: 500, nueva_fuerza_unidad: 'mg/m2' }))
       .rejects.toThrow('Administración no encontrada');
   });
 });
