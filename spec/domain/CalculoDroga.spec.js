@@ -7,7 +7,7 @@ describe('CalculoDroga (dominio)', () => {
       fuerza_valor: 50,
       cantidad_dias: 4,
       frecuencia_diaria: 2,
-      imc: 10,
+      peso: 10,
       nueva_fuerza_valor: 500,
       fuerza_unidad: 'mg/m2'
     });
@@ -21,7 +21,7 @@ describe('CalculoDroga (dominio)', () => {
       fuerza_valor: 50,
       cantidad_dias: 4,
       frecuencia_diaria: 2,
-      imc: 10,
+      peso: 10,
       nueva_fuerza_valor: 0,
       fuerza_unidad: 'mg/m2'
     });

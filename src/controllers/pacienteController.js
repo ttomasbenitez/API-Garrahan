@@ -36,7 +36,9 @@ async function obtenerPaciente(req, res, service) {
   try {
     const profesional_id = req.user.id;
     const { id } = req.params;
+    logger.info('aca');
     const paciente = await service.obtenerPorProfesional(id, profesional_id);
+    logger.info(paciente);
     logger.info('Paciente obtenido con ID: %d', paciente.paciente_id);
     res.status(200).json(paciente);
   } catch (error) {
@@ -65,7 +67,7 @@ async function obtenerPacienteExterno(req, res, service) {
   try {
     const { id } = req.params;
     const paciente = await service.obtenerExterno(id);
-    logger.info('Paciente obtenido con ID: %d', paciente.paciente_id);
+    logger.info('Paciente obtenido con ID: %d', paciente.id_hospitalario);
     res.status(200).json(paciente);
   } catch (error) {
     logger.error('Error al obtener paciente: %o', error);

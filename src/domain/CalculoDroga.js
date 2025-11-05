@@ -1,9 +1,9 @@
 export default class CalculoDroga {
-  constructor({ fuerza_valor, cantidad_dias, frecuencia_diaria, imc, nueva_fuerza_valor, fuerza_unidad }) {
+  constructor({ fuerza_valor, cantidad_dias, frecuencia_diaria, peso, nueva_fuerza_valor, fuerza_unidad }) {
     this.fuerza_valor = Number(fuerza_valor);
     this.cantidad_dias = Number(cantidad_dias);
     this.frecuencia_diaria = Number(frecuencia_diaria);
-    this.imc = Number(imc);
+    this.peso = Number(peso);
     this.nueva_fuerza_valor = Number(nueva_fuerza_valor);
     this.fuerza_unidad = fuerza_unidad;
   }
@@ -13,7 +13,7 @@ export default class CalculoDroga {
   }
 
   getCantidadTotal() {
-    return this.getCantidadBase() * this.imc;
+    return this.getCantidadBase() * this.peso;
   }
 
   getUnidades() {

@@ -14,7 +14,6 @@ async function crearProtocolo(req, res, service) {
     const profesional_id_asignador = req.user.id;
     const { paciente_id } = req.params;
     const { protocolo_id, regimen, ciclo_actual_id, numero_ciclo, fecha_inicio, fecha_fin, estado, fecha_asignacion } = req.body;
-
     if (!protocolo_id || regimen === undefined || !ciclo_actual_id || !profesional_id_asignador) {
       return res.status(400).json({ error: 'Faltan campos requeridos' });
     }
