@@ -28,8 +28,6 @@ export class CalculoDrogaService {
       fuerza_unidad: nueva_fuerza_unidad || admin.FUERZA_UNIDAD
     });
 
-    console.log(calculo);
-
     return {
       cantidad_base: calculo.getCantidadBase(),
       cantidad_total: calculo.getCantidadTotal(),
