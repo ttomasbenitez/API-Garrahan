@@ -13,6 +13,7 @@ export class RepositorioProtocoloActual {
           PP.protocolo_id,
           PP.ciclo_actual_id AS ciclo_id,
           PP.regimen,
+          PP.cambiar_regimen,
           P.nombre AS protocolo_nombre,
           AM.admin_id,
           D.droga_id,
@@ -76,6 +77,7 @@ export class RepositorioProtocoloActual {
       primeraFila.PROTOCOLO_ID,
       primeraFila.PROTOCOLO_NOMBRE,
       primeraFila.REGIMEN,
+      primeraFila.CAMBIAR_REGIMEN === '1',
       primeraFila.CICLO_ID,
       administracionesDetalladas
     );
