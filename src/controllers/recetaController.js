@@ -44,7 +44,7 @@ async function exportarRecetaPaciente(req, res, service) {
     const recetaExportada = await service.exportar(id, tipo);
     logger.info('Receta del paciente exportada con ID: %d', id);
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename=receta_${req.params.id}.pdf`);
+    res.setHeader('Content-Disposition', `inline; filename=receta_${req.params.id}.pdf`);
     res.send(recetaExportada);
     res.status(200);
     logger.info('Receta del paciente exportada con ID: %d', id);
