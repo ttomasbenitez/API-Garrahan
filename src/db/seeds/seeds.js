@@ -220,7 +220,7 @@ async function createProtocoloPaciente(cookie) {
 
 async function main() {
   const cookieAdmin = await login('admin');
-  const protocolo = await createProtocolo(cookieAdmin);
+  await createProtocolo(cookieAdmin);
   await createProfesionales(cookieAdmin);
   await createDrogas(cookieAdmin);
   await createFormasFarmaceuticas(cookieAdmin);

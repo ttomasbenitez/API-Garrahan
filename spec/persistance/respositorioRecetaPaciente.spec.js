@@ -73,7 +73,7 @@ describe(RepositorioRecetaPaciente, () => {
     expect(id).toBe(123);
 
     expect(mockExecute).toHaveBeenCalledTimes(1);
-    const [sql, binds, opts] = mockExecute.mock.calls[0];
+    const [sql, _binds, opts] = mockExecute.mock.calls[0];
 
     expect(sql).toMatch(/INSERT\s+INTO\s+receta_paciente/i);
     expect(opts).toMatchObject({ autoCommit: false });

@@ -15,7 +15,6 @@ async function crearProtocolo(req, res, service) {
     const profesional_id_asignador = req.user.id;
     const { paciente_id } = req.params;
     const { protocolo_id, regimen, ciclo_actual_id, numero_ciclo, fecha_inicio, fecha_fin, estado, fecha_asignacion } = req.body;
-
     if (!protocolo_id || regimen === undefined || !ciclo_actual_id || !profesional_id_asignador) {
       return res.status(400).json({ error: 'Faltan campos requeridos' });
     }
@@ -68,24 +67,6 @@ async function obtenerProtocoloEspecifico(req, res, service) {
     res.status(200).json(protocolos[0] || null);
   } catch (error) {
     logger.error('Error al obtener protocolo específico: %o', error);
-    res.status(500).json({ error: error.message });
-  }
-}
-
-async function solicitarMasCiclos(req, res, service) {
-  try {
-    const { protocolo_paciente_id } = req.params;
-    const { ciclos_solicitados } = req.body;
-    if (!protocolo_paciente_id || ciclos_solicitados === undefined) {
-      return res.status(400).json({ error: 'protocolo_paciente_id y ciclos_solicitados son requeridos' });
-    }
-    const result = await service.solicitarMasCiclos(protocolo_paciente_id, ciclos_solicitados);
-    if (!result) {
-      return res.status(404).json({ error: 'Protocolo paciente no encontrado' });
-    }
-    res.status(200).json({ actualizado: true, protocolo_paciente_id, ciclos_solicitados });
-  } catch (error) {
-    logger.error('Error al solicitar más ciclos: %o', error);
     res.status(500).json({ error: error.message });
   }
 }

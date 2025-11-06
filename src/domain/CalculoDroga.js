@@ -3,7 +3,6 @@ const FACTOR_MCG_A_MG = 1 / 1000;
 
 const UNIDAD_GRAMO = 'gr';
 const UNIDAD_MICROGRAMO = 'μg';
-const UNIDAD_MILIGRAMO = 'mg';
 
 const UNIDAD_POR_M2 = '/m2';
 const UNIDAD_POR_KG = '/kg';
