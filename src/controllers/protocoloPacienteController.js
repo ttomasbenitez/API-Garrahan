@@ -7,6 +7,7 @@ export const makeProtocoloPacienteController = (protocoloPacienteService) => ({
   obtenerPorPaciente: (req, res) => obtenerProtocolos(req, res, protocoloPacienteService),
   obtenerEspecifico: (req, res) => obtenerProtocoloEspecifico(req, res, protocoloPacienteService),
   patch: (req, res) => patchProtocoloPaciente(req, res, protocoloPacienteService),
+  actualizarCicloActual: (req, res) => actualizarCicloActual(req, res, protocoloPacienteService)
 });
 
 async function crearProtocolo(req, res, service) {
@@ -70,25 +71,6 @@ async function obtenerProtocoloEspecifico(req, res, service) {
   }
 }
 
-async function solicitarMasCiclos(req, res, service) {
-  try {
-    const { protocolo_paciente_id } = req.params;
-    const { ciclos_solicitados } = req.body;
-    if (!protocolo_paciente_id || ciclos_solicitados === undefined) {
-      return res.status(400).json({ error: 'protocolo_paciente_id y ciclos_solicitados son requeridos' });
-    }
-    const result = await service.solicitarMasCiclos(protocolo_paciente_id, ciclos_solicitados);
-    if (!result) {
-      return res.status(404).json({ error: 'Protocolo paciente no encontrado' });
-    }
-    res.status(200).json({ actualizado: true, protocolo_paciente_id, ciclos_solicitados });
-  } catch (error) {
-    logger.error('Error al solicitar más ciclos: %o', error);
-    res.status(500).json({ error: error.message });
-  }
-}
-
-
 // PATCH genérico para protocolo paciente
 async function patchProtocoloPaciente(req, res, service) {
   try {
@@ -101,6 +83,20 @@ async function patchProtocoloPaciente(req, res, service) {
     res.status(200).json({ actualizado: true, protocolo_paciente_id: id, campos });
   } catch (error) {
     logger.error('Error al actualizar protocolo paciente: %o', error);
+    res.status(500).json({ error: error.message });
+  }
+}
+
+async function actualizarCicloActual(req, res, service) {
+  try {
+    const { paciente_id } = req.params;
+    if (!paciente_id) {
+      return res.status(400).json({ error: 'paciente_id es requerido' });
+    }
+    const id = await service.actualizarCicloActual(paciente_id);
+    res.status(200).json({ actualizado: true, paciente_id: id });
+  } catch (error) {
+    logger.error('Error al actualizar ciclo actual de protocolo paciente: %o', error);
     res.status(500).json({ error: error.message });
   }
 }

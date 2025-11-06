@@ -115,7 +115,8 @@ Given(/^existe un Protocolo con protocolo_id (\d+) y nombre "(.*)"$/, async func
     protocolo_id: parseInt(id, 10),
     nombre: nombre,
     enfermedad: 'TEST_ENFERMEDAD',
-    linea: 'TEST_LINEA'
+    linea: 'TEST_LINEA',
+    cantidad_regimenes: 2,
   };
 
   const createResponse = await request(app)

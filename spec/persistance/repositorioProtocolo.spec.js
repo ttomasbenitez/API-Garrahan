@@ -2,9 +2,7 @@
 import oracleDB from '../../src/db/connection_pool.js';
 import Ciclo from '../../src/domain/protocolo/ciclo.js';
 import Protocolo from '../../src/domain/protocolo';
-//import AdministracionMedicacion from '../../src/domain/protocolo/administracionMedicacion.js';
 import { RepositorioProtocolo } from '../../src/persistance/repositorioProtocolo';
-import AdministracionMedicacion from '../../src/domain/protocolo/administracionMedicacion.js';
 
 jest.mock('../../src/db/connection_pool.js', () => ({
   __esModule: true,
@@ -60,33 +58,6 @@ describe(RepositorioProtocolo, () => {
 
     await repo.agregarCiclo(idProtocolo, [ciclo]);
     return connExecuteMock;
-  };
-
-  const agregarAdministraciones = async (cantidad = 1) => {
-    for(let i = 0; i < cantidad; i++) {
-      const adminDiaria  = new AdministracionMedicacion(123, 1, 0, 10, 13,  50 * (i + 1), 'mg', 2+i, 0, 1, i);
-      admins.push(adminDiaria);
-    }
-
-    const ids = Array.from({ length: cantidad }, (v, i) => ({ id: [i] }));
-
-    const connExecuteMock = jest.fn().mockResolvedValueOnce({
-      rowsAffected: cantidad,
-      outBinds: ids,
-      rows: [admins],
-    });
-
-    db.withConnection.mockImplementation(async (fn) => {
-      return await fn({
-        execute: jest.fn().mockResolvedValue({
-          rowsAffected: 1,
-          outBinds: { id: [123] },
-        }),
-        executeMany: connExecuteMock,
-      });
-    });
-
-    return {id: await repo.guardar(admins), connExecuteMock};
   };
 
   beforeEach(() => {
@@ -161,7 +132,7 @@ describe(RepositorioProtocolo, () => {
 
     expect(db.execute).toHaveBeenCalledTimes(2); // TODO: cambiar a 3 cuando se agregue la administración de medicación
     const [sql, binds] = db.execute.mock.calls[0];
-    expect(sql).toMatch(/SELECT\s+protocolo_id,\s+nombre,\s+enfermedad,\s+linea\s+FROM\s+protocolo/i);
+    expect(sql).toMatch(/SELECT\s+protocolo_id,\s+nombre,\s+enfermedad,\s+linea,\s+cantidad_regimenes\s+FROM\s+protocolo/i);
     expect(binds).toEqual([123]);
   });
 
@@ -218,75 +189,4 @@ describe(RepositorioProtocolo, () => {
     expect(cicloObtenido[0]).toBeInstanceOf(Ciclo);
     expect(cicloObtenido[0]).toMatchObject(ciclo);
   });
-
-  // test('dado un protocolo con ciclos y administraciones, deberia poder obtener todo el objeto completo', async () => {
-  //   const {id} = await agregarProtocolo();
-  //   await agregarCiclo(id);
-  //   await agregarAdministraciones(2);
-
-  //   expect(db.withConnection).toHaveBeenCalledTimes(3);
-
-  //   db.execute
-  //     .mockResolvedValueOnce({
-  //       rows: [{
-  //         PROTOCOLO_ID: 123,
-  //         NOMBRE: 'Protocolo de prueba',
-  //         ENFERMEDAD: 'Enfermedad de prueba',
-  //         LINEA: 'Primera línea'
-  //       }]
-  //     })
-  //     .mockResolvedValueOnce({
-  //       rows: [{
-  //         CICLO_ID: 1,
-  //         PROTOCOLO_ID: 123,
-  //         REGIMEN: 0,
-  //         DURACION_SEMANAS: 4,
-  //         CICLO_FINAL: 0,
-  //         REPETICIONES: 1
-  //       }]
-  //     })
-  //     .mockResolvedValueOnce({
-  //       rows: [
-  //         {
-  //           PROTOCOLO_ID: 123,
-  //           CICLO_ID: 1,
-  //           REGIMEN: 0,
-  //           VIA_ID: 10,
-  //           DROGA_ID: 1,
-  //           FUERZA: 50,
-  //           FUERZA_UNIDAD: 'mg',
-  //           CANTIDAD_DIAS: 2,
-  //           ADMINISTRACION_DIARIA: 0,
-  //           FRECUENCIA_DIARIA: 1,
-  //           ID: 1
-  //         },
-  //         {
-  //           PROTOCOLO_ID: 123,
-  //           CICLO_ID: 1,
-  //           REGIMEN: 0,
-  //           VIA_ID: 10,
-  //           DROGA_ID: 1,
-  //           FUERZA: 50,
-  //           FUERZA_UNIDAD: 'mg',
-  //           CANTIDAD_DIAS: 2,
-  //           ADMINISTRACION_DIARIA: 0,
-  //           FRECUENCIA_DIARIA: 1,
-  //           ID: 2
-  //         }
-  //       ]
-  //     });
-
-  //   const protocoloObtenido = await repo.obtener(id);
-  //   console.log(protocoloObtenido);
-
-  //   const ciclos = protocoloObtenido.ciclos;
-  //   const administraciones = ciclos[0].administracion_medicacion;
-
-  //   expect(ciclos.length).toBe(1);
-  //   expect(administraciones.length).toBe(2);
-  //   expect(administraciones[0]).toBeInstanceOf(AdministracionMedicacion);
-  //   expect(administraciones[1]).toBeInstanceOf(AdministracionMedicacion);
-  //   expect(administraciones[0]).toMatchObject(admins[0]);
-  //   expect(administraciones[1]).toMatchObject(admins[1]);
-  // });
 });

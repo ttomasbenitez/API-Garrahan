@@ -12,7 +12,8 @@ class ProtocoloPaciente {
     fecha_asignacion,
     protocolo_paciente_id,
     ciclo_final = false,
-    repeticiones_actuales = 0
+    repeticiones_actuales = 0,
+    cambiar_regimen = false
   }) {
     if (!paciente_id) throw new Error('paciente_id es obligatorio');
     if (!protocolo_id) throw new Error('protocolo_id es obligatorio');
@@ -32,6 +33,29 @@ class ProtocoloPaciente {
     this.fecha_asignacion = fecha_asignacion ?? null;
     this.ciclo_final = ciclo_final;
     this.repeticiones_actuales = repeticiones_actuales;
+    this.cambiar_regimen = cambiar_regimen;
+  }
+
+  esCicloFinal() {
+    return this.ciclo_final;
+  }
+
+  actualizarCicloFinal() {
+    this.ciclo_final = true;
+  }
+
+  actualizarCambiarRegimen() {
+    this.cambiar_regimen = true;
+    this.regimen += 1;
+  }
+
+  actualizarCicloActual() {
+    if(this.ciclo_final) {
+      this.repeticiones_actuales += 1;
+    }
+    else {
+      this.ciclo_actual_id += 1;
+    }
   }
 }
 

@@ -1,0 +1,5 @@
+[    
+    {"nombre": "Osteosarcoma GBTO 2006 - No metastásico", "enfermedad": "Osteosarcoma", "linea": "1", "cantidad_regimenes": 3},
+    {"nombre": "Osteosarcoma GBTO 2006 - Metastásico", "enfermedad": "Osteosarcoma", "linea": "2", "cantidad_regimenes": 1},
+    {"nombre": "Neuroblastoma - Alto Riesgo", "enfermedad": "Neuroblastoma", "linea": "2", "cantidad_regimenes": 1}
+]

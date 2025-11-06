@@ -1,9 +1,10 @@
 class Protocolo {
 
-  constructor(nombre, enfermedad, linea, protocolo_id = null, ciclos = []) {
+  constructor(nombre, enfermedad, linea, cantidad_regimenes, protocolo_id = null, ciclos = []) {
     this.nombre = nombre;
     this.enfermedad = enfermedad;
     this.linea = linea;
+    this.cantidad_regimenes = cantidad_regimenes;
     this.protocolo_id = protocolo_id;
     this.ciclos = ciclos;
   }
@@ -42,6 +43,18 @@ class Protocolo {
       adm.id = ids[index];
     });
     ciclo.agregarAdministracion(administracion_medicaciones);
+  }
+
+  // Devuelve false si el ciclo recibido es menor a alguno del protocolo.
+  // Devuelve true si no hay ningún ciclo_id mayor, por lo que es el último.
+  esCicloFinal(ciclo) {
+    const hayMayor = this.ciclos.some(c => c.ciclo_id > ciclo);
+    return !hayMayor;
+  }
+
+  cicloSiguienteTieneRegimenDistinto(ciclo_id, regimen) {
+    const siguientes = this.ciclos.filter(c => c.ciclo_id === ciclo_id + 1);
+    return siguientes.some(c => c.regimen !== regimen);
   }
 }
 

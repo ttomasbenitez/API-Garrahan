@@ -1,0 +1,38 @@
+[
+    {"protocolo_id": 1, "ciclos": [
+        { "ciclo_id": 1, "regimen": 0, "duracion_semanas": 5, "ciclo_final": false, "repeticiones": 0 },
+        { "ciclo_id": 2, "regimen": 0, "duracion_semanas": 5, "ciclo_final": false, "repeticiones": 0 },
+
+        { "ciclo_id": 3, "regimen": 1, "duracion_semanas": 5, "ciclo_final": false, "repeticiones": 0 },
+        { "ciclo_id": 4, "regimen": 1, "duracion_semanas": 5, "ciclo_final": false, "repeticiones": 0 },
+        { "ciclo_id": 5, "regimen": 1, "duracion_semanas": 4, "ciclo_final": false, "repeticiones": 0 },
+        { "ciclo_id": 6, "regimen": 1, "duracion_semanas": 4, "ciclo_final": true,  "repeticiones": 0 },
+
+        { "ciclo_id": 3, "regimen": 2, "duracion_semanas": 5, "ciclo_final": false, "repeticiones": 0 },
+        { "ciclo_id": 4, "regimen": 2, "duracion_semanas": 5, "ciclo_final": false, "repeticiones": 0 },
+        { "ciclo_id": 5, "regimen": 2, "duracion_semanas": 4, "ciclo_final": false, "repeticiones": 0 },
+        { "ciclo_id": 6, "regimen": 2, "duracion_semanas": 4, "ciclo_final": false, "repeticiones": 0 },
+
+        { "ciclo_id": 7, "regimen": 2, "duracion_semanas": 1, "ciclo_final": true,  "repeticiones": 73 }
+    ]},
+
+
+    {"protocolo_id": 2, "ciclos": [
+        { "ciclo_id": 1, "regimen": 0, "duracion_semanas": 5, "ciclo_final": false, "repeticiones": 0 },
+        { "ciclo_id": 2, "regimen": 0, "duracion_semanas": 5, "ciclo_final": false, "repeticiones": 0 },
+        { "ciclo_id": 3, "regimen": 0, "duracion_semanas": 5, "ciclo_final": false, "repeticiones": 0 },
+        { "ciclo_id": 4, "regimen": 0, "duracion_semanas": 5, "ciclo_final": false, "repeticiones": 0 },
+        { "ciclo_id": 5, "regimen": 0, "duracion_semanas": 4, "ciclo_final": false, "repeticiones": 0 },
+        { "ciclo_id": 6, "regimen": 0, "duracion_semanas": 4, "ciclo_final": false,  "repeticiones": 0 },
+        { "ciclo_id": 7, "regimen": 0, "duracion_semanas": 1, "ciclo_final": true,  "repeticiones": 73 }
+    ]},
+
+
+    {"protocolo_id": 3, "ciclos": [
+        { "ciclo_id": 1, "regimen": 0, "duracion_semanas": 3, "ciclo_final": false, "repeticiones": 0 },
+        { "ciclo_id": 2, "regimen": 0, "duracion_semanas": 3, "ciclo_final": false, "repeticiones": 0 },
+        { "ciclo_id": 3, "regimen": 0, "duracion_semanas": 3, "ciclo_final": false, "repeticiones": 0 },
+        { "ciclo_id": 4, "regimen": 0, "duracion_semanas": 3, "ciclo_final": false, "repeticiones": 0 },
+        { "ciclo_id": 5, "regimen": 0, "duracion_semanas": 2, "ciclo_final": true, "repeticiones": 0 }
+    ]}
+]

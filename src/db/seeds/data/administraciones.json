@@ -1,0 +1,110 @@
+[
+    { "protocolo_id": 1, "ciclo_id": 1, "regimen": 0, "droga_id": 20, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 60, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 1, "ciclo_id": 1, "regimen": 0, "droga_id": 34, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 37.5, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 1, "ciclo_id": 1, "regimen": 0, "droga_id": 68, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 12, "fuerza_unidad": "gr/m2",  "via_id": 1 },
+
+    { "protocolo_id": 1, "ciclo_id": 2, "regimen": 0, "droga_id": 20, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 60, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 1, "ciclo_id": 2, "regimen": 0, "droga_id": 34, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 37.5, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 1, "ciclo_id": 2, "regimen": 0, "droga_id": 68, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 12, "fuerza_unidad": "gr/m2",  "via_id": 1 },
+
+    { "protocolo_id": 1, "ciclo_id": 3, "regimen": 1, "droga_id": 20, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 60, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 1, "ciclo_id": 3, "regimen": 1, "droga_id": 34, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 37.5, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 1, "ciclo_id": 3, "regimen": 1, "droga_id": 68, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 12, "fuerza_unidad": "gr/m2",  "via_id": 1 },
+
+    { "protocolo_id": 1, "ciclo_id": 4, "regimen": 1, "droga_id": 20, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 60, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 1, "ciclo_id": 4, "regimen": 1, "droga_id": 34, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 37.5, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 1, "ciclo_id": 4, "regimen": 1, "droga_id": 68, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 12, "fuerza_unidad": "gr/m2",  "via_id": 1 },
+
+    { "protocolo_id": 1, "ciclo_id": 5, "regimen": 1, "droga_id": 34, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 37.5, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 1, "ciclo_id": 5, "regimen": 1, "droga_id": 68, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 12, "fuerza_unidad": "gr/m2",  "via_id": 1 },
+    { "protocolo_id": 1, "ciclo_id": 5, "regimen": 1, "droga_id": 104,"cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 375, "fuerza_unidad": "mg/m2", "via_id": 1 },
+
+    { "protocolo_id": 1, "ciclo_id": 6, "regimen": 1, "droga_id": 34, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 37.5, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 1, "ciclo_id": 6, "regimen": 1, "droga_id": 68, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 12, "fuerza_unidad": "gr/m",  "via_id": 1 },
+    { "protocolo_id": 1, "ciclo_id": 6, "regimen": 1, "droga_id": 104,"cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 375, "fuerza_unidad": "mg/m2", "via_id": 1 },
+
+    { "protocolo_id": 1, "ciclo_id": 3, "regimen": 2, "droga_id": 20, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 60, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 1, "ciclo_id": 3, "regimen": 2, "droga_id": 34, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 37.5, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 1, "ciclo_id": 3, "regimen": 2, "droga_id": 68, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 12, "fuerza_unidad": "gr/m2",  "via_id": 1 },
+
+    { "protocolo_id": 1, "ciclo_id": 4, "regimen": 2, "droga_id": 20, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 60, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 1, "ciclo_id": 4, "regimen": 2, "droga_id": 34, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 37.5, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 1, "ciclo_id": 4, "regimen": 2, "droga_id": 68, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 12, "fuerza_unidad": "gr/m2",  "via_id": 1 },
+
+    { "protocolo_id": 1, "ciclo_id": 5, "regimen": 2, "droga_id": 34, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 37.5, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 1, "ciclo_id": 5, "regimen": 2, "droga_id": 68, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 12, "fuerza_unidad": "gr/m2",  "via_id": 1 },
+    { "protocolo_id": 1, "ciclo_id": 5, "regimen": 2, "droga_id": 104,"cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 375, "fuerza_unidad": "mg/m2", "via_id": 1 },
+
+    { "protocolo_id": 1, "ciclo_id": 6, "regimen": 2, "droga_id": 34, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 37.5, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 1, "ciclo_id": 6, "regimen": 2, "droga_id": 68, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 12, "fuerza_unidad": "gr/m2",  "via_id": 1 },
+    { "protocolo_id": 1, "ciclo_id": 6, "regimen": 2, "droga_id": 104,"cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 375, "fuerza_unidad": "mg/m2", "via_id": 1 },
+
+    { "protocolo_id": 1, "ciclo_id": 7, "regimen": 2, "droga_id": 18, "cantidad_dias": 7, "frecuencia_diaria": 1, "fuerza_valor": 25, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 1, "ciclo_id": 7, "regimen": 2, "droga_id": 68, "cantidad_dias": 2, "frecuencia_diaria": 2, "fuerza_valor": 1.5, "fuerza_unidad": "mg/m2",  "via_id": 2 },
+
+
+    
+    { "protocolo_id": 2, "ciclo_id": 1, "regimen": 0, "droga_id": 20, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 60, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 2, "ciclo_id": 1, "regimen": 0, "droga_id": 34, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 37.5, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 2, "ciclo_id": 1, "regimen": 0, "droga_id": 68, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 12, "fuerza_unidad": "gr/m2",  "via_id": 1 },
+    { "protocolo_id": 2, "ciclo_id": 1, "regimen": 0, "droga_id": 18, "cantidad_dias": 35, "frecuencia_diaria": 1, "fuerza_valor": 25, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 2, "ciclo_id": 1, "regimen": 0, "droga_id": 68, "cantidad_dias": 10, "frecuencia_diaria": 2, "fuerza_valor": 1.5, "fuerza_unidad": "mg/m2",  "via_id": 2 },
+
+    { "protocolo_id": 2, "ciclo_id": 2, "regimen": 0, "droga_id": 20, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 60, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 2, "ciclo_id": 2, "regimen": 0, "droga_id": 34, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 37.5, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 2, "ciclo_id": 2, "regimen": 0, "droga_id": 68, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 12, "fuerza_unidad": "gr/m2",  "via_id": 1 },
+    { "protocolo_id": 2, "ciclo_id": 2, "regimen": 0, "droga_id": 18, "cantidad_dias": 35, "frecuencia_diaria": 1, "fuerza_valor": 25, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 2, "ciclo_id": 2, "regimen": 0, "droga_id": 68, "cantidad_dias": 10, "frecuencia_diaria": 2, "fuerza_valor": 1.5, "fuerza_unidad": "mg/m2",  "via_id": 2 },
+
+    { "protocolo_id": 2, "ciclo_id": 3, "regimen": 0, "droga_id": 20, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 60, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 2, "ciclo_id": 3, "regimen": 0, "droga_id": 34, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 37.5, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 2, "ciclo_id": 3, "regimen": 0, "droga_id": 68, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 12, "fuerza_unidad": "gr/m2",  "via_id": 1 },
+    { "protocolo_id": 2, "ciclo_id": 3, "regimen": 0, "droga_id": 18, "cantidad_dias": 35, "frecuencia_diaria": 1, "fuerza_valor": 25, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 2, "ciclo_id": 3, "regimen": 0, "droga_id": 68, "cantidad_dias": 10, "frecuencia_diaria": 2, "fuerza_valor": 1.5, "fuerza_unidad": "mg/m2",  "via_id": 2 },
+
+    { "protocolo_id": 2, "ciclo_id": 4, "regimen": 0, "droga_id": 20, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 60, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 2, "ciclo_id": 4, "regimen": 0, "droga_id": 34, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 37.5, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 2, "ciclo_id": 4, "regimen": 0, "droga_id": 68, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 12, "fuerza_unidad": "gr/m2",  "via_id": 1 },
+    { "protocolo_id": 2, "ciclo_id": 4, "regimen": 0, "droga_id": 18, "cantidad_dias": 35, "frecuencia_diaria": 1, "fuerza_valor": 25, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 2, "ciclo_id": 4, "regimen": 0, "droga_id": 68, "cantidad_dias": 10, "frecuencia_diaria": 2, "fuerza_valor": 1.5, "fuerza_unidad": "mg/m2",  "via_id": 2 },
+
+    { "protocolo_id": 2, "ciclo_id": 5, "regimen": 0, "droga_id": 34, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 37.5, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 2, "ciclo_id": 5, "regimen": 0, "droga_id": 68, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 12, "fuerza_unidad": "gr/m2",  "via_id": 1 },
+    { "protocolo_id": 2, "ciclo_id": 5, "regimen": 0, "droga_id": 104,"cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 375, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 2, "ciclo_id": 5, "regimen": 0, "droga_id": 18, "cantidad_dias": 28, "frecuencia_diaria": 1, "fuerza_valor": 25, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 2, "ciclo_id": 5, "regimen": 0, "droga_id": 68, "cantidad_dias": 8, "frecuencia_diaria": 2, "fuerza_valor": 1.5, "fuerza_unidad": "mg/m2",  "via_id": 2 },
+
+    { "protocolo_id": 2, "ciclo_id": 6, "regimen": 0, "droga_id": 34, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 37.5, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 2, "ciclo_id": 6, "regimen": 0, "droga_id": 68, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 12, "fuerza_unidad": "gr/m2",  "via_id": 1 },
+    { "protocolo_id": 2, "ciclo_id": 6, "regimen": 0, "droga_id": 104,"cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 375, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 2, "ciclo_id": 6, "regimen": 0, "droga_id": 18, "cantidad_dias": 28, "frecuencia_diaria": 1, "fuerza_valor": 25, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 2, "ciclo_id": 6, "regimen": 0, "droga_id": 68, "cantidad_dias": 8, "frecuencia_diaria": 2, "fuerza_valor": 1.5, "fuerza_unidad": "mg/m2",  "via_id": 2 },
+
+    { "protocolo_id": 2, "ciclo_id": 7, "regimen": 0, "droga_id": 18, "cantidad_dias": 7, "frecuencia_diaria": 1, "fuerza_valor": 25, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 2, "ciclo_id": 7, "regimen": 0, "droga_id": 68, "cantidad_dias": 2, "frecuencia_diaria": 2, "fuerza_valor": 1.5, "fuerza_unidad": "mg/m2",  "via_id": 2 },
+
+
+
+    { "protocolo_id": 3, "ciclo_id": 1, "regimen": 0, "droga_id": 18, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 70, "fuerza_unidad": "mg/kg", "via_id": 1 },
+    { "protocolo_id": 3, "ciclo_id": 1, "regimen": 0, "droga_id": 67, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 2000, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 3, "ciclo_id": 1, "regimen": 0, "droga_id": 34, "cantidad_dias": 3, "frecuencia_diaria": 1, "fuerza_valor": 25, "fuerza_unidad": "mg/m2",  "via_id": 1 },
+    { "protocolo_id": 3, "ciclo_id": 1, "regimen": 0, "droga_id": 102, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 1.5, "fuerza_unidad": "mg/m2",  "via_id": 1 },
+
+    { "protocolo_id": 3, "ciclo_id": 2, "regimen": 0, "droga_id": 18, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 70, "fuerza_unidad": "mg/kg", "via_id": 1 },
+    { "protocolo_id": 3, "ciclo_id": 2, "regimen": 0, "droga_id": 67, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 2000, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 3, "ciclo_id": 2, "regimen": 0, "droga_id": 34, "cantidad_dias": 3, "frecuencia_diaria": 1, "fuerza_valor": 25, "fuerza_unidad": "mg/m2",  "via_id": 1 },
+    { "protocolo_id": 3, "ciclo_id": 2, "regimen": 0, "droga_id": 102, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 1.5, "fuerza_unidad": "mg/m2",  "via_id": 1 },
+
+    { "protocolo_id": 3, "ciclo_id": 3, "regimen": 0, "droga_id": 20, "cantidad_dias": 4, "frecuencia_diaria": 1, "fuerza_valor": 50, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 3, "ciclo_id": 3, "regimen": 0, "droga_id": 40, "cantidad_dias": 3, "frecuencia_diaria": 1, "fuerza_valor": 200, "fuerza_unidad": "mg/m2", "via_id": 1 },
+
+    { "protocolo_id": 3, "ciclo_id": 4, "regimen": 0, "droga_id": 18, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 70, "fuerza_unidad": "mg/kg", "via_id": 1 },
+    { "protocolo_id": 3, "ciclo_id": 4, "regimen": 0, "droga_id": 67, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 2000, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 3, "ciclo_id": 4, "regimen": 0, "droga_id": 34, "cantidad_dias": 3, "frecuencia_diaria": 1, "fuerza_valor": 25, "fuerza_unidad": "mg/m2",  "via_id": 1 },
+    { "protocolo_id": 3, "ciclo_id": 4, "regimen": 0, "droga_id": 102, "cantidad_dias": 2, "frecuencia_diaria": 1, "fuerza_valor": 1.5, "fuerza_unidad": "mg/m2",  "via_id": 1 },
+
+    { "protocolo_id": 3, "ciclo_id": 5, "regimen": 0, "droga_id": 20, "cantidad_dias": 4, "frecuencia_diaria": 1, "fuerza_valor": 50, "fuerza_unidad": "mg/m2", "via_id": 1 },
+    { "protocolo_id": 3, "ciclo_id": 5, "regimen": 0, "droga_id": 40, "cantidad_dias": 3, "frecuencia_diaria": 1, "fuerza_valor": 200, "fuerza_unidad": "mg/m2", "via_id": 1 }
+
+    
+]

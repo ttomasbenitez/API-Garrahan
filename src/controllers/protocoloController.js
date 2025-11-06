@@ -16,7 +16,8 @@ export const makeProtocoloController = (protocoloService, drogaService) => ({
 async function crearProtocolo(req, res, service) {
   try {
     const payload = service.validarProtocolo(req.body);
-    const protocolo = new Protocolo(payload.nombre, payload.enfermedad, payload.linea);
+    const protocolo = new Protocolo(payload.nombre, payload.enfermedad, payload.linea,
+      payload.cantidad_regimenes);
     await service.crear(protocolo);
     logger.info('Protocolo creado con ID: %d', protocolo.protocolo_id);
     res.status(201).json(protocolo);

@@ -18,6 +18,10 @@ Given(/^de linea de tratamiento "(.*)"$/, function (lineaTratamiento) {
   data.linea = lineaTratamiento;
 });
 
+Given(/^cantidad_regimenes "(.*)"$/, function (cantidadRegimenes) {
+  data.cantidad_regimenes = cantidadRegimenes;
+});
+
 When(/^publico en la API "(.*)" con los datos$/, async function (endpoint) {
   response = await request(app)
     .post(endpoint)
@@ -43,8 +47,8 @@ Then('el sistema responde correctamente', function () {
   response = null;
 });
 
-Given(/^existe en la base de datos un protocolo con el nombre de "(.*)" con id "(.*)"$/, async function (nombreProtocolo, _idProtocolo) {
-  data = { nombre: nombreProtocolo, enfermedad: 'Osteosarcoma', linea: 'primera linea' };
+Given(/^existe en la base de datos un protocolo con el nombre de "(.*)" con id "(.*)" y cantidad_regimenes "(.*)"$/, async function (nombreProtocolo, _idProtocolo, cantidadRegimenes) {
+  data = { nombre: nombreProtocolo, enfermedad: 'Osteosarcoma', linea: 'primera linea', cantidad_regimenes: cantidadRegimenes };
   await request(app)
     .post('/protocolos')
     .send(data)
@@ -94,6 +98,10 @@ Then(/^el sistema me devuelve el protocolo con id "(.*)"$/, function (id) {
 
 Then(/^el nombre del protocolo es "(.*)"$/, function (nombre) {
   assert.strictEqual(response.nombre, nombre);
+});
+
+Then('cantidad_regimenes es {int}', function (cantidadRegimenes) {
+  assert.strictEqual(response.cantidad_regimenes, cantidadRegimenes);
 });
 
 Then(/^la enfermedad es "(.*)"$/, function (enfermedad) {

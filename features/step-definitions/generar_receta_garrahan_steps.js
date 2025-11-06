@@ -1,8 +1,7 @@
-import { Given, When, Then } from '@cucumber/cucumber';
+import { When, Then } from '@cucumber/cucumber';
 import request from 'supertest';
 import app from '../../src/app.js';
 import assert from 'node:assert/strict';
-import ExcelJS from 'exceljs';
 import { RecetaHospitalariaExportador } from '../../src/domain/receta/recetaHospitalariaExportador.js';
 
 let response = null;

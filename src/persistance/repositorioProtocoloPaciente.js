@@ -18,11 +18,13 @@ export class RepositorioProtocoloPaciente {
         `INSERT INTO protocolo_paciente (
             paciente_id, protocolo_id, regimen, ciclo_actual_id,
             numero_ciclo, fecha_inicio, fecha_fin, estado,
-            profesional_id_asignador, fecha_asignacion
+            profesional_id_asignador, fecha_asignacion, ciclo_final, 
+            repeticiones_actuales, cambiar_regimen
           ) VALUES (
             :paciente_id, :protocolo_id, :regimen, :ciclo_actual_id,
             :numero_ciclo, :fecha_inicio, :fecha_fin, :estado,
-            :profesional_id_asignador, :fecha_asignacion
+            :profesional_id_asignador, :fecha_asignacion, :ciclo_final, 
+            :repeticiones_actuales, :cambiar_regimen
           )
           RETURNING protocolo_paciente_id INTO :id`,
         {
@@ -36,6 +38,9 @@ export class RepositorioProtocoloPaciente {
           estado: toStr(pp.estado),
           profesional_id_asignador: toNum(pp.profesional_id_asignador),
           fecha_asignacion: pp.fecha_asignacion,
+          ciclo_final: toNum(pp.ciclo_final),
+          repeticiones_actuales: toNum(pp.repeticiones_actuales),
+          cambiar_regimen: toNum(pp.cambiar_regimen),
           id: { dir: oracledb.BIND_OUT, type: oracledb.NUMBER }
         },
         { autoCommit: true }
@@ -88,7 +93,10 @@ export class RepositorioProtocoloPaciente {
       fecha_fin: row.FECHA_FIN,
       estado: row.ESTADO,
       profesional_id_asignador: row.PROFESIONAL_ID_ASIGNADOR,
-      fecha_asignacion: row.FECHA_ASIGNACION
+      fecha_asignacion: row.FECHA_ASIGNACION,
+      ciclo_final: row.CICLO_FINAL === '1',
+      repeticiones_actuales: row.REPETICIONES_ACTUALES,
+      cambiar_regimen: row.CAMBIAR_REGIMEN === '1'
     }));
   }
 
@@ -112,8 +120,9 @@ export class RepositorioProtocoloPaciente {
       estado: campos.estado,
       profesional_id_asignador: campos.profesional_id_asignador !== undefined ? toNum(campos.profesional_id_asignador) : undefined,
       fecha_asignacion: campos.fecha_asignacion,
-      ciclo_final: campos.ciclo_final !== undefined ? (campos.ciclo_final ? 1 : 0) : undefined,
-      repeticiones_actuales: campos.repeticiones_actuales !== undefined ? toNum(campos.repeticiones_actuales) : undefined
+      ciclo_final: toNum(campos.ciclo_final),
+      repeticiones_actuales: toNum(campos.repeticiones_actuales),
+      cambiar_regimen: toNum(campos.cambiar_regimen)
     };
 
     for (const key of keys) {
@@ -122,7 +131,7 @@ export class RepositorioProtocoloPaciente {
         bindParams[key] = formattedFields[key];
       }
     }
-    setStatements.push('ultima_modificacion = SYSDATE');
+    //setStatements.push('ultima_modificacion = SYSDATE');
     const setClause = setStatements.join(', ');
     bindParams.protocolo_paciente_id = toNum(protocolo_paciente_id);
 

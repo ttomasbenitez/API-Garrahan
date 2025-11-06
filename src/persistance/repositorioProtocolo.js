@@ -11,13 +11,14 @@ export class RepositorioProtocolo {
   async guardar(protocolo) {
     return await this.db.withConnection(async (conn) => {
       const result = await conn.execute(
-        `INSERT INTO protocolo (nombre, enfermedad, linea)
-         VALUES (:nombre, :enfermedad, :linea)
+        `INSERT INTO protocolo (nombre, enfermedad, linea, cantidad_regimenes)
+         VALUES (:nombre, :enfermedad, :linea, :cantidad_regimenes)
          RETURNING protocolo_id INTO :id`,
         {
           nombre: toStr(protocolo.nombre),
           enfermedad: toStr(protocolo.enfermedad),
           linea: toStr(protocolo.linea),
+          cantidad_regimenes: Number(protocolo.cantidad_regimenes),
           id: { dir: oracledb.BIND_OUT, type: oracledb.NUMBER }
         },
         { autoCommit: true }
@@ -43,7 +44,8 @@ export class RepositorioProtocolo {
 
   async obtener(id) {
     const result = await this.db.execute(
-      'SELECT protocolo_id, nombre, enfermedad, linea FROM protocolo WHERE protocolo_id = :id',
+      `SELECT protocolo_id, nombre, enfermedad, linea, cantidad_regimenes FROM protocolo 
+      WHERE protocolo_id = :id`,
       [id]
     );
 
@@ -51,18 +53,20 @@ export class RepositorioProtocolo {
 
     const ciclos = await this.obtenerCiclos(id);
     const row = result.rows[0];
-    return new Protocolo(row.NOMBRE, row.ENFERMEDAD, row.LINEA, row.PROTOCOLO_ID, ciclos);
+    return new Protocolo(row.NOMBRE, row.ENFERMEDAD, row.LINEA, row.CANTIDAD_REGIMENES,
+      row.PROTOCOLO_ID, ciclos);
   }
 
   async obtenerTodos() {
     const result = await this.db.execute(
-      'SELECT protocolo_id, nombre, enfermedad, linea FROM protocolo'
+      'SELECT protocolo_id, nombre, enfermedad, linea, cantidad_regimenes FROM protocolo'
     );
 
     const protocolos = [];
     for (const row of result.rows) {
       const ciclos = await this.obtenerCiclos(row.PROTOCOLO_ID);
-      protocolos.push(new Protocolo(row.NOMBRE, row.ENFERMEDAD, row.LINEA, row.PROTOCOLO_ID, ciclos));
+      protocolos.push(new Protocolo(row.NOMBRE, row.ENFERMEDAD, row.LINEA, row.CANTIDAD_REGIMENES,
+        row.PROTOCOLO_ID, ciclos));
     }
 
     return protocolos;

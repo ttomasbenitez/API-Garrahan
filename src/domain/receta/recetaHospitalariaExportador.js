@@ -1,4 +1,11 @@
 import ExcelJS from 'exceljs';
+import fs from 'fs';
+import path from 'path';
+import libre from 'libreoffice-convert';
+import { promisify } from 'util';
+import { PDFParse } from 'pdf-parse';
+
+const libreConvert = promisify(libre.convert);
 
 export class RecetaHospitalariaExportador {
   constructor(receta, protocolo) {
@@ -15,7 +22,6 @@ export class RecetaHospitalariaExportador {
     sheet.getCell('A5').value += ` ${this.receta.nombreCompleto()}`;
     sheet.getCell('A6').value += ` ${this.receta.dni()}`;
     sheet.getCell('A7').value += ` ${this.receta.diagnostico}`;
-    sheet.getCell('G7').value += ` ${this.receta.edad()}`;
     sheet.getCell('A8').value += ` ${this.receta.domicilioCompleto()}`;
     sheet.getCell('A9').value += ` ${this.protocolo.nombre}`;
     sheet.getCell('F9').value += ` ${this.receta.contexto.numero_ciclo}`;
@@ -24,7 +30,6 @@ export class RecetaHospitalariaExportador {
     sheet.getCell('H10').value += ` ${this.receta.datos_paciente.superficie_corporal} m2`;
 
     let startRow = 14;
-
     for (const det of this.receta.detalles) {
       sheet.getCell(`A${startRow}`).value = det.nombre_generico;
       sheet.getCell(`E${startRow}`).value = det.presentacion;
@@ -35,18 +40,22 @@ export class RecetaHospitalariaExportador {
       startRow += 2;
     }
 
+    const tmpDir = path.join(process.cwd(), 'tmp');
+    if (!fs.existsSync(tmpDir)) fs.mkdirSync(tmpDir);
+    const excelPath = path.join(tmpDir, `receta_${Date.now()}.xlsx`);
+    await workbook.xlsx.writeFile(excelPath);
 
-    const xlsxBuffer = await workbook.xlsx.writeBuffer();
-    return Buffer.from(xlsxBuffer);
+    const xlsxBuffer = fs.readFileSync(excelPath);
+    const pdfBuffer = await libreConvert(xlsxBuffer, '.pdf', undefined);
+
+    fs.unlinkSync(excelPath);
+
+    return pdfBuffer;
   }
 
   async cargar(body) {
-    const workbook = new ExcelJS.Workbook();
-    await workbook.xlsx.load(body);
-    const sheet = workbook.getWorksheet(1);
-    const text = sheet.getSheetValues().flat().join(' ');
-
-    return text;
+    const parser = new PDFParse({ data: body });
+    const result = await parser.getText();
+    return result.text;
   }
-
 }

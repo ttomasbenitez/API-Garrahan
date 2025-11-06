@@ -20,12 +20,13 @@ export class CalculoDrogaService {
 
     // Crear entidad de dominio para el cálculo
     const calculo = new CalculoDroga({
-      fuerza_valor: admin.FUERZA_VALOR,
+      fuerza_valor_requerida: admin.FUERZA_VALOR,
+      fuerza_unidad_requerida: admin.FUERZA_UNIDAD,
       cantidad_dias: admin.CANTIDAD_DIAS,
       frecuencia_diaria: admin.FRECUENCIA_DIARIA,
       peso,
       nueva_fuerza_valor,
-      fuerza_unidad: nueva_fuerza_unidad || admin.FUERZA_UNIDAD
+      nueva_fuerza_unidad: nueva_fuerza_unidad || admin.FUERZA_UNIDAD
     });
 
     return {

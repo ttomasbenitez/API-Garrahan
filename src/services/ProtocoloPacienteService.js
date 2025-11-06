@@ -1,7 +1,10 @@
+import ProtocoloPaciente from '../domain/protocoloPaciente.js';
+
 export class ProtocoloPacienteService {
 
-  constructor(protocoloPacienteRepo) {
+  constructor(protocoloPacienteRepo, protocoloRepo) {
     this.protocoloPacienteRepo = protocoloPacienteRepo;
+    this.protocoloRepo = protocoloRepo;
   }
 
   // Asignar un protocolo a un paciente
@@ -16,6 +19,40 @@ export class ProtocoloPacienteService {
     return this.protocoloPacienteRepo.obtenerPorPaciente(paciente_id, protocolo_id);
   }
 
+  async actualizarCicloActual(pacienteId) {
+    const protocolos = await this.protocoloPacienteRepo.obtenerPorPaciente(pacienteId);
+    const original = protocolos[0];
+    const protocoloPaciente = new ProtocoloPaciente({ ...original });
+
+    const protocolo = await this.protocoloRepo.obtener(protocoloPaciente.protocolo_id);
+
+
+    if (protocolo.cicloSiguienteTieneRegimenDistinto(protocoloPaciente.ciclo_actual_id, protocoloPaciente.regimen)) {
+      protocoloPaciente.actualizarCambiarRegimen();
+    }
+
+    protocoloPaciente.actualizarCicloActual();
+
+    if (!protocoloPaciente.esCicloFinal()) {
+      if (protocolo.esCicloFinal(protocoloPaciente.ciclo_actual_id)) {
+        protocoloPaciente.actualizarCicloFinal();
+      }
+    }
+
+    // Comparar campos modificados
+    const cambios = {};
+    for (const key of Object.keys(protocoloPaciente)) {
+      if (protocoloPaciente[key] !== original[key]) {
+        cambios[key] = protocoloPaciente[key];
+      }
+    }
+
+    if (Object.keys(cambios).length > 0) {
+      await this.protocoloPacienteRepo.actualizarParcialmente(protocoloPaciente.protocolo_paciente_id, cambios);
+    }
+
+    return protocoloPaciente.protocolo_paciente_id;
+  }
 
   // Actualización parcial de protocolo_paciente
   async updateParcial(protocolo_paciente_id, campos) {

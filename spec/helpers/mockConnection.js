@@ -7,16 +7,15 @@ export function createMockOracleDB({
   outBinds = {},
   throwAt = null,   // "execute" | "executeMany" | "commit" | "rollback"
   error = null,
-  autoCommit = true,
 } = {}) {
   // Mocks de las funciones típicas de una conexión Oracle
   const conn = {
-    execute: jest.fn(async (sql, binds, opts) => {
+    execute: jest.fn(async () => {
       if (throwAt === 'execute') throw error ?? new Error('execute failed');
       return { rowsAffected, rows, outBinds };
     }),
 
-    executeMany: jest.fn(async (sql, bindsArr, opts) => {
+    executeMany: jest.fn(async (bindsArr) => {
       if (throwAt === 'executeMany') throw error ?? new Error('executeMany failed');
       return { rowsAffected: bindsArr?.length ?? rowsAffected, outBinds };
     }),
