@@ -21,15 +21,19 @@ jobs:
           node-version: 20
           cache: 'npm'
 
-      # 3. Instalación de dependencias
+      # 3. Instalación de LibreOffice
+      - name: Install LibreOffice
+        run: sudo apt-get update && sudo apt-get install -y libreoffice
+        
+      # 4. Instalación de dependencias
       - name: Instalar dependencias
         run: npm ci
 
-      # 4. Correr linter
+      # 5. Correr linter
       - name: Correr linter
         run: npm run lint
 
-      # 5. Correr tests
+      # 6. Correr tests
       - name: Correr tests
         run: npm run test
 
