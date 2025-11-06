@@ -1,5 +1,6 @@
 import { RecetaHospitalariaExportador } from '../domain/receta/recetaHospitalariaExportador.js';
 import { RECETA_TIPO_HOSPITALARIA } from '../utils/constants.js';
+import { ERROR_RECETA_PACIENTE_ID_REQUERIDO } from '../errors/receta.js';
 
 export class RecetaService {
 
@@ -17,6 +18,10 @@ export class RecetaService {
   }
 
   async obtenerTodas(idPaciente) {
+    if (!idPaciente) {
+      throw new Error(ERROR_RECETA_PACIENTE_ID_REQUERIDO);
+    }
+
     return await this.recetaPacienteRepo.obtenerTodasPorIdPaciente(idPaciente);
   }
 
