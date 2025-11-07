@@ -61,6 +61,10 @@ import administracionMedicacionRoutes from './routes/administracionMedicacion.js
 import { CalculoDrogaService } from './services/CalculoDrogaService.js';
 import { makeCalculoDrogaController } from './controllers/calculoDrogaController.js';
 import calculoDrogaRoutes from './routes/calculoDroga.js';
+import { RepositorioConfiguracionAlarma } from './persistance/repositorioConfiguracionAlarma.js';
+import { ConfiguracionAlarmaService } from './services/configuracionAlarmaService.js';
+import { makeConfiguracionAlarmaController } from './controllers/configuracionAlarmaController.js';
+import configuracionAlarmaRoutes from './routes/configuracionAlarma.js';
 
 const app = express();
 
@@ -125,6 +129,10 @@ const administracionMedicacionController = makeAdministracionMedicacionControlle
 // Calculo Droga
 const calculoDrogaService = new CalculoDrogaService(repositorioAdministracionMedicacion);
 const calculoDrogaController = makeCalculoDrogaController(calculoDrogaService);
+// Configuracion Alarma
+const repositorioConfiguracionAlarma = new RepositorioConfiguracionAlarma(oracleDBInstance);
+const configuracionAlarmaService = new ConfiguracionAlarmaService(repositorioConfiguracionAlarma);
+const configuracionAlarmaController = makeConfiguracionAlarmaController(configuracionAlarmaService);
 
 app.use(express.json());
 app.use(cors({
@@ -150,5 +158,6 @@ app.use('/presentaciones-droga-via', presentacionDrogaViaRoutes(presentacionDrog
 app.use('/recetas', buildRecetasRouter(recetaController));
 app.use('/administraciones', administracionMedicacionRoutes(administracionMedicacionController));
 app.use('/calculo', calculoDrogaRoutes(calculoDrogaController));
+app.use('/configuracion-alarma', configuracionAlarmaRoutes(configuracionAlarmaController));
 
 export default app;
