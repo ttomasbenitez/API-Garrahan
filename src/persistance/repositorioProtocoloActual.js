@@ -50,6 +50,7 @@ export class RepositorioProtocoloActual {
             ON PR.forma_farmaceutica_id = FF.forma_farmaceutica_id
       WHERE
           PP.paciente_id = :pacienteId
+      AND UPPER(PP.estado) = 'ACTIVO' 
     `;
 
     const result = await this.connection.execute(sql, { pacienteId });
