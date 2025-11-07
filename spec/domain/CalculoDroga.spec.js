@@ -7,6 +7,7 @@ const PESO = 25; // kg
 const SC_CALCULADA = 107 / 115;
 const CANTIDAD_DIAS = 7;
 const FRECUENCIA_DIARIA = 1;
+const FRECUENCIA_DIARIA_DOBLE = 2; // Para casos de dos tomas al día
 
 // --- Funciones de Ayuda para el Test ---
 const toFixed = (number, decimals) => parseFloat(number.toFixed(decimals));
@@ -199,5 +200,86 @@ describe('CalculoDroga - Conversiones y Unidades', () => {
     };
     const calculo = new CalculoDroga(params);
     expect(calculo.getUnidades()).toBe(0);
+  });
+});
+
+describe('CalculoDroga - Dosis Diaria', () => {
+
+  test('Dosis Diaria: mg/m2 (1 toma) y presentación en MG', () => {
+    const fuerzaRequerida = 100;
+    const params = {
+      fuerza_valor_requerida: fuerzaRequerida,
+      fuerza_unidad_requerida: 'mg/m2',
+      cantidad_dias: CANTIDAD_DIAS,
+      frecuencia_diaria: FRECUENCIA_DIARIA,
+      peso: PESO,
+      nueva_fuerza_valor: 500,
+      nueva_fuerza_unidad: 'mg'
+    };
+    const calculo = new CalculoDroga(params);
+
+    const dosisDiariaMg = fuerzaRequerida * SC_CALCULADA * FRECUENCIA_DIARIA;
+
+    expect(calculo.getDosisDiaria()).toEqual({ valor: toFixedString(dosisDiariaMg, 2), unidad: 'mg' });
+  });
+
+  test('Dosis Diaria: mg/kg (2 tomas) y presentación en GR', () => {
+    const fuerzaRequerida = 50;
+    const presentacionGr = 1;
+    const params = {
+      fuerza_valor_requerida: fuerzaRequerida,
+      fuerza_unidad_requerida: 'mg/kg',
+      cantidad_dias: CANTIDAD_DIAS,
+      frecuencia_diaria: FRECUENCIA_DIARIA_DOBLE,
+      peso: 10,
+      nueva_fuerza_valor: presentacionGr,
+      nueva_fuerza_unidad: 'gr'
+    };
+    const calculo = new CalculoDroga(params);
+
+    const dosisDiariaMg = fuerzaRequerida * 10 * FRECUENCIA_DIARIA_DOBLE;
+    const dosisDiariaGr = dosisDiariaMg / 1000;
+
+    expect(calculo.getDosisDiaria()).toEqual({ valor: toFixedString(dosisDiariaGr, 2), unidad: 'gr' });
+  });
+
+  test('Dosis Diaria: μg/kg (1 toma) y presentación en μg', () => {
+    const fuerzaRequeridaμg = 50;
+    const peso = 20;
+    const presentacionμg = 100;
+
+    const params = {
+      fuerza_valor_requerida: fuerzaRequeridaμg,
+      fuerza_unidad_requerida: 'μg/kg',
+      cantidad_dias: CANTIDAD_DIAS,
+      frecuencia_diaria: FRECUENCIA_DIARIA,
+      peso: peso,
+      nueva_fuerza_valor: presentacionμg,
+      nueva_fuerza_unidad: 'μg'
+    };
+    const calculo = new CalculoDroga(params);
+
+    const dosisDiariaMg = (fuerzaRequeridaμg / 1000) * peso * FRECUENCIA_DIARIA;
+    const dosisDiariaμg = dosisDiariaMg * 1000;
+
+    expect(calculo.getDosisDiaria()).toEqual({ valor: toFixedString(dosisDiariaμg, 2), unidad: 'μg' });
+  });
+
+  test('Dosis Diaria: maneja la nueva_fuerza_unidad vacía y devuelve en MG', () => {
+    const fuerzaRequerida = 100;
+    const params = {
+      fuerza_valor_requerida: fuerzaRequerida,
+      fuerza_unidad_requerida: 'mg/m2',
+      cantidad_dias: CANTIDAD_DIAS,
+      frecuencia_diaria: FRECUENCIA_DIARIA_DOBLE,
+      peso: PESO,
+      nueva_fuerza_valor: 500,
+      nueva_fuerza_unidad: ''
+    };
+    const calculo = new CalculoDroga(params);
+
+    const dosisDiariaMg = fuerzaRequerida * SC_CALCULADA * FRECUENCIA_DIARIA_DOBLE;
+
+    expect(calculo.getDosisDiaria()).toEqual({ valor: toFixedString(dosisDiariaMg, 2), unidad: '' });
   });
 });

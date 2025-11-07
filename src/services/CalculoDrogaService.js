@@ -14,11 +14,9 @@ export class CalculoDrogaService {
    * @param {string} params.nueva_fuerza_unidad
    */
   async calcular({ administracion_id, peso, nueva_fuerza_valor, nueva_fuerza_unidad }) {
-    // Buscar la administración por ID
     const admin = await this.repositorioAdministracion.getById(administracion_id);
     if (!admin) throw new Error('Administración no encontrada');
 
-    // Crear entidad de dominio para el cálculo
     const calculo = new CalculoDroga({
       fuerza_valor_requerida: admin.FUERZA_VALOR,
       fuerza_unidad_requerida: admin.FUERZA_UNIDAD,
@@ -30,7 +28,7 @@ export class CalculoDrogaService {
     });
 
     return {
-      cantidad_base: calculo.getCantidadBase(),
+      dosis_diaria: calculo.getDosisDiaria(),
       cantidad_total: calculo.getCantidadTotal(),
       unidades: calculo.getUnidades(),
       fuerza_unidad: calculo.fuerza_unidad,
