@@ -170,3 +170,4 @@ app.use('/configuracion-alarma', configuracionAlarmaRoutes(configuracionAlarmaCo
 app.use('/alarmas', buildAlarmaRouter(alarmaController));
 
 export default app;
+export { alarmaService };

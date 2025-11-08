@@ -51,17 +51,19 @@ export class RepositorioAlarma {
       return 0;
     }
 
-    const result = await this.db.executeMany(
-      `INSERT INTO alarmas (paciente_id, fecha_ultima_receta, dias_transcurridos)
-       VALUES (:paciente_id, :fecha_ultima_receta, :dias_transcurridos)`,
-      alarmas.map(a => ({
-        paciente_id: toNum(a.paciente_id),
-        fecha_ultima_receta: a.fecha_ultima_receta,
-        dias_transcurridos: toNum(a.dias_transcurridos)
-      })),
-      { autoCommit: true }
-    );
+    return await this.db.withConnection(async (connection) => {
+      const result = await connection.executeMany(
+        `INSERT INTO alarmas (paciente_id, fecha_ultima_receta, dias_transcurridos)
+         VALUES (:paciente_id, :fecha_ultima_receta, :dias_transcurridos)`,
+        alarmas.map(a => ({
+          paciente_id: toNum(a.paciente_id),
+          fecha_ultima_receta: a.fecha_ultima_receta,
+          dias_transcurridos: toNum(a.dias_transcurridos)
+        })),
+        { autoCommit: true }
+      );
 
-    return result.rowsAffected;
+      return result.rowsAffected;
+    });
   }
 }
