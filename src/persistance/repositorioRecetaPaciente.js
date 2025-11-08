@@ -32,7 +32,7 @@ export class RepositorioRecetaPaciente {
             peso, talla, superficie_corporal, diagnostico, numero_ciclo,
             protocolo_id, ciclo_id, regimen, paciente_id, profesional_id, estado
           ) VALUES (
-            SYSDATE, :nombre, :apellido, :tipo_documento, :numero_documento,
+            NVL(:fecha_prescripcion, SYSDATE), :nombre, :apellido, :tipo_documento, :numero_documento,
             :fecha_nacimiento, :sexo, :nacionalidad,
             :domicilio_calle, :domicilio_numero, :domicilio_piso, :domicilio_depto,
             :codigo_postal, :localidad, :partido,
@@ -40,8 +40,9 @@ export class RepositorioRecetaPaciente {
             :peso, :talla, :superficie_corporal, :diagnostico, :numero_ciclo,
             :protocolo_id, :ciclo_id, :regimen, :paciente_id, :profesional_id, :estado
           )
-          RETURNING receta_id, fecha_prescripcion INTO :id, :fecha_prescripcion`,
+          RETURNING receta_id, fecha_prescripcion INTO :id, :fecha_prescripcion_out`,
           {
+            fecha_prescripcion: rp.fecha_prescripcion ? new Date(rp.fecha_prescripcion) : null,
             nombre: toStr(identidad.nombre),
             apellido: toStr(identidad.apellido),
             tipo_documento: toStr(identidad.tipo_documento),
@@ -70,7 +71,7 @@ export class RepositorioRecetaPaciente {
             profesional_id: toNum(rp.profesional_id),
             estado: toStr(rp.estado),
             id: { dir: oracledb.BIND_OUT, type: oracledb.NUMBER },
-            fecha_prescripcion: { dir: oracledb.BIND_OUT, type: oracledb.DATE },
+            fecha_prescripcion_out: { dir: oracledb.BIND_OUT, type: oracledb.DATE },
           },
           { autoCommit: false }
         );
@@ -80,7 +81,7 @@ export class RepositorioRecetaPaciente {
         }
 
         rp.id = result.outBinds.id[0];
-        rp.fecha_prescripcion = new Date(result.outBinds.fecha_prescripcion[0]);
+        rp.fecha_prescripcion = new Date(result.outBinds.fecha_prescripcion_out[0]);
 
 
         if (Array.isArray(rp.detalles) && rp.detalles.length > 0) {
