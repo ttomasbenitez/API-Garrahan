@@ -8,10 +8,10 @@ async function startServer() {
   try {
     await oracleDB.init();
     logger.info('Conexión a Oracle establecida, iniciando servidor...');
-    
+
     // Iniciar job de alarmas
     iniciarJobAlarmas(alarmaService);
-    
+
     app.listen(config.app.port, () => logger.info(`Servidor escuchando en puerto ${config.app.port}`));
     const shutdown = async (signal) => {
       try {

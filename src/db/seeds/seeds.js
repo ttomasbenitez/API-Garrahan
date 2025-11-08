@@ -211,7 +211,7 @@ async function main() {
   await createCiclos(cookieAdmin);
   await createPresentacionDrogaVia(cookieAdmin);
   await createAdministracionesMedicacion(cookieAdmin);
-  
+
   const cookieMedico = await login('medico');
   await createPacientes(cookieMedico);
   await createProtocolosPaciente(cookieMedico);

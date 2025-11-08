@@ -10,10 +10,10 @@ export const iniciarJobAlarmas = (alarmaService) => {
 
   const job = cron.schedule(cronExpression, async () => {
     logger.info('🔔 Iniciando job de generación de alarmas...');
-    
+
     try {
       const resultado = await alarmaService.generarAlarmas();
-      
+
       logger.info('✅ Job de alarmas completado exitosamente:', {
         alarmasGeneradas: resultado.alarmasGeneradas,
         pacientesActivos: resultado.pacientesActivos,

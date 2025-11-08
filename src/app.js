@@ -68,7 +68,7 @@ import configuracionAlarmaRoutes from './routes/configuracionAlarma.js';
 import { RepositorioAlarma } from './persistance/repositorioAlarma.js';
 import { AlarmaService } from './services/alarmaService.js';
 import { makeAlarmaController } from './controllers/alarmaController.js';
-import buildAlarmaRouter from './routes/alarma.js';
+import alarmaRoutes from './routes/alarma.js';
 
 const app = express();
 
@@ -167,7 +167,7 @@ app.use('/recetas', buildRecetasRouter(recetaController));
 app.use('/administraciones', administracionMedicacionRoutes(administracionMedicacionController));
 app.use('/calculo', calculoDrogaRoutes(calculoDrogaController));
 app.use('/configuracion-alarma', configuracionAlarmaRoutes(configuracionAlarmaController));
-app.use('/alarmas', buildAlarmaRouter(alarmaController));
+app.use('/alarmas', alarmaRoutes(alarmaController));
 
 export default app;
 export { alarmaService };
