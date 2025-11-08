@@ -1,0 +1,10 @@
+[
+  {
+    "nombre": "Intravenosa",
+    "codigo": "IV"
+  },
+  {
+    "nombre": "Oral",
+    "codigo": "VO"
+  }
+]
