@@ -65,6 +65,10 @@ import { RepositorioConfiguracionAlarma } from './persistance/repositorioConfigu
 import { ConfiguracionAlarmaService } from './services/configuracionAlarmaService.js';
 import { makeConfiguracionAlarmaController } from './controllers/configuracionAlarmaController.js';
 import configuracionAlarmaRoutes from './routes/configuracionAlarma.js';
+import { RepositorioAlarma } from './persistance/repositorioAlarma.js';
+import { AlarmaService } from './services/alarmaService.js';
+import { makeAlarmaController } from './controllers/alarmaController.js';
+import buildAlarmaRouter from './routes/alarma.js';
 
 const app = express();
 
@@ -133,6 +137,10 @@ const calculoDrogaController = makeCalculoDrogaController(calculoDrogaService);
 const repositorioConfiguracionAlarma = new RepositorioConfiguracionAlarma(oracleDBInstance);
 const configuracionAlarmaService = new ConfiguracionAlarmaService(repositorioConfiguracionAlarma);
 const configuracionAlarmaController = makeConfiguracionAlarmaController(configuracionAlarmaService);
+// Alarma
+const repositorioAlarma = new RepositorioAlarma(oracleDBInstance);
+const alarmaService = new AlarmaService(repositorioAlarma, repositorioConfiguracionAlarma, oracleDBInstance);
+const alarmaController = makeAlarmaController(alarmaService);
 
 app.use(express.json());
 app.use(cors({
@@ -159,5 +167,6 @@ app.use('/recetas', buildRecetasRouter(recetaController));
 app.use('/administraciones', administracionMedicacionRoutes(administracionMedicacionController));
 app.use('/calculo', calculoDrogaRoutes(calculoDrogaController));
 app.use('/configuracion-alarma', configuracionAlarmaRoutes(configuracionAlarmaController));
+app.use('/alarmas', buildAlarmaRouter(alarmaController));
 
 export default app;
