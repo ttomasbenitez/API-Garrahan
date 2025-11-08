@@ -47,7 +47,7 @@ describe(RepositorioRecetaPaciente, () => {
       rowsAffected: 1,
       outBinds: {
         id: [123],
-        fecha_prescripcion: [new Date('2025-10-27')],
+        fecha_prescripcion_out: [new Date('2025-10-27')],
       },
     });
 
