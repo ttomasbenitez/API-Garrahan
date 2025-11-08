@@ -79,6 +79,14 @@ class RecetaPaciente {
     });
   }
 
+  nombre() {
+    return this.paciente_snapshot.identidad.nombre;
+  }
+
+  apellido() {
+    return this.paciente_snapshot.identidad.apellido;
+  }
+
   nombreCompleto() {
     return `${this.paciente_snapshot.identidad.nombre} ${this.paciente_snapshot.identidad.apellido}`;
   }
