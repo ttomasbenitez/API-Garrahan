@@ -19,7 +19,7 @@ async function listarAlarmas(req, res, service) {
 
 async function listarAlarmasPorProfesional(req, res, service) {
   try {
-    const { profesionalId } = req.params;
+    const profesionalId = req.user.id;
 
     if (!profesionalId || isNaN(Number(profesionalId))) {
       logger.warn('ID de profesional inválido: %s', profesionalId);
