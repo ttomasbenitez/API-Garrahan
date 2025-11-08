@@ -6,7 +6,7 @@ import logger from '../utils/logger.js';
  * Se ejecuta todos los días a las 2:00 AM
  */
 export const iniciarJobAlarmas = (alarmaService) => {
-  const cronExpression = '* * * * *'; // lo dejo en modo testing para cada 1 minuto cronExpression = '0 2 * * *'; // lo dejo en modo producción para las 2 AM diarias
+  const cronExpression = '0 2 * * *';
 
   const job = cron.schedule(cronExpression, async () => {
     logger.info('🔔 Iniciando job de generación de alarmas...');

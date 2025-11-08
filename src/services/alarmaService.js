@@ -12,6 +12,13 @@ export class AlarmaService {
     return this.alarmaRepo.listar();
   }
 
+  /**
+   * Lista alarmas por profesional
+   */
+  async listarPorProfesional(profesionalId) {
+    return this.alarmaRepo.listarPorProfesional(profesionalId);
+  }
+
   async generarAlarmas() {
     try {
       // 1. Obtener configuración (límite de días)

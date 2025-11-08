@@ -63,6 +63,97 @@ describe('RepositorioAlarma', () => {
     });
   });
 
+  describe('listarPorProfesional', () => {
+    test('deberia obtener alarmas de pacientes asociados a un profesional', async () => {
+      const fecha1 = new Date('2025-10-20T10:00:00Z');
+      const fecha2 = new Date('2025-10-18T10:00:00Z');
+      const profesionalId = 10;
+
+      db.execute.mockResolvedValue({
+        rows: [
+          {
+            ALARMA_ID: 1,
+            PACIENTE_ID: 123,
+            FECHA_ULTIMA_RECETA: fecha1,
+            DIAS_TRANSCURRIDOS: 18
+          },
+          {
+            ALARMA_ID: 3,
+            PACIENTE_ID: 789,
+            FECHA_ULTIMA_RECETA: fecha2,
+            DIAS_TRANSCURRIDOS: 20
+          }
+        ]
+      });
+
+      const alarmas = await repo.listarPorProfesional(profesionalId);
+
+      expect(alarmas).toHaveLength(2);
+      expect(alarmas[0]).toBeInstanceOf(Alarma);
+      expect(alarmas[0].alarma_id).toBe(1);
+      expect(alarmas[0].paciente_id).toBe(123);
+      expect(alarmas[0].dias_transcurridos).toBe(18);
+      expect(alarmas[1].paciente_id).toBe(789);
+      expect(db.execute).toHaveBeenCalledTimes(1);
+
+      const [sql, binds] = db.execute.mock.calls[0];
+      expect(sql).toMatch(/SELECT\s+DISTINCT/i);
+      expect(sql).toMatch(/FROM\s+alarmas\s+a/i);
+      expect(sql).toMatch(/INNER\s+JOIN\s+paciente_profesional\s+pp/i);
+      expect(sql).toMatch(/WHERE\s+pp\.profesional_id\s*=\s*:profesional_id/i);
+      expect(sql).toMatch(/ORDER BY\s+a\.dias_transcurridos\s+DESC/i);
+      expect(binds.profesional_id).toBe(profesionalId);
+    });
+
+    test('deberia devolver array vacio si el profesional no tiene pacientes con alarmas', async () => {
+      db.execute.mockResolvedValue({
+        rows: []
+      });
+
+      const alarmas = await repo.listarPorProfesional(99);
+
+      expect(alarmas).toHaveLength(0);
+      expect(Array.isArray(alarmas)).toBe(true);
+      expect(db.execute).toHaveBeenCalledTimes(1);
+    });
+
+    test('deberia formatear correctamente las fechas en las alarmas', async () => {
+      const fecha = new Date('2025-11-05T15:30:00Z');
+
+      db.execute.mockResolvedValue({
+        rows: [
+          {
+            ALARMA_ID: 5,
+            PACIENTE_ID: 100,
+            FECHA_ULTIMA_RECETA: fecha,
+            DIAS_TRANSCURRIDOS: 3
+          }
+        ]
+      });
+
+      const alarmas = await repo.listarPorProfesional(5);
+
+      expect(alarmas[0].fecha_ultima_receta).toBe('2025-11-05');
+    });
+
+    test('deberia manejar fecha_ultima_receta null', async () => {
+      db.execute.mockResolvedValue({
+        rows: [
+          {
+            ALARMA_ID: 6,
+            PACIENTE_ID: 200,
+            FECHA_ULTIMA_RECETA: null,
+            DIAS_TRANSCURRIDOS: 10
+          }
+        ]
+      });
+
+      const alarmas = await repo.listarPorProfesional(7);
+
+      expect(alarmas[0].fecha_ultima_receta).toBeNull();
+    });
+  });
+
   describe('limpiar', () => {
     test('deberia eliminar todas las alarmas correctamente', async () => {
       db.execute.mockResolvedValue({

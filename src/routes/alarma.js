@@ -5,6 +5,7 @@ export default function alarmaRoutes(controller) {
   const r = express.Router();
 
   r.get('/', authMiddleware, controller.listar);
+  r.get('/profesional/:profesionalId', authMiddleware, requireRole('admin', 'medico'), controller.listarPorProfesional);
   r.post('/generar', authMiddleware, requireRole('admin'), controller.generarManual);
 
   return r;

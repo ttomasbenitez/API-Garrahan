@@ -230,3 +230,4 @@ CREATE TABLE alarmas (
 -- ======= ÍNDICES DE APOYO =======
 
 CREATE INDEX idx_protocolo_nombre ON protocolo(nombre);
+CREATE INDEX idx_paciente_profesional ON paciente_profesional(profesional_id);
