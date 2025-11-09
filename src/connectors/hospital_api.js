@@ -13,16 +13,42 @@ export class ApiHospitalConector {
     return this._normalizarFhir(fhirData);
   }
 
-  _normalizarFhir(fhirData) {
-    const patient = fhirData.entry?.find(e => e.resourceType === 'Patient') || fhirData.entry?.[0];
-    const condition = fhirData.entry?.find(e => e.resource?.resourceType === 'Condition')?.resource;
+  _extraerPaciente(fhirData) {
+    const entry = fhirData.entry?.find(e => e.resourceType === 'Patient' || e.resource?.resourceType === 'Patient');
+    return entry?.resource || entry || null;
+  }
+
+  _extraerObservaciones(fhirData) {
     const observations = fhirData.entry
       ?.filter(e => e.resource?.resourceType === 'Observation')
-      .map(e => e.resource);
+      .map(e => e.resource) || [];
 
-    const peso = observations?.find(o => o.id === 'obs-weight')?.valueQuantity?.value || null;
-    const talla = observations?.find(o => o.id === 'obs-height')?.valueQuantity?.value || null;
-    const superficie_corporal = observations?.find(o => o.id === 'obs-bsa')?.valueQuantity?.value || null;
+    return {
+      peso: observations.find(o => o.id === 'obs-weight')?.valueQuantity?.value || null,
+      talla: observations.find(o => o.id === 'obs-height')?.valueQuantity?.value || null,
+      superficie_corporal: observations.find(o => o.id === 'obs-bsa')?.valueQuantity?.value || null
+    };
+  }
+
+  _extraerDireccion(address) {
+    if (!address?.[0]?.line) return { calle: null, numero: null, pisoDepto: null };
+
+    // Si line es array, unirlo
+    const lineStr = Array.isArray(address[0].line) ? address[0].line.join(', ') : address[0].line;
+    const [calleRaw, numero, pisoRaw] = lineStr.split(',').map(s => s.trim());
+
+    const calle = calleRaw?.replace(/Piso\s*\d+[A-Z]?/i, '').trim() || calleRaw;
+    const pisoDepto = pisoRaw?.match(/(\d+[A-Z]?)/i)?.[1] || pisoRaw || null;
+
+    return { calle, numero, pisoDepto };
+  }
+
+  _normalizarFhir(fhirData) {
+    const patient = this._extraerPaciente(fhirData);
+    const condition = fhirData.entry?.find(e => e.resource?.resourceType === 'Condition')?.resource;
+    const coverage = fhirData.entry?.find(e => e.resource?.resourceType === 'Coverage')?.resource;
+    const { peso, talla, superficie_corporal } = this._extraerObservaciones(fhirData);
+    const { calle, numero, pisoDepto } = this._extraerDireccion(patient?.address);
 
     const dni = patient?.identifier?.find(i => i.system === 'DNI');
 
@@ -34,9 +60,9 @@ export class ApiHospitalConector {
       fecha_nacimiento: patient?.birthDate || null,
       sexo: patient?.gender?.[0]?.toUpperCase() || null,
       nacionalidad: patient?.extension?.[0]?.valueCodeableConcept?.text || null,
-      domicilio_calle: patient?.address?.[0]?.line || null,
-      domicilio_numero: patient?.address?.[0]?.number || null,
-      domicilio_piso_depto: patient?.address?.[0]?.line?.split(',')?.[2]?.trim() || null,
+      domicilio_calle: calle || null,
+      domicilio_numero: numero || null,
+      domicilio_piso_depto: pisoDepto || null,
       codigo_postal: patient?.address?.[0]?.postalCode || null,
       localidad: patient?.address?.[0]?.city || null,
       partido: patient?.address?.[0]?.district || null,
@@ -46,8 +72,10 @@ export class ApiHospitalConector {
       talla,
       superficie_corporal,
       diagnostico: condition?.code?.text || null,
+      obra_social: coverage?.payor?.[0]?.display || null,
     };
   }
+
 }
 
 

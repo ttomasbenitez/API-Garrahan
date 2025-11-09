@@ -12,6 +12,48 @@ describe('ApiHospitalConector', () => {
     conector = new ApiHospitalConector();
   });
 
+  test('_extraerPaciente devuelve el recurso Patient correcto', () => {
+    const fhirData = {
+      entry: [{ resourceType: 'Patient', resource: { id: '123', name: [{ given: ['Juan'], family: 'Pérez' }] } }],
+    };
+    const result = conector._extraerPaciente(fhirData);
+    expect(result.name[0].given[0]).toBe('Juan');
+    expect(result.name[0].family).toBe('Pérez');
+  });
+
+  test('_extraerObservaciones devuelve valores de peso, talla y superficie corporal', () => {
+    const fhirData = {
+      entry: [
+        { resource: { resourceType: 'Observation', id: 'obs-weight', valueQuantity: { value: 70 } } },
+        { resource: { resourceType: 'Observation', id: 'obs-height', valueQuantity: { value: 180 } } },
+        { resource: { resourceType: 'Observation', id: 'obs-bsa', valueQuantity: { value: 1.9 } } },
+      ],
+    };
+    const result = conector._extraerObservaciones(fhirData);
+    expect(result).toEqual({ peso: 70, talla: 180, superficie_corporal: 1.9 });
+  });
+
+  test('_extraerDireccion separa calle, número y pisoDepto correctamente', () => {
+    const address = [{ line: ['Av. Siempre Viva, 742, Piso 3A'] }];
+    const result = conector._extraerDireccion(address);
+    expect(result).toEqual({
+      calle: 'Av. Siempre Viva',
+      numero: '742',
+      pisoDepto: '3A',
+    });
+  });
+
+  test('_extraerDireccion maneja sólo piso sin letra', () => {
+    const address = [{ line: ['Av. Siempre Viva, 742, Piso 3'] }];
+    const result = conector._extraerDireccion(address);
+    expect(result.pisoDepto).toBe('3');
+  });
+
+  test('_extraerDireccion devuelve nulls si falta la dirección', () => {
+    const result = conector._extraerDireccion(null);
+    expect(result).toEqual({ calle: null, numero: null, pisoDepto: null });
+  });
+
   test('obtenerPaciente devuelve datos normalizados correctamente', async () => {
     const mockResponse = {
       ok: true,
@@ -42,6 +84,12 @@ describe('ApiHospitalConector', () => {
           extension: [{
             valueCodeableConcept: { text: 'Argentina' }
           }]
+        },
+        {
+          resource: {
+            resourceType: 'Coverage',
+            payor: [{ display: 'OSDE' }]
+          }
         },
         {
           resource: {
@@ -86,9 +134,9 @@ describe('ApiHospitalConector', () => {
       fecha_nacimiento: '2017-05-15',
       sexo: 'M',
       nacionalidad: 'Argentina',
-      domicilio_calle: 'Av. Calchaqui, 1090, Piso 3B',
+      domicilio_calle: 'Av. Calchaqui',
       domicilio_numero: '1090',
-      domicilio_piso_depto: 'Piso 3B',
+      domicilio_piso_depto: '3B',
       codigo_postal: '1414',
       localidad: 'Quilmes Oeste',
       partido: 'Quilmes',
@@ -97,7 +145,8 @@ describe('ApiHospitalConector', () => {
       peso: 18.2,
       talla: 110.0,
       superficie_corporal: 0.78,
-      diagnostico: 'Leucemia linfoblástica aguda'
+      diagnostico: 'Leucemia linfoblástica aguda',
+      obra_social: 'OSDE'
     });
   });
 
@@ -129,7 +178,8 @@ describe('ApiHospitalConector', () => {
       peso: null,
       talla: null,
       superficie_corporal: null,
-      diagnostico: null
+      diagnostico: null,
+      obra_social: null,
     });
   });
 
