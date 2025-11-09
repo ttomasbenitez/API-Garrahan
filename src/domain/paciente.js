@@ -1,5 +1,5 @@
 class Paciente {
-  constructor(nombre, apellido, id_hospitalario, fecha_nacimiento, peso, altura, sexo, obra_social, dni, ultima_modificacion, paciente_id) {
+  constructor(nombre, apellido, id_hospitalario, fecha_nacimiento, peso, altura, sexo, obra_social, dni, sup_corporal, ultima_modificacion, paciente_id) {
 
     this.nombre = nombre ?? null;
     this.apellido = apellido ?? null;
@@ -12,6 +12,7 @@ class Paciente {
     this.ultima_modificacion = ultima_modificacion ?? null;
     this.obra_social = obra_social ?? null;
     this.dni = dni ?? null;
+    this.sup_corporal = sup_corporal ?? null;
   }
 }
 

@@ -61,6 +61,14 @@ import administracionMedicacionRoutes from './routes/administracionMedicacion.js
 import { CalculoDrogaService } from './services/CalculoDrogaService.js';
 import { makeCalculoDrogaController } from './controllers/calculoDrogaController.js';
 import calculoDrogaRoutes from './routes/calculoDroga.js';
+import { RepositorioConfiguracionAlarma } from './persistance/repositorioConfiguracionAlarma.js';
+import { ConfiguracionAlarmaService } from './services/configuracionAlarmaService.js';
+import { makeConfiguracionAlarmaController } from './controllers/configuracionAlarmaController.js';
+import configuracionAlarmaRoutes from './routes/configuracionAlarma.js';
+import { RepositorioAlarma } from './persistance/repositorioAlarma.js';
+import { AlarmaService } from './services/alarmaService.js';
+import { makeAlarmaController } from './controllers/alarmaController.js';
+import alarmaRoutes from './routes/alarma.js';
 
 const app = express();
 // droga
@@ -124,6 +132,14 @@ const administracionMedicacionController = makeAdministracionMedicacionControlle
 // Calculo Droga
 const calculoDrogaService = new CalculoDrogaService(repositorioAdministracionMedicacion);
 const calculoDrogaController = makeCalculoDrogaController(calculoDrogaService);
+// Configuracion Alarma
+const repositorioConfiguracionAlarma = new RepositorioConfiguracionAlarma(oracleDBInstance);
+const configuracionAlarmaService = new ConfiguracionAlarmaService(repositorioConfiguracionAlarma);
+const configuracionAlarmaController = makeConfiguracionAlarmaController(configuracionAlarmaService);
+// Alarma
+const repositorioAlarma = new RepositorioAlarma(oracleDBInstance);
+const alarmaService = new AlarmaService(repositorioAlarma, repositorioConfiguracionAlarma, oracleDBInstance);
+const alarmaController = makeAlarmaController(alarmaService);
 
 app.use(express.json());
 app.use(cors({
@@ -149,5 +165,8 @@ app.use('/presentaciones-droga-via', presentacionDrogaViaRoutes(presentacionDrog
 app.use('/recetas', buildRecetasRouter(recetaController));
 app.use('/administraciones', administracionMedicacionRoutes(administracionMedicacionController));
 app.use('/calculo', calculoDrogaRoutes(calculoDrogaController));
+app.use('/configuracion-alarma', configuracionAlarmaRoutes(configuracionAlarmaController));
+app.use('/alarmas', alarmaRoutes(alarmaController));
 
 export default app;
+export { alarmaService };

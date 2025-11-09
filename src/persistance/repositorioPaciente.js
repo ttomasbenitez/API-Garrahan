@@ -14,9 +14,9 @@ export class RepositorioPaciente {
 
     const result = await this.connection.execute(
       `INSERT INTO paciente (
-            nombre, apellido, id_hospitalario, fecha_nacimiento, peso, altura, sexo, ultima_modificacion, obra_social, dni
+            nombre, apellido, id_hospitalario, fecha_nacimiento, peso, altura, sup_corporal, sexo, ultima_modificacion, obra_social, dni
           ) VALUES (
-            :nombre, :apellido, :id_hospitalario, :fecha_nacimiento, :peso, :altura, :sexo, SYSDATE, :obra_social, :dni
+            :nombre, :apellido, :id_hospitalario, :fecha_nacimiento, :peso, :altura, :sup_corporal, :sexo, SYSDATE, :obra_social, :dni
           )
           RETURNING paciente_id INTO :id`,
       {
@@ -26,6 +26,7 @@ export class RepositorioPaciente {
         fecha_nacimiento: paciente.fecha_nacimiento,
         peso: toFloat(paciente.peso),
         altura: Number(paciente.altura),
+        sup_corporal: toFloat(paciente.sup_corporal),
         sexo: toStr(paciente.sexo),
         obra_social: toStr(paciente.obra_social),
         dni: toStr(paciente.dni),
@@ -46,7 +47,7 @@ export class RepositorioPaciente {
   async obtener(id) {
 
     const result = await this.connection.execute(
-      `SELECT paciente_id, nombre, apellido, id_hospitalario, fecha_nacimiento, peso, altura, sexo, ultima_modificacion, obra_social, dni
+      `SELECT paciente_id, nombre, apellido, id_hospitalario, fecha_nacimiento, peso, altura, sexo, ultima_modificacion, obra_social, dni, sup_corporal
            FROM paciente
            WHERE paciente_id = :id`,
       [id]
@@ -67,6 +68,7 @@ export class RepositorioPaciente {
       row.SEXO,
       row.OBRA_SOCIAL,
       row.DNI,
+      row.SUP_CORPORAL,
       row.ULTIMA_MODIFICACION,
       row.PACIENTE_ID,
     );
@@ -74,7 +76,7 @@ export class RepositorioPaciente {
 
   async obtenerTodos() {
     const result = await this.connection.execute(
-      `SELECT paciente_id, nombre, apellido, id_hospitalario, fecha_nacimiento, peso, altura, sexo, ultima_modificacion, obra_social, dni
+      `SELECT paciente_id, nombre, apellido, id_hospitalario, fecha_nacimiento, peso, altura, sexo, ultima_modificacion, obra_social, dni, sup_corporal
            FROM paciente`,
     );
 
@@ -90,6 +92,7 @@ export class RepositorioPaciente {
         row.SEXO,
         row.OBRA_SOCIAL,
         row.DNI,
+        row.SUP_CORPORAL,
         row.ULTIMA_MODIFICACION,
         row.PACIENTE_ID,
       ));
@@ -112,7 +115,8 @@ export class RepositorioPaciente {
     const formattedFields = {
       peso: toFloat(campos.peso),
       altura: Number(campos.altura),
-      obra_social: toStr(campos.obra_social)
+      obra_social: toStr(campos.obra_social),
+      sup_corporal: toFloat(campos.sup_corporal)
     };
 
     // 2. Construir la cláusula SET con bind variables de Oracle (:campo)

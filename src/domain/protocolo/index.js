@@ -53,7 +53,10 @@ class Protocolo {
   }
 
   cicloSiguienteTieneRegimenDistinto(ciclo_id, regimen) {
-    const siguientes = this.ciclos.filter(c => c.ciclo_id === ciclo_id + 1);
+    let siguientes = this.ciclos.filter(c => c.ciclo_id === ciclo_id + 1 && c.regimen === regimen);
+    if (siguientes.length === 0) {
+      siguientes = this.ciclos.filter(c => c.ciclo_id > ciclo_id && c.regimen > regimen);
+    }
     return siguientes.some(c => c.regimen !== regimen);
   }
 }

@@ -1,4 +1,5 @@
 import ProtocoloPaciente from '../domain/protocoloPaciente.js';
+import {ERROR_PROTOCOLO_PACIENTE_NO_ENCONTRADO} from '../errors/protocoloPaciente.js';
 
 export class ProtocoloPacienteService {
 
@@ -9,6 +10,46 @@ export class ProtocoloPacienteService {
 
   // Asignar un protocolo a un paciente
   async crear(protocoloPaciente) {
+    let protocolosExistentes = [];
+    try {
+      protocolosExistentes = await this.protocoloPacienteRepo.obtenerPorPaciente(protocoloPaciente.paciente_id);
+    } catch (err) {
+      if (err.message !== ERROR_PROTOCOLO_PACIENTE_NO_ENCONTRADO) {
+        throw err;
+      }
+    }
+
+    if (protocoloPaciente.estado === 'Activo') {
+      // Verificar si el paciente ya tiene otro protocolo activo
+      const yaActivo = protocolosExistentes.find(p => p.estado === 'Activo');
+      if (yaActivo) {
+        throw new Error('El paciente ya tiene un protocolo activo. Solo puede haber uno activo por paciente.');
+      }
+    }
+
+    // Buscar si ya existe una relación con el mismo protocolo_id y regimen
+    const existente = protocolosExistentes.find(p =>
+      p.protocolo_id === protocoloPaciente.protocolo_id
+      // && p.regimen === protocoloPaciente.regimen TODO: chequear si es necesario incluir el regimen tambien
+    );
+
+    if (existente) {
+      // Si ya existe y estaba inactivo, y el nuevo viene como activo → actualizarlo
+      if (existente.estado === 'Inactivo' && protocoloPaciente.estado === 'Activo') {
+        await this.protocoloPacienteRepo.actualizarParcialmente(existente.protocolo_paciente_id, {
+          estado: 'Activo',
+          regimen: protocoloPaciente.regimen,
+          fecha_asignacion: new Date(),
+          profesional_id_asignador: protocoloPaciente.profesional_id_asignador
+        });
+        return existente.protocolo_paciente_id;
+      }
+
+      // Si ya existía y sigue con el mismo estado o cualquier otro caso → error de duplicado lógico
+      throw new Error('El paciente ya tiene asignado este protocolo');
+    }
+
+    // Si no existía, crear uno nuevo
     const id = await this.protocoloPacienteRepo.guardar(protocoloPaciente);
     protocoloPaciente.protocolo_paciente_id = id;
     return id;

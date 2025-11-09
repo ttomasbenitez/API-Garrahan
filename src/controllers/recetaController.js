@@ -1,5 +1,9 @@
 import RecetaPaciente from '../domain/receta/recetaPaciente.js';
-import { ERROR_RECETA_PACIENTE_CREACION, ERROR_RECETA_PACIENTE_CREACION_CODE, ERROR_RECETA_PACIENTE_INEXITENTE_CODE, ERROR_RECETA_PACIENTE_NO_ENCONTRADA } from '../errors/receta.js';
+import {
+  ERROR_RECETA_PACIENTE_CREACION, ERROR_RECETA_PACIENTE_CREACION_CODE,
+  ERROR_RECETA_PACIENTE_ID_REQUERIDO,
+  ERROR_RECETA_PACIENTE_ID_REQUERIDO_CODE, ERROR_RECETA_PACIENTE_INEXITENTE_CODE, ERROR_RECETA_PACIENTE_NO_ENCONTRADA
+} from '../errors/receta.js';
 import { RECETA_TIPO_HOSPITALARIA } from '../utils/constants.js';
 import logger from '../utils/logger.js';
 
@@ -44,7 +48,7 @@ async function exportarRecetaPaciente(req, res, service) {
     const recetaExportada = await service.exportar(id, tipo);
     logger.info('Receta del paciente exportada con ID: %d', id);
     res.setHeader('Content-Type', 'application/pdf');
-    res.setHeader('Content-Disposition', `attachment; filename=receta_${req.params.id}.pdf`);
+    res.setHeader('Content-Disposition', `inline; filename=receta_${req.params.id}.pdf`);
     res.send(recetaExportada);
     res.status(200);
     logger.info('Receta del paciente exportada con ID: %d', id);
@@ -62,6 +66,19 @@ async function obtenerRecetasPaciente(req, res, service) {
     res.status(200).json(recetas);
   } catch (error) {
     logger.error('Error al obtener la receta del paciente: %o', error);
-    res.status(error.status || 500).json({ error: error.message || ERROR_RECETA_PACIENTE_NO_ENCONTRADA, code: error.code || ERROR_RECETA_PACIENTE_INEXITENTE_CODE });
+    switch (error.message) {
+    case ERROR_RECETA_PACIENTE_ID_REQUERIDO:
+      return res.status(400).json({
+        error: ERROR_RECETA_PACIENTE_ID_REQUERIDO,
+        code: ERROR_RECETA_PACIENTE_ID_REQUERIDO_CODE,
+      });
+
+    default:
+      return res.status(500).json({
+        error: ERROR_RECETA_PACIENTE_NO_ENCONTRADA,
+        code: ERROR_RECETA_PACIENTE_INEXITENTE_CODE
+      });
+    }
   }
 }
+

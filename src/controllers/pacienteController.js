@@ -16,7 +16,7 @@ async function crearPaciente(req, res, service) {
   try {
     const profesional_id = req.user.id;
     const { nombre, apellido, id_hospitalario, fecha_nacimiento, peso, altura, sexo, obra_social, dni,
-      protocolo_id, ciclo_actual_id, regimen, fecha_inicio, estado} = req.body;
+      sup_corporal, protocolo_id, ciclo_actual_id, regimen, fecha_inicio, estado} = req.body;
     if (!id_hospitalario || !profesional_id) {
       logger.error('Error al crear paciente: Faltan campos requeridos' );
       return res.status(400).json({ error: 'Faltan campos requeridos' });
@@ -24,8 +24,7 @@ async function crearPaciente(req, res, service) {
 
     const fecha_nacimiento_date = fecha_nacimiento ? new Date(fecha_nacimiento) : null;
 
-    const paciente = new Paciente(nombre, apellido, id_hospitalario, fecha_nacimiento_date, peso, altura, sexo, obra_social, dni);
-
+    const paciente = new Paciente(nombre, apellido, id_hospitalario, fecha_nacimiento_date, peso, altura, sexo, obra_social, dni, sup_corporal);
     await service.crear(paciente, profesional_id);
     if (protocolo_id && ciclo_actual_id && regimen && fecha_inicio && estado) {
       const protocoloPaciente = new ProtocoloPaciente({paciente_id: paciente.paciente_id,

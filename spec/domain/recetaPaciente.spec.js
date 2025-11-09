@@ -28,7 +28,8 @@ describe('RecetaPaciente', () => {
       regimen: 1,
       paciente_id: 1,
       profesional_id: 2,
-      estado: 'Activo'
+      estado: 'Activo',
+      tipo_receta: 'hospitalaria'
     };
 
     const recetaPaciente = RecetaPaciente.fromBody(body);

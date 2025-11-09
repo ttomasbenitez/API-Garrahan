@@ -1,0 +1,16 @@
+[
+  {
+    "nombre": "Walter",
+    "apellido": "Cacciavillano",
+    "dni": "19201241",
+    "matricula": "MP12345",
+    "especialidad": "Oncología"
+  },
+  {
+    "nombre": "Fernando",
+    "apellido": "Gómez",
+    "dni": "21201241",
+    "matricula": "MP12346",
+    "especialidad": "Pediatría"
+  }
+]

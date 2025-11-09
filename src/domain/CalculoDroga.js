@@ -58,6 +58,7 @@ export default class CalculoDroga {
     peso,
     nueva_fuerza_valor,
     nueva_fuerza_unidad,
+    via_codigo,
   }) {
 
     const unidadRequeridaLower = (fuerza_unidad_requerida || '').toLowerCase();
@@ -75,20 +76,24 @@ export default class CalculoDroga {
     this.cantidad_dias = cantidad_dias;
     this.frecuencia_diaria = frecuencia_diaria;
     this.peso = peso;
+    this.via_codigo = via_codigo;
   }
 
   /**
    * Calcula la Superficie Corporal Pediátrica.
    */
   calcularSuperficieCorporalPediatrica() {
-    // Los números 4, 7, 90 son parte de la fórmula matemática y son constantes de dominio
     const FACTOR_A = 4;
     const FACTOR_B = 7;
     const FACTOR_C = 90;
     return (this.peso * FACTOR_A + FACTOR_B) / (this.peso + FACTOR_C);
   }
 
-  getDosisTotal() {
+  /**
+   * Calcula la dosis total diaria en Miligramos (mg).
+   * Dosis Requerida (mg/m2 o mg/kg) * Factor de Cálculo (m2 o kg)
+   */
+  getDosisTotalDiariaEnMg() {
     let factorCalculo = 1;
 
     if (this.unidad_por === UNIDAD_POR_M2) {
@@ -97,11 +102,21 @@ export default class CalculoDroga {
       factorCalculo = this.peso;
     }
 
-    const dosisTotalEnMg = this.dosis_requerida_mg_por_unidad * this.cantidad_dias * this.frecuencia_diaria * factorCalculo;
+    // Dosis diaria es: Dosis base por unidad * Factor de Cálculo * Frecuencia Diaria
+    const dosisDiariaEnMg = this.dosis_requerida_mg_por_unidad * factorCalculo;
+    return dosisDiariaEnMg;
+  }
+
+  /**
+   * Retorna la dosis total para todo el período de tratamiento en Miligramos.
+   */
+  getDosisTotal() {
+    const dosisDiariaEnMg = this.getDosisTotalDiariaEnMg();
+    const dosisTotalEnMg = dosisDiariaEnMg * this.cantidad_dias * this.frecuencia_diaria;
     return dosisTotalEnMg;
   }
 
-  // Retorna la cantidad base
+  // Retorna la cantidad base (para todo el período)
   getCantidadBase() {
     const cantidadBaseEnMgPorUnidad = this.dosis_requerida_mg_por_unidad * this.cantidad_dias * this.frecuencia_diaria;
     const valorReconvertido = CalculoDroga.reconvertirValor(cantidadBaseEnMgPorUnidad, this.fuerza_unidad_requerida);
@@ -112,7 +127,7 @@ export default class CalculoDroga {
     };
   }
 
-  // Retorna la cantidad total
+  // Retorna la cantidad total (para todo el período) en la unidad de presentación
   getCantidadTotal() {
     const dosisTotalEnMg = this.getDosisTotal();
     const valorReconvertido = CalculoDroga.reconvertirValor(dosisTotalEnMg, this.nueva_fuerza_unidad);
@@ -123,13 +138,40 @@ export default class CalculoDroga {
     };
   }
 
-  getUnidades() {
-    const dosisTotalEnMg = this.getDosisTotal();
+  /**
+   * Retorna la dosis total requerida para un solo día de tratamiento
+   * para el paciente, en la unidad de la presentación.
+   */
+  getDosisDiaria() {
+    const dosisDiariaEnMg = this.getDosisTotalDiariaEnMg() * this.frecuencia_diaria;
 
+    const valorReconvertido = CalculoDroga.reconvertirValor(dosisDiariaEnMg, this.nueva_fuerza_unidad);
+
+    return {
+      valor: valorReconvertido.toFixed(2),
+      unidad: this.nueva_fuerza_unidad,
+    };
+  }
+
+  getUnidades() {
     if (!this.fuerza_presentacion_mg || this.fuerza_presentacion_mg === 0) {
       return 0;
     }
 
+    // Para drogas intravenosas (vía IV), el excedente de cada día se descarta
+    if (this.via_codigo === 'IV') {
+      // Calcular la dosis diaria total en mg (todas las dosis del día)
+      const dosisDiariaEnMg = this.getDosisTotalDiariaEnMg() * this.frecuencia_diaria;
+
+      // Calcular cuántas unidades se necesitan por día (redondeando hacia arriba)
+      const unidadesPorDia = Math.ceil(dosisDiariaEnMg / this.fuerza_presentacion_mg);
+
+      // Multiplicar por la cantidad de días
+      return unidadesPorDia * this.cantidad_dias;
+    }
+
+    // Para otras vías de administración, se calcula sobre el total acumulado
+    const dosisTotalEnMg = this.getDosisTotal();
     return Math.ceil(dosisTotalEnMg / this.fuerza_presentacion_mg);
   }
 }

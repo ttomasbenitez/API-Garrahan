@@ -65,6 +65,7 @@ Feature: Generacion recetas
       | paciente_id         | 1                        |
       | profesional_id      | 1                        |
       | estado              | Activo                   |
+      | tipo_receta         | hospitalaria             |
     And la receta con id "1" tiene los detalles:
       | receta_id          | 1               |
       | admin_id           | 1               |

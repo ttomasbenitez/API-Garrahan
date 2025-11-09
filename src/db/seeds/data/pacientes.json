@@ -1,0 +1,41 @@
+[
+  {
+    "nombre": "María",
+    "apellido": "Pérez",
+    "id_hospitalario": "H001",
+    "fecha_nacimiento": "2020-05-12",
+    "peso": 30.5,
+    "sexo": "F",
+    "profesional_id": 1,
+    "obra_social": "OSDE",
+    "dni": "12345678",
+    "sup_corporal": 1.070539419087137,
+    "altura": 120
+  },
+  {
+    "nombre": "Juan",
+    "apellido": "Esposito",
+    "id_hospitalario": "H002",
+    "fecha_nacimiento": "2018-03-20",
+    "peso": 25.0,
+    "sexo": "M",
+    "profesional_id": 2,
+    "obra_social": "IOMA",
+    "dni": "87654321",
+    "sup_corporal": 0.04131274131274131,
+    "altura": 120
+  },
+  {
+    "nombre": "Ana",
+    "apellido": "García",
+    "id_hospitalario": "H003",
+    "fecha_nacimiento": "2019-07-15",
+    "peso": 28.0,
+    "sexo": "F",
+    "profesional_id": 1,
+    "obra_social": "OSDE",
+    "dni": "11223344",
+    "sup_corporal": 0.041176470588235294,
+    "altura": 120
+  }
+]

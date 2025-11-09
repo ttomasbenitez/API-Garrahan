@@ -1,13 +1,18 @@
 // seeds.js
-//import drogas from './data/drogas.json';
-//import presentaciones_droga from './data/presentaciones_droga.json';
 import { readFileSync } from 'fs';
+
 const drogas = JSON.parse(readFileSync(new URL('./data/drogas.json', import.meta.url)));
 const presentaciones_droga = JSON.parse(readFileSync(new URL('./data/presentaciones_droga.json', import.meta.url)));
 const presentaciones_droga_via = JSON.parse(readFileSync(new URL('./data/presentaciones_droga_via.json', import.meta.url)));
 const ciclos = JSON.parse(readFileSync(new URL('./data/ciclos.json', import.meta.url)));
 const administraciones = JSON.parse(readFileSync(new URL('./data/administraciones.json', import.meta.url)));
 const protocolos = JSON.parse(readFileSync(new URL('./data/protocolos.json', import.meta.url)));
+const profesionales = JSON.parse(readFileSync(new URL('./data/profesionales.json', import.meta.url)));
+const formas_farmaceuticas = JSON.parse(readFileSync(new URL('./data/formas_farmaceuticas.json', import.meta.url)));
+const vias_administracion = JSON.parse(readFileSync(new URL('./data/vias_administracion.json', import.meta.url)));
+const pacientes = JSON.parse(readFileSync(new URL('./data/pacientes.json', import.meta.url)));
+const protocolos_paciente = JSON.parse(readFileSync(new URL('./data/protocolos_paciente.json', import.meta.url)));
+const recetas = JSON.parse(readFileSync(new URL('./data/recetas.json', import.meta.url)));
 
 async function login(role) {
   const res = await fetch('http://api-garrahan-app-1:3000/auth/login-test', {
@@ -32,11 +37,6 @@ async function createProtocolo(cookie) {
 }
 
 async function createProfesionales(cookie) {
-  const profesionales = [
-    { nombre: 'Walter', apellido: 'Cacciavillano', dni: '19201241', matricula: 'MP12345', especialidad: 'Oncología' },
-    { nombre: 'Fernando', apellido: 'Gómez', dni: '21201241', matricula: 'MP12346', especialidad: 'Pediatría' },
-  ];
-
   for (const p of profesionales) {
     const res = await fetch('http://api-garrahan-app-1:3000/profesionales', {
       method: 'POST',
@@ -57,36 +57,18 @@ async function createDrogas(cookie) {
 }
 
 async function createFormasFarmaceuticas(cookie) {
-  const formas = [
-    { nombre: 'COMPRIMIDO', codigo: 'VO' },
-    { nombre: 'CÁPSULA', codigo: 'VO' },
-    { nombre: 'FRASCO AMPOLLA', codigo: 'IV' },
-    { nombre: 'VIAL', codigo: 'IV' },
-    { nombre: 'JERINGA PRELLENADA', codigo: 'IV' }
-  ];
-
   const res = await fetch('http://api-garrahan-app-1:3000/formas-farmaceuticas', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Cookie': cookie },
-    body: JSON.stringify(formas),
+    body: JSON.stringify(formas_farmaceuticas),
   });
   console.log('Formas farmacéuticas creadas:', await res.json());
 }
 
 async function createPresentacionesDroga(cookie) {
-  // estado para qué sirve?
-  //const presentaciones = [
-  //  { droga_id: 20, forma_farmaceutica_id: 3, estado: 'Activo', fuerza_valor: 10, fuerza_unidad: 'mg' }, //CISPLATINO
-  //  { droga_id: 20, forma_farmaceutica_id: 3, estado: 'Activo', fuerza_valor: 50, fuerza_unidad: 'mg' }, //CISPLATINO
-  //  { droga_id: 2, forma_farmaceutica_id: 1, estado: null, fuerza_valor: null, fuerza_unidad: null },
-  //  { droga_id: 3, forma_farmaceutica_id: 1, estado: null, fuerza_valor: null, fuerza_unidad: null },
-  //];
-
   for (const presentacion of presentaciones_droga) {
     const drogaId = presentacion.droga_id;
-
     const url = `http://api-garrahan-app-1:3000/drogas/${drogaId}/presentaciones`;
-
 
     const res = await fetch(url, {
       method: 'POST',
@@ -147,15 +129,10 @@ async function createCiclos(cookie) {
 }
 
 async function createViasAdministracion(cookie) {
-  const vias = [
-    { nombre: 'Intravenosa', codigo: 'IV' },
-    { nombre: 'Oral', codigo: 'VO' },
-  ];
-
   const res = await fetch('http://api-garrahan-app-1:3000/vias-administracion', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Cookie': cookie },
-    body: JSON.stringify(vias),
+    body: JSON.stringify(vias_administracion),
   });
   console.log('Vías de administración creadas:', await res.json());
 }
@@ -187,34 +164,40 @@ async function createAdministracionesMedicacion(cookie) {
 }
 
 async function createPacientes(cookie) {
-  const pacientes = [
-    { nombre: 'María', apellido: 'Pérez', id_hospitalario: 'H001', fecha_nacimiento: '2020-05-12', peso: 30.5, sexo: 'F', profesional_id: 1, obra_social: 'OSDE', dni: '12345678' },
-    { nombre: 'Juan', apellido: 'Esposito', id_hospitalario: 'H002', fecha_nacimiento: null, peso: null, sexo: 'M', profesional_id: 2, obra_social: null, dni: '87654321' },
-  ];
   for (const p of pacientes) {
-    console.log('Paciente creado:', await (await fetch('http://api-garrahan-app-1:3000/pacientes', {
+    const res = await fetch('http://api-garrahan-app-1:3000/pacientes', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Cookie': cookie },
-      body: JSON.stringify(p) })).json());
+      body: JSON.stringify(p)
+    });
+    console.log('Paciente creado:', await res.json());
   }
 }
 
-async function createProtocoloPaciente(cookie) {
+async function createProtocolosPaciente(cookie) {
+  for (const pp of protocolos_paciente) {
+    const res = await fetch(`http://api-garrahan-app-1:3000/pacientes/${pp.paciente_id}/protocolos`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Cookie': cookie },
+      body: JSON.stringify(pp)
+    });
+    console.log(`Protocolo asignado a paciente ${pp.paciente_id}:`, await res.json());
+  }
+}
 
-  const datosProtocoloPaciente = {
-    protocolo_id: 1,
-    regimen: 0,
-    ciclo_actual_id: 1,
-    fecha_inicio: new Date().toISOString(),
-    estado: 'Activo',
-    profesional_id_asignador: 2,
-    fecha_asignacion: new Date().toISOString(),
-  };
-
-  console.log('Protocolo asignado a paciente:', await (await fetch('http://api-garrahan-app-1:3000/pacientes/1/protocolos', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Cookie': cookie },
-    body: JSON.stringify(datosProtocoloPaciente) })).json());
+async function createRecetas(cookie) {
+  for (const receta of recetas) {
+    const res = await fetch('http://api-garrahan-app-1:3000/recetas', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Cookie': cookie },
+      body: JSON.stringify(receta)
+    });
+    if (res.ok) {
+      console.log(`Receta creada para paciente ${receta.paciente_id}:`, await res.json());
+    } else {
+      console.log(`Error al crear receta para paciente ${receta.paciente_id}:`, await res.text());
+    }
+  }
 }
 
 async function main() {
@@ -228,11 +211,19 @@ async function main() {
   await createCiclos(cookieAdmin);
   await createPresentacionDrogaVia(cookieAdmin);
   await createAdministracionesMedicacion(cookieAdmin);
+
   const cookieMedico = await login('medico');
   await createPacientes(cookieMedico);
-  await createProtocoloPaciente(cookieMedico);
+  await createProtocolosPaciente(cookieMedico);
+  await createRecetas(cookieMedico);
 
-  console.log('Seeds creadas correctamente');
+  console.log('\n✅ Seeds creadas correctamente');
+  console.log('\n📊 Datos para sistema de alarmas:');
+  console.log('- Paciente 1 (María): Receta del 2025-10-18 (hace ~20 días)');
+  console.log('- Paciente 2 (Juan): Receta del 2025-10-22 (hace ~16 días)');
+  console.log('- Paciente 3 (Ana): Receta del 2025-11-02 (hace ~5 días)');
+  console.log('\n💡 Con límite de 14 días, deberían generarse 2 alarmas (pacientes 1 y 2)');
+  console.log('\n⏰ El job de alarmas se ejecutará automáticamente a las 2:00 AM');
 }
 
 main().catch(err => {

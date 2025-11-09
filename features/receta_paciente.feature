@@ -64,6 +64,7 @@ Feature: Gestión de Recetas para Pacientes
       | paciente_id         | 1                        |
       | profesional_id      | 1                        |
       | estado              | Activo                   |
+      | tipo_receta         | hospitalaria             |
     When publico la API "/recetas" con los datos de la receta
     Then el "id" de la receta es "1"
     And se crea correctamente la receta
@@ -97,6 +98,7 @@ Feature: Gestión de Recetas para Pacientes
       | paciente_id         | 1                        |
       | profesional_id      | 1                        |
       | estado              | Activo                   |
+      | tipo_receta         | hospitalaria             |
     When consulto en la API "/recetas/1" por su id de receta
     Then el sistema me devuelve la receta con id "1"
     And responde correctamente la receta
@@ -142,6 +144,10 @@ Feature: Gestión de Recetas para Pacientes
       | paciente_id         | 1                        |
       | profesional_id      | 1                        |
       | estado              | Activo                   |
+      | tipo_receta         | hospitalaria             |
+      | tnm                 | 1/2/0                    |
+      | estadio             | II                       |
+      | ps                  | 0                        |
     When publico la API "/recetas" con los datos de la receta
     Then el sistema rechaza la creación por clave foránea inválida "FK_CICLO"
     And no se crea la receta
@@ -175,6 +181,7 @@ Feature: Gestión de Recetas para Pacientes
       | paciente_id         | 9                        |
       | profesional_id      | 1                        |
       | estado              | Activo                   |
+      | tipo_receta         | hospitalaria             |
     When publico la API "/recetas" con los datos de la receta
     Then el sistema rechaza la creación por clave foránea inválida "FK_PACIENTE"
     And no se crea la receta
@@ -208,6 +215,7 @@ Feature: Gestión de Recetas para Pacientes
       | paciente_id         | 1                        |
       | profesional_id      | 10                       |
       | estado              | Activo                   |
+      | tipo_receta         | hospitalaria             |
     When publico la API "/recetas" con los datos de la receta
     Then el sistema rechaza la creación por clave foránea inválida "FK_PROFESIONAL"
     And no se crea la receta
@@ -241,7 +249,40 @@ Feature: Gestión de Recetas para Pacientes
       | paciente_id         | 1                        |
       | profesional_id      | 1                        |
       | estado              | Activo                   |
+      | tipo_receta         | hospitalaria             |
     When publico la API "/recetas" con los datos de la receta
     Then el sistema rechaza la creación por campos obligatorios faltantes
     And no se crea la receta
 
+  Scenario: US-11.8 Rechazar creación por receta_tipo inexistente
+    Given que tengo los siguientes datos de la receta:
+      | nombre              | Juan                     |
+      | apellido            | Pérez                    |
+      | tipo_documento      | DNI                      |
+      | numero_documento    | 5098765                  |
+      | fecha_nacimiento    | 2020-05-21               |
+      | sexo                | M                        |
+      | nacionalidad        | Argentina                |
+      | domicilio_calle     | Av. Corrientes           |
+      | domicilio_numero    | 1234                     |
+      | domicilio_piso      | 5                        |
+      | domicilio_depto     | B                        |
+      | codigo_postal       | C1043                    |
+      | localidad           | CABA                     |
+      | partido             | San Nicolás              |
+      | telefono            | 1122334455               |
+      | email               | juan.perez@example.com   |
+      | peso                | 40.4                     |
+      | talla               | 140.7                    |
+      | superficie_corporal |                          |
+      | diagnostico         |                          |
+      | numero_ciclo        | 1                        |
+      | protocolo_id        | 1                        |
+      | ciclo_id            | 1                        |
+      | regimen             | 1                        |
+      | paciente_id         | 1                        |
+      | profesional_id      | 1                        |
+      | estado              | Activo                   |
+    When publico la API "/recetas" con los datos de la receta
+    Then el sistema rechaza la creación por campos obligatorios faltantes
+    And no se crea la receta
