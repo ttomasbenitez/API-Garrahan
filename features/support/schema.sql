@@ -15,6 +15,7 @@ CREATE TABLE paciente (
   fecha_nacimiento      DATE,
   peso                  FLOAT,
   altura                NUMBER,
+  sup_corporal          FLOAT,
   ultima_modificacion   TIMESTAMP,
   sexo                  CHAR(1) CHECK (sexo IN ('M','F')),
   dni                   VARCHAR2(10),
