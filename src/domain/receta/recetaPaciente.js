@@ -14,6 +14,7 @@ class RecetaPaciente {
     estado,
     fecha_prescripcion,
     detalles,
+    tipo_receta,
     id,
   }) {
 
@@ -26,6 +27,7 @@ class RecetaPaciente {
     this.estado = toStr(estado);
     this.fecha_prescripcion = fecha_prescripcion ?? new Date();
     this.detalles = detalles ?? [];
+    this.tipo_receta = tipo_receta;
     this.id = id;
 
     this.validar();
@@ -73,6 +75,7 @@ class RecetaPaciente {
       paciente_id: body.paciente_id,
       profesional_id: body.profesional_id,
       estado: body.estado,
+      tipo_receta: body.tipo_receta,
       fecha_prescripcion: body.fecha_prescripcion ?? null,
       detalles,
       id: body.id ?? null,
@@ -138,7 +141,9 @@ class RecetaPaciente {
     if (this.profesional_id === null) {
       throw getError('profesional_id es obligatorio.', ERROR_RECETA_PACIENTE_CREACION_CODE);
     }
-
+    if (this.tipo_receta === null) {
+      throw getError('tipo_receta es obligatorio.', ERROR_RECETA_PACIENTE_CREACION_CODE);
+    }
     if (this.estado && this.estado.length > 100) {
       throw getError('estado no puede superar 100 caracteres.', ERROR_RECETA_PACIENTE_CREACION_CODE);
     }

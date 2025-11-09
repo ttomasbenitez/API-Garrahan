@@ -116,6 +116,7 @@ Given(/^existen en la base de datos las siguientes recetas:$/, async function (d
       paciente_id: receta.paciente_id,
       profesional_id: 1,
       estado: 'Activo',
+      tipo_receta: 'hospitalaria',
       fecha_receta: receta.fecha_receta,
       receta_id: receta.receta_id,
     };
