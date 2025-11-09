@@ -60,6 +60,7 @@ Feature: Gestión del Detalle de Recetas
       | paciente_id         | 1                        |
       | profesional_id      | 1                        |
       | estado              | Activo                   |
+      | tipo_receta         | hospitalaria             |
     And estoy logueado como médico con id "1"
 
   Scenario: US-12.1 Crear un detalle de receta válido
