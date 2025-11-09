@@ -16,14 +16,13 @@ Given('existe en la base de datos el protocolo con id {string} y con los datos:'
     .set('Cookie', this.sessionCookie);
 });
 
-Given('existe el ciclo del protocolo {string} con:', function (string, dataTable) {
+Given('existe el ciclo del protocolo {string} con:', async function (string, dataTable) {
   const ciclo = dataTable.rowsHash();
-  return request(app)
+  await request(app)
     .post(`/protocolos/${string}/ciclos`)
     .send(ciclo)
     .set('Accept', 'application/json')
     .set('Cookie', this.sessionCookie);
-
 });
 
 Given('existe la droga con id {string} y con los datos:', function (string, dataTable) {
