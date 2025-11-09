@@ -15,6 +15,10 @@ class RecetaPaciente {
     fecha_prescripcion,
     detalles,
     tipo_receta,
+    tnm,
+    estadio,
+    intervalo,
+    ps,
     id,
   }) {
 
@@ -28,6 +32,10 @@ class RecetaPaciente {
     this.fecha_prescripcion = fecha_prescripcion ?? new Date();
     this.detalles = detalles ?? [];
     this.tipo_receta = tipo_receta;
+    this.tnm = tnm ?? null,
+    this.estadio = estadio ?? null,
+    this.intervalo = intervalo ?? null,
+    this.ps = ps ?? null,
     this.id = id;
 
     this.validar();
@@ -76,6 +84,10 @@ class RecetaPaciente {
       profesional_id: body.profesional_id,
       estado: body.estado,
       tipo_receta: body.tipo_receta,
+      tnm: body.tnm,
+      estadio: body.estadio,
+      intervalo: body.intervalo,
+      ps: body.ps,
       fecha_prescripcion: body.fecha_prescripcion ?? null,
       detalles,
       id: body.id ?? null,

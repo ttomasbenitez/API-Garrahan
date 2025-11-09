@@ -23,6 +23,10 @@ export class RecetaProvinciaExportador {
 
     form.getTextField('diagnostico').setText(` ${this.receta.diagnostico}`);
     form.getTextField('numeroCiclo').setText(` ${this.receta.contexto.numero_ciclo}`);
+    form.getTextField('TNM').setText(` ${this.receta.tnm}`);
+    form.getTextField('estadio').setText(` ${this.receta.estadio}`);
+    form.getTextField('intervalo').setText(` ${this.receta.intervalo}`);
+    form.getTextField('PS').setText(` ${this.receta.ps}`);
     //form.getTextField('nombreHospital').setText(this.receta.hospital.nombreHospital || '');
     //form.getTextField('fechaPrescripcion').setText(this.receta.fechaPrescripcion || '');
 

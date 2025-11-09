@@ -138,6 +138,10 @@ CREATE TABLE receta_paciente (
   profesional_id          NUMBER NOT NULL,
   estado                  VARCHAR2(100),
   tipo_receta             VARCHAR2(20),
+  tnm                     VARCHAR2(20),
+  estadio                 VARCHAR2(30),
+  intervalo               VARCHAR2(30),
+  ps                      VARCHAR2(20),
   CONSTRAINT fk_receta_paciente    FOREIGN KEY (paciente_id)  REFERENCES paciente(paciente_id),
   CONSTRAINT fk_receta_profesional FOREIGN KEY (profesional_id) REFERENCES profesional(profesional_id),
   CONSTRAINT fk_receta_ciclo       FOREIGN KEY (protocolo_id, ciclo_id, regimen)

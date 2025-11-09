@@ -145,6 +145,9 @@ Feature: Gestión de Recetas para Pacientes
       | profesional_id      | 1                        |
       | estado              | Activo                   |
       | tipo_receta         | hospitalaria             |
+      | tnm                 | 1/2/0                    |
+      | estadio             | II                       |
+      | ps                  | 0                        |
     When publico la API "/recetas" con los datos de la receta
     Then el sistema rechaza la creación por clave foránea inválida "FK_CICLO"
     And no se crea la receta
