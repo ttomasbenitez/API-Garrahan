@@ -4,7 +4,6 @@ class ProtocoloPaciente {
     protocolo_id,
     regimen,
     ciclo_actual_id,
-    numero_ciclo,
     fecha_inicio,
     fecha_fin,
     estado,
@@ -25,7 +24,6 @@ class ProtocoloPaciente {
     this.protocolo_id = protocolo_id;
     this.regimen = regimen;
     this.ciclo_actual_id = ciclo_actual_id;
-    this.numero_ciclo = numero_ciclo ?? null;
     this.fecha_inicio = fecha_inicio ?? null;
     this.fecha_fin = fecha_fin ?? null;
     this.estado = estado ?? null;

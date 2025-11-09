@@ -17,7 +17,6 @@ Feature: Asignar y consultar protocolos de un paciente
       | protocolo_id            | 1        |
       | regimen                 | 0        |
       | ciclo_actual_id         | 1        |
-      | numero_ciclo            | 1        |
       | fecha_inicio            | 2025-10-07 |
       | estado                  | ACTIVO   |
       | profesional_id_asignador | 1        |
@@ -29,7 +28,6 @@ Feature: Asignar y consultar protocolos de un paciente
       | protocolo_id            | 1        |
       | regimen                 | 0        |
       | ciclo_actual_id         | 1        |
-      | numero_ciclo            | 1        |
       | fecha_inicio            | 2025-10-07 |
       | estado                  | ACTIVO   |
       | profesional_id_asignador | 1        |
@@ -69,7 +67,6 @@ Feature: Asignar y consultar protocolos de un paciente
       | protocolo_id            | 1        |
       | regimen                 | 0        |
       | ciclo_actual_id         | 1        |
-      | numero_ciclo            | 1        |
       | fecha_inicio            | 2025-10-07 |
       | estado                  | ACTIVO   |
       | profesional_id_asignador | 1        |
@@ -82,7 +79,6 @@ Feature: Asignar y consultar protocolos de un paciente
       | protocolo_id             | 1          |
       | regimen                  | 0          |
       | ciclo_actual_id          | 1          |
-      | numero_ciclo             | 1          |
       | fecha_inicio             | 2025-10-07 |
       | estado                   | ACTIVO     |
       | profesional_id_asignador | 1          |
@@ -95,7 +91,6 @@ Feature: Asignar y consultar protocolos de un paciente
       | protocolo_id             | 1          |
       | regimen                  | 0          |
       | ciclo_actual_id          | 2          |
-      | numero_ciclo             | 1          |
       | fecha_inicio             | 2025-10-07 |
       | estado                   | ACTIVO     |
       | profesional_id_asignador | 1          |
@@ -108,7 +103,6 @@ Feature: Asignar y consultar protocolos de un paciente
       | protocolo_id             | 1          |
       | regimen                  | 0          |
       | ciclo_actual_id          | 2          |
-      | numero_ciclo             | 1          |
       | fecha_inicio             | 2025-10-07 |
       | estado                   | ACTIVO     |
       | profesional_id_asignador | 1          |

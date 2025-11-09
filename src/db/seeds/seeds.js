@@ -205,7 +205,6 @@ async function createProtocoloPaciente(cookie) {
     protocolo_id: 1,
     regimen: 0,
     ciclo_actual_id: 1,
-    numero_ciclo: 1,
     fecha_inicio: new Date().toISOString(),
     estado: 'Activo',
     profesional_id_asignador: 2,
