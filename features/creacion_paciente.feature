@@ -5,7 +5,18 @@ Feature: Creación paciente
   Para que queden correctamente registrados en la base de datos
 
     Background:
-        Given estoy logueado como médico con id "2"
+				Given existe en la base de datos el protocolo con id "1" y con los datos:
+						| nombre             | LLA Pediátrica |
+						| enfermedad         | LLA            |
+						| linea              | 1              |
+						| cantidad_regimenes | 2              |
+				And existe el ciclo del protocolo "1" con:
+						| ciclo_id         | 1 |
+						| regimen          | 0 |
+						| duracion_semanas | 4 |
+						| ciclo_final      | 0 |
+						| repeticiones     | 0 |
+        And estoy logueado como médico con id "2"
 
     Scenario: US-03.1 Crear un paciente con todos los campos
         Given quiero crear un paciente con los siguientes datos:
@@ -84,15 +95,35 @@ Feature: Creación paciente
         | 2           | Leandro | Paredes   |
         | 3           | Miguel  | Merentiel |
 
+    Scenario: US-03.5 Guardar el protocolo del paciente junto con sus datos
+			And quiero crear un paciente con los siguientes datos:
+          | nombre            | Juan        |
+          | apellido          | Pérez       |
+          | id_hospitalario   | P12345      |
+          | fecha_nacimiento  | 2020-05-21  |
+          | peso              | 30          |
+          | altura            | 60          |
+          | sexo              | M           |
+          | obra_social       | OSDE        |
+          | dni               | 12345678    |
+      And el siguiente protocolo asociado:
+          | protocolo_id      | 1           |
+          | regimen           | 0           |
+          | ciclo_actual_id   | 1           |
+          | fecha_inicio      | 2025-01-01  |
+          | estado            | ACTIVO      |
+      When publico en el endpoint "/pacientes" con los datos del paciente y el protocolo
+      Then el paciente se crea correctamente con el protocolo asociado
+
     @wip
-    Scenario: US-03.5 Obtener paciente de la api del hospital por su id_hospitalario
+    Scenario: US-03.6 Obtener paciente de la api del hospital por su id_hospitalario
         Given quiero obtener el paciente con id_hospitalario "2" del sistema del hospital
         And con nombre "Juan" y apellido "Pérez"
         When consulto en la API externa "/pacientes/2/externo" por su id_hospitalario
         Then el sistema devuelve el paciente esperado
 
     @wip
-    Scenario: US-03.6 Crear paciente sin id_hospitalario
+    Scenario: US-03.7 Crear paciente sin id_hospitalario
         Given existe un paciente con los siguientes datos:
             | nombre            | Juan        |
             | apellido          | Pérez       |

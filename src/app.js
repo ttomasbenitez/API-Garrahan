@@ -63,16 +63,28 @@ import { makeCalculoDrogaController } from './controllers/calculoDrogaController
 import calculoDrogaRoutes from './routes/calculoDroga.js';
 
 const app = express();
-
+// droga
+const repositorioDroga = new RepositorioDroga(oracleDBInstance);
+const drogasService = new DrogaService(repositorioDroga);
+const drogaController = makeDrogaController(drogasService);
+// protocolo
+const repositorioProtocolo = new RepositorioProtocolo(oracleDBInstance);
+const repositorioAdministracionMedicacion = new RepositorioAdminisitracionMedicacion(oracleDBInstance);
+const protocoloService = new ProtocoloService(repositorioProtocolo, repositorioAdministracionMedicacion);
+const protocoloController = makeProtocoloController(protocoloService, drogasService);
 // profesional
 const repositorioProfesional = new RepositorioProfesional(oracleDBInstance);
 const profesionalService = new ProfesionalService(repositorioProfesional);
 const profesionalController = makeProfesionalController(profesionalService);
+// protocolo_paciente
+const repositorioProtocoloPaciente = new RepositorioProtocoloPaciente(oracleDBInstance);
+const protocoloPacienteService = new ProtocoloPacienteService(repositorioProtocoloPaciente, repositorioProtocolo);
+const protocoloPacienteController = makeProtocoloPacienteController(protocoloPacienteService);
 // paciente_profesional y paciente
 const repositorioPacienteProfesional = new RepositorioPacienteProfesional(oracleDBInstance);
 const repositorioPaciente = new RepositorioPaciente(oracleDBInstance);
 
-const pacienteService = new PacienteService(repositorioPaciente, repositorioPacienteProfesional, apiHospitalConector);
+const pacienteService = new PacienteService(repositorioPaciente, repositorioPacienteProfesional, protocoloPacienteService, apiHospitalConector);
 const pacienteProfesionalService = new PacienteProfesionalService(
   repositorioPacienteProfesional,
   pacienteService,
@@ -81,27 +93,14 @@ const pacienteProfesionalService = new PacienteProfesionalService(
 const pacienteProfesionalController = makePacienteProfesionalController(pacienteProfesionalService);
 // paciente
 const pacienteController = makePacienteController(pacienteService);
-// droga
-const repositorioDroga = new RepositorioDroga(oracleDBInstance);
-const drogasService = new DrogaService(repositorioDroga);
-const drogaController = makeDrogaController(drogasService);
 // forma farmacéutica
 const repositorioFormaFarmaceutica = new RepositorioFormaFarmaceutica(oracleDBInstance);
 const formaFarmaceuticaService = new FormaFarmaceuticaService(repositorioFormaFarmaceutica);
 const formaFarmaceuticaController = makeFormaFarmaceuticaController(formaFarmaceuticaService);
-// protocolo
-const repositorioProtocolo = new RepositorioProtocolo(oracleDBInstance);
-const repositorioAdministracionMedicacion = new RepositorioAdminisitracionMedicacion(oracleDBInstance);
-const protocoloService = new ProtocoloService(repositorioProtocolo, repositorioAdministracionMedicacion);
-const protocoloController = makeProtocoloController(protocoloService, drogasService);
 // via administracion
 const respositorioViaAdministracion = new RepositorioViaAdministracion(oracleDBInstance);
 const viaAdministracionService = new ViaAdministracionService(respositorioViaAdministracion);
 const viaAdministracionController = makeViaAdministracionController(viaAdministracionService);
-// protocolo_paciente
-const repositorioProtocoloPaciente = new RepositorioProtocoloPaciente(oracleDBInstance);
-const protocoloPacienteService = new ProtocoloPacienteService(repositorioProtocoloPaciente, repositorioProtocolo);
-const protocoloPacienteController = makeProtocoloPacienteController(protocoloPacienteService);
 // presentacion droga
 const repositorioPresentacionDroga = new RepositorioPresentacionDroga(oracleDBInstance);
 const repositorioPresentacionDrogaConForma = new RepositorioPresentacionDrogaConForma(oracleDBInstance);

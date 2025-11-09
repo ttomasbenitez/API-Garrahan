@@ -8,6 +8,7 @@ Before(function () {
   this.paciente = {};
   this.response = null;
   this.profesionalLogueadoId = null;
+  this.protocoloPaciente = {};
 });
 
 Given(/^estoy logueado como médico con id "(.*)"$/, async function (idProfesional) {
@@ -196,4 +197,36 @@ Then(/^el sistema me devuelve una lista que contiene los siguientes pacientes:$/
       `El apellido para el paciente id ${idBuscado} no coincide. Esperado: "${expected.apellido}", Recibido: "${actual.apellido}"`
     );
   }
+});
+
+Given('el siguiente protocolo asociado:', function (dataTable) {
+  this.protocoloPaciente = dataTable.rowsHash();
+});
+
+When('publico en el endpoint {string} con los datos del paciente y el protocolo', async function (endpoint) {
+  this.response = await request(app)
+    .post(endpoint)
+    .send({ ...this.paciente, ...this.protocoloPaciente })
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
+});
+
+
+Then('el paciente se crea correctamente con el protocolo asociado', async function () {
+  if (!this.response) throw new Error('No se recibió respuesta');
+  assert.ok(this.response);
+  assert.strictEqual(this.response.status, 201);
+  if (!this.response.body) throw new Error('No se recibió id del paciente');
+  const protocoloPaciente = await request(app)
+    .get(`/pacientes/${this.response.body.paciente_id}/protocolos`)
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie);
+  assert.ok(protocoloPaciente);
+  assert.strictEqual(protocoloPaciente.status, 200);
+  assert.strictEqual(protocoloPaciente.body.length, 1);
+  const protocolo = protocoloPaciente.body[0];
+  assert.strictEqual(protocolo.protocolo_id, Number(this.protocoloPaciente.protocolo_id));
+  assert.strictEqual(protocolo.ciclo_actual_id, Number(this.protocoloPaciente.ciclo_actual_id));
+  assert.strictEqual(protocolo.regimen, Number(this.protocoloPaciente.regimen));
+  assert.strictEqual(protocolo.estado, this.protocoloPaciente.estado);
 });
