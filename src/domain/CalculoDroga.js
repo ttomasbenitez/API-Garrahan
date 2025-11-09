@@ -112,9 +112,33 @@ export default class CalculoDroga {
   }
 
   /**
+   * Retorna la dosis total requerida para un solo día de tratamiento
+   * para el paciente, en Miligramos (sin convertir).
+   * Aplica límite máximo de 2mg para VINCRISTINA.
+   */
+  getDosisDiariaEnMg() {
+    let dosisDiariaEnMg = this.getDosisTotalDiariaEnMg() * this.frecuencia_diaria;
+
+    // Aplicar límite máximo para VINCRISTINA
+    if (this.nombre_droga === 'VINCRISTINA' && dosisDiariaEnMg > DOSIS_MAXIMA_VINCRISTINA) {
+      dosisDiariaEnMg = DOSIS_MAXIMA_VINCRISTINA;
+    }
+
+    return dosisDiariaEnMg;
+  }
+
+  /**
    * Retorna la dosis total para todo el período de tratamiento en Miligramos.
+   * Considera el límite de VINCRISTINA si aplica.
    */
   getDosisTotal() {
+    // Si es VINCRISTINA, usar la dosis diaria limitada
+    if (this.nombre_droga === 'VINCRISTINA') {
+      const dosisDiariaEnMg = this.getDosisDiariaEnMg();
+      return dosisDiariaEnMg * this.cantidad_dias;
+    }
+
+    // Para otras drogas, usar el cálculo normal
     const dosisDiariaEnMg = this.getDosisTotalDiariaEnMg();
     const dosisTotalEnMg = dosisDiariaEnMg * this.cantidad_dias * this.frecuencia_diaria;
     return dosisTotalEnMg;
@@ -148,13 +172,7 @@ export default class CalculoDroga {
    * Aplica límite máximo de 2mg para VINCRISTINA.
    */
   getDosisDiaria() {
-    let dosisDiariaEnMg = this.getDosisTotalDiariaEnMg() * this.frecuencia_diaria;
-
-    // Aplicar límite máximo para VINCRISTINA
-    if (this.nombre_droga === 'VINCRISTINA' && dosisDiariaEnMg > DOSIS_MAXIMA_VINCRISTINA) {
-      dosisDiariaEnMg = DOSIS_MAXIMA_VINCRISTINA;
-    }
-
+    const dosisDiariaEnMg = this.getDosisDiariaEnMg();
     const valorReconvertido = CalculoDroga.reconvertirValor(dosisDiariaEnMg, this.nueva_fuerza_unidad);
 
     return {
@@ -170,8 +188,8 @@ export default class CalculoDroga {
 
     // Para drogas intravenosas (vía IV), el excedente de cada día se descarta
     if (this.via_codigo === 'IV') {
-      // Calcular la dosis diaria total en mg (todas las dosis del día)
-      const dosisDiariaEnMg = this.getDosisTotalDiariaEnMg() * this.frecuencia_diaria;
+      // Usar la dosis diaria que ya considera el límite
+      const dosisDiariaEnMg = this.getDosisDiariaEnMg();
 
       // Calcular cuántas unidades se necesitan por día (redondeando hacia arriba)
       const unidadesPorDia = Math.ceil(dosisDiariaEnMg / this.fuerza_presentacion_mg);
