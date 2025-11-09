@@ -11,94 +11,79 @@ export class RepositorioPaciente {
   }
 
   async guardar(paciente) {
-
     const result = await this.connection.execute(
       `INSERT INTO paciente (
-            nombre, apellido, id_hospitalario, fecha_nacimiento, peso, altura, sup_corporal, sexo, ultima_modificacion, obra_social, dni
-          ) VALUES (
-            :nombre, :apellido, :id_hospitalario, :fecha_nacimiento, :peso, :altura, :sup_corporal, :sexo, SYSDATE, :obra_social, :dni
-          )
-          RETURNING paciente_id INTO :id`,
+        nombre, apellido, id_hospitalario, fecha_nacimiento, peso, sup_corporal, altura, sexo, ultima_modificacion, obra_social,
+        tipo_documento, numero_documento, nacionalidad, domicilio_calle, domicilio_numero, domicilio_piso_depto,
+        codigo_postal, localidad, partido, telefono, email, diagnostico
+      ) VALUES (
+        :nombre, :apellido, :id_hospitalario, :fecha_nacimiento, :peso, :sup_corporal, :altura, :sexo, SYSDATE, :obra_social,
+        :tipo_documento, :numero_documento, :nacionalidad, :domicilio_calle, :domicilio_numero, :domicilio_piso_depto,
+        :codigo_postal, :localidad, :partido, :telefono, :email, :diagnostico
+      ) RETURNING paciente_id INTO :id`,
       {
-        nombre: toStr(paciente.nombre),
-        apellido: toStr(paciente.apellido),
-        id_hospitalario: toStr(paciente.id_hospitalario),
-        fecha_nacimiento: paciente.fecha_nacimiento,
-        peso: toFloat(paciente.peso),
-        altura: Number(paciente.altura),
-        sup_corporal: toFloat(paciente.sup_corporal),
-        sexo: toStr(paciente.sexo),
-        obra_social: toStr(paciente.obra_social),
-        dni: toStr(paciente.dni),
-        id: { dir: oracledb.BIND_OUT, type: oracledb.NUMBER },
+        nombre: toStr(paciente.nombre), apellido: toStr(paciente.apellido),
+        id_hospitalario: toStr(paciente.id_hospitalario), fecha_nacimiento: paciente.fecha_nacimiento,
+        peso: toFloat(paciente.peso), sup_corporal: toFloat(paciente.sup_corporal),
+        altura: Number(paciente.altura), sexo: toStr(paciente.sexo),
+        obra_social: toStr(paciente.obra_social), tipo_documento: toStr(paciente.tipo_documento),
+        numero_documento: toStr(paciente.numero_documento), nacionalidad: toStr(paciente.nacionalidad),
+        domicilio_calle: toStr(paciente.domicilio_calle), domicilio_numero: toStr(paciente.domicilio_numero),
+        domicilio_piso_depto: toStr(paciente.domicilio_piso_depto), codigo_postal: toStr(paciente.codigo_postal),
+        localidad: toStr(paciente.localidad), partido: toStr(paciente.partido),
+        telefono: toStr(paciente.telefono), email: toStr(paciente.email),
+        diagnostico: toStr(paciente.diagnostico),
+        id: { dir: oracledb.BIND_OUT, type: oracledb.NUMBER }
       },
       { autoCommit: true }
     );
 
-    if (result.rowsAffected === 0) {
-      throw new Error(ERROR_PACIENTE_CREACION);
-    }
-
-    const pacienteId = result.outBinds.id[0];
-
-    return pacienteId;
+    if (!result.rowsAffected) throw new Error(ERROR_PACIENTE_CREACION);
+    return result.outBinds.id[0];
   }
 
   async obtener(id) {
-
     const result = await this.connection.execute(
-      `SELECT paciente_id, nombre, apellido, id_hospitalario, fecha_nacimiento, peso, altura, sexo, ultima_modificacion, obra_social, dni, sup_corporal
-           FROM paciente
-           WHERE paciente_id = :id`,
+      `SELECT paciente_id, nombre, apellido, id_hospitalario, fecha_nacimiento, peso, sup_corporal, altura,
+              ultima_modificacion, sexo, obra_social, tipo_documento, numero_documento, nacionalidad,
+              domicilio_calle, domicilio_numero, domicilio_piso_depto, codigo_postal, localidad, partido,
+              telefono, email, diagnostico
+         FROM paciente
+        WHERE paciente_id = :id`,
       [id]
     );
+    if (!result.rows.length) throw new Error(ERROR_PACIENTE_NO_ENCONTRADO);
 
-    if (result.rows.length === 0) {
-      throw new Error(ERROR_PACIENTE_NO_ENCONTRADO);
-    }
-
-    const row = result.rows[0];
-    return new Paciente(
-      row.NOMBRE,
-      row.APELLIDO,
-      row.ID_HOSPITALARIO,
-      row.FECHA_NACIMIENTO ? new Date(row.FECHA_NACIMIENTO).toISOString().split('T')[0] : null,
-      row.PESO,
-      row.ALTURA,
-      row.SEXO,
-      row.OBRA_SOCIAL,
-      row.DNI,
-      row.SUP_CORPORAL,
-      row.ULTIMA_MODIFICACION,
-      row.PACIENTE_ID,
-    );
+    const r = result.rows[0];
+    return new Paciente({
+      paciente_id: r.PACIENTE_ID, nombre: r.NOMBRE, apellido: r.APELLIDO, id_hospitalario: r.ID_HOSPITALARIO,
+      fecha_nacimiento: r.FECHA_NACIMIENTO ? new Date(r.FECHA_NACIMIENTO).toISOString().split('T')[0] : null,
+      peso: r.PESO, sup_corporal: r.SUP_CORPORAL, altura: r.ALTURA, ultima_modificacion: r.ULTIMA_MODIFICACION,
+      sexo: r.SEXO, obra_social: r.OBRA_SOCIAL, tipo_documento: r.TIPO_DOCUMENTO, numero_documento: r.NUMERO_DOCUMENTO,
+      nacionalidad: r.NACIONALIDAD, domicilio_calle: r.DOMICILIO_CALLE, domicilio_numero: r.DOMICILIO_NUMERO,
+      domicilio_piso_depto: r.DOMICILIO_PISO_DEPTO, codigo_postal: r.CODIGO_POSTAL, localidad: r.LOCALIDAD,
+      partido: r.PARTIDO, telefono: r.TELEFONO, email: r.EMAIL, diagnostico: r.DIAGNOSTICO
+    });
   }
 
   async obtenerTodos() {
     const result = await this.connection.execute(
-      `SELECT paciente_id, nombre, apellido, id_hospitalario, fecha_nacimiento, peso, altura, sexo, ultima_modificacion, obra_social, dni, sup_corporal
-           FROM paciente`,
+      `SELECT paciente_id, nombre, apellido, id_hospitalario, fecha_nacimiento, peso, sup_corporal, altura,
+              ultima_modificacion, sexo, obra_social, tipo_documento, numero_documento, nacionalidad,
+              domicilio_calle, domicilio_numero, domicilio_piso_depto, codigo_postal, localidad, partido,
+              telefono, email, diagnostico
+         FROM paciente`
     );
 
-    const pacientes = [];
-    for (const row of result.rows) {
-      pacientes.push(new Paciente(
-        row.NOMBRE,
-        row.APELLIDO,
-        row.ID_HOSPITALARIO,
-        row.FECHA_NACIMIENTO ? new Date(row.FECHA_NACIMIENTO).toISOString().split('T')[0] : null,
-        row.PESO,
-        row.ALTURA,
-        row.SEXO,
-        row.OBRA_SOCIAL,
-        row.DNI,
-        row.SUP_CORPORAL,
-        row.ULTIMA_MODIFICACION,
-        row.PACIENTE_ID,
-      ));
-    }
-
-    return pacientes;
+    return result.rows.map(r => new Paciente({
+      paciente_id: r.PACIENTE_ID, nombre: r.NOMBRE, apellido: r.APELLIDO, id_hospitalario: r.ID_HOSPITALARIO,
+      fecha_nacimiento: r.FECHA_NACIMIENTO ? new Date(r.FECHA_NACIMIENTO).toISOString().split('T')[0] : null,
+      peso: r.PESO, sup_corporal: r.SUP_CORPORAL, altura: r.ALTURA, ultima_modificacion: r.ULTIMA_MODIFICACION,
+      sexo: r.SEXO, obra_social: r.OBRA_SOCIAL, tipo_documento: r.TIPO_DOCUMENTO, numero_documento: r.NUMERO_DOCUMENTO,
+      nacionalidad: r.NACIONALIDAD, domicilio_calle: r.DOMICILIO_CALLE, domicilio_numero: r.DOMICILIO_NUMERO,
+      domicilio_piso_depto: r.DOMICILIO_PISO_DEPTO, codigo_postal: r.CODIGO_POSTAL, localidad: r.LOCALIDAD,
+      partido: r.PARTIDO, telefono: r.TELEFONO, email: r.EMAIL, diagnostico: r.DIAGNOSTICO
+    }));
   }
 
   async actualizarParcialmente(id, campos) {

@@ -46,8 +46,8 @@ Given(/^existe un paciente con los siguientes datos no asociado al médico con i
   this.paciente = dataTable.rowsHash();
 
   await oracleDBInstance.execute(
-    `INSERT INTO paciente (nombre, apellido, id_hospitalario, fecha_nacimiento, peso, sexo, obra_social, dni)
-    VALUES (:nombre, :apellido, :id_hospitalario, TO_DATE(:fecha_nacimiento, 'YYYY-MM-DD'), :peso, :sexo, :obra_social, :dni)`,
+    `INSERT INTO paciente (nombre, apellido, id_hospitalario, fecha_nacimiento, peso, sexo, obra_social)
+    VALUES (:nombre, :apellido, :id_hospitalario, TO_DATE(:fecha_nacimiento, 'YYYY-MM-DD'), :peso, :sexo, :obra_social)`,
     {
       nombre: this.paciente.nombre,
       apellido: this.paciente.apellido,
@@ -55,8 +55,7 @@ Given(/^existe un paciente con los siguientes datos no asociado al médico con i
       fecha_nacimiento: this.paciente.fecha_nacimiento,
       peso: this.paciente.peso,
       sexo: this.paciente.sexo,
-      obra_social: this.paciente.obra_social,
-      dni: this.paciente.dni
+      obra_social: this.paciente.obra_social
     },
     { autoCommit: true }
   );

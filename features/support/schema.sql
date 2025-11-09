@@ -18,8 +18,19 @@ CREATE TABLE paciente (
   sup_corporal          FLOAT,
   ultima_modificacion   TIMESTAMP,
   sexo                  CHAR(1) CHECK (sexo IN ('M','F')),
-  dni                   VARCHAR2(10),
-  obra_social           VARCHAR2(100)
+  obra_social           VARCHAR2(100),
+  tipo_documento        VARCHAR2(20),
+  numero_documento      VARCHAR2(20),
+  nacionalidad          VARCHAR2(30),
+  domicilio_calle       VARCHAR2(50),
+  domicilio_numero      VARCHAR2(10),
+  domicilio_piso_depto  VARCHAR2(20),
+  codigo_postal         VARCHAR2(20),
+  localidad             VARCHAR2(50),
+  partido               VARCHAR2(50),
+  telefono              VARCHAR2(40),
+  email                 VARCHAR2(255),
+  diagnostico           VARCHAR2(255)
 );
 
 CREATE INDEX idx_paciente_nombre ON paciente(nombre, apellido);

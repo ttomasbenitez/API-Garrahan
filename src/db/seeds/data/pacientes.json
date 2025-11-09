@@ -8,7 +8,8 @@
     "sexo": "F",
     "profesional_id": 1,
     "obra_social": "OSDE",
-    "dni": "12345678",
+    "tipo_documento": "DNI",
+    "numero_documento": "12345678",
     "sup_corporal": 1.070539419087137,
     "altura": 120
   },
@@ -21,7 +22,8 @@
     "sexo": "M",
     "profesional_id": 2,
     "obra_social": "IOMA",
-    "dni": "87654321",
+    "tipo_documento": "DNI",
+    "numero_documento": "87654321",
     "sup_corporal": 0.04131274131274131,
     "altura": 120
   },
@@ -34,7 +36,8 @@
     "sexo": "F",
     "profesional_id": 1,
     "obra_social": "OSDE",
-    "dni": "11223344",
+    "tipo_documento": "DNI",
+    "numero_documento": "11223344",
     "sup_corporal": 0.041176470588235294,
     "altura": 120
   }

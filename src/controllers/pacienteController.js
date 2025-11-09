@@ -15,24 +15,36 @@ export const makePacienteController = (pacienteService) => ({
 async function crearPaciente(req, res, service) {
   try {
     const profesional_id = req.user.id;
-    const { nombre, apellido, id_hospitalario, fecha_nacimiento, peso, altura, sexo, obra_social, dni,
-      sup_corporal, protocolo_id, ciclo_actual_id, regimen, fecha_inicio, estado} = req.body;
-    if (!id_hospitalario || !profesional_id) {
-      logger.error('Error al crear paciente: Faltan campos requeridos' );
+    const {
+      nombre, apellido, id_hospitalario, fecha_nacimiento, peso, sup_corporal, altura,
+      sexo, obra_social, tipo_documento, numero_documento, nacionalidad,
+      domicilio_calle, domicilio_numero, domicilio_piso_depto,
+      codigo_postal, localidad, partido, telefono, email, diagnostico,
+      protocolo_id, ciclo_actual_id, regimen, fecha_inicio, estado
+    } = req.body;
+
+    if (!id_hospitalario || !profesional_id)
       return res.status(400).json({ error: 'Faltan campos requeridos' });
-    }
 
-    const fecha_nacimiento_date = fecha_nacimiento ? new Date(fecha_nacimiento) : null;
+    const paciente = new Paciente({
+      nombre, apellido, id_hospitalario,
+      fecha_nacimiento: fecha_nacimiento ? new Date(fecha_nacimiento) : null,
+      peso, sup_corporal, altura, sexo, obra_social, tipo_documento, numero_documento,
+      nacionalidad, domicilio_calle, domicilio_numero, domicilio_piso_depto,
+      codigo_postal, localidad, partido, telefono, email, diagnostico
+    });
 
-    const paciente = new Paciente(nombre, apellido, id_hospitalario, fecha_nacimiento_date, peso, altura, sexo, obra_social, dni, sup_corporal);
     await service.crear(paciente, profesional_id);
+
     if (protocolo_id && ciclo_actual_id && regimen && fecha_inicio && estado) {
-      const protocoloPaciente = new ProtocoloPaciente({paciente_id: paciente.paciente_id,
-        protocolo_id: Number(protocolo_id), ciclo_actual_id: Number(ciclo_actual_id), regimen: Number(regimen), fecha_inicio: new Date(fecha_inicio), estado,
-        profesional_id_asignador: Number(profesional_id), fecha_asignacion: new Date()});
-      await service.crearProtocoloPaciente(protocoloPaciente);
+      await service.crearProtocoloPaciente(new ProtocoloPaciente({
+        paciente_id: paciente.paciente_id,
+        protocolo_id: +protocolo_id, ciclo_actual_id: +ciclo_actual_id, regimen: +regimen,
+        fecha_inicio: new Date(fecha_inicio), estado,
+        profesional_id_asignador: +profesional_id, fecha_asignacion: new Date()
+      }));
     }
-    logger.info('Paciente creado con ID: %d', paciente.paciente_id);
+
     res.status(201).json(paciente);
   } catch (error) {
     logger.error('Error al crear paciente: %o', error);
