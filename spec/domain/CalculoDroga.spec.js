@@ -283,3 +283,135 @@ describe('CalculoDroga - Dosis Diaria', () => {
     expect(calculo.getDosisDiaria()).toEqual({ valor: toFixedString(dosisDiariaMg, 2), unidad: '' });
   });
 });
+
+describe('CalculoDroga - Vías de Administración IV', () => {
+
+  test('Vía IV: debe calcular unidades día a día - Ejemplo 1.2mg/día x 4 días con ampollas de 1mg', () => {
+    // Dosis diaria: 1.2 mg
+    // Presentación: 1 mg por ampolla
+    // Días: 4
+    // Resultado esperado: 2 ampollas por día x 4 días = 8 ampollas
+    const params = {
+      fuerza_valor_requerida: 1.2,
+      fuerza_unidad_requerida: 'mg',
+      cantidad_dias: 4,
+      frecuencia_diaria: 1,
+      peso: 20,
+      nueva_fuerza_valor: 1,
+      nueva_fuerza_unidad: 'mg',
+      via_codigo: 'IV'
+    };
+    const calculo = new CalculoDroga(params);
+
+    // Cada día necesita 1.2 mg = 2 ampollas de 1mg (sobran 0.8mg que se tiran)
+    // 4 días x 2 ampollas = 8 ampollas
+    expect(calculo.getUnidades()).toBe(8);
+  });
+
+  test('Vía IV: debe calcular correctamente con dosis que se da 2 veces al día', () => {
+    // Dosis: 50 mg/kg, 2 veces al día
+    // Peso: 10 kg
+    // Dosis por toma: 50 mg/kg x 10 kg = 500 mg
+    // Dosis diaria total: 500 mg x 2 = 1000 mg
+    // Presentación: 400 mg por vial
+    // Unidades por día: ceil(1000 / 400) = 3 viales
+    // Días: 3
+    // Total: 3 viales x 3 días = 9 viales
+    const params = {
+      fuerza_valor_requerida: 50,
+      fuerza_unidad_requerida: 'mg/kg',
+      cantidad_dias: 3,
+      frecuencia_diaria: 2,
+      peso: 10,
+      nueva_fuerza_valor: 400,
+      nueva_fuerza_unidad: 'mg',
+      via_codigo: 'IV'
+    };
+    const calculo = new CalculoDroga(params);
+
+    expect(calculo.getUnidades()).toBe(9);
+  });
+
+  test('Vía IV: debe calcular correctamente con mg/m2', () => {
+    // Dosis: 100 mg/m2
+    // Peso: 25 kg → SC = 0.9304347826
+    // Dosis diaria: 100 x 0.9304 x 1 = 93.04 mg
+    // Presentación: 50 mg por ampolla
+    // Unidades por día: ceil(93.04 / 50) = 2 ampollas
+    // Días: 5
+    // Total: 2 x 5 = 10 ampollas
+    const params = {
+      fuerza_valor_requerida: 100,
+      fuerza_unidad_requerida: 'mg/m2',
+      cantidad_dias: 5,
+      frecuencia_diaria: 1,
+      peso: 25,
+      nueva_fuerza_valor: 50,
+      nueva_fuerza_unidad: 'mg',
+      via_codigo: 'IV'
+    };
+    const calculo = new CalculoDroga(params);
+
+    expect(calculo.getUnidades()).toBe(10);
+  });
+
+  test('Vía IV: debe manejar decimales con redondeo hacia arriba por día', () => {
+    // Dosis: 33.5 mg/día
+    // Presentación: 10 mg por vial
+    // Unidades por día: ceil(33.5 / 10) = 4 viales
+    // Días: 7
+    // Total: 4 x 7 = 28 viales
+    const params = {
+      fuerza_valor_requerida: 33.5,
+      fuerza_unidad_requerida: 'mg',
+      cantidad_dias: 7,
+      frecuencia_diaria: 1,
+      peso: 20,
+      nueva_fuerza_valor: 10,
+      nueva_fuerza_unidad: 'mg',
+      via_codigo: 'IV'
+    };
+    const calculo = new CalculoDroga(params);
+
+    expect(calculo.getUnidades()).toBe(28);
+  });
+
+  test('Vía VO: debe calcular acumulado cuando el código NO es IV', () => {
+    // Mismo caso que el primer test de IV pero con código VO
+    // Dosis total: 1.2 mg x 4 días = 4.8 mg
+    // Presentación: 1 mg por comprimido
+    // Total acumulado: ceil(4.8 / 1) = 5 comprimidos
+    const params = {
+      fuerza_valor_requerida: 1.2,
+      fuerza_unidad_requerida: 'mg',
+      cantidad_dias: 4,
+      frecuencia_diaria: 1,
+      peso: 20,
+      nueva_fuerza_valor: 1,
+      nueva_fuerza_unidad: 'mg',
+      via_codigo: 'VO'
+    };
+    const calculo = new CalculoDroga(params);
+
+    // Cálculo acumulado: 5 comprimidos (no 8 como en IV)
+    expect(calculo.getUnidades()).toBe(5);
+  });
+
+  test('Sin código de vía: debe usar cálculo acumulado (comportamiento por defecto)', () => {
+    // Sin especificar código, debe usar la lógica acumulada
+    const params = {
+      fuerza_valor_requerida: 1.2,
+      fuerza_unidad_requerida: 'mg',
+      cantidad_dias: 4,
+      frecuencia_diaria: 1,
+      peso: 20,
+      nueva_fuerza_valor: 1,
+      nueva_fuerza_unidad: 'mg'
+      // via_codigo no especificado
+    };
+    const calculo = new CalculoDroga(params);
+
+    expect(calculo.getUnidades()).toBe(5);
+  });
+});
+

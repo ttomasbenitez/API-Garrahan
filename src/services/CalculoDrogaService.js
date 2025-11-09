@@ -24,7 +24,8 @@ export class CalculoDrogaService {
       frecuencia_diaria: admin.FRECUENCIA_DIARIA,
       peso,
       nueva_fuerza_valor,
-      nueva_fuerza_unidad: nueva_fuerza_unidad || admin.FUERZA_UNIDAD
+      nueva_fuerza_unidad: nueva_fuerza_unidad || admin.FUERZA_UNIDAD,
+      via_codigo: admin.VIA_CODIGO
     });
 
     return {

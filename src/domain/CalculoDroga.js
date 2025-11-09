@@ -58,6 +58,7 @@ export default class CalculoDroga {
     peso,
     nueva_fuerza_valor,
     nueva_fuerza_unidad,
+    via_codigo,
   }) {
 
     const unidadRequeridaLower = (fuerza_unidad_requerida || '').toLowerCase();
@@ -75,6 +76,7 @@ export default class CalculoDroga {
     this.cantidad_dias = cantidad_dias;
     this.frecuencia_diaria = frecuencia_diaria;
     this.peso = peso;
+    this.via_codigo = via_codigo;
   }
 
   /**
@@ -152,12 +154,24 @@ export default class CalculoDroga {
   }
 
   getUnidades() {
-    const dosisTotalEnMg = this.getDosisTotal();
-
     if (!this.fuerza_presentacion_mg || this.fuerza_presentacion_mg === 0) {
       return 0;
     }
 
+    // Para drogas intravenosas (vía IV), el excedente de cada día se descarta
+    if (this.via_codigo === 'IV') {
+      // Calcular la dosis diaria total en mg (todas las dosis del día)
+      const dosisDiariaEnMg = this.getDosisTotalDiariaEnMg() * this.frecuencia_diaria;
+
+      // Calcular cuántas unidades se necesitan por día (redondeando hacia arriba)
+      const unidadesPorDia = Math.ceil(dosisDiariaEnMg / this.fuerza_presentacion_mg);
+
+      // Multiplicar por la cantidad de días
+      return unidadesPorDia * this.cantidad_dias;
+    }
+
+    // Para otras vías de administración, se calcula sobre el total acumulado
+    const dosisTotalEnMg = this.getDosisTotal();
     return Math.ceil(dosisTotalEnMg / this.fuerza_presentacion_mg);
   }
 }

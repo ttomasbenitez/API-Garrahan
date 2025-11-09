@@ -62,7 +62,12 @@ export class RepositorioAdminisitracionMedicacion {
     }
   }
   async getById(admin_id) {
-    const sql = 'SELECT * FROM administracion_medicacion WHERE admin_id = :admin_id';
+    const sql = `
+      SELECT a.*, v.codigo AS via_codigo
+      FROM administracion_medicacion a
+      INNER JOIN via_administracion v ON a.via_id = v.via_id
+      WHERE a.admin_id = :admin_id
+    `;
     const result = await this.db.withConnection(conn => conn.execute(sql, { admin_id: Number(admin_id) }, { outFormat: oracledb.OUT_FORMAT_OBJECT }));
     if (!result.rows || result.rows.length === 0) return null;
     return result.rows[0];
