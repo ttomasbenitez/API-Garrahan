@@ -415,3 +415,116 @@ describe('CalculoDroga - Vías de Administración IV', () => {
   });
 });
 
+describe('CalculoDroga - Validación VINCRISTINA', () => {
+
+  test('VINCRISTINA: debe limitar la dosis diaria a máximo 2mg cuando se supera', () => {
+    // Dosis que supera los 2mg
+    const params = {
+      fuerza_valor_requerida: 150, // mg/m2
+      fuerza_unidad_requerida: 'mg/m2',
+      cantidad_dias: CANTIDAD_DIAS,
+      frecuencia_diaria: FRECUENCIA_DIARIA,
+      peso: PESO,
+      nueva_fuerza_valor: 1,
+      nueva_fuerza_unidad: 'mg',
+      nombre_droga: 'VINCRISTINA'
+    };
+    const calculo = new CalculoDroga(params);
+
+    // Sin límite sería: 150 * 0.9304 * 1 = 139.56 mg/día
+    // Con límite debe ser: 2.00 mg/día
+    expect(calculo.getDosisDiaria()).toEqual({ valor: '2.00', unidad: 'mg' });
+  });
+
+  test('VINCRISTINA: no debe modificar la dosis si está por debajo de 2mg', () => {
+    // Dosis menor a 2mg
+    const params = {
+      fuerza_valor_requerida: 1.5, // mg/kg
+      fuerza_unidad_requerida: 'mg/kg',
+      cantidad_dias: CANTIDAD_DIAS,
+      frecuencia_diaria: FRECUENCIA_DIARIA,
+      peso: 1, // 1kg para que sea 1.5mg
+      nueva_fuerza_valor: 1,
+      nueva_fuerza_unidad: 'mg',
+      nombre_droga: 'VINCRISTINA'
+    };
+    const calculo = new CalculoDroga(params);
+
+    // Dosis: 1.5 * 1 * 1 = 1.5 mg/día (no debe limitarse)
+    expect(calculo.getDosisDiaria()).toEqual({ valor: '1.50', unidad: 'mg' });
+  });
+
+  test('VINCRISTINA: debe reconocer el nombre en minúsculas o con espacios', () => {
+    const params = {
+      fuerza_valor_requerida: 150,
+      fuerza_unidad_requerida: 'mg/m2',
+      cantidad_dias: CANTIDAD_DIAS,
+      frecuencia_diaria: FRECUENCIA_DIARIA,
+      peso: PESO,
+      nueva_fuerza_valor: 1,
+      nueva_fuerza_unidad: 'mg',
+      nombre_droga: '  vincristina  ' // Con espacios y minúsculas
+    };
+    const calculo = new CalculoDroga(params);
+
+    expect(calculo.getDosisDiaria()).toEqual({ valor: '2.00', unidad: 'mg' });
+  });
+
+  test('VINCRISTINA: debe aplicar el límite con frecuencia diaria múltiple', () => {
+    // Si la frecuencia es 2 veces al día, la dosis total diaria sigue limitada a 2mg
+    const params = {
+      fuerza_valor_requerida: 75, // mg/m2
+      fuerza_unidad_requerida: 'mg/m2',
+      cantidad_dias: CANTIDAD_DIAS,
+      frecuencia_diaria: FRECUENCIA_DIARIA_DOBLE,
+      peso: PESO,
+      nueva_fuerza_valor: 1,
+      nueva_fuerza_unidad: 'mg',
+      nombre_droga: 'VINCRISTINA'
+    };
+    const calculo = new CalculoDroga(params);
+
+    // Sin límite sería: 75 * 0.9304 * 2 = 139.56 mg/día
+    // Con límite debe ser: 2.00 mg/día
+    expect(calculo.getDosisDiaria()).toEqual({ valor: '2.00', unidad: 'mg' });
+  });
+
+  test('Otras drogas: no deben tener límite de 2mg', () => {
+    const params = {
+      fuerza_valor_requerida: 150,
+      fuerza_unidad_requerida: 'mg/m2',
+      cantidad_dias: CANTIDAD_DIAS,
+      frecuencia_diaria: FRECUENCIA_DIARIA,
+      peso: PESO,
+      nueva_fuerza_valor: 1,
+      nueva_fuerza_unidad: 'mg',
+      nombre_droga: 'DOXORRUBICINA'
+    };
+    const calculo = new CalculoDroga(params);
+
+    // Dosis: 150 * 0.9304 * 1 = 139.56 mg/día (sin límite)
+    const dosisEsperada = 150 * SC_CALCULADA * FRECUENCIA_DIARIA;
+    expect(calculo.getDosisDiaria()).toEqual({
+      valor: toFixedString(dosisEsperada, 2),
+      unidad: 'mg'
+    });
+  });
+
+  test('VINCRISTINA: debe limitar en diferentes unidades de presentación', () => {
+    // Prueba con presentación en gramos
+    const params = {
+      fuerza_valor_requerida: 150,
+      fuerza_unidad_requerida: 'mg/m2',
+      cantidad_dias: CANTIDAD_DIAS,
+      frecuencia_diaria: FRECUENCIA_DIARIA,
+      peso: PESO,
+      nueva_fuerza_valor: 0.001, // 0.001 gr = 1 mg
+      nueva_fuerza_unidad: 'gr',
+      nombre_droga: 'VINCRISTINA'
+    };
+    const calculo = new CalculoDroga(params);
+
+    // 2mg limitado convertido a gramos = 0.002 gr
+    expect(calculo.getDosisDiaria()).toEqual({ valor: '0.00', unidad: 'gr' });
+  });
+});

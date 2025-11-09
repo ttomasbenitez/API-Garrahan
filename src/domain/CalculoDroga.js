@@ -7,6 +7,8 @@ const UNIDAD_MICROGRAMO = 'μg';
 const UNIDAD_POR_M2 = '/m2';
 const UNIDAD_POR_KG = '/kg';
 
+const DOSIS_MAXIMA_VINCRISTINA = 2; // mg
+
 
 export default class CalculoDroga {
   /**
@@ -59,6 +61,7 @@ export default class CalculoDroga {
     nueva_fuerza_valor,
     nueva_fuerza_unidad,
     via_codigo,
+    nombre_droga,
   }) {
 
     const unidadRequeridaLower = (fuerza_unidad_requerida || '').toLowerCase();
@@ -77,6 +80,7 @@ export default class CalculoDroga {
     this.frecuencia_diaria = frecuencia_diaria;
     this.peso = peso;
     this.via_codigo = via_codigo;
+    this.nombre_droga = (nombre_droga || '').toUpperCase().trim();
   }
 
   /**
@@ -141,9 +145,15 @@ export default class CalculoDroga {
   /**
    * Retorna la dosis total requerida para un solo día de tratamiento
    * para el paciente, en la unidad de la presentación.
+   * Aplica límite máximo de 2mg para VINCRISTINA.
    */
   getDosisDiaria() {
-    const dosisDiariaEnMg = this.getDosisTotalDiariaEnMg() * this.frecuencia_diaria;
+    let dosisDiariaEnMg = this.getDosisTotalDiariaEnMg() * this.frecuencia_diaria;
+
+    // Aplicar límite máximo para VINCRISTINA
+    if (this.nombre_droga === 'VINCRISTINA' && dosisDiariaEnMg > DOSIS_MAXIMA_VINCRISTINA) {
+      dosisDiariaEnMg = DOSIS_MAXIMA_VINCRISTINA;
+    }
 
     const valorReconvertido = CalculoDroga.reconvertirValor(dosisDiariaEnMg, this.nueva_fuerza_unidad);
 

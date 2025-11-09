@@ -12,8 +12,9 @@ export class CalculoDrogaService {
    * @param {number} params.peso
    * @param {number} params.nueva_fuerza_valor
    * @param {string} params.nueva_fuerza_unidad
+   * @param {string} params.nombre_droga
    */
-  async calcular({ administracion_id, peso, nueva_fuerza_valor, nueva_fuerza_unidad }) {
+  async calcular({ administracion_id, peso, nueva_fuerza_valor, nueva_fuerza_unidad, nombre_droga }) {
     const admin = await this.repositorioAdministracion.getById(administracion_id);
     if (!admin) throw new Error('Administración no encontrada');
 
@@ -25,7 +26,8 @@ export class CalculoDrogaService {
       peso,
       nueva_fuerza_valor,
       nueva_fuerza_unidad: nueva_fuerza_unidad || admin.FUERZA_UNIDAD,
-      via_codigo: admin.VIA_CODIGO
+      via_codigo: admin.VIA_CODIGO,
+      nombre_droga
     });
 
     return {
