@@ -67,7 +67,7 @@ class RecetaPaciente {
     });
 
     const contexto = new ContextoSnapshot({
-      protocolo_id: body.protocolo_id, ciclo_id: body.ciclo_id, regimen: body.regimen, numero_ciclo: body.numero_ciclo
+      protocolo_id: body.protocolo_id, ciclo_id: body.ciclo_id, regimen: body.regimen
     });
 
     const detalles = body.detalles ? body.detalles.map((d) =>

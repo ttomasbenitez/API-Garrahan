@@ -17,7 +17,6 @@
     "protocolo_id": 1,
     "ciclo_id": 1,
     "regimen": 0,
-    "numero_ciclo": 1,
     "tipo_receta": "hospitalaria",
     "detalles": []
   },
@@ -39,7 +38,6 @@
     "protocolo_id": 1,
     "ciclo_id": 1,
     "regimen": 0,
-    "numero_ciclo": 1,
     "tipo_receta": "hospitalaria",
     "detalles": []
   },
@@ -59,9 +57,8 @@
     "talla": 132,
     "superficie_corporal": 1.0,
     "protocolo_id": 1,
-    "ciclo_id": 3,
-    "regimen": 1,
-    "numero_ciclo": 1,
+    "ciclo_id": 1,
+    "regimen": 0,
     "tipo_receta": "provincia",
     "detalles": []
   }

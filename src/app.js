@@ -45,7 +45,7 @@ import { PresentacionDrogaViaService } from './services/PresentacionDrogaViaServ
 import { makePresentacionDrogaViaController } from './controllers/presentacionDrogaViaController.js';
 import presentacionDrogaViaRoutes from './routes/presentacionDrogaVia.js';
 import { RepositorioPacienteProfesional } from './persistance/repositorioPacienteProfesional.js';
-import apiHospitalConector from './connectors/hospital_api.js';
+import apiHospitalConector from './connectors/hospitalApi.js';
 import { RepositorioAdminisitracionMedicacion } from './persistance/repositorioAdministracionMedicacion.js';
 import { RepositorioRecetaPaciente } from './persistance/repositorioRecetaPaciente.js';
 import { RecetaService } from './services/RecetaService.js';

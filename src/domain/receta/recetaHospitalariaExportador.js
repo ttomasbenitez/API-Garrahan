@@ -24,7 +24,7 @@ export class RecetaHospitalariaExportador {
     sheet.getCell('A7').value += ` ${this.receta.diagnostico}`;
     sheet.getCell('A8').value += ` ${this.receta.domicilioCompleto()}`;
     sheet.getCell('A9').value += ` ${this.protocolo.nombre}`;
-    sheet.getCell('F9').value += ` ${this.receta.contexto.numero_ciclo}`;
+    sheet.getCell('F9').value += ` ${this.receta.contexto.ciclo_id}`;
     sheet.getCell('A10').value += ` ${this.receta.datos_paciente.peso} kg`;
     sheet.getCell('E10').value += ` ${this.receta.datos_paciente.talla} cm`;
     sheet.getCell('H10').value += ` ${this.receta.datos_paciente.superficie_corporal} m2`;

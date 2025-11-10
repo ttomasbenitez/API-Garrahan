@@ -80,31 +80,6 @@ async function createPresentacionesDroga(cookie) {
   }
 }
 
-//async function createCiclos(cookie, protocoloId) {
-//  const ciclos = [
-//    { ciclo_id: 1, regimen: 0, duracion_semanas: 5, ciclo_final: false, repeticiones: 0 },
-//    { ciclo_id: 2, regimen: 0, duracion_semanas: 5, ciclo_final: false, repeticiones: 0 },
-//
-//    { ciclo_id: 3, regimen: 1, duracion_semanas: 5, ciclo_final: false,  repeticiones: 0 },
-//    { ciclo_id: 4, regimen: 1, duracion_semanas: 5, ciclo_final: false,  repeticiones: 0 },
-//    { ciclo_id: 5, regimen: 1, duracion_semanas: 4, ciclo_final: false,  repeticiones: 0 },
-//    { ciclo_id: 6, regimen: 1, duracion_semanas: 4, ciclo_final: true,  repeticiones: 0 },
-//
-//    { ciclo_id: 3, regimen: 2, duracion_semanas: 5, ciclo_final: false,  repeticiones: 0 },
-//    { ciclo_id: 4, regimen: 2, duracion_semanas: 5, ciclo_final: false,  repeticiones: 0 },
-//    { ciclo_id: 5, regimen: 2, duracion_semanas: 4, ciclo_final: false,  repeticiones: 0 },
-//    { ciclo_id: 6, regimen: 2, duracion_semanas: 4, ciclo_final: false,  repeticiones: 0 },
-//
-//    { ciclo_id: 7, regimen: 2, duracion_semanas: 1, ciclo_final: true,  repeticiones: 73 },
-//  ];
-//
-//  const res = await fetch(`http://api-garrahan-app-1:3000/protocolos/${protocoloId}/ciclos`, {
-//    method: 'POST',
-//    headers: { 'Content-Type': 'application/json', 'Cookie': cookie },
-//    body: JSON.stringify(ciclos),
-//  });
-//  console.log('Ciclos creados:', await res.json());
-//}
 
 async function createCiclos(cookie) {
   const urlBase = 'http://api-garrahan-app-1:3000/protocolos';

@@ -10,7 +10,8 @@
     "obra_social": "OSDE",
     "tipo_documento": "DNI",
     "numero_documento": "12345678",
-    "sup_corporal": 1.070539419087137,
+    "dni": "12345678",
+    "sup_corporal": 1.0705,
     "altura": 120
   },
   {
@@ -18,14 +19,15 @@
     "apellido": "Esposito",
     "id_hospitalario": "H002",
     "fecha_nacimiento": "2018-03-20",
-    "peso": 25.0,
+    "peso": 30.0,
     "sexo": "M",
     "profesional_id": 2,
     "obra_social": "IOMA",
     "tipo_documento": "DNI",
     "numero_documento": "87654321",
-    "sup_corporal": 0.04131274131274131,
-    "altura": 120
+    "dni": "87654321",
+    "sup_corporal": 1.0583,
+    "altura": 110
   },
   {
     "nombre": "Ana",
@@ -38,7 +40,8 @@
     "obra_social": "OSDE",
     "tipo_documento": "DNI",
     "numero_documento": "11223344",
-    "sup_corporal": 0.041176470588235294,
+    "dni": "51223344",
+    "sup_corporal": 1.0084,
     "altura": 120
   }
 ]

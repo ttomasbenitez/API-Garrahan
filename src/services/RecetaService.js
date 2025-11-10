@@ -38,4 +38,8 @@ export class RecetaService {
       return await exportador.generar();
     }
   }
+
+  async eliminar(id) {
+    return await this.recetaPacienteRepo.eliminar(id);
+  }
 }

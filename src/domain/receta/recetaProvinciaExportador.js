@@ -22,7 +22,7 @@ export class RecetaProvinciaExportador {
     form.getTextField('superficieCorporal').setText(` ${this.receta.datos_paciente.talla}`);
 
     form.getTextField('diagnostico').setText(` ${this.receta.diagnostico}`);
-    form.getTextField('numeroCiclo').setText(` ${this.receta.contexto.numero_ciclo}`);
+    form.getTextField('numeroCiclo').setText(` ${this.receta.contexto.ciclo_id}`);
     form.getTextField('TNM').setText(` ${this.receta.tnm}`);
     form.getTextField('estadio').setText(` ${this.receta.estadio}`);
     form.getTextField('intervalo').setText(` ${this.receta.intervalo}`);

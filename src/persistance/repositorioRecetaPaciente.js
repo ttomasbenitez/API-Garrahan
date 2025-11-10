@@ -1,7 +1,7 @@
 import oracledb from 'oracledb';
 import { ERROR_RECETA_DETALLE_CREACION, ERROR_RECETA_DETALLE_CREACION_CODE, ERROR_RECETA_PACIENTE_CREACION, ERROR_RECETA_PACIENTE_CREACION_CODE } from '../errors/receta.js';
 import { FK_NOT_EXISTENT_CODE, UNIQUE_VIOLATION_CODE } from '../errors/index.js';
-import { toFloat, toNum, toStr } from '../utils/formatters.js';
+import { getError, toFloat, toNum, toStr } from '../utils/formatters.js';
 import { mapRecetaDetalleInsertError, mapRecetaPacienteInsertError } from './errorsMapper.js';
 import RecetaPaciente from '../domain/receta/recetaPaciente.js';
 import { Contacto, ContextoSnapshot, DatosPaciente, Domicilio, Identidad, PacienteSnapshot } from '../domain/receta/pacienteSnapshot.js';
@@ -29,7 +29,7 @@ export class RepositorioRecetaPaciente {
             domicilio_calle, domicilio_numero, domicilio_piso, domicilio_depto,
             codigo_postal, localidad, partido,
             telefono, email,
-            peso, talla, superficie_corporal, diagnostico, numero_ciclo, protocolo_id,
+            peso, talla, superficie_corporal, diagnostico, protocolo_id,
             ciclo_id, regimen, paciente_id, profesional_id, estado, tipo_receta,
             tnm, estadio, intervalo, ps
           ) VALUES (
@@ -38,7 +38,7 @@ export class RepositorioRecetaPaciente {
             :domicilio_calle, :domicilio_numero, :domicilio_piso, :domicilio_depto,
             :codigo_postal, :localidad, :partido,
             :telefono, :email,
-            :peso, :talla, :superficie_corporal, :diagnostico, :numero_ciclo, :protocolo_id, 
+            :peso, :talla, :superficie_corporal, :diagnostico, :protocolo_id, 
             :ciclo_id, :regimen, :paciente_id, :profesional_id, :estado, :tipo_receta,
             :tnm, :estadio, :intervalo, :ps
           )
@@ -65,7 +65,6 @@ export class RepositorioRecetaPaciente {
             talla: toFloat(datos_paciente.talla),
             superficie_corporal: toFloat(datos_paciente.superficie_corporal),
             diagnostico: toStr(rp.diagnostico),
-            numero_ciclo: toNum(contexto.numero_ciclo),
             protocolo_id: toNum(contexto.protocolo_id),
             ciclo_id: toNum(contexto.ciclo_id),
             regimen: toNum(contexto.regimen),
@@ -114,7 +113,7 @@ export class RepositorioRecetaPaciente {
             presentacion: toStr(d.presentacion),
             concentracion: toStr(d.concentracion),
             cantidad: toNum(d.cantidad),
-            dosis_diaria: toNum(d.dosis_diaria),
+            dosis_diaria: toStr(d.dosis_diaria),
             numero_dias: toNum(d.numero_dias),
             dosis_total: toNum(d.dosis_total),
             via_administracion: toStr(d.via_administracion),
@@ -129,7 +128,7 @@ export class RepositorioRecetaPaciente {
               presentacion:     { type: oracledb.STRING, maxSize: 100 },
               concentracion:    { type: oracledb.STRING, maxSize: 50 },
               cantidad:         { type: oracledb.NUMBER },
-              dosis_diaria:     { type: oracledb.NUMBER },
+              dosis_diaria:     { type: oracledb.STRING, maxSize: 50 },
               numero_dias:      { type: oracledb.NUMBER },
               dosis_total:      { type: oracledb.NUMBER },
               via_administracion: { type: oracledb.STRING, maxSize: 100 },
@@ -190,7 +189,7 @@ export class RepositorioRecetaPaciente {
         presentacion: toStr(row.PRESENTACION),
         concentracion: toStr(row.CONCENTRACION),
         cantidad: toNum(row.CANTIDAD),
-        dosis_diaria: toNum(row.DOSIS_DIARIA),
+        dosis_diaria: toStr(row.DOSIS_DIARIA),
         numero_dias: toNum(row.NUMERO_DIAS),
         dosis_total: toNum(row.DOSIS_TOTAL),
         via_administracion: toStr(row.VIA_ADMINISTRACION),
@@ -202,6 +201,7 @@ export class RepositorioRecetaPaciente {
 
 
   async obtener(id) {
+
     const result = await this.connection.execute(
       `SELECT
           receta_id,
@@ -212,8 +212,7 @@ export class RepositorioRecetaPaciente {
           domicilio_depto, codigo_postal, localidad, partido,
           telefono, email,
           peso, talla, superficie_corporal,
-          diagnostico, numero_ciclo,
-          protocolo_id, ciclo_id, regimen,
+          diagnostico, protocolo_id, ciclo_id, regimen,
           paciente_id, profesional_id, estado, tipo_receta,
           tnm, estadio, intervalo, ps
        FROM receta_paciente
@@ -222,7 +221,7 @@ export class RepositorioRecetaPaciente {
     );
 
     if (!result?.rows || result.rows.length === 0) {
-      return null;
+      throw getError('Receta de paciente no encontrada', 'RECETA_PACIENTE_NO_ENCONTRADA');
     }
 
     const row = result.rows[0];
@@ -269,7 +268,6 @@ export class RepositorioRecetaPaciente {
       protocolo_id: toNum(row.PROTOCOLO_ID),
       ciclo_id: toNum(row.CICLO_ID),
       regimen: toNum(row.REGIMEN),
-      numero_ciclo: toNum(row.NUMERO_CICLO),
     });
 
     const detalles = await this.obtenerDetalles(id);
@@ -294,6 +292,7 @@ export class RepositorioRecetaPaciente {
     receta.fecha_prescripcion = row.FECHA_PRESCRIPCION ? new Date(row.FECHA_PRESCRIPCION) : null;
 
     return receta;
+
   }
 
   async obtenerTodasPorIdPaciente(idPaciente) {
@@ -307,8 +306,7 @@ export class RepositorioRecetaPaciente {
           domicilio_depto, codigo_postal, localidad, partido,
           telefono, email,
           peso, talla, superficie_corporal,
-          diagnostico, numero_ciclo,
-          protocolo_id, ciclo_id, regimen,
+          diagnostico, protocolo_id, ciclo_id, regimen,
           paciente_id, profesional_id, estado, tipo_receta,
           tnm, estadio, intervalo, ps
        FROM receta_paciente
@@ -363,7 +361,6 @@ export class RepositorioRecetaPaciente {
           protocolo_id: toNum(row.PROTOCOLO_ID),
           ciclo_id: toNum(row.CICLO_ID),
           regimen: toNum(row.REGIMEN),
-          numero_ciclo: toNum(row.NUMERO_CICLO),
         });
 
         const detalles = await this.obtenerDetalles(row.RECETA_ID);
@@ -392,5 +389,34 @@ export class RepositorioRecetaPaciente {
     );
 
     return recetas;
+  }
+
+  async eliminar(id) {
+    return this.connection.withConnection(async (conn) => {
+      try {
+        const result = await conn.execute(
+          'DELETE FROM receta_detalle WHERE receta_id = :id',
+          { id },
+          { autoCommit: false }
+        );
+
+        if (result.rowsAffected === 0) {
+          throw new Error('Receta no encontrada');
+        }
+
+        await conn.execute(
+          'DELETE FROM receta_paciente WHERE receta_id = :id',
+          { id },
+          { autoCommit: false }
+        );
+
+        await conn.commit();
+
+        return id;
+      } catch (e) {
+        await conn.rollback();
+        throw e;
+      }
+    });
   }
 }

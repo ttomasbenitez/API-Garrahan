@@ -88,6 +88,7 @@ async function obtenerPacienteExterno(req, res, service) {
     const { id } = req.params;
     const paciente = await service.obtenerExterno(id);
     logger.info('Paciente obtenido con ID: %d', paciente.id_hospitalario);
+    console.log(paciente);
     res.status(200).json(paciente);
   } catch (error) {
     logger.error('Error al obtener paciente: %o', error);

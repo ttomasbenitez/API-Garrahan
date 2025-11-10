@@ -53,7 +53,6 @@ Feature: Gestión del Detalle de Recetas
       | talla               | 140.7                    |
       | superficie_corporal | 1.20                     |
       | diagnostico         | Leucemia Linfoblástica Aguda |
-      | numero_ciclo        | 1                        |
       | protocolo_id        | 1                        |
       | ciclo_id            | 1                        |
       | regimen             | 1                        |
@@ -72,7 +71,7 @@ Feature: Gestión del Detalle de Recetas
       | concentracion      | 1 mg/ml         |
       | via_administracion | Intravenosa     |
       | cantidad           | 3               |
-      | dosis_diaria       | 50              |
+      | dosis_diaria       | 50 mg/m2        |
       | numero_dias        | 5               |
       | dosis_total        | 250             |
     When publico en la API "/recetas" con los datos del detalle

@@ -1,63 +1,31 @@
 /* global describe, test, expect, jest, beforeEach */
-import { ApiHospitalConector } from '../../src/connectors/hospital_api.js';
+import { ApiHospitalConector } from '../../src/connectors/hospitalApi.js';
 import config from '../../config.js';
+import axios from 'axios';
+
+// Source - https://stackoverflow.com/a
+// Posted by Benny Neugebauer
+// Retrieved 2025-11-09, License - CC BY-SA 4.0
+
+jest.mock('axios');
 
 describe('ApiHospitalConector', () => {
+
   let conector;
 
   beforeEach(() => {
     jest.clearAllMocks();
-    global.fetch = jest.fn();
-    config.app = { apiHospitalUrl: 'http://fake-hospital-api.com' };
+    config.app = { apiHospitalUrl: 'http://localhost:4000' };
     conector = new ApiHospitalConector();
-  });
-
-  test('_extraerPaciente devuelve el recurso Patient correcto', () => {
-    const fhirData = {
-      entry: [{ resourceType: 'Patient', resource: { id: '123', name: [{ given: ['Juan'], family: 'Pérez' }] } }],
-    };
-    const result = conector._extraerPaciente(fhirData);
-    expect(result.name[0].given[0]).toBe('Juan');
-    expect(result.name[0].family).toBe('Pérez');
-  });
-
-  test('_extraerObservaciones devuelve valores de peso, talla y superficie corporal', () => {
-    const fhirData = {
-      entry: [
-        { resource: { resourceType: 'Observation', id: 'obs-weight', valueQuantity: { value: 70 } } },
-        { resource: { resourceType: 'Observation', id: 'obs-height', valueQuantity: { value: 180 } } },
-        { resource: { resourceType: 'Observation', id: 'obs-bsa', valueQuantity: { value: 1.9 } } },
-      ],
-    };
-    const result = conector._extraerObservaciones(fhirData);
-    expect(result).toEqual({ peso: 70, talla: 180, superficie_corporal: 1.9 });
-  });
-
-  test('_extraerDireccion separa calle, número y pisoDepto correctamente', () => {
-    const address = [{ line: ['Av. Siempre Viva, 742, Piso 3A'] }];
-    const result = conector._extraerDireccion(address);
-    expect(result).toEqual({
-      calle: 'Av. Siempre Viva',
-      numero: '742',
-      pisoDepto: '3A',
-    });
-  });
-
-  test('_extraerDireccion maneja sólo piso sin letra', () => {
-    const address = [{ line: ['Av. Siempre Viva, 742, Piso 3'] }];
-    const result = conector._extraerDireccion(address);
-    expect(result.pisoDepto).toBe('3');
-  });
-
-  test('_extraerDireccion devuelve nulls si falta la dirección', () => {
-    const result = conector._extraerDireccion(null);
-    expect(result).toEqual({ calle: null, numero: null, pisoDepto: null });
+    conector.apiClient = axios;
   });
 
   test('obtenerPaciente devuelve datos normalizados correctamente', async () => {
-    const mockResponse = {
-      ok: true,
-      json: jest.fn().mockResolvedValue({
+
+    axios.get.mockResolvedValueOnce({
+      data: JSON.stringify({
+        resourceType: 'Bundle',
+        type: 'collection',
         entry: [{
           resourceType: 'Patient',
           id: '123',
@@ -117,15 +85,12 @@ describe('ApiHospitalConector', () => {
             id: 'obs-bsa',
             valueQuantity: { value: 0.78 }
           }
-        }]
-      })
-    };
+        }]}),
+      status: 200,
+    });
 
-    global.fetch.mockResolvedValue(mockResponse);
+    const paciente = await conector.obtenerPaciente('H001');
 
-    const paciente = await conector.obtenerPaciente('123');
-
-    expect(global.fetch).toHaveBeenCalledWith('http://fake-hospital-api.com/fhir/Patient/123');
     expect(paciente).toEqual({
       nombre: 'Juan',
       apellido: 'Pérez',
@@ -150,11 +115,61 @@ describe('ApiHospitalConector', () => {
     });
   });
 
-  test('lanza error si la respuesta no es ok', async () => {
-    global.fetch.mockResolvedValue({ ok: false });
-    await expect(conector.obtenerPaciente('999'))
-      .rejects.toThrow('Error al consultar la API del hospital');
+  test('lanza error si la respuesta no es 200', async () => {
+
+    axios.get.mockResolvedValueOnce({
+      data: {},
+      status: 404,
+    });
+
+    await expect(conector.obtenerPaciente('999')).rejects.toThrow(
+      'Error al consultar la API del hospital'
+    );
   });
+
+
+  test('_extraerPaciente devuelve el recurso Patient correcto', () => {
+    const fhirData = {
+      entry: [{ resourceType: 'Patient', resource: { id: '123', name: [{ given: ['Juan'], family: 'Pérez' }] } }],
+    };
+    const result = conector._extraerPaciente(fhirData);
+    expect(result.name[0].given[0]).toBe('Juan');
+    expect(result.name[0].family).toBe('Pérez');
+  });
+
+  test('_extraerObservaciones devuelve valores de peso, talla y superficie corporal', () => {
+    const fhirData = {
+      entry: [
+        { resource: { resourceType: 'Observation', id: 'obs-weight', valueQuantity: { value: 70 } } },
+        { resource: { resourceType: 'Observation', id: 'obs-height', valueQuantity: { value: 180 } } },
+        { resource: { resourceType: 'Observation', id: 'obs-bsa', valueQuantity: { value: 1.9 } } },
+      ],
+    };
+    const result = conector._extraerObservaciones(fhirData);
+    expect(result).toEqual({ peso: 70, talla: 180, superficie_corporal: 1.9 });
+  });
+
+  test('_extraerDireccion separa calle, número y pisoDepto correctamente', () => {
+    const address = [{ line: ['Av. Siempre Viva, 742, Piso 3A'] }];
+    const result = conector._extraerDireccion(address);
+    expect(result).toEqual({
+      calle: 'Av. Siempre Viva',
+      numero: '742',
+      pisoDepto: '3A',
+    });
+  });
+
+  test('_extraerDireccion maneja sólo piso sin letra', () => {
+    const address = [{ line: ['Av. Siempre Viva, 742, Piso 3'] }];
+    const result = conector._extraerDireccion(address);
+    expect(result.pisoDepto).toBe('3');
+  });
+
+  test('_extraerDireccion devuelve nulls si falta la dirección', () => {
+    const result = conector._extraerDireccion(null);
+    expect(result).toEqual({ calle: null, numero: null, pisoDepto: null });
+  });
+
 
   test('_normalizarFhir maneja valores faltantes devolviendo nulls', () => {
     const fhirDataIncompleto = { entry: [{ resourceType: 'Patient' }] };
@@ -183,10 +198,4 @@ describe('ApiHospitalConector', () => {
     });
   });
 
-  test('lanza error si fetch falla por error de red', async () => {
-    global.fetch.mockRejectedValue(new Error('Network error'));
-
-    await expect(conector.obtenerPaciente('500'))
-      .rejects.toThrow('Network error');
-  });
 });

@@ -57,7 +57,7 @@ Feature: Gestión de Recetas para Pacientes
       | talla               | 140.7                    |
       | superficie_corporal | 1.20                     |
       | diagnostico         | Leucemia Linfoblástica Aguda |
-      | numero_ciclo        | 1                        |
+
       | protocolo_id        | 1                        |
       | ciclo_id            | 1                        |
       | regimen             | 1                        |
@@ -91,7 +91,7 @@ Feature: Gestión de Recetas para Pacientes
       | talla               | 140.7                    |
       | superficie_corporal | 1.20                     |
       | diagnostico         | Leucemia Linfoblástica Aguda |
-      | numero_ciclo        | 1                        |
+
       | protocolo_id        | 1                        |
       | ciclo_id            | 1                        |
       | regimen             | 1                        |
@@ -137,7 +137,7 @@ Feature: Gestión de Recetas para Pacientes
       | talla               | 140.7                    |
       | superficie_corporal | 1.20                     |
       | diagnostico         | Leucemia Linfoblástica Aguda |
-      | numero_ciclo        | 1                        |
+
       | protocolo_id        | 1                        |
       | ciclo_id            | 0                        |
       | regimen             | 0                        |
@@ -174,7 +174,7 @@ Feature: Gestión de Recetas para Pacientes
       | talla               | 140.7                    |
       | superficie_corporal | 1.20                     |
       | diagnostico         | Leucemia Linfoblástica Aguda |
-      | numero_ciclo        | 1                        |
+
       | protocolo_id        | 1                        |
       | ciclo_id            | 1                        |
       | regimen             | 1                        |
@@ -208,7 +208,7 @@ Feature: Gestión de Recetas para Pacientes
       | talla               | 140.7                    |
       | superficie_corporal | 1.20                     |
       | diagnostico         | Leucemia Linfoblástica Aguda |
-      | numero_ciclo        | 1                        |
+
       | protocolo_id        | 1                        |
       | ciclo_id            | 1                        |
       | regimen             | 1                        |
@@ -242,7 +242,6 @@ Feature: Gestión de Recetas para Pacientes
       | talla               | 140.7                    |
       | superficie_corporal |                          |
       | diagnostico         |                          |
-      | numero_ciclo        | 1                        |
       | protocolo_id        | 1                        |
       | ciclo_id            | 1                        |
       | regimen             | 1                        |
@@ -276,7 +275,6 @@ Feature: Gestión de Recetas para Pacientes
       | talla               | 140.7                    |
       | superficie_corporal |                          |
       | diagnostico         |                          |
-      | numero_ciclo        | 1                        |
       | protocolo_id        | 1                        |
       | ciclo_id            | 1                        |
       | regimen             | 1                        |

@@ -12,6 +12,7 @@
     "dev": "echo PATH=$PATH && ls -l node_modules/.bin | head && ./node_modules/.bin/nodemon --watch src --ext js,mjs,ts --legacy-watch --exec node src/server.js"
   },
   "dependencies": {
+    "axios": "^1.13.2",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
@@ -19,6 +20,7 @@
     "express": "^4.18.2",
     "jsonwebtoken": "^9.0.2",
     "libreoffice-convert": "^1.7.0",
+    "moment": "^2.30.1",
     "node-cron": "^4.2.1",
     "oracledb": "^6.3.0",
     "pdf-lib": "^1.17.1",

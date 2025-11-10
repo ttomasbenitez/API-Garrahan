@@ -12,6 +12,7 @@ export const makeRecetaController = (recetaPacienteService) => ({
   obtener: (req, res) => obtenerRecetaPaciente(req, res, recetaPacienteService),
   obtenerTodas: (req, res) => obtenerRecetasPaciente(req, res, recetaPacienteService),
   exportar: (req, res) => exportarRecetaPaciente(req, res, recetaPacienteService),
+  eliminar: async (req, res) => eliminarRecetaPaciente(req, res, recetaPacienteService),
 });
 
 async function crearRecetaPaciente(req, res, service) {
@@ -82,3 +83,15 @@ async function obtenerRecetasPaciente(req, res, service) {
   }
 }
 
+async function eliminarRecetaPaciente(req, res, service) {
+  try {
+    const { id } = req.params;
+    await service.eliminar(id);
+    logger.info('Receta del paciente eliminada con ID: %d', id);
+    res.status(204).json({id});
+  } catch (error) {
+    logger.error('Error al eliminar la receta del paciente: %o', error);
+    res.status(error.status || 500).json({ error: error.message || 'Error al eliminar la receta del paciente', code: error.code || 'RECETA_PACIENTE_ELIMINACION_ERROR' });
+  }
+
+}
