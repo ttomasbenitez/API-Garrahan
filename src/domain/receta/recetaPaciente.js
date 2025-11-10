@@ -49,8 +49,8 @@ class RecetaPaciente {
       sexo: body.sexo, nacionalidad: body.nacionalidad
     });
     const domicilio = new Domicilio({
-      calle: body.domicilio_calle, numero: body.domicilio_numero, piso: body.domicilio_piso,
-      depto: body.domicilio_depto, codigo_postal: body.codigo_postal,
+      calle: body.domicilio_calle, numero: body.domicilio_numero,
+      piso_depto: body.domicilio_piso_depto, codigo_postal: body.codigo_postal,
       localidad: body.localidad, partido: body.partido
     });
     const contacto = new Contacto({
@@ -73,7 +73,8 @@ class RecetaPaciente {
     const detalles = body.detalles ? body.detalles.map((d) =>
       new RecetaDetalle({admin_id: d.admin_id, nombre_generico: d.nombre_generico, presentacion: d.presentacion,
         concentracion: d.concentracion, cantidad: d.cantidad, dosis_diaria: d.dosis_diaria, numero_dias: d.numero_dias,
-        dosis_total: d.dosis_total, via_administracion: d.via_administracion, receta_id: body.id ?? null})) : [];
+        dosis_total: d.dosis_total, dosis_unidad: d.dosis_unidad, via_administracion: d.via_administracion,
+        receta_id: body.id ?? null})) : [];
 
     return new RecetaPaciente({
       paciente_snapshot,
@@ -110,12 +111,21 @@ class RecetaPaciente {
     return this.paciente_snapshot.identidad.numero_documento;
   }
 
+  tipoYNumeroDocumento() {
+    return `${this.paciente_snapshot.identidad.tipo_documento} ${this.paciente_snapshot.identidad.numero_documento}`;
+  }
+
+  fechaNacimiento() {
+    const f = this.paciente_snapshot.identidad.fecha_nacimiento;
+    return `${String(f.getDate()).padStart(2,'0')}/${String(f.getMonth()+1).padStart(2,'0')}/${f.getFullYear()}`;
+  }
+
   domicilioCompleto() {
     const dom = this.paciente_snapshot.domicilio;
     const domicilio = `${dom.calle} ${dom.numero}, ${dom.localidad}`;
 
-    if (dom.piso && dom.depto) {
-      return `${domicilio}, Piso: ${dom.piso}, Depto: ${dom.depto}`;
+    if (dom.piso_depto) {
+      return `${domicilio}, Depto: ${dom.piso_depto}`;
     }
 
     return domicilio;

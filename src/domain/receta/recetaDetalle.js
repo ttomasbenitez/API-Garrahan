@@ -2,7 +2,7 @@
 export class RecetaDetalle {
   constructor({admin_id, nombre_generico, presentacion,
     concentracion, cantidad, dosis_diaria, numero_dias, dosis_total,
-    via_administracion, receta_id = null}) {
+    dosis_unidad, via_administracion, receta_id = null}) {
 
     this.receta_id = receta_id;
     this.admin_id = admin_id;
@@ -13,6 +13,7 @@ export class RecetaDetalle {
     this.dosis_diaria = dosis_diaria;
     this.numero_dias = numero_dias;
     this.dosis_total = dosis_total;
+    this.dosis_unidad = dosis_unidad;
     this.via_administracion = via_administracion;
   }
 }

@@ -2,6 +2,9 @@ import { PDFDocument } from 'pdf-lib';
 import fs from 'fs';
 import path from 'path';
 
+const NOMBRE_HOSPITAL = 'GARRAHAN';
+const LOCALIDAD_HOSPITAL = 'CABA';
+
 export class RecetaProvinciaExportador {
   constructor(recetaData) {
     this.receta = recetaData;
@@ -14,8 +17,22 @@ export class RecetaProvinciaExportador {
 
     form.getTextField('apellido').setText(` ${this.receta.apellido()}`);
     form.getTextField('nombre').setText(` ${this.receta.nombre()}`);
-    form.getTextField('documento').setText(` ${this.receta.dni()}`);
-    //form.getTextField('localidad').setText(this.receta.paciente.localidad || '');
+    form.getTextField('documento').setText(` ${this.receta.tipoYNumeroDocumento()}`);
+    form.getTextField('fechaDeNacimiento').setText(` ${this.receta.fechaNacimiento()}`);
+    form.getTextField('sexo').setText(` ${this.receta.paciente_snapshot.identidad.sexo}`);
+    form.getTextField('nacionalidad').setText(` ${this.receta.paciente_snapshot.identidad.nacionalidad}`);
+    form.getTextField('telefono').setText(` ${this.receta.paciente_snapshot.contacto.telefono}`);
+    form.getTextField('email').setText(` ${this.receta.paciente_snapshot.contacto.email}`);
+
+    form.getTextField('domicilio').setText(` ${this.receta.paciente_snapshot.domicilio.calle}`);
+    form.getTextField('domicilioNumero').setText(` ${this.receta.paciente_snapshot.domicilio.numero}`);
+    form.getTextField('pisoYDepto').setText(` ${this.receta.paciente_snapshot.domicilio.piso_depto}`);
+    form.getTextField('codigoPostal').setText(` ${this.receta.paciente_snapshot.domicilio.codigo_postal}`);
+    form.getTextField('localidad').setText(` ${this.receta.paciente_snapshot.domicilio.localidad}`);
+    form.getTextField('partido').setText(` ${this.receta.paciente_snapshot.domicilio.partido}`);
+
+    form.getTextField('nombreHospital').setText(NOMBRE_HOSPITAL);
+    form.getTextField('localidadHospital').setText(LOCALIDAD_HOSPITAL);
 
     form.getTextField('peso').setText(` ${this.receta.datos_paciente.peso}`);
     form.getTextField('talla').setText(` ${this.receta.datos_paciente.talla}`);
@@ -27,8 +44,6 @@ export class RecetaProvinciaExportador {
     form.getTextField('estadio').setText(` ${this.receta.estadio}`);
     form.getTextField('intervalo').setText(` ${this.receta.intervalo}`);
     form.getTextField('PS').setText(` ${this.receta.ps}`);
-    //form.getTextField('nombreHospital').setText(this.receta.hospital.nombreHospital || '');
-    //form.getTextField('fechaPrescripcion').setText(this.receta.fechaPrescripcion || '');
 
     if (this.receta.detalles && Array.isArray(this.receta.detalles)) {
       this.receta.detalles.forEach((droga, index) => {
@@ -38,10 +53,10 @@ export class RecetaProvinciaExportador {
         form.getTextField(`droga${i}Presentacion`).setText(` ${droga.presentacion}`);
         form.getTextField(`droga${i}Concentracion`).setText(` ${droga.concentracion}`);
         form.getTextField(`droga${i}Cantidad`).setText(` ${droga.cantidad?.toString()}`);
-        form.getTextField(`droga${i}DosisDiaria`).setText(` ${droga.dosis_diaria}`);
+        form.getTextField(`droga${i}DosisDiaria`).setText(` ${droga.dosis_diaria} ${droga.dosis_unidad}`);
         form.getTextField(`droga${i}NumeroDias`).setText(` ${droga.numero_dias?.toString()}`);
-        //form.getTextField(`droga${i}DosisTotal`).setText(droga.dosisTotal || '');
-        //form.getTextField(`droga${i}ViaAdministracion`).setText(droga.viaAdmin || '');
+        form.getTextField(`droga${i}DosisTotal`).setText(` ${droga.dosis_total?.toString()} ${droga.dosis_unidad?.toString()}`);
+        form.getTextField(`droga${i}ViaAdministracion`).setText(` ${droga.via_administracion?.toString()}`);
       });
     }
 

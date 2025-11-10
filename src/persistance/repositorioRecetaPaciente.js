@@ -26,7 +26,7 @@ export class RepositorioRecetaPaciente {
           `INSERT INTO receta_paciente (
             fecha_prescripcion, nombre, apellido, tipo_documento, numero_documento,
             fecha_nacimiento, sexo, nacionalidad,
-            domicilio_calle, domicilio_numero, domicilio_piso, domicilio_depto,
+            domicilio_calle, domicilio_numero, domicilio_piso_depto,
             codigo_postal, localidad, partido,
             telefono, email,
             peso, talla, superficie_corporal, diagnostico, protocolo_id,
@@ -35,7 +35,7 @@ export class RepositorioRecetaPaciente {
           ) VALUES (
             NVL(:fecha_prescripcion, SYSDATE), :nombre, :apellido, :tipo_documento, :numero_documento,
             :fecha_nacimiento, :sexo, :nacionalidad,
-            :domicilio_calle, :domicilio_numero, :domicilio_piso, :domicilio_depto,
+            :domicilio_calle, :domicilio_numero, :domicilio_piso_depto,
             :codigo_postal, :localidad, :partido,
             :telefono, :email,
             :peso, :talla, :superficie_corporal, :diagnostico, :protocolo_id, 
@@ -54,8 +54,7 @@ export class RepositorioRecetaPaciente {
             nacionalidad: toStr(identidad.nacionalidad),
             domicilio_calle: toStr(domicilio.calle),
             domicilio_numero: toStr(domicilio.numero),
-            domicilio_piso: toStr(domicilio.piso),
-            domicilio_depto: toStr(domicilio.depto),
+            domicilio_piso_depto: toStr(domicilio.piso_depto),
             codigo_postal: toStr(domicilio.codigo_postal),
             localidad: toStr(domicilio.localidad),
             partido: toStr(domicilio.partido),
@@ -94,10 +93,10 @@ export class RepositorioRecetaPaciente {
           const detalleSql = `
             INSERT INTO receta_detalle (
               receta_id, admin_id, nombre_generico, presentacion, concentracion,
-              cantidad, dosis_diaria, numero_dias, dosis_total, via_administracion
+              cantidad, dosis_diaria, numero_dias, dosis_total, dosis_unidad, via_administracion
             ) VALUES (
-              :receta_id, :admin_id, :nombre_generico, :presentacion, :concentracion,
-              :cantidad, :dosis_diaria, :numero_dias, :dosis_total, :via_administracion
+              :receta_id, :admin_id, :nombre_generico, :presentacion, :concentracion, :cantidad,
+              :dosis_diaria, :numero_dias, :dosis_total, :dosis_unidad, :via_administracion
             )
           `;
 
@@ -116,6 +115,7 @@ export class RepositorioRecetaPaciente {
             dosis_diaria: toStr(d.dosis_diaria),
             numero_dias: toNum(d.numero_dias),
             dosis_total: toNum(d.dosis_total),
+            dosis_unidad: toStr(d.dosis_unidad),
             via_administracion: toStr(d.via_administracion),
           }));
 
@@ -131,6 +131,7 @@ export class RepositorioRecetaPaciente {
               dosis_diaria:     { type: oracledb.STRING, maxSize: 50 },
               numero_dias:      { type: oracledb.NUMBER },
               dosis_total:      { type: oracledb.NUMBER },
+              dosis_unidad:     { type: oracledb.STRING, maxSize: 10 },
               via_administracion: { type: oracledb.STRING, maxSize: 100 },
             }
           };
@@ -175,7 +176,7 @@ export class RepositorioRecetaPaciente {
     const result = await this.connection.execute(
       `SELECT 
         receta_id, admin_id, nombre_generico, presentacion, concentracion,
-        cantidad, dosis_diaria, numero_dias, dosis_total, via_administracion
+        cantidad, dosis_diaria, numero_dias, dosis_total, dosis_unidad, via_administracion
       FROM receta_detalle
       WHERE receta_id = :receta_id`,
       [recetaId],
@@ -192,6 +193,7 @@ export class RepositorioRecetaPaciente {
         dosis_diaria: toStr(row.DOSIS_DIARIA),
         numero_dias: toNum(row.NUMERO_DIAS),
         dosis_total: toNum(row.DOSIS_TOTAL),
+        dosis_unidad: toStr(row.DOSIS_UNIDAD),
         via_administracion: toStr(row.VIA_ADMINISTRACION),
         receta_id: toNum(row.RECETA_ID),
       });
@@ -208,9 +210,8 @@ export class RepositorioRecetaPaciente {
           fecha_prescripcion,
           nombre, apellido, tipo_documento, numero_documento,
           fecha_nacimiento, sexo, nacionalidad,
-          domicilio_calle, domicilio_numero, domicilio_piso,
-          domicilio_depto, codigo_postal, localidad, partido,
-          telefono, email,
+          domicilio_calle, domicilio_numero, domicilio_piso_depto,
+          codigo_postal, localidad, partido, telefono, email,
           peso, talla, superficie_corporal,
           diagnostico, protocolo_id, ciclo_id, regimen,
           paciente_id, profesional_id, estado, tipo_receta,
@@ -240,8 +241,7 @@ export class RepositorioRecetaPaciente {
     const domicilio = new Domicilio({
       calle: toStr(row.DOMICILIO_CALLE),
       numero: toStr(row.DOMICILIO_NUMERO),
-      piso: toStr(row.DOMICILIO_PISO),
-      depto: toStr(row.DOMICILIO_DEPTO),
+      piso_depto: toStr(row.DOMICILIO_PISO_DEPTO),
       codigo_postal: toStr(row.CODIGO_POSTAL),
       localidad: toStr(row.LOCALIDAD),
       partido: toStr(row.PARTIDO),
@@ -302,9 +302,9 @@ export class RepositorioRecetaPaciente {
           fecha_prescripcion,
           nombre, apellido, tipo_documento, numero_documento,
           fecha_nacimiento, sexo, nacionalidad,
-          domicilio_calle, domicilio_numero, domicilio_piso,
-          domicilio_depto, codigo_postal, localidad, partido,
-          telefono, email,
+          domicilio_calle, domicilio_numero, 
+          domicilio_piso_depto, codigo_postal, 
+          localidad, partido, telefono, email,
           peso, talla, superficie_corporal,
           diagnostico, protocolo_id, ciclo_id, regimen,
           paciente_id, profesional_id, estado, tipo_receta,
@@ -333,8 +333,7 @@ export class RepositorioRecetaPaciente {
         const domicilio = new Domicilio({
           calle: toStr(row.DOMICILIO_CALLE),
           numero: toStr(row.DOMICILIO_NUMERO),
-          piso: toStr(row.DOMICILIO_PISO),
-          depto: toStr(row.DOMICILIO_DEPTO),
+          piso_depto: toStr(row.DOMICILIO_PISO_DEPTO),
           codigo_postal: toStr(row.CODIGO_POSTAL),
           localidad: toStr(row.LOCALIDAD),
           partido: toStr(row.PARTIDO),

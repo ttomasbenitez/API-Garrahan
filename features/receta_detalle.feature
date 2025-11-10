@@ -42,8 +42,7 @@ Feature: Gestión del Detalle de Recetas
       | nacionalidad        | Argentina                |
       | domicilio_calle     | Av. Corrientes           |
       | domicilio_numero    | 1234                     |
-      | domicilio_piso      | 5                        |
-      | domicilio_depto     | B                        |
+      | domicilio_piso_depto | 5B                      |
       | codigo_postal       | C1043                    |
       | localidad           | CABA                     |
       | partido             | San Nicolás              |

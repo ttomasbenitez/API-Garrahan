@@ -3,11 +3,10 @@ import { ERROR_RECETA_PACIENTE_CREACION_CODE } from '../../errors/receta.js';
 
 
 export class Domicilio {
-  constructor({ calle, numero, piso, depto, codigo_postal, localidad, partido }) {
+  constructor({ calle, numero, piso_depto, codigo_postal, localidad, partido }) {
     this.calle = calle ?? null;
     this.numero = numero ?? null;
-    this.piso = piso ?? null;
-    this.depto = depto ?? null;
+    this.piso_depto = piso_depto ?? null;
     this.codigo_postal = codigo_postal ?? null;
     this.localidad = localidad ?? null;
     this.partido = partido ?? null;
