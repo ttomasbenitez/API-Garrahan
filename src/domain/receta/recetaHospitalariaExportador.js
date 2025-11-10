@@ -22,6 +22,7 @@ export class RecetaHospitalariaExportador {
     sheet.getCell('A5').value += ` ${this.receta.nombreCompleto()}`;
     sheet.getCell('A6').value += ` ${this.receta.dni()}`;
     sheet.getCell('A7').value += ` ${this.receta.diagnostico}`;
+    sheet.getCell('G7').value += ` ${this.receta.edad()}`;
     sheet.getCell('A8').value += ` ${this.receta.domicilioCompleto()}`;
     sheet.getCell('A9').value += ` ${this.protocolo.nombre}`;
     sheet.getCell('F9').value += ` ${this.receta.contexto.ciclo_id}`;

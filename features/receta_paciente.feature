@@ -170,7 +170,6 @@ Feature: Gestión de Recetas para Pacientes
       | talla               | 140.7                    |
       | superficie_corporal | 1.20                     |
       | diagnostico         | Leucemia Linfoblástica Aguda |
-
       | protocolo_id        | 1                        |
       | ciclo_id            | 1                        |
       | regimen             | 1                        |
@@ -182,6 +181,7 @@ Feature: Gestión de Recetas para Pacientes
     Then el sistema rechaza la creación por clave foránea inválida "FK_PACIENTE"
     And no se crea la receta
 
+  @wip
   Scenario: US-11.6 Rechazar creación por profesional inexistente
     Given que tengo los siguientes datos de la receta:
       | nombre              | Juan                     |

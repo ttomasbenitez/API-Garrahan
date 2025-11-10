@@ -18,7 +18,8 @@ export const makeRecetaController = (recetaPacienteService) => ({
 async function crearRecetaPaciente(req, res, service) {
   try {
     const payload = req.body;
-    const recetaPaciente = RecetaPaciente.fromBody(payload);
+    const profesionalId = req.user.id;
+    const recetaPaciente = RecetaPaciente.fromBody({...payload,profesional_id: profesionalId});
     const id = await service.crear(recetaPaciente);
     logger.info('Receta Paciente creada con IDs: %o', recetaPaciente.id);
 
