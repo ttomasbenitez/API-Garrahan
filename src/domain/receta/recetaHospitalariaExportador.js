@@ -28,6 +28,7 @@ export class RecetaHospitalariaExportador {
     sheet.getCell('A10').value += ` ${this.receta.datos_paciente.peso} kg`;
     sheet.getCell('E10').value += ` ${this.receta.datos_paciente.talla} cm`;
     sheet.getCell('H10').value += ` ${this.receta.datos_paciente.superficie_corporal} m2`;
+    sheet.getCell('G7').value += ` ${this.receta.edad()}`;
 
     let startRow = 14;
     for (const det of this.receta.detalles) {
@@ -35,7 +36,7 @@ export class RecetaHospitalariaExportador {
       sheet.getCell(`E${startRow}`).value = det.presentacion;
       sheet.getCell(`F${startRow}`).value = det.concentracion ?? '-';
       sheet.getCell(`G${startRow}`).value = det.cantidad;
-      sheet.getCell(`H${startRow}`).value = det.dosis_diaria ?? '-';
+      sheet.getCell(`H${startRow}`).value = ` ${det.dosis_total?.toString()} ${det.dosis_unidad?.toString()}`;
       sheet.getCell(`I${startRow}`).value = det.numero_dias ?? '-';
       startRow += 2;
     }
