@@ -581,7 +581,7 @@
     "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 300,
-    "fuerza_unidad": "mcg"
+    "fuerza_unidad": "µg"
   },
   {
     "droga_id": 42,
@@ -589,7 +589,7 @@
     "codigo_farmacia": "A",
     "estado": null,
     "fuerza_valor": 300,
-    "fuerza_unidad": "mcg"
+    "fuerza_unidad": "µg"
   },
   {
     "droga_id": 43,
