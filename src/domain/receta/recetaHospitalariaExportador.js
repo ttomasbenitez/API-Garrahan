@@ -29,7 +29,6 @@ export class RecetaHospitalariaExportador {
     sheet.getCell('A10').value += ` ${this.receta.datos_paciente.peso} kg`;
     sheet.getCell('E10').value += ` ${this.receta.datos_paciente.talla} cm`;
     sheet.getCell('H10').value += ` ${this.receta.datos_paciente.superficie_corporal} m2`;
-    sheet.getCell('G7').value += ` ${this.receta.edad()}`;
 
     let startRow = 14;
     for (const det of this.receta.detalles) {
