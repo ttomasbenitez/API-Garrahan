@@ -2,6 +2,7 @@ import { Given, When, Then } from '@cucumber/cucumber';
 import request from 'supertest';
 import app from '../../src/app.js';
 import assert from 'node:assert/strict';
+import oracleDBInstance from '../../src/db/connection_pool.js';
 
 let response;
 let data;
@@ -98,8 +99,7 @@ Given(/^existen en la base de datos las siguientes recetas:$/, async function (d
       nacionalidad: 'Argentina',
       domicilio_calle: 'Av. Corrientes',
       domicilio_numero: '1234',
-      domicilio_piso: '5',
-      domicilio_depto: 'B',
+      domicilio_piso_depto: '5B',
       codigo_postal: 'C1043',
       localidad: 'CABA',
       partido: 'San Nicolás',
@@ -109,13 +109,13 @@ Given(/^existen en la base de datos las siguientes recetas:$/, async function (d
       talla: 140.7,
       superficie_corporal: 1.2,
       diagnostico: 'Leucemia Linfoblástica Aguda',
-      numero_ciclo: receta.ciclo_id,
       protocolo_id: receta.protocolo_id,
       ciclo_id: receta.ciclo_id,
       regimen: receta.regimen,
       paciente_id: receta.paciente_id,
       profesional_id: 1,
       estado: 'Activo',
+      tipo_receta: 'hospitalaria',
       fecha_receta: receta.fecha_receta,
       receta_id: receta.receta_id,
     };
@@ -227,4 +227,34 @@ Then('el primer registro tiene receta_id = {int}', function (recetaId) {
 
 Then('el segundo registro tiene receta_id = {int}', function (recetaId) {
   assert.equal(response.body[1].id, recetaId);
+});
+
+When('elimino la receta con id {string} mediante la API {string}', async function (id, endpoint ) {
+  return request(app)
+    .delete(`${endpoint}/${id}`)
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie)
+    .then(function (res) {
+      response = res;
+      assert.equal(res.status, 204);
+    });
+});
+
+Then('la receta con id {string} ya no existe en el sistema', async function (id) {
+  return request(app)
+    .get('/recetas/1')
+    .set('Accept', 'application/json')
+    .set('Cookie', this.sessionCookie)
+    .then(function (res) {
+      assert.equal(res.status, 404);
+    });
+});
+
+Given('estoy logueado como admin', async function () {
+  const res = await request(app)
+    .post('/auth/login-test')
+    .send({ id: '2', name: 'Dr. Juan', role: 'admin' })
+    .set('Accept', 'application/json');
+
+  this.sessionCookie = res.headers['set-cookie'];
 });

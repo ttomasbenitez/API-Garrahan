@@ -11,6 +11,7 @@ export class RepositorioProtocoloActual {
     const sql = `
       SELECT
           PP.protocolo_id,
+          PP.protocolo_paciente_id,
           PP.ciclo_actual_id AS ciclo_id,
           PP.regimen,
           PP.cambiar_regimen,
@@ -49,6 +50,7 @@ export class RepositorioProtocoloActual {
             ON PR.forma_farmaceutica_id = FF.forma_farmaceutica_id
       WHERE
           PP.paciente_id = :pacienteId
+      AND UPPER(PP.estado) = 'ACTIVO' 
     `;
 
     const result = await this.connection.execute(sql, { pacienteId });
@@ -75,6 +77,7 @@ export class RepositorioProtocoloActual {
 
     return new ProtocoloActualDTO(
       primeraFila.PROTOCOLO_ID,
+      primeraFila.PROTOCOLO_PACIENTE_ID,
       primeraFila.PROTOCOLO_NOMBRE,
       primeraFila.REGIMEN,
       primeraFila.CAMBIAR_REGIMEN === '1',

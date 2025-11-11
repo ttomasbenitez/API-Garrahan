@@ -22,13 +22,13 @@ describe('RecetaPaciente', () => {
       talla: 175,
       superficie_corporal: 1.8,
       diagnostico: 'Leucemia Linfoblástica Aguda',
-      numero_ciclo: 1,
       protocolo_id: 1,
       ciclo_id: 1,
       regimen: 1,
       paciente_id: 1,
       profesional_id: 2,
-      estado: 'Activo'
+      estado: 'Activo',
+      tipo_receta: 'hospitalaria'
     };
 
     const recetaPaciente = RecetaPaciente.fromBody(body);
@@ -52,7 +52,6 @@ describe('RecetaPaciente', () => {
     expect(recetaPaciente.contexto.protocolo_id).toBe(1);
     expect(recetaPaciente.contexto.ciclo_id).toBe(1);
     expect(recetaPaciente.contexto.regimen).toBe(1);
-    expect(recetaPaciente.contexto.numero_ciclo).toBe(1);
     expect(recetaPaciente.datos_paciente.peso).toBe(70);
     expect(recetaPaciente.datos_paciente.talla).toBe(175);
     expect(recetaPaciente.datos_paciente.superficie_corporal).toBe(1.8);

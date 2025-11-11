@@ -14,6 +14,11 @@ class RecetaPaciente {
     estado,
     fecha_prescripcion,
     detalles,
+    tipo_receta,
+    tnm,
+    estadio,
+    intervalo,
+    ps,
     id,
   }) {
 
@@ -26,6 +31,11 @@ class RecetaPaciente {
     this.estado = toStr(estado);
     this.fecha_prescripcion = fecha_prescripcion ?? new Date();
     this.detalles = detalles ?? [];
+    this.tipo_receta = tipo_receta;
+    this.tnm = tnm ?? null,
+    this.estadio = estadio ?? null,
+    this.intervalo = intervalo ?? null,
+    this.ps = ps ?? null,
     this.id = id;
 
     this.validar();
@@ -39,8 +49,8 @@ class RecetaPaciente {
       sexo: body.sexo, nacionalidad: body.nacionalidad
     });
     const domicilio = new Domicilio({
-      calle: body.domicilio_calle, numero: body.domicilio_numero, piso: body.domicilio_piso,
-      depto: body.domicilio_depto, codigo_postal: body.codigo_postal,
+      calle: body.domicilio_calle, numero: body.domicilio_numero,
+      piso_depto: body.domicilio_piso_depto, codigo_postal: body.codigo_postal,
       localidad: body.localidad, partido: body.partido
     });
     const contacto = new Contacto({
@@ -57,13 +67,14 @@ class RecetaPaciente {
     });
 
     const contexto = new ContextoSnapshot({
-      protocolo_id: body.protocolo_id, ciclo_id: body.ciclo_id, regimen: body.regimen, numero_ciclo: body.numero_ciclo
+      protocolo_id: body.protocolo_id, ciclo_id: body.ciclo_id, regimen: body.regimen
     });
 
     const detalles = body.detalles ? body.detalles.map((d) =>
       new RecetaDetalle({admin_id: d.admin_id, nombre_generico: d.nombre_generico, presentacion: d.presentacion,
         concentracion: d.concentracion, cantidad: d.cantidad, dosis_diaria: d.dosis_diaria, numero_dias: d.numero_dias,
-        dosis_total: d.dosis_total, via_administracion: d.via_administracion, receta_id: body.id ?? null})) : [];
+        dosis_total: d.dosis_total, dosis_unidad: d.dosis_unidad, via_administracion: d.via_administracion,
+        receta_id: body.id ?? null})) : [];
 
     return new RecetaPaciente({
       paciente_snapshot,
@@ -73,10 +84,23 @@ class RecetaPaciente {
       paciente_id: body.paciente_id,
       profesional_id: body.profesional_id,
       estado: body.estado,
+      tipo_receta: body.tipo_receta,
+      tnm: body.tnm,
+      estadio: body.estadio,
+      intervalo: body.intervalo,
+      ps: body.ps,
       fecha_prescripcion: body.fecha_prescripcion ?? null,
       detalles,
       id: body.id ?? null,
     });
+  }
+
+  nombre() {
+    return this.paciente_snapshot.identidad.nombre;
+  }
+
+  apellido() {
+    return this.paciente_snapshot.identidad.apellido;
   }
 
   nombreCompleto() {
@@ -87,15 +111,31 @@ class RecetaPaciente {
     return this.paciente_snapshot.identidad.numero_documento;
   }
 
+  tipoYNumeroDocumento() {
+    return `${this.paciente_snapshot.identidad.tipo_documento} ${this.paciente_snapshot.identidad.numero_documento}`;
+  }
+
+  fechaNacimiento() {
+    const f = this.paciente_snapshot.identidad.fecha_nacimiento;
+    return `${String(f.getDate()).padStart(2,'0')}/${String(f.getMonth()+1).padStart(2,'0')}/${f.getFullYear()}`;
+  }
+
   domicilioCompleto() {
     const dom = this.paciente_snapshot.domicilio;
     const domicilio = `${dom.calle} ${dom.numero}, ${dom.localidad}`;
 
-    if (dom.piso && dom.depto) {
-      return `${domicilio}, Piso: ${dom.piso}, Depto: ${dom.depto}`;
+    if (dom.piso_depto) {
+      return `${domicilio}, Depto: ${dom.piso_depto}`;
     }
 
     return domicilio;
+  }
+
+  pisoDepto() {
+    if(!this.paciente_snapshot.domicilio.piso_depto) {
+      return '';
+    }
+    return this.paciente_snapshot.domicilio.piso_depto;
   }
 
   edad() {
@@ -130,7 +170,9 @@ class RecetaPaciente {
     if (this.profesional_id === null) {
       throw getError('profesional_id es obligatorio.', ERROR_RECETA_PACIENTE_CREACION_CODE);
     }
-
+    if (this.tipo_receta === null) {
+      throw getError('tipo_receta es obligatorio.', ERROR_RECETA_PACIENTE_CREACION_CODE);
+    }
     if (this.estado && this.estado.length > 100) {
       throw getError('estado no puede superar 100 caracteres.', ERROR_RECETA_PACIENTE_CREACION_CODE);
     }

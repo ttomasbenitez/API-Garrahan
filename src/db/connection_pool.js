@@ -42,6 +42,10 @@ class oracleBD {
     return await this.withConnection((conn) => conn.execute(...args));
   }
 
+  async executeMany(...args) {
+    return await this.withConnection((conn) => conn.executeMany(...args));
+  }
+
   async close() {
     if (this.pool) {
       await this.pool.close(10);

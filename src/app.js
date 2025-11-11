@@ -45,7 +45,7 @@ import { PresentacionDrogaViaService } from './services/PresentacionDrogaViaServ
 import { makePresentacionDrogaViaController } from './controllers/presentacionDrogaViaController.js';
 import presentacionDrogaViaRoutes from './routes/presentacionDrogaVia.js';
 import { RepositorioPacienteProfesional } from './persistance/repositorioPacienteProfesional.js';
-import apiHospitalConector from './connectors/hospital_api.js';
+import apiHospitalConector from './connectors/hospitalApi.js';
 import { RepositorioAdminisitracionMedicacion } from './persistance/repositorioAdministracionMedicacion.js';
 import { RepositorioRecetaPaciente } from './persistance/repositorioRecetaPaciente.js';
 import { RecetaService } from './services/RecetaService.js';
@@ -61,18 +61,38 @@ import administracionMedicacionRoutes from './routes/administracionMedicacion.js
 import { CalculoDrogaService } from './services/CalculoDrogaService.js';
 import { makeCalculoDrogaController } from './controllers/calculoDrogaController.js';
 import calculoDrogaRoutes from './routes/calculoDroga.js';
+import { RepositorioConfiguracionAlarma } from './persistance/repositorioConfiguracionAlarma.js';
+import { ConfiguracionAlarmaService } from './services/configuracionAlarmaService.js';
+import { makeConfiguracionAlarmaController } from './controllers/configuracionAlarmaController.js';
+import configuracionAlarmaRoutes from './routes/configuracionAlarma.js';
+import { RepositorioAlarma } from './persistance/repositorioAlarma.js';
+import { AlarmaService } from './services/alarmaService.js';
+import { makeAlarmaController } from './controllers/alarmaController.js';
+import alarmaRoutes from './routes/alarma.js';
 
 const app = express();
-
+// droga
+const repositorioDroga = new RepositorioDroga(oracleDBInstance);
+const drogasService = new DrogaService(repositorioDroga);
+const drogaController = makeDrogaController(drogasService);
+// protocolo
+const repositorioProtocolo = new RepositorioProtocolo(oracleDBInstance);
+const repositorioAdministracionMedicacion = new RepositorioAdminisitracionMedicacion(oracleDBInstance);
+const protocoloService = new ProtocoloService(repositorioProtocolo, repositorioAdministracionMedicacion);
+const protocoloController = makeProtocoloController(protocoloService, drogasService);
 // profesional
 const repositorioProfesional = new RepositorioProfesional(oracleDBInstance);
 const profesionalService = new ProfesionalService(repositorioProfesional);
 const profesionalController = makeProfesionalController(profesionalService);
+// protocolo_paciente
+const repositorioProtocoloPaciente = new RepositorioProtocoloPaciente(oracleDBInstance);
+const protocoloPacienteService = new ProtocoloPacienteService(repositorioProtocoloPaciente, repositorioProtocolo);
+const protocoloPacienteController = makeProtocoloPacienteController(protocoloPacienteService);
 // paciente_profesional y paciente
 const repositorioPacienteProfesional = new RepositorioPacienteProfesional(oracleDBInstance);
 const repositorioPaciente = new RepositorioPaciente(oracleDBInstance);
 
-const pacienteService = new PacienteService(repositorioPaciente, repositorioPacienteProfesional, apiHospitalConector);
+const pacienteService = new PacienteService(repositorioPaciente, repositorioPacienteProfesional, protocoloPacienteService, apiHospitalConector);
 const pacienteProfesionalService = new PacienteProfesionalService(
   repositorioPacienteProfesional,
   pacienteService,
@@ -81,27 +101,14 @@ const pacienteProfesionalService = new PacienteProfesionalService(
 const pacienteProfesionalController = makePacienteProfesionalController(pacienteProfesionalService);
 // paciente
 const pacienteController = makePacienteController(pacienteService);
-// droga
-const repositorioDroga = new RepositorioDroga(oracleDBInstance);
-const drogasService = new DrogaService(repositorioDroga);
-const drogaController = makeDrogaController(drogasService);
 // forma farmacéutica
 const repositorioFormaFarmaceutica = new RepositorioFormaFarmaceutica(oracleDBInstance);
 const formaFarmaceuticaService = new FormaFarmaceuticaService(repositorioFormaFarmaceutica);
 const formaFarmaceuticaController = makeFormaFarmaceuticaController(formaFarmaceuticaService);
-// protocolo
-const repositorioProtocolo = new RepositorioProtocolo(oracleDBInstance);
-const repositorioAdministracionMedicacion = new RepositorioAdminisitracionMedicacion(oracleDBInstance);
-const protocoloService = new ProtocoloService(repositorioProtocolo, repositorioAdministracionMedicacion);
-const protocoloController = makeProtocoloController(protocoloService, drogasService);
 // via administracion
 const respositorioViaAdministracion = new RepositorioViaAdministracion(oracleDBInstance);
 const viaAdministracionService = new ViaAdministracionService(respositorioViaAdministracion);
 const viaAdministracionController = makeViaAdministracionController(viaAdministracionService);
-// protocolo_paciente
-const repositorioProtocoloPaciente = new RepositorioProtocoloPaciente(oracleDBInstance);
-const protocoloPacienteService = new ProtocoloPacienteService(repositorioProtocoloPaciente, repositorioProtocolo);
-const protocoloPacienteController = makeProtocoloPacienteController(protocoloPacienteService);
 // presentacion droga
 const repositorioPresentacionDroga = new RepositorioPresentacionDroga(oracleDBInstance);
 const repositorioPresentacionDrogaConForma = new RepositorioPresentacionDrogaConForma(oracleDBInstance);
@@ -125,10 +132,18 @@ const administracionMedicacionController = makeAdministracionMedicacionControlle
 // Calculo Droga
 const calculoDrogaService = new CalculoDrogaService(repositorioAdministracionMedicacion);
 const calculoDrogaController = makeCalculoDrogaController(calculoDrogaService);
+// Configuracion Alarma
+const repositorioConfiguracionAlarma = new RepositorioConfiguracionAlarma(oracleDBInstance);
+const configuracionAlarmaService = new ConfiguracionAlarmaService(repositorioConfiguracionAlarma);
+const configuracionAlarmaController = makeConfiguracionAlarmaController(configuracionAlarmaService);
+// Alarma
+const repositorioAlarma = new RepositorioAlarma(oracleDBInstance);
+const alarmaService = new AlarmaService(repositorioAlarma, repositorioConfiguracionAlarma, oracleDBInstance);
+const alarmaController = makeAlarmaController(alarmaService);
 
 app.use(express.json());
 app.use(cors({
-  origin: 'http://localhost:3003', // frontend Next
+  origin: ['http://localhost:3003', 'http://localhost:3004'], // frontend Next
   credentials: true
 }));
 app.use(cookieParser());
@@ -150,5 +165,8 @@ app.use('/presentaciones-droga-via', presentacionDrogaViaRoutes(presentacionDrog
 app.use('/recetas', buildRecetasRouter(recetaController));
 app.use('/administraciones', administracionMedicacionRoutes(administracionMedicacionController));
 app.use('/calculo', calculoDrogaRoutes(calculoDrogaController));
+app.use('/configuracion-alarma', configuracionAlarmaRoutes(configuracionAlarmaController));
+app.use('/alarmas', alarmaRoutes(alarmaController));
 
 export default app;
+export { alarmaService };

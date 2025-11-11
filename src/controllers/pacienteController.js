@@ -1,6 +1,7 @@
 import Paciente from '../domain/paciente.js';
 import logger from '../utils/logger.js';
 import { ERROR_PACIENTE_NO_ASOCIADO } from '../errors/pacienteProfesional.js';
+import ProtocoloPaciente from '../domain/protocoloPaciente.js';
 
 export const makePacienteController = (pacienteService) => ({
   crear: (req, res) => crearPaciente(req, res, pacienteService),
@@ -14,17 +15,36 @@ export const makePacienteController = (pacienteService) => ({
 async function crearPaciente(req, res, service) {
   try {
     const profesional_id = req.user.id;
-    const { nombre, apellido, id_hospitalario, fecha_nacimiento, peso, altura, sexo, obra_social, dni} = req.body;
-    if (!id_hospitalario || !profesional_id) {
-      logger.error('Error al crear paciente: Faltan campos requeridos' );
+    const {
+      nombre, apellido, id_hospitalario, fecha_nacimiento, peso, sup_corporal, altura,
+      sexo, obra_social, tipo_documento, numero_documento, nacionalidad,
+      domicilio_calle, domicilio_numero, domicilio_piso_depto,
+      codigo_postal, localidad, partido, telefono, email, diagnostico,
+      protocolo_id, ciclo_actual_id, regimen, fecha_inicio, estado
+    } = req.body;
+
+    if (!id_hospitalario || !profesional_id)
       return res.status(400).json({ error: 'Faltan campos requeridos' });
+
+    const paciente = new Paciente({
+      nombre, apellido, id_hospitalario,
+      fecha_nacimiento: fecha_nacimiento ? new Date(fecha_nacimiento) : null,
+      peso, sup_corporal, altura, sexo, obra_social, tipo_documento, numero_documento,
+      nacionalidad, domicilio_calle, domicilio_numero, domicilio_piso_depto,
+      codigo_postal, localidad, partido, telefono, email, diagnostico
+    });
+
+    await service.crear(paciente, profesional_id);
+
+    if (protocolo_id && ciclo_actual_id && regimen && fecha_inicio && estado) {
+      await service.crearProtocoloPaciente(new ProtocoloPaciente({
+        paciente_id: paciente.paciente_id,
+        protocolo_id: +protocolo_id, ciclo_actual_id: +ciclo_actual_id, regimen: +regimen,
+        fecha_inicio: new Date(fecha_inicio), estado,
+        profesional_id_asignador: +profesional_id, fecha_asignacion: new Date()
+      }));
     }
 
-    const fecha_nacimiento_date = fecha_nacimiento ? new Date(fecha_nacimiento) : null;
-
-    const paciente = new Paciente(nombre, apellido, id_hospitalario, fecha_nacimiento_date, peso, altura, sexo, obra_social, dni);
-    await service.crear(paciente, profesional_id);
-    logger.info('Paciente creado con ID: %d', paciente.paciente_id);
     res.status(201).json(paciente);
   } catch (error) {
     logger.error('Error al crear paciente: %o', error);
@@ -68,6 +88,7 @@ async function obtenerPacienteExterno(req, res, service) {
     const { id } = req.params;
     const paciente = await service.obtenerExterno(id);
     logger.info('Paciente obtenido con ID: %d', paciente.id_hospitalario);
+    console.log(paciente);
     res.status(200).json(paciente);
   } catch (error) {
     logger.error('Error al obtener paciente: %o', error);

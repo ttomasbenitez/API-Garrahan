@@ -1,0 +1,22 @@
+[
+  {
+    "nombre": "COMPRIMIDO",
+    "codigo": "VO"
+  },
+  {
+    "nombre": "CÁPSULA",
+    "codigo": "VO"
+  },
+  {
+    "nombre": "FRASCO AMPOLLA",
+    "codigo": "IV"
+  },
+  {
+    "nombre": "VIAL",
+    "codigo": "IV"
+  },
+  {
+    "nombre": "JERINGA PRELLENADA",
+    "codigo": "IV"
+  }
+]

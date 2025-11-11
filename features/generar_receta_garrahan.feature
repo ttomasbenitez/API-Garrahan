@@ -4,7 +4,8 @@ Feature: Generacion recetas
   Para poder administrar los medicamentos indicados
 
   Background:
-    Given existe en la base de datos el paciente con id "1" y con los datos:
+    Given estoy logueado como médico con id "2"
+    And existe en la base de datos el paciente con id "1" y con los datos:
       | nombre            | Juan        |
       | apellido          | Pérez       |
       | id_hospitalario   | P12345      |
@@ -13,6 +14,7 @@ Feature: Generacion recetas
       | sexo              | M           |
       | obra_social       | OSDE        |
       | dni               | 40123456    |
+    And estoy logueado como admin
     And existe en la base de datos el protocolo con id "1" y con los datos:
       | nombre             | LLA Pediátrica |
       | enfermedad         | LLA            |
@@ -47,8 +49,7 @@ Feature: Generacion recetas
       | nacionalidad        | Argentina                |
       | domicilio_calle     | Av. Corrientes           |
       | domicilio_numero    | 1234                     |
-      | domicilio_piso      | 5                        |
-      | domicilio_depto     | B                        |
+      | domicilio_piso_depto | 5B                      |
       | codigo_postal       | C1043                    |
       | localidad           | CABA                     |
       | partido             | San Nicolás              |
@@ -58,13 +59,13 @@ Feature: Generacion recetas
       | talla               | 140.7                    |
       | superficie_corporal | 1.20                     |
       | diagnostico         | Leucemia Linfoblástica Aguda |
-      | numero_ciclo        | 1                        |
       | protocolo_id        | 1                        |
       | ciclo_id            | 1                        |
       | regimen             | 1                        |
       | paciente_id         | 1                        |
       | profesional_id      | 1                        |
       | estado              | Activo                   |
+      | tipo_receta         | hospitalaria             |
     And la receta con id "1" tiene los detalles:
       | receta_id          | 1               |
       | admin_id           | 1               |
@@ -73,7 +74,8 @@ Feature: Generacion recetas
       | concentracion      | 1 mg/ml         |
       | via_administracion | Intravenosa     |
       | cantidad           | 3               |
-      | dosis_diaria       | 50              |
+      | dosis_diaria       | 50 mg/m         |
+      | dosis_unidad       | 10 mg           |
       | numero_dias        | 5               |
       | dosis_total        | 250             |
     And la receta con id "1" tiene los detalles:
@@ -84,7 +86,8 @@ Feature: Generacion recetas
       | concentracion      | 1 mg/ml         |
       | via_administracion | ORAL            |
       | cantidad           | 4               |
-      | dosis_diaria       | 10              |
+      | dosis_diaria       | 10 mg/m2        |
+      | dosis_unidad       | 10 mg           |
       | numero_dias        | 5               |
       | dosis_total        | 1               |
     And la receta con id "1" está guardada en el sistema
@@ -97,3 +100,7 @@ Feature: Generacion recetas
     And el archivo contiene "CISPLATINO"
     And el archivo contiene "Ampolla"
     And el archivo contiene "10"
+
+  Scenario: US-13.2 Puedo eliminar una receta médica existente
+    When elimino la receta con id "1" mediante la API "/recetas"
+    Then la receta con id "1" ya no existe en el sistema

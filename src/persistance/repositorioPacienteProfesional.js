@@ -97,33 +97,29 @@ export class RepositorioPacienteProfesional {
   async obtenerPacientePorProfesional(paciente_id, profesional_id) {
     const result = await this.connection.execute(
       `SELECT pp.profesional_id, pp.paciente_id, pp.rol,
-              pac.nombre, pac.apellido, pac.id_hospitalario, pac.fecha_nacimiento, pac.peso,
-              pac.altura, pac.ultima_modificacion, pac.sexo, pac.obra_social, pac.dni
-       FROM paciente_profesional pp
-       JOIN paciente pac ON pp.paciente_id = pac.paciente_id  
-       WHERE pp.profesional_id = :profesional_id
-         AND pp.paciente_id = :paciente_id`,
-      [profesional_id, paciente_id],
+              p.nombre, p.apellido, p.id_hospitalario, p.fecha_nacimiento, p.peso, p.sup_corporal, p.altura,
+              p.ultima_modificacion, p.sexo, p.obra_social, p.tipo_documento, p.numero_documento, p.nacionalidad,
+              p.domicilio_calle, p.domicilio_numero, p.domicilio_piso_depto, p.codigo_postal, p.localidad,
+              p.partido, p.telefono, p.email, p.diagnostico
+         FROM paciente_profesional pp
+         JOIN paciente p ON pp.paciente_id = p.paciente_id
+        WHERE pp.profesional_id = :profesional_id
+          AND pp.paciente_id = :paciente_id`,
+      [profesional_id, paciente_id]
     );
 
-    if (result.rows.length === 0) {
-      throw new Error(ERROR_PACIENTE_NO_ASOCIADO);
-    }
+    if (!result.rows.length) throw new Error(ERROR_PACIENTE_NO_ASOCIADO);
 
-    const row = result.rows[0];
-    return new Paciente(
-      row.NOMBRE,
-      row.APELLIDO,
-      row.ID_HOSPITALARIO,
-      row.FECHA_NACIMIENTO ? new Date(row.FECHA_NACIMIENTO).toISOString().split('T')[0] : null,
-      row.PESO,
-      row.ALTURA,
-      row.SEXO,
-      row.OBRA_SOCIAL,
-      row.DNI,
-      row.ULTIMA_MODIFICACION,
-      row.PACIENTE_ID
-    );
+    const r = result.rows[0];
+    return new Paciente({
+      paciente_id: r.PACIENTE_ID, nombre: r.NOMBRE, apellido: r.APELLIDO, id_hospitalario: r.ID_HOSPITALARIO,
+      fecha_nacimiento: r.FECHA_NACIMIENTO ? new Date(r.FECHA_NACIMIENTO).toISOString().split('T')[0] : null,
+      peso: r.PESO, sup_corporal: r.SUP_CORPORAL, altura: r.ALTURA, ultima_modificacion: r.ULTIMA_MODIFICACION,
+      sexo: r.SEXO, obra_social: r.OBRA_SOCIAL, tipo_documento: r.TIPO_DOCUMENTO, numero_documento: r.NUMERO_DOCUMENTO,
+      nacionalidad: r.NACIONALIDAD, domicilio_calle: r.DOMICILIO_CALLE, domicilio_numero: r.DOMICILIO_NUMERO,
+      domicilio_piso_depto: r.DOMICILIO_PISO_DEPTO, codigo_postal: r.CODIGO_POSTAL, localidad: r.LOCALIDAD,
+      partido: r.PARTIDO, telefono: r.TELEFONO, email: r.EMAIL, diagnostico: r.DIAGNOSTICO
+    });
   }
 
   async remover(profesional_id, paciente_id) {
@@ -149,8 +145,7 @@ export class RepositorioPacienteProfesional {
     const result = await this.connection.execute(
       `SELECT COUNT(*) as count FROM paciente_profesional 
        WHERE profesional_id = :profesional_id AND paciente_id = :paciente_id`,
-      [profesional_id, paciente_id],
-      { outFormat: oracledb.OUT_FORMAT_OBJECT }
+      [profesional_id, paciente_id]
     );
     return result.rows[0].COUNT > 0;
   }

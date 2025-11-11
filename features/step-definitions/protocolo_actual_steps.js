@@ -178,7 +178,6 @@ Given(/^el Paciente (\d+) tiene asignado el Protocolo (\d+), Regimen (\d+), y es
     protocolo_id: parseInt(protId, 10),
     regimen: parseInt(regId, 10),
     ciclo_actual_id: parseInt(cId, 10),
-    numero_ciclo: 1,
     estado: 'ACTIVO',
     fecha_asignacion: new Date().toISOString().split('T')[0]
   };

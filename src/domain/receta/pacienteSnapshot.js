@@ -3,11 +3,10 @@ import { ERROR_RECETA_PACIENTE_CREACION_CODE } from '../../errors/receta.js';
 
 
 export class Domicilio {
-  constructor({ calle, numero, piso, depto, codigo_postal, localidad, partido }) {
+  constructor({ calle, numero, piso_depto, codigo_postal, localidad, partido }) {
     this.calle = calle ?? null;
     this.numero = numero ?? null;
-    this.piso = piso ?? null;
-    this.depto = depto ?? null;
+    this.piso_depto = piso_depto ?? null;
     this.codigo_postal = codigo_postal ?? null;
     this.localidad = localidad ?? null;
     this.partido = partido ?? null;
@@ -75,11 +74,10 @@ export class DatosPaciente {
 }
 
 export class ContextoSnapshot {
-  constructor({ protocolo_id, ciclo_id, regimen, numero_ciclo }) {
+  constructor({ protocolo_id, ciclo_id, regimen }) {
     this.protocolo_id = toNum(protocolo_id);
     this.ciclo_id = toNum(ciclo_id);
     this.regimen = toNum(regimen);
-    this.numero_ciclo = toNum(numero_ciclo);
   }
 
   validar() {
@@ -91,9 +89,6 @@ export class ContextoSnapshot {
     }
     if (this.regimen === null) {
       throw getError('regimen es obligatorio', 'RECETA_REGIMEN_REQUERIDO');
-    }
-    if (this.numero_ciclo === null) {
-      throw getError('numero_ciclo es obligatorio', 'RECETA_NUMERO_CICLO_REQUERIDO');
     }
   }
 }

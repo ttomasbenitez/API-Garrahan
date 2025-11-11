@@ -1,12 +1,17 @@
-import app from './app.js';
+import app, { alarmaService } from './app.js';
 import oracleDB from './db/connection_pool.js';
 import logger from './utils/logger.js';
 import config from '../config.js';
+import { iniciarJobAlarmas } from './jobs/alarmaJob.js';
 
 async function startServer() {
   try {
     await oracleDB.init();
     logger.info('Conexión a Oracle establecida, iniciando servidor...');
+
+    // Iniciar job de alarmas
+    iniciarJobAlarmas(alarmaService);
+
     app.listen(config.app.port, () => logger.info(`Servidor escuchando en puerto ${config.app.port}`));
     const shutdown = async (signal) => {
       try {

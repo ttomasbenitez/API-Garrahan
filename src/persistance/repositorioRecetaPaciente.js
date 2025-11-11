@@ -1,7 +1,7 @@
 import oracledb from 'oracledb';
 import { ERROR_RECETA_DETALLE_CREACION, ERROR_RECETA_DETALLE_CREACION_CODE, ERROR_RECETA_PACIENTE_CREACION, ERROR_RECETA_PACIENTE_CREACION_CODE } from '../errors/receta.js';
 import { FK_NOT_EXISTENT_CODE, UNIQUE_VIOLATION_CODE } from '../errors/index.js';
-import { toFloat, toNum, toStr } from '../utils/formatters.js';
+import { getError, toFloat, toNum, toStr } from '../utils/formatters.js';
 import { mapRecetaDetalleInsertError, mapRecetaPacienteInsertError } from './errorsMapper.js';
 import RecetaPaciente from '../domain/receta/recetaPaciente.js';
 import { Contacto, ContextoSnapshot, DatosPaciente, Domicilio, Identidad, PacienteSnapshot } from '../domain/receta/pacienteSnapshot.js';
@@ -26,22 +26,25 @@ export class RepositorioRecetaPaciente {
           `INSERT INTO receta_paciente (
             fecha_prescripcion, nombre, apellido, tipo_documento, numero_documento,
             fecha_nacimiento, sexo, nacionalidad,
-            domicilio_calle, domicilio_numero, domicilio_piso, domicilio_depto,
+            domicilio_calle, domicilio_numero, domicilio_piso_depto,
             codigo_postal, localidad, partido,
             telefono, email,
-            peso, talla, superficie_corporal, diagnostico, numero_ciclo,
-            protocolo_id, ciclo_id, regimen, paciente_id, profesional_id, estado
+            peso, talla, superficie_corporal, diagnostico, protocolo_id,
+            ciclo_id, regimen, paciente_id, profesional_id, estado, tipo_receta,
+            tnm, estadio, intervalo, ps
           ) VALUES (
-            SYSDATE, :nombre, :apellido, :tipo_documento, :numero_documento,
+            NVL(:fecha_prescripcion, SYSDATE), :nombre, :apellido, :tipo_documento, :numero_documento,
             :fecha_nacimiento, :sexo, :nacionalidad,
-            :domicilio_calle, :domicilio_numero, :domicilio_piso, :domicilio_depto,
+            :domicilio_calle, :domicilio_numero, :domicilio_piso_depto,
             :codigo_postal, :localidad, :partido,
             :telefono, :email,
-            :peso, :talla, :superficie_corporal, :diagnostico, :numero_ciclo,
-            :protocolo_id, :ciclo_id, :regimen, :paciente_id, :profesional_id, :estado
+            :peso, :talla, :superficie_corporal, :diagnostico, :protocolo_id, 
+            :ciclo_id, :regimen, :paciente_id, :profesional_id, :estado, :tipo_receta,
+            :tnm, :estadio, :intervalo, :ps
           )
-          RETURNING receta_id, fecha_prescripcion INTO :id, :fecha_prescripcion`,
+          RETURNING receta_id, fecha_prescripcion INTO :id, :fecha_prescripcion_out`,
           {
+            fecha_prescripcion: rp.fecha_prescripcion ? new Date(rp.fecha_prescripcion) : null,
             nombre: toStr(identidad.nombre),
             apellido: toStr(identidad.apellido),
             tipo_documento: toStr(identidad.tipo_documento),
@@ -51,8 +54,7 @@ export class RepositorioRecetaPaciente {
             nacionalidad: toStr(identidad.nacionalidad),
             domicilio_calle: toStr(domicilio.calle),
             domicilio_numero: toStr(domicilio.numero),
-            domicilio_piso: toStr(domicilio.piso),
-            domicilio_depto: toStr(domicilio.depto),
+            domicilio_piso_depto: toStr(domicilio.piso_depto),
             codigo_postal: toStr(domicilio.codigo_postal),
             localidad: toStr(domicilio.localidad),
             partido: toStr(domicilio.partido),
@@ -62,15 +64,19 @@ export class RepositorioRecetaPaciente {
             talla: toFloat(datos_paciente.talla),
             superficie_corporal: toFloat(datos_paciente.superficie_corporal),
             diagnostico: toStr(rp.diagnostico),
-            numero_ciclo: toNum(contexto.numero_ciclo),
             protocolo_id: toNum(contexto.protocolo_id),
             ciclo_id: toNum(contexto.ciclo_id),
             regimen: toNum(contexto.regimen),
             paciente_id: toNum(rp.paciente_id),
             profesional_id: toNum(rp.profesional_id),
             estado: toStr(rp.estado),
+            tipo_receta: toStr(rp.tipo_receta),
+            tnm: toStr(rp.tnm),
+            estadio: toStr(rp.estadio),
+            intervalo: toStr(rp.intervalo),
+            ps: toStr(rp.ps),
             id: { dir: oracledb.BIND_OUT, type: oracledb.NUMBER },
-            fecha_prescripcion: { dir: oracledb.BIND_OUT, type: oracledb.DATE },
+            fecha_prescripcion_out: { dir: oracledb.BIND_OUT, type: oracledb.DATE },
           },
           { autoCommit: false }
         );
@@ -80,17 +86,17 @@ export class RepositorioRecetaPaciente {
         }
 
         rp.id = result.outBinds.id[0];
-        rp.fecha_prescripcion = new Date(result.outBinds.fecha_prescripcion[0]);
+        rp.fecha_prescripcion = new Date(result.outBinds.fecha_prescripcion_out[0]);
 
 
         if (Array.isArray(rp.detalles) && rp.detalles.length > 0) {
           const detalleSql = `
             INSERT INTO receta_detalle (
               receta_id, admin_id, nombre_generico, presentacion, concentracion,
-              cantidad, dosis_diaria, numero_dias, dosis_total, via_administracion
+              cantidad, dosis_diaria, numero_dias, dosis_total, dosis_unidad, via_administracion
             ) VALUES (
-              :receta_id, :admin_id, :nombre_generico, :presentacion, :concentracion,
-              :cantidad, :dosis_diaria, :numero_dias, :dosis_total, :via_administracion
+              :receta_id, :admin_id, :nombre_generico, :presentacion, :concentracion, :cantidad,
+              :dosis_diaria, :numero_dias, :dosis_total, :dosis_unidad, :via_administracion
             )
           `;
 
@@ -106,9 +112,10 @@ export class RepositorioRecetaPaciente {
             presentacion: toStr(d.presentacion),
             concentracion: toStr(d.concentracion),
             cantidad: toNum(d.cantidad),
-            dosis_diaria: toNum(d.dosis_diaria),
+            dosis_diaria: toStr(d.dosis_diaria),
             numero_dias: toNum(d.numero_dias),
             dosis_total: toNum(d.dosis_total),
+            dosis_unidad: toStr(d.dosis_unidad),
             via_administracion: toStr(d.via_administracion),
           }));
 
@@ -121,9 +128,10 @@ export class RepositorioRecetaPaciente {
               presentacion:     { type: oracledb.STRING, maxSize: 100 },
               concentracion:    { type: oracledb.STRING, maxSize: 50 },
               cantidad:         { type: oracledb.NUMBER },
-              dosis_diaria:     { type: oracledb.NUMBER },
+              dosis_diaria:     { type: oracledb.STRING, maxSize: 50 },
               numero_dias:      { type: oracledb.NUMBER },
               dosis_total:      { type: oracledb.NUMBER },
+              dosis_unidad:     { type: oracledb.STRING, maxSize: 10 },
               via_administracion: { type: oracledb.STRING, maxSize: 100 },
             }
           };
@@ -168,7 +176,7 @@ export class RepositorioRecetaPaciente {
     const result = await this.connection.execute(
       `SELECT 
         receta_id, admin_id, nombre_generico, presentacion, concentracion,
-        cantidad, dosis_diaria, numero_dias, dosis_total, via_administracion
+        cantidad, dosis_diaria, numero_dias, dosis_total, dosis_unidad, via_administracion
       FROM receta_detalle
       WHERE receta_id = :receta_id`,
       [recetaId],
@@ -182,9 +190,10 @@ export class RepositorioRecetaPaciente {
         presentacion: toStr(row.PRESENTACION),
         concentracion: toStr(row.CONCENTRACION),
         cantidad: toNum(row.CANTIDAD),
-        dosis_diaria: toNum(row.DOSIS_DIARIA),
+        dosis_diaria: toStr(row.DOSIS_DIARIA),
         numero_dias: toNum(row.NUMERO_DIAS),
         dosis_total: toNum(row.DOSIS_TOTAL),
+        dosis_unidad: toStr(row.DOSIS_UNIDAD),
         via_administracion: toStr(row.VIA_ADMINISTRACION),
         receta_id: toNum(row.RECETA_ID),
       });
@@ -194,27 +203,26 @@ export class RepositorioRecetaPaciente {
 
 
   async obtener(id) {
+
     const result = await this.connection.execute(
       `SELECT
           receta_id,
           fecha_prescripcion,
           nombre, apellido, tipo_documento, numero_documento,
           fecha_nacimiento, sexo, nacionalidad,
-          domicilio_calle, domicilio_numero, domicilio_piso,
-          domicilio_depto, codigo_postal, localidad, partido,
-          telefono, email,
+          domicilio_calle, domicilio_numero, domicilio_piso_depto,
+          codigo_postal, localidad, partido, telefono, email,
           peso, talla, superficie_corporal,
-          diagnostico, numero_ciclo,
-          protocolo_id, ciclo_id, regimen,
-          paciente_id, profesional_id, estado
+          diagnostico, protocolo_id, ciclo_id, regimen,
+          paciente_id, profesional_id, estado, tipo_receta,
+          tnm, estadio, intervalo, ps
        FROM receta_paciente
        WHERE receta_id = :id`,
-      [id],
-      { outFormat: this.connection.OUT_FORMAT_OBJECT }
+      [id]
     );
 
     if (!result?.rows || result.rows.length === 0) {
-      return null;
+      throw getError('Receta de paciente no encontrada', 'RECETA_PACIENTE_NO_ENCONTRADA');
     }
 
     const row = result.rows[0];
@@ -233,8 +241,7 @@ export class RepositorioRecetaPaciente {
     const domicilio = new Domicilio({
       calle: toStr(row.DOMICILIO_CALLE),
       numero: toStr(row.DOMICILIO_NUMERO),
-      piso: toStr(row.DOMICILIO_PISO),
-      depto: toStr(row.DOMICILIO_DEPTO),
+      piso_depto: toStr(row.DOMICILIO_PISO_DEPTO),
       codigo_postal: toStr(row.CODIGO_POSTAL),
       localidad: toStr(row.LOCALIDAD),
       partido: toStr(row.PARTIDO),
@@ -261,7 +268,6 @@ export class RepositorioRecetaPaciente {
       protocolo_id: toNum(row.PROTOCOLO_ID),
       ciclo_id: toNum(row.CICLO_ID),
       regimen: toNum(row.REGIMEN),
-      numero_ciclo: toNum(row.NUMERO_CICLO),
     });
 
     const detalles = await this.obtenerDetalles(id);
@@ -274,6 +280,11 @@ export class RepositorioRecetaPaciente {
       paciente_id: toNum(row.PACIENTE_ID),
       profesional_id: toNum(row.PROFESIONAL_ID),
       estado: toStr(row.ESTADO),
+      tipo_receta: toStr(row.TIPO_RECETA),
+      tnm: toStr(row.TNM),
+      estadio: toStr(row.ESTADIO),
+      intervalo: toStr(row.INTERVALO),
+      ps: toStr(row.PS),
       detalles,
     });
 
@@ -281,6 +292,7 @@ export class RepositorioRecetaPaciente {
     receta.fecha_prescripcion = row.FECHA_PRESCRIPCION ? new Date(row.FECHA_PRESCRIPCION) : null;
 
     return receta;
+
   }
 
   async obtenerTodasPorIdPaciente(idPaciente) {
@@ -290,17 +302,16 @@ export class RepositorioRecetaPaciente {
           fecha_prescripcion,
           nombre, apellido, tipo_documento, numero_documento,
           fecha_nacimiento, sexo, nacionalidad,
-          domicilio_calle, domicilio_numero, domicilio_piso,
-          domicilio_depto, codigo_postal, localidad, partido,
-          telefono, email,
+          domicilio_calle, domicilio_numero, 
+          domicilio_piso_depto, codigo_postal, 
+          localidad, partido, telefono, email,
           peso, talla, superficie_corporal,
-          diagnostico, numero_ciclo,
-          protocolo_id, ciclo_id, regimen,
-          paciente_id, profesional_id, estado
+          diagnostico, protocolo_id, ciclo_id, regimen,
+          paciente_id, profesional_id, estado, tipo_receta,
+          tnm, estadio, intervalo, ps
        FROM receta_paciente
        WHERE paciente_id = :idPaciente`,
-      [idPaciente],
-      { outFormat: this.connection.OUT_FORMAT_OBJECT }
+      [idPaciente]
     );
 
     if (!result?.rows || result.rows.length === 0) {
@@ -322,8 +333,7 @@ export class RepositorioRecetaPaciente {
         const domicilio = new Domicilio({
           calle: toStr(row.DOMICILIO_CALLE),
           numero: toStr(row.DOMICILIO_NUMERO),
-          piso: toStr(row.DOMICILIO_PISO),
-          depto: toStr(row.DOMICILIO_DEPTO),
+          piso_depto: toStr(row.DOMICILIO_PISO_DEPTO),
           codigo_postal: toStr(row.CODIGO_POSTAL),
           localidad: toStr(row.LOCALIDAD),
           partido: toStr(row.PARTIDO),
@@ -350,7 +360,6 @@ export class RepositorioRecetaPaciente {
           protocolo_id: toNum(row.PROTOCOLO_ID),
           ciclo_id: toNum(row.CICLO_ID),
           regimen: toNum(row.REGIMEN),
-          numero_ciclo: toNum(row.NUMERO_CICLO),
         });
 
         const detalles = await this.obtenerDetalles(row.RECETA_ID);
@@ -363,6 +372,11 @@ export class RepositorioRecetaPaciente {
           paciente_id: toNum(row.PACIENTE_ID),
           profesional_id: toNum(row.PROFESIONAL_ID),
           estado: toStr(row.ESTADO),
+          tipo_receta: toStr(row.TIPO_RECETA),
+          tnm: toStr(row.TIPO_RECETA),
+          estadio: toStr(row.ESTADIO),
+          intervalo: toStr(row.INTERVALO),
+          ps: toStr(row.PS),
           detalles,
         });
 
@@ -374,5 +388,34 @@ export class RepositorioRecetaPaciente {
     );
 
     return recetas;
+  }
+
+  async eliminar(id) {
+    return this.connection.withConnection(async (conn) => {
+      try {
+        const result = await conn.execute(
+          'DELETE FROM receta_detalle WHERE receta_id = :id',
+          { id },
+          { autoCommit: false }
+        );
+
+        if (result.rowsAffected === 0) {
+          throw new Error('Receta no encontrada');
+        }
+
+        await conn.execute(
+          'DELETE FROM receta_paciente WHERE receta_id = :id',
+          { id },
+          { autoCommit: false }
+        );
+
+        await conn.commit();
+
+        return id;
+      } catch (e) {
+        await conn.rollback();
+        throw e;
+      }
+    });
   }
 }

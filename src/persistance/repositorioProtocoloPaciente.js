@@ -17,12 +17,12 @@ export class RepositorioProtocoloPaciente {
       const result = await this.connection.execute(
         `INSERT INTO protocolo_paciente (
             paciente_id, protocolo_id, regimen, ciclo_actual_id,
-            numero_ciclo, fecha_inicio, fecha_fin, estado,
+            fecha_inicio, fecha_fin, estado,
             profesional_id_asignador, fecha_asignacion, ciclo_final, 
             repeticiones_actuales, cambiar_regimen
           ) VALUES (
             :paciente_id, :protocolo_id, :regimen, :ciclo_actual_id,
-            :numero_ciclo, :fecha_inicio, :fecha_fin, :estado,
+            :fecha_inicio, :fecha_fin, :estado,
             :profesional_id_asignador, :fecha_asignacion, :ciclo_final, 
             :repeticiones_actuales, :cambiar_regimen
           )
@@ -32,7 +32,6 @@ export class RepositorioProtocoloPaciente {
           protocolo_id: toNum(pp.protocolo_id),
           regimen: toNum(pp.regimen),
           ciclo_actual_id: toNum(pp.ciclo_actual_id),
-          numero_ciclo: toNum(pp.numero_ciclo),
           fecha_inicio: pp.fecha_inicio,
           fecha_fin: pp.fecha_fin,
           estado: toStr(pp.estado),
@@ -88,7 +87,6 @@ export class RepositorioProtocoloPaciente {
       protocolo_id: row.PROTOCOLO_ID,
       regimen: row.REGIMEN,
       ciclo_actual_id: row.CICLO_ACTUAL_ID,
-      numero_ciclo: row.NUMERO_CICLO,
       fecha_inicio: row.FECHA_INICIO,
       fecha_fin: row.FECHA_FIN,
       estado: row.ESTADO,
@@ -114,7 +112,6 @@ export class RepositorioProtocoloPaciente {
     const formattedFields = {
       regimen: campos.regimen !== undefined ? toNum(campos.regimen) : undefined,
       ciclo_actual_id: campos.ciclo_actual_id !== undefined ? toNum(campos.ciclo_actual_id) : undefined,
-      numero_ciclo: campos.numero_ciclo !== undefined ? toNum(campos.numero_ciclo) : undefined,
       fecha_inicio: campos.fecha_inicio,
       fecha_fin: campos.fecha_fin,
       estado: campos.estado,

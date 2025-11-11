@@ -7,5 +7,7 @@ export default function buildRecetasRouter(controller) {
   r.get('/:id', authMiddleware, requireRole('admin', 'medico'), controller.obtener);
   r.get('/', authMiddleware, requireRole('admin', 'medico'), controller.obtenerTodas);
   r.get('/:id/exportar', authMiddleware, requireRole('admin', 'medico'), controller.exportar);
+  r.delete('/:id', authMiddleware, requireRole('admin', 'medico'), controller.eliminar);
+
   return r;
 }

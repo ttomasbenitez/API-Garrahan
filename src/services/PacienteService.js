@@ -1,7 +1,8 @@
 export class PacienteService {
-  constructor(pacienteRepo, pacienteProfesionalRepo, apiHospitalConector) {
+  constructor(pacienteRepo, pacienteProfesionalRepo, protocoloPacienteService, apiHospitalConector) {
     this.pacienteRepo = pacienteRepo;
     this.pacienteProfesionalRepo = pacienteProfesionalRepo;
+    this.protocoloPacienteService = protocoloPacienteService;
     this.apiHospitalConector = apiHospitalConector;
   }
 
@@ -37,4 +38,9 @@ export class PacienteService {
   async cambiarProfesionalPrincipal(paciente_id, nuevo_profesional_id) {
     return this.pacienteProfesionalRepo.cambiarProfesionalPrincipal(paciente_id, nuevo_profesional_id);
   }
+
+  async crearProtocoloPaciente(protocoloPaciente) {
+    return this.protocoloPacienteService.crear(protocoloPaciente);
+  }
+
 }

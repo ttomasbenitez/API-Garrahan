@@ -22,9 +22,16 @@ describe(RepositorioPaciente, () => {
   });
 
   test('guardar paciente funciona correctamente devolviendo el id de la creación', async () => {
-    const paciente = new Paciente(
-      'Juan', 'Pérez', 'P12345', '2020-05-21', 30, 70, 'M', 'OSDE', '12345678'
-    );
+    const paciente = new Paciente({
+      nombre: 'Juan',
+      apellido: 'Pérez',
+      id_hospitalario: 'P12345',
+      fecha_nacimiento: '2020-05-21',
+      peso: 30,
+      altura: 70,
+      sexo: 'M',
+      obra_social: 'OSDE'
+    });
 
     connection.execute.mockResolvedValue({
       rowsAffected: 1,
@@ -42,7 +49,6 @@ describe(RepositorioPaciente, () => {
     expect(binds1).toMatchObject({
       nombre: paciente.nombre,
       apellido: paciente.apellido,
-      dni: paciente.dni,
       id_hospitalario: paciente.id_hospitalario,
       fecha_nacimiento: paciente.fecha_nacimiento,
       peso: paciente.peso,
@@ -54,9 +60,15 @@ describe(RepositorioPaciente, () => {
   });
 
   test('guardar paciente lanza error si no se crea', async () => {
-    const paciente = new Paciente(
-      'Lucía', 'Gómez', 'P67890', '2011-11-10', 55, 60, 'F', null, '87654321'
-    );
+    const paciente = new Paciente({
+      nombre: 'Lucía',
+      apellido: 'Gómez',
+      id_hospitalario: 'P67890',
+      fecha_nacimiento: '2021-05-21',
+      peso: 55,
+      altura: 60,
+      sexo: 'F'
+    });
 
     connection.execute.mockResolvedValue({
       rowsAffected: 0,
@@ -77,8 +89,7 @@ describe(RepositorioPaciente, () => {
       SEXO: 'M',
       PACIENTE_ID: 123,
       ULTIMA_MODIFICACION: null,
-      OBRA_SOCIAL: 'OSDE',
-      DNI: '12345678'
+      OBRA_SOCIAL: 'OSDE'
     };
 
     connection.execute.mockResolvedValue({
@@ -98,8 +109,7 @@ describe(RepositorioPaciente, () => {
       sexo: row.SEXO,
       paciente_id: row.PACIENTE_ID,
       ultima_modificacion: row.ULTIMA_MODIFICACION,
-      obra_social: row.OBRA_SOCIAL,
-      dni: row.DNI
+      obra_social: row.OBRA_SOCIAL
     });
 
     expect(connection.execute).toHaveBeenCalledTimes(1);

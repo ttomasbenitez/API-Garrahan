@@ -23,7 +23,7 @@ cucumber:
 	NODE_ENV=test npm run cucumber
 
 clean:
-	docker compose -f docker-compose.yaml down --rmi all --volumes --remove-orphans
+	docker compose --env-file .env.dev -f docker-compose.yaml down --rmi all --volumes --remove-orphans
 
 # Entorno dev
 dev:
@@ -32,3 +32,6 @@ dev:
 
 dev-down:
 	docker compose -f docker-compose.dev.yaml down
+
+seeds:
+	docker exec -it api-garrahan-app-1 node src/db/seeds/seeds.js

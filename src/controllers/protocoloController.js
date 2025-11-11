@@ -22,7 +22,7 @@ async function crearProtocolo(req, res, service) {
     logger.info('Protocolo creado con ID: %d', protocolo.protocolo_id);
     res.status(201).json(protocolo);
   } catch (error) {
-    logger.error('Error al crear protocolo: %o', error);
+    logger.info('Error al crear protocolo: %o', error);
     res.status(error.status || 500).json({ error: error.message, message: error.details ?? error.message });
   }
 }
@@ -56,7 +56,6 @@ async function agregarCiclo(req, res, service) {
     const protocoloId = Number(req.params.id);
     const payload = Array.isArray(req.body) ? req.body : [req.body];
     const errors = [];
-
     const ciclos = payload.map((c) => {
       if (!c.ciclo_id || c.regimen === undefined || !c.duracion_semanas ||
         c.ciclo_final === undefined || c.repeticiones === undefined) {
@@ -75,6 +74,7 @@ async function agregarCiclo(req, res, service) {
     });
 
     if (errors.length > 0) {
+      logger.info('Error de validación al agregar ciclo al protocolo ID: %d', protocoloId);
       return res.status(400).json({ error: ERROR_CAMPOS_REQUERIDOS });
     }
 
