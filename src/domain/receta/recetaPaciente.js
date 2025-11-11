@@ -131,6 +131,13 @@ class RecetaPaciente {
     return domicilio;
   }
 
+  pisoDepto() {
+    if(!this.paciente_snapshot.domicilio.piso_depto) {
+      return '';
+    }
+    return this.paciente_snapshot.domicilio.piso_depto;
+  }
+
   edad() {
     const hoy = new Date();
     const nacimiento = new Date(this.paciente_snapshot.identidad.fecha_nacimiento);

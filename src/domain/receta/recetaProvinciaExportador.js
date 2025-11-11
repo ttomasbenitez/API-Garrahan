@@ -26,7 +26,7 @@ export class RecetaProvinciaExportador {
 
     form.getTextField('domicilio').setText(` ${this.receta.paciente_snapshot.domicilio.calle}`);
     form.getTextField('domicilioNumero').setText(` ${this.receta.paciente_snapshot.domicilio.numero}`);
-    form.getTextField('pisoYDepto').setText(` ${this.receta.paciente_snapshot.domicilio.piso_depto}`);
+    form.getTextField('pisoYDepto').setText(` ${this.receta.pisoDepto()}`);
     form.getTextField('codigoPostal').setText(` ${this.receta.paciente_snapshot.domicilio.codigo_postal}`);
     form.getTextField('localidad').setText(` ${this.receta.paciente_snapshot.domicilio.localidad}`);
     form.getTextField('partido').setText(` ${this.receta.paciente_snapshot.domicilio.partido}`);
