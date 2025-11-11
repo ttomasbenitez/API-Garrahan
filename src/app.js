@@ -143,7 +143,7 @@ const alarmaController = makeAlarmaController(alarmaService);
 
 app.use(express.json());
 app.use(cors({
-  origin: 'http://localhost:3003', // frontend Next
+  origin: ['http://localhost:3003', 'http://localhost:3004'], // frontend Next
   credentials: true
 }));
 app.use(cookieParser());
