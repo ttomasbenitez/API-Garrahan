@@ -75,6 +75,7 @@ Feature: Generacion recetas
       | via_administracion | Intravenosa     |
       | cantidad           | 3               |
       | dosis_diaria       | 50 mg/m         |
+      | dosis_unidad       | 10 mg           |
       | numero_dias        | 5               |
       | dosis_total        | 250             |
     And la receta con id "1" tiene los detalles:
@@ -86,6 +87,7 @@ Feature: Generacion recetas
       | via_administracion | ORAL            |
       | cantidad           | 4               |
       | dosis_diaria       | 10 mg/m2        |
+      | dosis_unidad       | 10 mg           |
       | numero_dias        | 5               |
       | dosis_total        | 1               |
     And la receta con id "1" está guardada en el sistema
