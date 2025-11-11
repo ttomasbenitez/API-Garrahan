@@ -165,6 +165,28 @@ describe('ApiHospitalConector', () => {
     expect(result.pisoDepto).toBe('3');
   });
 
+  test('_extraerDireccion maneja dirección sin pisoDepto correctamente', () => {
+    const address = [
+      {
+        use: 'home',
+        line: 'San Martín 1550',
+        number: '1550',
+        city: 'CABA',
+        district: 'CABA',
+        postalCode: '1824',
+        country: 'AR',
+      },
+    ];
+
+    const result = conector._extraerDireccion(address);
+
+    expect(result).toEqual({
+      calle: 'San Martín',
+      numero: '1550',
+      pisoDepto: null,
+    });
+  });
+
   test('_extraerDireccion devuelve nulls si falta la dirección', () => {
     const result = conector._extraerDireccion(null);
     expect(result).toEqual({ calle: null, numero: null, pisoDepto: null });

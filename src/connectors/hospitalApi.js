@@ -79,14 +79,19 @@ export class ApiHospitalConector {
   }
 
   _extraerDireccion(address) {
-    if (!address?.[0]?.line) return { calle: null, numero: null, pisoDepto: null };
+    if (!address?.[0]) return { calle: null, numero: null, pisoDepto: null };
 
-    // Si line es array, unirlo
-    const lineStr = Array.isArray(address[0].line) ? address[0].line.join(', ') : address[0].line;
-    const [calleRaw, numero, pisoRaw] = lineStr.split(',').map(s => s.trim());
+    const addr = address[0];
+    const lineStr = Array.isArray(addr.line) ? addr.line.join(', ') : addr.line || '';
 
-    const calle = calleRaw?.replace(/Piso\s*\d+[A-Z]?/i, '').trim() || calleRaw;
-    const pisoDepto = pisoRaw?.match(/(\d+[A-Z]?)/i)?.[1] || pisoRaw || null;
+    // Tomar el número explícito, si no está buscar en el texto
+    const numero = addr.number || lineStr.match(/\b\d+\b/)?.[0] || null;
+
+    // Sacar la parte numérica de la calle
+    const calle = lineStr.replace(/\b\d+\b.*$/,'').trim().replace(/,$/, '') || null;
+
+    // Buscar piso/depto
+    const pisoDepto = lineStr.match(/Piso\s*([\dA-Z]+)/i)?.[1] || null;
 
     return { calle, numero, pisoDepto };
   }
