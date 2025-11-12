@@ -2,6 +2,7 @@
 import { ApiHospitalConector } from '../../src/connectors/hospitalApi.js';
 import config from '../../config.js';
 import axios from 'axios';
+import Profesional from '../../src/domain/profesional.js';
 
 // Source - https://stackoverflow.com/a
 // Posted by Benny Neugebauer
@@ -218,6 +219,33 @@ describe('ApiHospitalConector', () => {
       diagnostico: null,
       obra_social: null,
     });
+  });
+
+  test('obtener los datos de un profesional por su DNI', async () => {
+    axios.get.mockResolvedValueOnce({
+      data:JSON.stringify({
+        resourceType: 'Practitioner',
+        id: '19201241',
+        identifier: [
+          {
+            system: 'DNI',
+            value: '19201241'
+          },
+          {
+            system: 'MATRICULA',
+            value: 'MP12345'
+          }
+        ],
+        specialty: {text: 'Oncología'},
+        name: [{ family: 'Cacciavillano', given: ['Walter'] }],
+      }),
+      status: 200,
+    });
+
+    const profesional = await conector.obtenerProfesional('19201241');
+    const profesionalObject = new Profesional('Walter', 'Cacciavillano', '19201241', 'MP12345', 'Oncología');
+
+    expect(profesional).toEqual(profesionalObject);
   });
 
 });

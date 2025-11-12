@@ -441,3 +441,38 @@ export const PACIENTES_BY_ID_HOSPITALARIO = {
     ]
   },
 };
+
+export const PROFESIONALES_BY_DNI = {
+  '19201241': {
+    resourceType: 'Practitioner',
+    id: '19201241',
+    identifier: [
+      {
+        system: 'DNI',
+        value: '19201241'
+      },
+      {
+        system: 'MATRICULA',
+        value: 'MP12345'
+      }
+    ],
+    specialty: {text: 'Oncología'},
+    name: [{ family: 'Cacciavillano', given: ['Walter'] }],
+  },
+  '21201241': {
+    resourceType: 'Practitioner',
+    id: '21201241',
+    identifier: [
+      {
+        system: 'DNI',
+        value: '21201241'
+      },
+      {
+        system: 'MATRICULA',
+        value: 'MP12346'
+      }
+    ],
+    specialty: {text: 'Pediatría'},
+    name: [{ family: 'Gómez', given: ['Fernando'] }],
+  }
+};

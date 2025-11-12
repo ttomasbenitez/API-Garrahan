@@ -1,5 +1,6 @@
 import config from '../../config.js';
 import axios from 'axios';
+import Profesional from '../domain/profesional.js';
 
 export class ApiHospitalConector {
   constructor() {
@@ -25,6 +26,24 @@ export class ApiHospitalConector {
       throw new Error('Error al consultar la API del hospital');
     } else {
       return this._normalizarFhir(JSON.parse(response.data));
+    }
+  }
+
+  async obtenerProfesional(dni) {
+    const response = await this.apiClient.get(`/fhir/Practitioner/${dni}`);
+    if (response.status !== 200) {
+      throw new Error('Error al consultar la API del hospital');
+    } else {
+      const fhirData = JSON.parse(response.data);
+      const data = {
+        nombre: fhirData.name?.[0]?.given?.[0] || null,
+        apellido: fhirData.name?.[0]?.family || null,
+        dni,
+        matricula: fhirData.identifier?.find(i => i.system === 'MATRICULA')?.value || null,
+        especialidad: fhirData.specialty?.text || null,
+      };
+
+      return new Profesional(data.nombre, data.apellido, data.dni, data.matricula, data.especialidad);
     }
   }
 
