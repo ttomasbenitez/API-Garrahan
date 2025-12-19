@@ -3,7 +3,7 @@
     "paciente_id": 1,
     "protocolo_id": 1,
     "regimen": 0,
-    "ciclo_actual_id": 1,
+    "ciclo_actual_id": 2,
     "fecha_inicio": "2025-01-15",
     "estado": "Activo",
     "profesional_id_asignador": 2,
@@ -13,10 +13,20 @@
     "paciente_id": 2,
     "protocolo_id": 1,
     "regimen": 0,
-    "ciclo_actual_id": 1,
+    "ciclo_actual_id": 2,
     "fecha_inicio": "2025-02-10",
     "estado": "Activo",
     "profesional_id_asignador": 2,
     "fecha_asignacion": "2025-02-10"
+  },
+  {
+    "paciente_id": 3,
+    "protocolo_id": 1,
+    "regimen": 0,
+    "ciclo_actual_id": 2,
+    "fecha_inicio": "2025-12-12",
+    "estado": "Activo",
+    "profesional_id_asignador": 2,
+    "fecha_asignacion": "2025-12-12"
   }
 ]
