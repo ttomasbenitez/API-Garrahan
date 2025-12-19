@@ -45,3 +45,14 @@ Feature: Creación profesional
         And especialidad del profesional "Oncología"
         When publico en el endpoint de profesionales "/profesionales" con los datos
         Then obtengo el error "Faltan campos requeridos"
+
+    @wip
+    Scenario: US-02.6 Puedo obtener todos los profesionales
+        Given existen los siguientes profesionales en la base de datos:
+          | nombre  | apellido | dni       | matricula | especialidad |
+          | Walter  | Perez    | 20981812  | MP12345   | Oncología    |
+          | María   | Gómez    | 30567890  | MP54321   | Pediatría    |
+        When consulto en la API "/profesionales" para obtener todos los profesionales
+        Then el sistema me devuelve la lista de profesionales
+        And la lista contiene un profesional con "nombre" "Walter", "apellido" "Perez", "dni" "20981812", "matricula" "MP12345", "especialidad" "Oncología"
+        And la lista contiene un profesional con "nombre" "María", "apellido" "Gómez", "dni" "30567890", "matricula" "MP54321", "especialidad" "Pediatría"

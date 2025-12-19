@@ -32,11 +32,12 @@ export class RecetaHospitalariaExportador {
 
     let startRow = 14;
     for (const det of this.receta.detalles) {
+      const numeroDias = det.numero_dias ?? 1;
       sheet.getCell(`A${startRow}`).value = det.nombre_generico;
       sheet.getCell(`E${startRow}`).value = det.presentacion;
       sheet.getCell(`F${startRow}`).value = det.concentracion ?? '-';
       sheet.getCell(`G${startRow}`).value = det.cantidad;
-      sheet.getCell(`H${startRow}`).value = ` ${det.dosis_total?.toString()} ${det.dosis_unidad?.toString()}`;
+      sheet.getCell(`H${startRow}`).value = ` ${(det.dosis_total / numeroDias).toString()} ${det.dosis_unidad?.toString()}`;
       sheet.getCell(`I${startRow}`).value = det.numero_dias ?? '-';
       startRow += 2;
     }

@@ -82,7 +82,7 @@ const protocoloService = new ProtocoloService(repositorioProtocolo, repositorioA
 const protocoloController = makeProtocoloController(protocoloService, drogasService);
 // profesional
 const repositorioProfesional = new RepositorioProfesional(oracleDBInstance);
-const profesionalService = new ProfesionalService(repositorioProfesional);
+const profesionalService = new ProfesionalService(repositorioProfesional, apiHospitalConector);
 const profesionalController = makeProfesionalController(profesionalService);
 // protocolo_paciente
 const repositorioProtocoloPaciente = new RepositorioProtocoloPaciente(oracleDBInstance);
